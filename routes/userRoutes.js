@@ -1,6 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const userController = require('../controllers/userController');
+const userController = require('../controllers/userController');  
+const passport = require('passport')
+require('../passport')
+require('dotenv').config()
+
+router.use(passport.initialize())
+router.use(passport.session())
+
+// const userController = require('../controllers/userController');
+
 
 router.get('/', userController.homePage);
 router.get('/account',userController.account);
@@ -10,5 +19,23 @@ router.post('/loginUser',userController.submitlogin);
 router.get('/signup',userController.signupPage);
 router.post('/signupUser',userController.submitSignup);
 
+router.get('/',userController.loadAuth)
+
+
+router.get('/auth/google',passport.authenticate('google',{scope:['email','profile']}))
+
+router.get(
+    '/auth/google/callback',
+    passport.authenticate('google',{
+        successRedirect:'/account',
+        failureRedirect:'/failure'
+    })
+)
+
+// sucess
+
+// failure
+
+router.get('/failure',userController.failureGooglelogin)
 
 module.exports = router;

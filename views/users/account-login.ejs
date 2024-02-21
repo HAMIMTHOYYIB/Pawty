@@ -317,24 +317,26 @@
           <div class="col-12">
             <div class="login-form-content">
 
-
+              <span class="text-danger"><%= passError ? passError : ' ' %></span><br>
               <form action="/loginUser" method="post">
                 <div class="row">
                   <div class="col-12">
                     <div class="form-group">
-                      <label for="email">Username or email address <span class="">*</span></label>
-                      <input id="email" class="form-control" name="email" type="email">
+                      <label for="email">email<span class="">*</span></label>
+                      <input id="email" class="form-control" name="email" type="text">
                     </div>
                   </div>
+                  
                   <div class="col-12">
                     <div class="form-group">
-                      <label for="password">Password <span class="">*</span></label>
+                      <label for="password">Password<span class="">*</span></label>
                       <input id="password" class="form-control" name="password" type="password">
                     </div>
                   </div>
                   <div class="col-12">
                     <div class="form-group">
                       <button class="btn-login" type="submit">Login</button>
+                      <button><a href="/auth/google">Login With Google</a></button>
                       <!-- <a class="btn-login" href="/login">Login</a> -->
                     </div>
                   </div>

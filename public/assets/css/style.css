@@ -5779,8 +5779,8 @@ table p {
   -webkit-box-shadow: none;
           box-shadow: none;
   border-radius: 0;
-  border: 1px solid #e8e8e8;
-  height: 60px;
+  border: 1px solid #b7b7b7;
+  height: 50px;
   padding: 0 20px;
   font-size: 14px;
 }
@@ -7348,8 +7348,8 @@ table p {
 }
 
 .account-area .container {
-  padding-top: 95px;
-  padding-bottom: 100px;
+  padding-top: 25px;
+  padding-bottom: 20px;
 }
 @media only screen and (max-width: 1199px) {
   .account-area .container {

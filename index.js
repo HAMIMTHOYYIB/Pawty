@@ -1,7 +1,8 @@
+
 const express = require('express');
+const session = require('express-session');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-
 
 mongoose.connect('mongodb://localhost:27017/Pawty', {
     useNewUrlParser: true,
@@ -17,12 +18,30 @@ const vendorRoutes =require('./routes/vendorRoutes');
 const userRoutes = require('./routes/userRoutes');
 
 const app = express();
+
+require('dotenv').config()
+
+app.use(session({
+    resave:false,
+    saveUninitialized:true,
+    secret:'topssecrett',
+    cookie:{
+        secure:false,
+        httponly:true,
+        maxAge:24*60*60*1000
+    }
+}))
+
+const {parsed:config} = require('dotenv').config()
+global.config = config
+
 const port = 7003;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine','ejs');
-app.use(express.static('public'))
+app.use(express.static('public'));
+
 
 // app.use('/admin',adminRoutes);
 // app.use('/vendor',vendorRoutes);

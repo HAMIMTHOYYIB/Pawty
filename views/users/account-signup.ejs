@@ -313,7 +313,8 @@
         <div class="row">
           <div class="col-12">
             <div class="register-form-content">
-              <form action="/signupUser" method="post">
+              <span id="errMessage" class="text-danger"><%= errMsg %></span> <br>
+              <form action="/signupUser" method="post" onsubmit="return signupValid()">
                 <div class="row">
                   <div class="col-12">
                     <div class="form-group">
@@ -324,18 +325,21 @@
                   <div class="col-12">
                     <div class="form-group">
                       <label for="email">Email address <span class="required">*</span></label>
-                      <input id="email" name="email" class="form-control" type="email">
+                      <input  id="email" name="email" class="form-control" type="email">
                     </div>
                   </div>
                   <div class="col-12">
                     <div class="form-group">
-                      <label for="password">Password <span class="required">*</span></label>
+                      <label for="password">Password<span class="required">*</span></label>
                       <input id="password" class="form-control" name="password" type="password">
+                      <label for="Confirm-password">Confirm-Password<span class="required">*</span></label>
+                      <input id="confirm-password" class="form-control" name="confirmPassword" type="password">
+                      <span id="passwordErr" class="text-danger"></span> <br>
                     </div>
                   </div>
                   <div class="col-12">
                     <div class="form-group mb--0">
-                      <button class="btn-register" type="submit">Signup</button>
+                      <button class="btn-register" onclick="signupValid" type="submit">Signup</button>
                       <!-- <a class="btn-register" href="shop.html">Signup</a> -->
                     </div>
                   </div>
@@ -347,7 +351,6 @@
                           <label class="form-check-label" for="defaultCheck1">Remember me</label>
                         </div>
                       </div> -->
-                      <br>
                       <a class="lost-password" href="/signup">have an account?</a>
                     </div>
                   </div>
@@ -807,6 +810,32 @@
 </div>
 
 <!--=======================Javascript============================-->
+<script>
+  function signupValid() {
+      let username = document.getElementById('username').value;
+      let email = document.getElementById('email').value;
+      let passwrd = document.getElementById('password').value;
+      let confirmPasswrd = document.getElementById('confirm-password').value;
+
+      let errMessage = document.getElementById('errMessage');
+      let passwordErr = document.getElementById('passwordErr');
+
+      if (username === '' || email === '' || passwrd === '' || confirmPasswrd === '') {
+          errMessage.innerHTML = "Please fill the form";
+          return false; // Prevent form submission
+      } else {
+          errMessage.innerHTML = ""; // Clear error message
+      }
+
+      if (passwrd !== confirmPasswrd) {
+          passwordErr.innerHTML = "Password doesn't match";
+          return false; // Prevent form submission
+      } else {
+          passwordErr.innerHTML = ""; // Clear error message
+      }
+      return true; // Allow form submission
+  }
+</script>
 
 <!--=== jQuery Modernizr Min Js ===-->
 <script src="assets/js/modernizr.js"></script>
