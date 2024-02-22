@@ -19,6 +19,14 @@ router.post('/loginUser',userController.submitlogin);
 router.get('/signup',userController.signupPage);
 router.post('/signupUser',userController.submitSignup);
 
+router.get('/forgetPass',userController.forgotGetPage);
+router.post('/forgetPass',userController.forgotEmailPostPage);
+router.post('/resetPass',userController.resetPassword)
+
+// router.get('/otpVerification',userController.otpVer)
+
+
+
 // router.get('/',userController.loadAuth)
 
 
