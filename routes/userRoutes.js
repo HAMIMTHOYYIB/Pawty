@@ -19,7 +19,7 @@ router.post('/loginUser',userController.submitlogin);
 router.get('/signup',userController.signupPage);
 router.post('/signupUser',userController.submitSignup);
 
-router.get('/',userController.loadAuth)
+// router.get('/',userController.loadAuth)
 
 
 router.get('/auth/google',passport.authenticate('google',{scope:['email','profile']}))
@@ -27,15 +27,13 @@ router.get('/auth/google',passport.authenticate('google',{scope:['email','profil
 router.get(
     '/auth/google/callback',
     passport.authenticate('google',{
-        successRedirect:'/account',
+        successRedirect:'/success',
         failureRedirect:'/failure'
     })
 )
-
-// sucess
-
+// success
+router.get('/success',userController.succesGoogleLogin)
 // failure
-
 router.get('/failure',userController.failureGooglelogin)
 
 module.exports = router;

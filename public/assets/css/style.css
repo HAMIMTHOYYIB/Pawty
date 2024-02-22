@@ -467,7 +467,7 @@ table p {
   -webkit-box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.2);
           box-shadow: 0 0 8px 1px rgba(0, 0, 0, 0.2);
   bottom: -60px;
-  background-color: #721b65;
+  background-color: #326f97;
   color: #fff;
   position: fixed;
   right: 30px;
@@ -492,7 +492,7 @@ table p {
   z-index: 999;
 }
 .scroll-to-top:hover {
-  background-color: #ffd868;
+  background-color: #3a3a3a;
 }
 .scroll-to-top.show {
   visibility: visible;
@@ -5652,11 +5652,11 @@ table p {
   font-size: 14px;
 }
 .login-form-content .form-group .form-control:active, .login-form-content .form-group .form-control:focus {
-  border-color: #721b65;
+  border-color: #25496a;
 }
 .login-form-content .form-group .btn-login {
-  background-color: #721b65;
-  border-color: #721b65;
+  background-color: #25496a;
+  border-color: #25496a;
   color: #fff;
   font-size: 14px;
   text-transform: uppercase;
@@ -5674,9 +5674,9 @@ table p {
   -o-transition: all 0.3s ease-out;
 }
 .login-form-content .form-group .btn-login:hover {
-  color: #721b65;
-  background-color: #ffd868;
-  border-color: #ffd868;
+  color: #060606;
+  background-color: #326f97;
+  border-color: #326f97;
 }
 .login-form-content .account-info-group {
   -webkit-box-align: center;
@@ -5756,7 +5756,7 @@ table p {
   letter-spacing: 0.6px;
 }
 .login-form-content .lost-password:hover {
-  color: #721b65;
+  color: #22465e;
 }
 
 .register-form-content {
