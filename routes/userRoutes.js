@@ -14,7 +14,8 @@ router.use(passport.session())
 router.get('/', userController.homePage);
 router.get('/account',userController.account);
 router.get('/shop',userController.shop);
-router.get('/login',userController.loginPage)
+router.get('/product',userController.product);
+router.get('/login',userController.loginPage);
 router.post('/loginUser',userController.submitlogin);
 router.get('/signup',userController.signupPage);
 router.post('/signupUser',userController.submitSignup);
@@ -23,10 +24,8 @@ router.get('/forgetPass',userController.forgotGetPage);
 router.post('/forgetPass',userController.forgotEmailPostPage);
 router.post('/resetPass',userController.resetPassword)
 
+
 // router.get('/otpVerification',userController.otpVer)
-
-
-
 // router.get('/',userController.loadAuth)
 
 

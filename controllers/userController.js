@@ -23,9 +23,9 @@ let shop = (req,res) => {
     res.render('users/shop-org')
 }
 
-// const loadAuth = (req,res) =>{
-//     res.render('auth')
-// }
+let product = (req,res) => {
+    res.render('users/single-product')
+}
 
 // Get UserLoginPage
 let loginPage = (req,res) => {
@@ -105,8 +105,11 @@ const succesGoogleLogin = async (req,res) =>{
         })
         await user.save();
         console.log('UserData Saved.');
+    }else{
+      console.log("login with google");
+      res.redirect('/account')
     }
-    res.redirect('/account')
+
 }
 
 const failureGooglelogin = (req,res) =>{
@@ -230,6 +233,7 @@ module.exports={
     homePage,
     account,
     shop,
+    product,
     loginPage,
     submitlogin,
     signupPage,
@@ -237,7 +241,6 @@ module.exports={
     forgotGetPage,
     forgotEmailPostPage,
     resetPassword,
-    // otpVer,
     succesGoogleLogin,
     failureGooglelogin
 }

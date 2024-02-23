@@ -43,8 +43,8 @@ app.set('view engine','ejs');
 app.use(express.static('public'));
 
 
-// app.use('/admin',adminRoutes);
-// app.use('/vendor',vendorRoutes);
+app.use('/',adminRoutes);
+// app.use('/',vendorRoutes);
 app.use('/',userRoutes);
 
 
