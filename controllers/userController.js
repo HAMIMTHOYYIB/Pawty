@@ -130,7 +130,7 @@ const failureGooglelogin = (req,res) =>{
 // FORGOT PASSWORD PAGE DISPLAY
 let forgotGetPage = async (req, res) => {
     try {
-      res.render("users/forgetPass");
+      res.render("users/forgetPass",{passError:""});
     } catch (error) {
       res.status(404).send("page not found");
     }
@@ -142,8 +142,8 @@ let forgotGetPage = async (req, res) => {
     host: 'smtp.gmail.com',
      port: 465,
     auth: {
-      user: "hamimthoyyib@gmail.com",
-      pass: "pfmuixviwdoxxalt",
+      user: process.env.EMAIL,
+      pass: process.env.PASS,
     },
   });
   
@@ -174,7 +174,7 @@ let forgotGetPage = async (req, res) => {
       const user = await User.findOne({ email });
   
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).render('users/forgetPass',{passError: "User not found with this email" });
       }
   
       const otp = Math.floor(100000 + Math.random() * 900000).toString();
@@ -199,7 +199,7 @@ let forgotGetPage = async (req, res) => {
       const user = await User.findOne({ email });
   
       if (!user) {
-        return res.status(404).json({ message: "User not found" });
+        return res.status(404).render('users/otpVerification',{ passError: "User not found" });
       }
   
       if (user.otp !== otp || Date.now() > user.otpExpiration) {

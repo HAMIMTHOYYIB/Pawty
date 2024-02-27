@@ -15,7 +15,7 @@ let submitAdminLogin = async (req,res) => {
         try {
             const loginAdmin = await Admin.findOne({email: email});
             if (!loginAdmin) {
-                return res.status(404).render('users/admin-login', { passError: 'Admin Not Found' });             //send('User Not Found');
+                return res.status(404).render('admin/admin-login', { passError: 'Admin Not Found' });             //send('User Not Found');
             }
             console.log("loginAdmin : ", loginAdmin);
             
