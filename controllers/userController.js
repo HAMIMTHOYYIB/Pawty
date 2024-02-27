@@ -105,6 +105,7 @@ const succesGoogleLogin = async (req,res) =>{
         })
         await user.save();
         console.log('UserData Saved.');
+        res.redirect('/account')
     }else{
       console.log("login with google");
       res.redirect('/account')
@@ -116,18 +117,7 @@ const failureGooglelogin = (req,res) =>{
     res.send('Error')
 }
 
-// Forget Password
-// const forgetPassword = (req,res) => {
-//     res.render('users/forgetPass',{passError :''})
-// }
-// const otpVer = (req,res) => {
-//     res.render('users/otpVerification',{passError :''})
-// }
-
-
-// FORGOT PASSWORD -- STARTS FROM HERE
-
-// FORGOT PASSWORD PAGE DISPLAY
+// FORGOT PASSWORD 
 let forgotGetPage = async (req, res) => {
     try {
       res.render("users/forgetPass",{passError:""});
@@ -136,38 +126,34 @@ let forgotGetPage = async (req, res) => {
     }
   };
   
-  ////////////////////////////////////////////////
-  const transporter = nodemailer.createTransport({
-    service: "gmail",
-    host: 'smtp.gmail.com',
-     port: 465,
-    auth: {
-      user: process.env.EMAIL,
-      pass: process.env.PASS,
-    },
-  });
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  host: 'smtp.gmail.com',
+    port: 465,
+  auth: {
+    user: process.env.EMAIL,
+    pass: process.env.PASS,
+  },
+});
   
-  const sendOtpEmail = async (email, otp) => {
-    const mailOptions = {
-      from: "hamimthoyyib@gmail.com",
-      to: email,
-      subject: "Reset Your Password",
-      text: `Your OTP to reset your password is: ${otp}`,
-    };
-  
-  
-    try {
-      await transporter.sendMail(mailOptions);
-      console.log("Email sent");
-    } catch (error) {
-      console.error("Error sending email:", error);
-    }
+const sendOtpEmail = async (email, otp) => {
+  const mailOptions = {
+    from: process.env.EMAIL,
+    to: email,
+    subject: "Reset Your Password",
+    text: `Your OTP to reset your password is: ${otp}`,
   };
-  ////////////////////////////////////////////
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log("Email sent");
+  } catch (error) {
+    console.error("Error sending email:", error);
+  }
+};
   
   
   // FORGOT EMAIL POST + OTP GENERATION AND MAIL SEND
-  let forgotEmailPostPage = async (req, res) => {
+  let forgotPassPost = async (req, res) => {
     const { email } = req.body;
   
     try {
@@ -227,7 +213,6 @@ let forgotGetPage = async (req, res) => {
     }
   };
   // FORGOT PASSWORD -- ENDS HERE
-////////////////
 
 module.exports={
     homePage,
@@ -239,7 +224,7 @@ module.exports={
     signupPage,
     submitSignup,
     forgotGetPage,
-    forgotEmailPostPage,
+    forgotPassPost,
     resetPassword,
     succesGoogleLogin,
     failureGooglelogin

@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const userController = require('../controllers/userController');  
 const passport = require('passport')
-require('../passport')
+require('../helpers/passport')
 require('dotenv').config()
 
 router.use(passport.initialize())
@@ -21,7 +21,7 @@ router.get('/signup',userController.signupPage);
 router.post('/signupUser',userController.submitSignup);
 
 router.get('/forgetPass',userController.forgotGetPage);
-router.post('/forgetPass',userController.forgotEmailPostPage);
+router.post('/forgetPass',userController.forgotPassPost);
 router.post('/resetPass',userController.resetPassword)
 
 

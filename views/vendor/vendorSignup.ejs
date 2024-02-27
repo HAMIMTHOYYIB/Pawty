@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Tuime - Animal Food Website Template"/>
+    <meta name="keywords" content="accessories, digital products, electronic html, modern, products, responsive"/>
+    <meta name="author" content="hastech"/>
+
+    <title>Register Vendor</title>
+
+    <!--== Favicon ==-->
+    <link rel="shortcut icon" href="assets/img/favicon.jpg" type="image/x-icon" />
+
+    <!--== Google Fonts ==-->
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600&amp;display=swap" rel="stylesheet">
+
+    <!--== Bootstrap CSS ==-->
+    <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
+    <!--== Font Awesome Min Icon CSS ==-->
+    <link href="assets/css/font-awesome.min.css" rel="stylesheet" />
+    <!--== 7 Stroke Icon CSS ==-->
+    <link href="assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+    <!--== Swiper CSS ==-->
+    <link href="assets/css/swiper.min.css" rel="stylesheet" />
+    <!--== Fancybox Min CSS ==-->
+    <link href="assets/css/fancybox.min.css" rel="stylesheet" />
+    <!--== Range Slider Min CSS ==-->
+    <link href="assets/css/ion.rangeSlider.min.css" rel="stylesheet" />
+
+    <!--== Main Style CSS ==-->
+    <link href="assets/css/style.css" rel="stylesheet" />
+</head>
+
+<body>
+
+<header class="header-area header-default" data-bg-img="assets/img/photos/asset32.png">
+  <div class="container">
+    <div class="row no-gutter align-items-center position-relative">
+      <div class="col-12">
+        <div class="header-align">
+          <div class="header-align-start">
+            <div class="header-logo-area">
+              <a href="/vendor">
+                <img class="logo-main" src="assets/img/logo-light.png" width="158" height="36" alt="Logo" />
+              </a>
+            </div>
+          </div>
+            <div class="header-align-center"> 
+            <h2 class="text-light w-100 me-5">Vendor Signup</h2>
+          </div>  
+          <div class="header-align-end">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!--wrapper start-->
+<div class="wrapper">
+    <!--== Start My Account Area Wrapper ==-->
+    <section class="account-area">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <div class="register-form-content">
+              <b><span id="errMessage" class="text-danger"><%= passError %></span></b>
+              <form action="/vendorSignup" method="post" onsubmit="return signupValid()">
+                <div class="row">
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label for="name">Name<span class="required">*</span></label>
+                      <input id="Name" name="name" class="form-control" type="text">
+                      <span id="nameErr" class="text-danger"></span>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label for="email">Email address <span class="required">*</span></label>
+                      <input  id="email" name="email" class="form-control" type="text">
+                      <span id="emailErr" class="text-danger"></span>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group">
+                      <label for="password">Password<span class="required">*</span></label>
+                      <input id="password" class="form-control" name="password" type="password">
+                      <label for="Confirm-password">Confirm-Password<span class="required">*</span></label>
+                      <input id="confirm-password" class="form-control" name="confirmPassword" type="password">
+                      <span id="passwordErr" class="text-danger"></span>
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group mb--0">
+                      <button class="btn-register" onclick="signupValid" type="submit">Signup</button>
+                      <!-- <a class="btn-register" href="shop.html">Signup</a> -->
+                    </div>
+                  </div>
+                  <div class="col-12">
+                    <div class="form-group account-info-group mb--0">
+                      <a class="lost-password" href="/vendor">have an account?</a>
+                    </div>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!--== End My Account Area Wrapper ==-->
+  <!--== End Aside Menu ==-->
+</div>
+
+<!--=======================Javascript============================-->
+<script>
+  function signupValid() {
+    let Name = document.getElementById('Name').value;
+    let email = document.getElementById('email').value;
+    let passwrd = document.getElementById('password').value;
+    let confirmPasswrd = document.getElementById('confirm-password').value;
+
+    let errMessage = document.getElementById('errMessage');
+    let passwordErr = document.getElementById('passwordErr');
+    let nameErr = document.getElementById('nameErr');
+    let emailErr = document.getElementById('emailErr');
+
+    // Regex 
+    let emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let NamePattern = /^[a-zA-Z]{4,}$/;
+    let passwordPattern = /^.{6,}$/;
+
+    if (Name === '' || email === '' || passwrd === '' || confirmPasswrd === '') {
+        errMessage.innerHTML = "Please fill the form";
+        return false;
+    } else {
+        errMessage.innerHTML = "";
+    }
+
+    if (!emailPattern.test(email)) {
+        emailErr.innerHTML = "Invalid email format";
+
+    } else {
+        emailErr.innerHTML = ""; 
+    }
+    if (!NamePattern.test(Name)) {
+        nameErr.innerHTML = "Name only contains letters and must contain at least 4 letters";
+
+    } else {
+        nameErr.innerHTML = "";
+    }
+    if (!passwordPattern.test(passwrd)) {
+        passwordErr.innerHTML = "Password must contain at least 6 characters";
+    }else if (passwrd !== confirmPasswrd) {
+        passwordErr.innerHTML = "Password doesn't match";
+    } else {
+        passwordErr.innerHTML = ""; 
+    }
+
+    if(!emailPattern.test(email) || !NamePattern.test(Name) || !passwordPattern.test(passwrd) || passwrd !== confirmPasswrd){
+      return false;
+    }
+    return true; 
+}
+</script>
+
+<!--=== jQuery Modernizr Min Js ===-->
+<script src="assets/js/modernizr.js"></script>
+<!--=== jQuery Min Js ===-->
+<script src="assets/js/jquery-main.js"></script>
+<!--=== jQuery Migration Min Js ===-->
+<script src="assets/js/jquery-migrate.js"></script>
+<!--=== jQuery Popper Min Js ===-->
+<script src="assets/js/popper.min.js"></script>
+<!--=== jQuery Bootstrap Min Js ===-->
+<script src="assets/js/bootstrap.min.js"></script>
+<!--=== jQuery Swiper Min Js ===-->
+<script src="assets/js/swiper.min.js"></script>
+<!--=== jQuery Fancybox Min Js ===-->
+<script src="assets/js/fancybox.min.js"></script>
+<!--=== jQuery Countdown Min Js ===-->
+<script src="assets/js/countdown.js"></script>
+<!--=== jQuery Isotope Min Js ===-->
+<script src="assets/js/isotope.pkgd.min.js"></script>
+<!--=== jQuery Range Slider Min Js ===-->
+<script src="assets/js/ion.rangeSlider.min.js"></script>
+
+<!--=== jQuery Custom Js ===-->
+<script src="assets/js/custom.js"></script>
+
+</body>
+
+
+<!-- Mirrored from htmldemo.net/tuime/tuime/account-register.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 10 Feb 2024 04:43:25 GMT -->
+</html>

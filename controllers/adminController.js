@@ -18,7 +18,7 @@ let submitAdminLogin = async (req,res) => {
                 return res.status(404).render('admin/admin-login', { passError: 'Admin Not Found' });             //send('User Not Found');
             }
             console.log("loginAdmin : ", loginAdmin);
-            
+        
             if(password !== loginAdmin.password){
                 return res.status(401).render('admin/admin-login',{passError : 'Wrong Password'});
             }else{

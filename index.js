@@ -44,7 +44,7 @@ app.use(express.static('public'));
 
 
 app.use('/',adminRoutes);
-// app.use('/',vendorRoutes);
+app.use('/',vendorRoutes);
 app.use('/',userRoutes);
 
 
