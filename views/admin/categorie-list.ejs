@@ -144,7 +144,7 @@
                         <!-- header rightbar icon -->
                         <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
                             <div class="d-flex align-items-center">
-                                <a href="categories-add.html" class="btn btn-primary py-2 px-5 btn-set-task w-sm-100"><i class="icofont-plus-circle me-2 fs-6"></i> Add Categories</a>
+                                <a href="/addCategory" class="btn btn-primary py-2 px-5 btn-set-task w-sm-100"><i class="icofont-plus-circle me-2 fs-6"></i> Add Categories</a>
                             </div>
                             <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-end ms-5 zindex-popover">
                                 <div class="u-info me-2">
@@ -213,17 +213,18 @@
                                         <thead>
                                             <tr>
                                                 <th>Id</th>
-                                                <th>Categorie</th>
+                                                <th>categoryName</th>
                                                 <th>Date</th>
                                                 <th>Status</th>
                                                 <th>Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <% category.map(cat => { %>
                                             <tr>
-                                                <td><strong>#0001</strong></td>
-                                                <td>Watch</td>
-                                                <td>March 13, 2021</td>
+                                                <td><strong><%= cat.id %></strong></td>
+                                                <td><%= cat.categoryName %></td>
+                                                <td><%= cat.createdAt.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></td>
                                                 <td><span class="badge bg-success">Published</span></td>
                                                 <td>
                                                     <div class="btn-group" role="group" aria-label="Basic outlined example">
@@ -232,7 +233,8 @@
                                                     </div>
                                                 </td>
                                             </tr>
-                                            <tr>
+                                            <% }) %>
+                                            <!-- <tr>
                                                 <td><strong>#0002</strong></td>
                                                 <td>Toy</td>
                                                 <td>January 14, 2021</td>
@@ -255,7 +257,7 @@
                                                         <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
                                                     </div>
                                                 </td>
-                                            </tr>
+                                            </tr> -->
                                             <!-- <tr>
                                                 <td><strong>#0004</strong></td>
                                                 <td>Mobile</td>

@@ -12,13 +12,25 @@ const adminSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-    }
-    // otp:{
-    //     type:String
-    // },
-    // otpExpiration:{
-    //     type:Date
-    // }
+    },
+    category:[{
+        categoryName:{
+            type:String,
+        },
+        createdAt:{
+            type:Date,
+            default:Date.now
+        }
+    }],
+    subCategory:[{
+        subCategoryName:{
+            type:String,
+        },
+        createdAt:{
+            type:Date,
+            default:Date.now
+        }
+    }]
 });
 
 const Admin = mongoose.model('Admin',adminSchema);

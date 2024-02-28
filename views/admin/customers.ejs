@@ -327,13 +327,13 @@
                                         <thead>
                                             <tr>
                                                 <!-- <th>Id</th> -->
-                                                <th>Customers</th> 
-                                                <th>Register  Date</th>
-                                                <th>Mail</th>
-                                                <th>Phone</th> 
+                                                <th class="col-4">Customers</th> 
+                                                <th class="col-3">Register  Date</th>
+                                                <th class="col-3">Mail</th>
+                                                <!-- <th>Phone</th>  -->
                                                 <!-- <th>Country</th>  -->
                                                 <!-- <th>Total Order</th> -->
-                                                <th>Status</th>  
+                                                <th class="col-2">Status</th>  
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -342,20 +342,20 @@
                                             
                                             <tr>
                                                 <!-- <td><strong><%= user._id  %></strong></td> -->
-                                                <td>
+                                                <td class="col-4">
                                                         <a href="customer-detail.html">
-                                                            <img class="avatar rounded" src="assets/images/xs/avatar1.svg" alt="">
+                                                            <img class="avatar rounded" src="assets/images/xs/avatar1.svg">
                                                             <span class="fw-bold ms-1"><%= user.username %></span>
                                                         </a>
                                                 </td>
-                                                <td>
+                                                <td class="col-3">
                                                         12/03/2021
                                                 </td>
-                                                <td><%= user.email %></td>
-                                                <td>202-555-0983</td>
+                                                <td class="col-3"><%= user.email %></td>
+                                                <!-- <td>202-555-0983</td> -->
                                                 <!-- <td>South Africa</td> -->
                                                 <!-- <td>18</td> -->
-                                                <td>
+                                                <td class="col-2">
                                                     <% if (user.Blocked) { %>
                                                         <form method="post" action="/userBlock">
                                                             <input type="hidden" name="userId" value="<%= user._id %>">

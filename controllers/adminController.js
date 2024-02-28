@@ -34,8 +34,27 @@ let submitAdminLogin = async (req,res) => {
     }
 }
 
-let categoryList = (req,res) => {
-    res.render('admin/categorie-list')
+let categoryList = async (req,res) => {
+    let admin = await Admin.find();
+    if(!admin){
+        res.status(400).send('Admin not found');
+    }
+    let category = admin[0].category.map(category => category);
+    res.render('admin/categorie-list',{category});
+}
+
+let addCategory = (req,res) => {
+    res.render('admin/categories-add');
+}
+let submitAddCategory = async (req,res) => {
+    let {categoryName} =req.body;
+    let admin = await Admin.findOne();
+    if(!admin){
+        res.status(400).send('Admin not found')
+    }
+    admin.category.push({categoryName});
+    admin.save();
+    res.redirect('/categories')
 }
 
 let userList =async (req,res) => {
@@ -64,6 +83,8 @@ module.exports = {
     adminLogin,
     submitAdminLogin,
     categoryList,
+    addCategory,
+    submitAddCategory,
     userList,
     userBlock
 }

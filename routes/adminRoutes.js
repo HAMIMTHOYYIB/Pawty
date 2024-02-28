@@ -8,5 +8,7 @@ router.post('/admin',adminController.submitAdminLogin);
 router.get('/categories',adminController.categoryList);
 router.get('/Customers',adminController.userList);
 router.post('/userblock',adminController.userBlock);
+router.get('/addCategory',adminController.addCategory);
+router.post('/addCategory',adminController.submitAddCategory)
 
 module.exports = router;
