@@ -1,5 +1,6 @@
 
 const Admin = require('../models/admin');
+const User = require('../models/User');
 
 let dashboard = (req,res) => {
     res.render('admin/index')
@@ -32,8 +33,37 @@ let submitAdminLogin = async (req,res) => {
         res.render('admin/admin-login',{passError:'Please Complete the fields :'})
     }
 }
+
+let categoryList = (req,res) => {
+    res.render('admin/categorie-list')
+}
+
+let userList =async (req,res) => {
+    let user = await User.find();
+    res.render('admin/customers',{user});
+}
+
+let userBlock = async (req,res) => {
+    const userId = req.body.userId;
+    try {
+        const user = await User.findOne({_id:userId});
+        console.log(user);
+        if(user){
+            console.log("user");
+            user.Blocked = !user.Blocked;
+            await user.save();
+        }
+        res.redirect('/Customers');
+    } catch (error) {
+        res.status(500).send('Error on admin Changing User status');
+    }
+}
+
 module.exports = {
     dashboard,
     adminLogin,
-    submitAdminLogin
+    submitAdminLogin,
+    categoryList,
+    userList,
+    userBlock
 }

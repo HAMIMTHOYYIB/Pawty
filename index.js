@@ -1,8 +1,9 @@
-
 const express = require('express');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+require('dotenv').config()
 
 mongoose.connect('mongodb://localhost:27017/Pawty', {
     useNewUrlParser: true,
@@ -19,8 +20,6 @@ const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 
-require('dotenv').config()
-
 app.use(session({
     resave:false,
     saveUninitialized:true,
@@ -30,7 +29,9 @@ app.use(session({
         httponly:true,
         maxAge:24*60*60*1000
     }
-}))
+}));
+app.use(cookieParser());
+// app.use(jwtMiddleware);
 
 const {parsed:config} = require('dotenv').config()
 global.config = config

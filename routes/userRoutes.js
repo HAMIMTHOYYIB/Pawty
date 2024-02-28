@@ -7,18 +7,21 @@ require('dotenv').config()
 
 router.use(passport.initialize())
 router.use(passport.session())
+const { verifyToken } = require('../middleware/jwt');
+
 
 // const userController = require('../controllers/userController');
 
 
 router.get('/', userController.homePage);
-router.get('/account',userController.account);
+router.get('/account', userController.account);
 router.get('/shop',userController.shop);
 router.get('/product',userController.product);
 router.get('/login',userController.loginPage);
 router.post('/loginUser',userController.submitlogin);
 router.get('/signup',userController.signupPage);
 router.post('/signupUser',userController.submitSignup);
+router.get('/logout',userController.logout);
 
 router.get('/forgetPass',userController.forgotGetPage);
 router.post('/forgetPass',userController.forgotPassPost);

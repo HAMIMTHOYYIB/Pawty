@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
 require('dotenv').config()
 
 
@@ -37,12 +38,12 @@ let submitlogin = async (req, res) => {
     const {email, password} = req.body;
     if(email && password){
         try {
-            const loginUser = await User.findOne({email: email});
-            if (!loginUser) {
+            const User = await User.findOne({email: email});
+            if (!User) {
                 return res.status(404).render('users/account-login', { passError: 'User Not Found' });             //send('User Not Found');
             }
-            console.log("loginUser : ", loginUser);
-            bcrypt.compare(password, loginUser.password, (err, result) => {
+            console.log("loginUser : ", User);
+            bcrypt.compare(password, User.password, (err, result) => {
                 if (err) {
                     // console.error("problem : ", err);
                     return res.status(500).send('Internal Server Error');
@@ -50,7 +51,13 @@ let submitlogin = async (req, res) => {
                 if (!result) {
                     return res.status(401).render('users/account-login',{passError : 'Wrong Password'});
                 }
-                // req.session.userId = loginUser._id;  //jwt
+                // const token = jwt.sign({ userId: User._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+                // // Store the token in a cookie or response header
+                // res.cookie('jwt', token, { httpOnly: true });
+                // // Or send the token in the response body
+                // // res.json({ token });
+            
                 res.render('users/account');
             });
         } catch (error) {
@@ -124,7 +131,7 @@ let forgotGetPage = async (req, res) => {
     } catch (error) {
       res.status(404).send("page not found");
     }
-  };
+  }; 
   
 const transporter = nodemailer.createTransport({
   service: "gmail",
@@ -214,6 +221,14 @@ const sendOtpEmail = async (email, otp) => {
   };
   // FORGOT PASSWORD -- ENDS HERE
 
+
+  let logout = (req, res) => {
+    // res.clearCookie('jwt');
+    // console.log('user logged out');
+    res.redirect('/');
+};
+
+
 module.exports={
     homePage,
     account,
@@ -227,5 +242,6 @@ module.exports={
     forgotPassPost,
     resetPassword,
     succesGoogleLogin,
-    failureGooglelogin
+    failureGooglelogin,
+    logout
 }
