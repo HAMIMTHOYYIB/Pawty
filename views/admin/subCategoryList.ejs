@@ -37,7 +37,7 @@
                         </a>
                     </li>
                     <li class="collapsed">
-                        <a class="m-link active" data-bs-toggle="collapse" data-bs-target="#categories" href="#">
+                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#categories" href="#">
                             <i class="icofont-chart-flow fs-5"></i> <span>Categories</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
                             <!-- Menu: Sub menu ul -->
                             <ul class="sub-menu collapse" id="categories">
@@ -47,7 +47,7 @@
                             </ul>
                     </li>
                     <li class="collapsed">
-                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#subcategories" href="#">
+                        <a class="m-link active" data-bs-toggle="collapse" data-bs-target="#subcategories" href="#">
                             <i class="icofont-chart-flow fs-5"></i> <span>Sub-Categories</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
                             <!-- Menu: Sub menu ul -->
                             <ul class="sub-menu collapse" id="subcategories">
@@ -144,7 +144,7 @@
                         <!-- header rightbar icon -->
                         <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
                             <div class="d-flex align-items-center">
-                                <a href="/addCategory" class="btn btn-primary py-2 px-5 btn-set-task w-sm-100"><i class="icofont-plus-circle me-2 fs-6"></i> Add Categories</a>
+                                <a href="/addSubCategory" class="btn btn-primary py-2 px-5 btn-set-task w-sm-100"><i class="icofont-plus-circle me-2 fs-6"></i> Add subCategories</a>
                             </div>
                             <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-end ms-5 zindex-popover">
                                 <div class="u-info me-2">
@@ -201,7 +201,7 @@
                     <div class="row align-items-center">
                         <div class="border-0 mb-4">
                             <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                                <h3 class="fw-bold mb-0">Category List</h3>
+                                <h3 class="fw-bold mb-0">subCategory List</h3>
                             </div>
                         </div>
                     </div> <!-- Row end  -->
@@ -213,26 +213,32 @@
                                         <thead>
                                             <tr>
                                                 <th>Id</th>
-                                                <th>categoryName</th>
-                                                <th>Added on</th>
+                                                <th>subCategoryName</th>
+                                                <th>Date</th>
                                                 <!-- <th>Status</th> -->
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <% category.map(cat => { %>
+                                            <% subCategory.map(cat => { %>
                                             <tr>
                                                 <td><strong><%= cat.id %></strong></td>
-                                                <td><%= cat.categoryName %></td>
+                                                <td><%= cat.subCategoryName %></td>
                                                 <td><%= cat.createdAt.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></td>
                                                 <!-- <td><span class="badge bg-success">Published</span></td> -->
                                                 <td class="d-flex">
-                                                    <form class="col-6" action='/deleteCategory/<%= cat._id %>' method="POST">
+                                                    <form class="col-6" action='/deleteSubCategory/<%= cat._id %>' method="POST">
                                                         <button type="submit" class="btn btn-outline-secondary"><i class="icofont-ui-delete text-danger"></i></button>
+                                                        <!-- <button type="submit">Delete</button> -->
                                                     </form>
-                                                    <form class="col-6" action="/editCategory/<%= cat._id %>" method="get">
-                                                            <button type="submit" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></button>
+                                                    <form class="col-6" action="/editSubCategory/<%= cat._id %>" method="get">
+                                                        <button type="submit" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></button>
                                                     </form>
+<!--                                                     
+                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                        <a href="categories-edit.html" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
+                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+                                                    </div> -->
                                                 </td>
                                             </tr>
                                             <% }) %>

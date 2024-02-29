@@ -22,6 +22,10 @@ const userSchema = new mongoose.Schema({
     Blocked:{
         type:Boolean,
         default:false
+    },
+    signedAt:{
+        type:Date,
+        default:Date.now
     }
 });
 

@@ -16,6 +16,7 @@ const adminSchema = new mongoose.Schema({
     category:[{
         categoryName:{
             type:String,
+            required:true
         },
         createdAt:{
             type:Date,
@@ -25,6 +26,7 @@ const adminSchema = new mongoose.Schema({
     subCategory:[{
         subCategoryName:{
             type:String,
+            required:true
         },
         createdAt:{
             type:Date,
