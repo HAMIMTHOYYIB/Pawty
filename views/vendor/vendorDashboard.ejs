@@ -10,11 +10,11 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
 
     <!-- plugin css file  -->
-    <link rel="stylesheet" href="assets/plugin/datatables/responsive.dataTables.min.css">
-    <link rel="stylesheet" href="assets/plugin/datatables/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/assets/plugin/datatables/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="/assets/plugin/datatables/dataTables.bootstrap5.min.css">
 
     <!-- project css file  -->
-    <link rel="stylesheet" href="assets/css/ebazar.style.min.css">
+    <link rel="stylesheet" href="/assets/css/ebazar.style.min.css">
 </head>
 <body>
     <div id="ebazar-layout" class="theme-blue">
@@ -30,17 +30,19 @@
                 </a>
                 <!-- Menu: main ul -->
                 <ul class="menu-list flex-grow-1 mt-3">
-                    <li><a class="m-link active" href="/admin"><i class="icofont-home fs-5"></i> <span>Dashboard</span></a></li>
-                    <li class="collapsed">
+                    <li><a class="m-link active" href="/vendor/dashboard"><i class="icofont-home fs-5"></i> <span>Dashboard</span></a></li>
+                    <li><a class="m-link" href="/vendor/product-list"><i class="icofont-home fs-5"></i> <span>Products</span></a></li>
+                    <li><a class="m-link" href="/vendor/add-product"><i class="icofont-home fs-5"></i> <span>Add Products</span></a></li>
+                    <!-- <li class="collapsed">
                         <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-product" href="/vendor/product-list">
                             <i class="icofont-truck-loaded fs-5"></i> <span>Products</span>
                         </a>
                     </li>
-                    <li class="collapsed">
-                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-product" href="#">
+                    <li>
+                        <a class="m-link" data-bs-toggle="collapse"  href="/vendor">
                             <i class="icofont-truck-loaded fs-5"></i> <span>Add Products</span>
                         </a>
-                    </li>                     
+                    </li>                      -->
                     <li class="collapsed">
                         <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-order" href="#">
                         <i class="icofont-notepad fs-5"></i> <span>Orders</span></a>
@@ -115,11 +117,11 @@
                         <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
                             <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
                                 <div class="u-info me-2">
-                                    <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold"><%= vendorExist.vendorName %></span></p>
+                                    <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">vendor name</span></p>
                                     <small>Vendor Profile</small>
                                 </div>
                                 <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
-                                    <img class="avatar lg rounded-circle img-thumbnail" src="assets/images/profile_av.svg" alt="profile">
+                                    <img class="avatar lg rounded-circle img-thumbnail" src="/assets/images/profile_av.svg" alt="profile">
                                 </a>
                                 <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
                                     <div class="card border-0 w280">
@@ -127,8 +129,7 @@
                                             <div class="d-flex py-1">
                                                 <img class="avatar rounded-circle" src="assets/images/profile_av.svg" alt="profile">
                                                 <div class="flex-fill ms-3">
-                                                    <p class="mb-0" for="name"><span class="font-weight-bold"><span class="font-weight-bold"><%= vendorExist.vendorName %></span></span></p>
-                                                    <small class="" ><%= vendorExist.email %></small>
+                                                    <p class="mb-0" for="name"><span class="font-weight-bold"><span class="font-weight-bold">vendorname</span></span></p>
                                                 </div>
                                             </div>
                                             
@@ -1084,11 +1085,11 @@
     </div>
 
     <!-- Jquery Core Js -->
-    <script src="assets/bundles/libscripts.bundle.js"></script>
+    <script src="/assets/bundles/libscripts.bundle.js"></script>
 
     <!-- Plugin Js -->
-    <script src="assets/bundles/apexcharts.bundle.js"></script>
-    <script src="assets/bundles/dataTables.bundle.js"></script>  
+    <script src="/assets/bundles/apexcharts.bundle.js"></script>
+    <script src="/assets/bundles/dataTables.bundle.js"></script>  
 
     <!-- Jquery Page Js -->
     <script src="../js/template.js"></script>

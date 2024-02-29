@@ -1,4 +1,5 @@
-const Vendor = require('../models/Vendor')
+const Vendor = require('../models/Vendor');
+const Admin = require('../models/admin');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 require('dotenv').config()
@@ -30,6 +31,76 @@ let vendorLoginSubmit = async (req,res) => {
     }else{
         res.render('vendor/vendorLogin',{passError:'Please Fill the input Fields.'})
     }
+}
+
+
+let vendorSignup = (req,res) => {
+  res.render('vendor/vendorSignup',{passError:''})
+}
+
+let vendorSignupPost = async (req,res) => {
+  console.log(req.body);
+  let {name,email,password} = req.body
+  try {
+      let vendorExisted = await Vendor.findOne({email});
+      if(vendorExisted){
+          res.status(400).render('vendor/vendorSignup',{passError:'Reseller Exist With this E-mail'})
+      }else{
+          const hashedPass = await bcrypt.hash(password,10)
+          const newVendor = new Vendor({vendorName:name,email,password:hashedPass})
+          await newVendor.save();
+          console.log('New Vendor Added Successfully');
+          vendorExist = newVendor;
+          res.render('vendor/vendorDashboard',{vendorExist});
+      }
+  } catch (error) {
+      res.status(500).send('Internal Server Error')
+  }
+}
+
+
+
+let addProduct = async (req,res) => {
+  let admin = await Admin.findOne();
+  if (!admin.category) {
+    res.status(400).send('Category Not Found');
+  }else{
+    res.render('vendor/product-add',{admin})
+  }
+}
+
+let submitAddProduct = async (req,res) => {
+  let {
+      ProductName,
+      Price,
+      Brand,
+      Stock,
+      Discription,
+      image1,
+      image2,
+      image3,
+      image4,
+      Category,
+      SubCategory
+    } = req.body;
+
+  let newProduct = {
+    productName:ProductName,discription:Discription,price:Price,brand:Brand,category:Category,subCategory:SubCategory,stockQuantity:Stock
+  }
+  console.log("newobjj:",newProduct);
+  try {
+    let vendor = await Vendor.findOne();
+    if(!vendor){
+      res.status(400).send('Vendor Not Found')
+    }else{
+      vendor.products.push(newProduct);
+      await vendor.save();
+      res.redirect('/vendor/product-list');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal Server Error')
+  }
 }
 
 
@@ -66,7 +137,6 @@ const sendOtpEmail = async (email, otp) => {
     console.error("Error sending email:", error);
   }
 };
-  
   
   // FORGOT EMAIL POST + OTP GENERATION AND MAIL SEND
   let vendorForgotPass = async (req, res) => {
@@ -131,35 +201,15 @@ const sendOtpEmail = async (email, otp) => {
   // FORGOT PASSWORD -- ENDS HERE
 
 
-  let vendorSignup = (req,res) => {
-    res.render('vendor/vendorSignup',{passError:''})
-  }
-  let vendorSignupPost = async (req,res) => {
-    console.log(req.body);
-    let {name,email,password} = req.body
-    try {
-        let vendorExisted = await Vendor.findOne({email});
-        if(vendorExisted){
-            res.status(400).render('vendor/vendorSignup',{passError:'Reseller Exist With this E-mail'})
-        }else{
-            const hashedPass = await bcrypt.hash(password,10)
-            const newVendor = new Vendor({vendorName:name,email,password:hashedPass})
-            await newVendor.save();
-            console.log('New Vendor Added Successfully');
-            vendorExist = newVendor;
-            res.render('vendor/vendorDashboard',{vendorExist});
-        }
-    } catch (error) {
-        res.status(500).send('Internal Server Error')
-    }
-  }
 
 module.exports = {
+    vendorDashboard,
     vendorLogin,
     vendorLoginSubmit,
-    vendorForgotPass,
-    resetVendorPass,
     vendorSignup,
     vendorSignupPost,
-    vendorDashboard
+    addProduct,
+    submitAddProduct,
+    vendorForgotPass,
+    resetVendorPass
 }

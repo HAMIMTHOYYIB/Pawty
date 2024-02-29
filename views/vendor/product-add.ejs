@@ -10,19 +10,18 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
 
     <!--plugin css file -->
-    <link rel="stylesheet" href="/public/assets/plugin/multi-select/css/multi-select.css"><!-- Multi Select Css -->
-    <link rel="stylesheet" href="/public/assets/plugin/bootstrap-tagsinput/bootstrap-tagsinput.css"><!-- Bootstrap Tagsinput Css -->
-    <link rel="stylesheet" href="/public/assets/plugin/cropper/cropper.min.css"><!--Cropperer Css -->   
-    <link rel="stylesheet" href="/public/assets/plugin/dropify/dist/css/dropify.min.css"/><!-- Dropify Css -->
-    <link rel="stylesheet" href="/public/assets/plugin/datatables/responsive.dataTables.min.css"><!-- Datatable Css -->
-    <link rel="stylesheet" href="/public/assets/plugin/datatables/dataTables.bootstrap5.min.css"><!-- Datatable Css -->
+    <link rel="stylesheet" href="/assets/plugin/multi-select/css/multi-select.css"><!-- Multi Select Css -->
+    <link rel="stylesheet" href="/assets/plugin/bootstrap-tagsinput/bootstrap-tagsinput.css"><!-- Bootstrap Tagsinput Css -->
+    <link rel="stylesheet" href="/assets/plugin/cropper/cropper.min.css"><!--Cropperer Css -->   
+    <link rel="stylesheet" href="/assets/plugin/dropify/dist/css/dropify.min.css"/><!-- Dropify Css -->
+    <link rel="stylesheet" href="/assets/plugin/datatables/responsive.dataTables.min.css"><!-- Datatable Css -->
+    <link rel="stylesheet" href="/assets/plugin/datatables/dataTables.bootstrap5.min.css"><!-- Datatable Css -->
 
     <!-- Project css file  -->
-    <link rel="stylesheet" href="/public/assets/css/ebazar.style.min.css">
+    <link rel="stylesheet" href="/assets/css/ebazar.style.min.css">
 </head>
 <body>
     <div id="ebazar-layout" class="theme-blue">
-        
         <!-- sidebar -->
         <div class="sidebar px-4 py-4 py-md-4 me-0">
             <div class="d-flex flex-column h-100">
@@ -34,14 +33,14 @@
                 </a>
                 <!-- Menu: main ul -->
                 <ul class="menu-list flex-grow-1 mt-3">
-                    <li><a class="m-link active" href="/admin"><i class="icofont-home fs-5"></i> <span>Dashboard</span></a></li>
+                    <li><a class="m-link " href="/vendor"><i class="icofont-home fs-5"></i> <span>Dashboard</span></a></li>
                     <li class="collapsed">
                         <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-product" href="/vendor/product-list">
                             <i class="icofont-truck-loaded fs-5"></i> <span>Products</span>
                         </a>
                     </li>
                     <li class="collapsed">
-                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-product" href="#">
+                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-product" href="/vendor/add-product">
                             <i class="icofont-truck-loaded fs-5"></i> <span>Add Products</span>
                         </a>
                     </li>                     
@@ -117,128 +116,19 @@
         
                          <!-- header rightbar icon -->
                         <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
-                            <!--<div class="d-flex">
-                                <a class="nav-link text-primary collapsed" href="help.html" title="Get Help">
-                                    <i class="icofont-info-square fs-5"></i>
-                                </a>
-                            </div>
-                            <div class="dropdown zindex-popover">
-                                <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
-                                    <img src="/public/assets/images/flag/GB.png" alt="">
-                                </a>
-                                <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-md-end p-0 m-0 mt-3">
-                                    <div class="card border-0">
-                                        <ul class="list-unstyled py-2 px-3">
-                                            <li>
-                                                <a href="#" class=""><img src="/public/assets/images/flag/GB.png" alt=""> English</a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class=""><img src="/public/assets/images/flag/DE.png" alt=""> German</a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class=""><img src="/public/assets/images/flag/FR.png" alt=""> French</a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class=""><img src="/public/assets/images/flag/IT.png" alt=""> Italian</a>
-                                            </li>
-                                            <li>
-                                                <a href="#" class=""><img src="/public/assets/images/flag/RU.png" alt=""> Russian</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="dropdown notifications">
-                                <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
-                                    <i class="icofont-alarm fs-5"></i>
-                                    <span class="pulse-ring"></span>
-                                </a>
-                                <div id="NotificationsDiv" class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-md-end p-0 m-0 mt-3">
-                                    <div class="card border-0 w380">
-                                        <div class="card-header border-0 p-3">
-                                            <h5 class="mb-0 font-weight-light d-flex justify-content-between">
-                                                <span>Notifications</span>
-                                                <span class="badge text-white">06</span>
-                                            </h5>
-                                        </div>
-                                        <div class="tab-content card-body">
-                                            <div class="tab-pane fade show active">
-                                                <ul class="list-unstyled list mb-0">
-                                                    <li class="py-2 mb-1 border-bottom">
-                                                        <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="/public/assets/images/xs/avatar1.svg" alt="">
-                                                            <div class="flex-fill ms-2">
-                                                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Chloe Walkerr</span> <small>2MIN</small></p>
-                                                                <span class="">Added New Product 2021-07-15 <span class="badge bg-success">Add</span></span>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                    <li class="py-2 mb-1 border-bottom">
-                                                        <a href="javascript:void(0);" class="d-flex">
-                                                            <div class="avatar rounded-circle no-thumbnail">AH</div>
-                                                            <div class="flex-fill ms-2">
-                                                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Alan	Hill</span> <small>13MIN</small></p>
-                                                                <span class="">Invoice generator </span>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                    <li class="py-2 mb-1 border-bottom">
-                                                        <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="/public/assets/images/xs/avatar3.svg" alt="">
-                                                            <div class="flex-fill ms-2">
-                                                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Melanie	Oliver</span> <small>1HR</small></p>
-                                                                <span class="">Orader  Return RT-00004</span>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                    <li class="py-2 mb-1 border-bottom">
-                                                        <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="/public/assets/images/xs/avatar5.svg" alt="">
-                                                            <div class="flex-fill ms-2">
-                                                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Boris Hart</span> <small>13MIN</small></p>
-                                                                <span class="">Product Order to Toyseller</span>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                    <li class="py-2 mb-1 border-bottom">
-                                                        <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="/public/assets/images/xs/avatar6.svg" alt="">
-                                                            <div class="flex-fill ms-2">
-                                                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Alan	Lambert</span> <small>1HR</small></p>
-                                                                <span class="">Leave Apply</span>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                    <li class="py-2">
-                                                        <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="/public/assets/images/xs/avatar7.svg" alt="">
-                                                            <div class="flex-fill ms-2">
-                                                                <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Zoe Wright</span> <small class="">1DAY</small></p>
-                                                                <span class="">Product Stoke Entry Updated</span>
-                                                            </div>
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <a class="card-footer text-center border-top-0" href="#"> View all notifications</a>
-                                    </div>
-                                </div>
-                            </div> -->
                             <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
                                 <div class="u-info me-2">
                                     <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">John Quinn</span></p>
                                     <small>Admin Profile</small>
                                 </div>
                                 <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
-                                    <img class="avatar lg rounded-circle img-thumbnail" src="/public/assets/images/profile_av.svg" alt="profile">
+                                    <img class="avatar lg rounded-circle img-thumbnail" src="/assets/images/profile_av.svg" alt="profile">
                                 </a>
                                 <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
                                     <div class="card border-0 w280">
                                         <div class="card-body pb-0">
                                             <div class="d-flex py-1">
-                                                <img class="avatar rounded-circle" src="/public/assets/images/profile_av.svg" alt="profile">
+                                                <img class="avatar rounded-circle" src="/assets/images/profile_av.svg" alt="profile">
                                                 <div class="flex-fill ms-3">
                                                     <p class="mb-0"><span class="font-weight-bold">John	Quinn</span></p>
                                                     <small class="">Johnquinn@gmail.com</small>
@@ -286,196 +176,141 @@
                         <div class="border-0 mb-4">
                             <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
                                 <h3 class="fw-bold mb-0">Add New Products</h3>
-                                <button type="submit" class="btn btn-primary btn-set-task w-sm-100 py-2 px-5 text-uppercase">Save</button>
                             </div>
                         </div>
                     </div> <!-- Row end  -->  
-                    
+                <form id="addProduct" action="/vendor/add-product" method="post" onsubmit="return validateForm()">
                     <div class="row g-3 mb-3">
+                        <div class="col-xl-8 col-lg-8">
+                            <div class="sticky-lg-top card mb-3">
+                                <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                    <h6 class="mb-0 fw-bold ">Product information</h6>
+                                </div>
+                                <div class="card-header py-0 d-flex justify-content-between bg-transparent border-bottom-0">
+                                    <b><span class="text-danger text-uppercase" id="Errormessage"></span></b>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row g-3 align-items-center">
+                                        <div class="col-md-6">
+                                            <label for="ProductName"  class="form-label">ProductName</label>
+                                            <input type="text" id="productName" name="ProductName" placeholder="Product Name" class="form-control">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="Price"  class="form-label">Price</label>
+                                            <input name="Price" type="number" id="price" placeholder="Price" class="form-control">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="Brand" class="form-label">Brand</label>
+                                            <input type="text" name="Brand" id="brand" placeholder="Brand Name" class="form-control">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="Stock" class="form-label">Stock Quantity</label>
+                                            <input type="number" name="Stock" id="stockQuantity" placeholder="Total Stocks" class="form-control">
+                                        </div>
+                                        <!-- <div class="col-md-12">
+                                            <label class="form-label">Product Identifier URL</label>
+                                            <div class="input-group mb-3">
+                                                <span class="input-group-text">https://eBazar.com/</span>
+                                                <input type="text" class="form-control">
+                                            </div>
+                                        </div> -->
+                                        <div class="col-md-12">
+                                            <label for="Discription" class="form-label col-12">Product Description</label>
+                                            <input name="Discription" class="col-12 pb-3 form-control" type="text" placeholder="Add Discription Here">
+                                            <!-- <div id="editor">
+                                                <h4>Enter Product Description Here</h4>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="card my-3">
+                                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                            <h6 class="mb-0 fw-bold ">Images</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row col-12 g-1 align-items-center">
+                                                <label class="form-label col-3" for="image1">Product Image-1 :</label>
+                                                <input class="col-9" type="file" name="image1" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
+                                            
+                                                <label class="form-label col-3" for="image2">Product Image-2 :</label>
+                                                <input class="col-9" type="file" name="image2" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
+                                                <br><br>
+                                                <label class="form-label col-3" for="image3">Product Image-3 :</label>
+                                                <input class="col-9" type="file" name="image3" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
+                                                
+                                                <label class="form-label col-3" for="image4">Product Image-4 :</label>
+                                                <input class="col-9" type="file" name="image4" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                         <div class="col-xl-4 col-lg-4">
-                            <div class="sticky-lg-top">
+                            <div class="sticky-lg-top mb-4">
                                 <div class="card mb-3">
-                                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                                        <h6 class="m-0 fw-bold">Pricing Info</h6>
+                                    <div class="card-header pt-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                                        <h6 class="m-0 fw-bold">Category</h6>
                                     </div>
                                     <div class="card-body">
-                                        <div class="row g-3 align-items-center">
-                                            <div class="col-md-12">
-                                                <label  class="form-label">Product Price Old</label>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label  class="form-label">Product Price New</label>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label  class="form-label">Product Coupon</label>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card mb-3">
-                                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                                        <h6 class="m-0 fw-bold">Visibility Status</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="couponsstatus" checked>
-                                            <label class="form-check-label">
-                                                Published
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="couponsstatus">
-                                            <label class="form-check-label">
-                                                Scheduled
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="couponsstatus">
-                                            <label class="form-check-label">
-                                                Hidden
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card mb-3">
-                                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                                        <h6 class="m-0 fw-bold">Size</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="sizechek1">
-                                            <label class="form-check-label" for="sizechek1">
-                                            XS
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="sizechek2">
-                                            <label class="form-check-label" for="sizechek2">
-                                            S
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="sizechek3">
-                                            <label class="form-check-label" for="sizechek3">
-                                            M
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="sizechek4">
-                                            <label class="form-check-label" for="sizechek4">
-                                            L
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="" id="sizechek5">
-                                            <label class="form-check-label" for="sizechek5">
-                                            XL
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card mb-3">
-                                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                                        <h6 class="m-0 fw-bold">Publish Schedule</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row g-3 align-items-center">
-                                            <div class="col-md-12">
-                                                <label  class="form-label">Publish Date</label>
-                                                <input type="date" class="form-control w-100">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label  class="form-label">Publish Time</label>
-                                                <input type="time" class="form-control w-100">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card mb-3">
-                                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                                        <h6 class="m-0 fw-bold">Tags</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="form-group demo-tagsinput-area">
-                                            <div class="form-line">
-                                                <input type="text" class="form-control" data-role="tagsinput">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card mb-3">
-                                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                                        <h6 class="m-0 fw-bold">Categories</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <label  class="form-label">Categories Select</label>
-                                        <select class="form-select" size="3" aria-label="size 3 select example">
-                                            <option value="1">Watch</option>
-                                            <option value="2">Clothes</option>
+                                        <label for="Category" class="form-label">Select Product Category</label>
+                                        <select name="Category" class="form-select" size="2" aria-label="size 3 select example">
+                                            <% admin.category.forEach(cat =>{ %>
+                                            <option value="<%= cat.categoryName %>"><%= cat.categoryName %></option>
+                                            <% }) %>
+                                            <!-- <option value="2">Clothes</option>
                                             <option value="3">Toy</option>
                                             <option value="4">Cosmetic</option>
                                             <option value="5">Laptop</option>
                                             <option value="6">Mobile</option>
-                                            <option value="7">Gaming accessories</option>
+                                            <option value="7">Gaming accessories</option> -->
                                         </select>
                                     </div>
                                 </div>
-                                <div class="card">
-                                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                                        <h6 class="m-0 fw-bold">Inventory Info</h6>
+                                <div class="card mb-3">
+                                    <div class="card-header pt-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                                        <h6 class="m-0 fw-bold">SubCategory</h6>
                                     </div>
                                     <div class="card-body">
-                                        <div class="row g-3 align-items-center">
-                                            <div class="col-md-12">
-                                                <label  class="form-label">SKU</label>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label  class="form-label">Total Stock Quantity</label>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                        </div>
+                                        <label for="SubCategory" class="form-label">Select Product SubCategory</label>
+                                        <select name="SubCategory" class="form-select" size="2" aria-label="size 3 select example">
+                                            <% admin.subCategory.forEach( sub => { %>
+                                            <option value="<%= sub.subCategoryName %>"><%= sub.subCategoryName %></option>
+                                            <% }) %>
+                                            <!-- <option value="2">Clothes</option>
+                                            <option value="3">Toy</option>
+                                            <option value="4">Cosmetic</option>
+                                            <option value="5">Laptop</option>
+                                            <option value="6">Mobile</option>
+                                            <option value="7">Gaming accessories</option> -->
+                                        </select>
                                     </div>
+                                </div>
+                                <div class="submit">
+                                    <button type="submit" class="btn btn-primary btn-set-task w-100 py-2 px-5 text-uppercase">Add Product</button>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-8 col-lg-8">
-                            <div class="card mb-3">
-                                <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                    <h6 class="mb-0 fw-bold ">Basic information</h6>
-                                </div>
-                                <div class="card-body">
-                                    <form>
-                                        <div class="row g-3 align-items-center">
-                                            <div class="col-md-6">
-                                                <label  class="form-label">Name</label>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label  class="form-label">Page Title</label>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label class="form-label">Product Identifier URL</label>
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text">https://eBazar.com/</span>
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label class="form-label">Product Description</label>
-                                                <div id="editor">
-                                                    <h4>Enter Product Description Here</h4>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="card mb-3">
+                    </div>
+                </form>
+                <script>
+                    function validateForm() {
+                        let productName = document.getElementById('productName').value.trim();
+                        let price = document.getElementById('price').value.trim();
+                        let brand = document.getElementById('brand').value.trim();
+                        let stockQuantity = document.getElementById('stockQuantity').value.trim();
+                
+                        if (productName === '' || price === '' || brand === '' || stockQuantity === '') {
+                            document.getElementById('Errormessage').textContent = 'Please fill all Input-fields';
+                            return false;
+                        } else {
+                            document.getElementById('Errormessage').textContent = '';
+                            return true;
+                        }
+                    }
+                </script>
+                
+                            <!-- <div class="card mb-3">
                                 <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
                                     <h6 class="mb-0 fw-bold ">Shipping Country</h6>
                                 </div>
@@ -543,15 +378,15 @@
                                         </optgroup>
                                     </select>
                                 </div>
-                            </div>
-                            <div class="card mb-3">
+                            </div> -->
+                            <!-- <div class="card mb-3">
                                 <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
                                     <h6 class="mb-0 fw-bold ">Images</h6>
                                 </div>
                                 <div class="card-body">
                                     <form>
-                                        <div class="row g-3 align-items-center">
-                                            <div class="col-md-12">
+                                        <div class="row g-3 align-items-center"> -->
+                                            <!-- <div class="col-md-12">
                                                 <label class="form-label">Product Images Upload</label>
                                                 <small class="d-block text-muted mb-2">Only portrait or square images, 2M max and 2000px max-height.</small>
                                                 <input type="file" id="input-file-to-destroy" class="dropify" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
@@ -559,11 +394,19 @@
                                             <div class="col-md-12">
                                                 <label  class="form-label w-100">Select Product Color</label>
                                                 <input type="color" id="color">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="product-cart">
-                                                    <div class="checkout-table table-responsive">
-                                                        <table id="myCartTable" class="table display dataTable table-hover align-middle" style="width:100%">
+                                            </div> -->
+                                            <!-- <div class="col-md-12">
+                                                <div class="product-cart"> -->
+                                                <!-- <input type="file" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
+                                                
+                                                <input type="file" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
+                                                <br><br>
+                                                <input type="file" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
+                                                
+                                                <input type="file" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
+                                                     -->
+                                                    <!-- <div class="checkout-table table-responsive"> -->
+                                                        <!-- <table id="myCartTable" class="table display dataTable table-hover align-middle" style="width:100%">
                                                             <thead>
                                                                 <tr>
                                                                     <th class="product">Product</th>
@@ -578,7 +421,7 @@
                                                                     <td>
                                                                         <div class="product-cart d-flex align-items-center">
                                                                             <div class="product-thumb">
-                                                                                <img src="/public/assets/images/product/upload.png" class="img-fluid avatar xl" alt="Product">
+                                                                                <img src="/assets/images/product/upload.png" class="img-fluid avatar xl" alt="Product">
                                                                             </div>
                                                                         </div>
                                                                     </td>
@@ -603,7 +446,7 @@
                                                                     <td>
                                                                         <div class="product-cart d-flex align-items-center">
                                                                             <div class="product-thumb">
-                                                                                <img src="/public/assets/images/product/upload.png" class="img-fluid avatar xl" alt="Product">
+                                                                                <img src="/assets/images/product/upload.png" class="img-fluid avatar xl" alt="Product">
                                                                             </div>
                                                                         </div>
                                                                     </td>
@@ -628,7 +471,7 @@
                                                                     <td>
                                                                         <div class="product-cart d-flex align-items-center">
                                                                             <div class="product-thumb">
-                                                                                <img src="/public/assets/images/product/upload.png" class="img-fluid avatar xl" alt="Product">
+                                                                                <img src="/assets/images/product/upload.png" class="img-fluid avatar xl" alt="Product">
                                                                             </div>
                                                                         </div>
                                                                     </td>
@@ -653,7 +496,7 @@
                                                                     <td>
                                                                         <div class="product-cart d-flex align-items-center">
                                                                             <div class="product-thumb">
-                                                                                <img src="/public/assets/images/product/upload.png" class="img-fluid avatar xl" alt="Product">
+                                                                                <img src="/assets/images/product/upload.png" class="img-fluid avatar xl" alt="Product">
                                                                             </div>
                                                                         </div>
                                                                     </td>
@@ -675,15 +518,15 @@
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
+                                                        </table> -->
+                                                    <!-- </div> -->
+                                                <!-- </div>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
-                            </div>
-                            <div class="card">
+                            </div> -->
+                            <!-- <div class="card">
                                 <div class="card-header py-3 bg-transparent border-bottom-0">
                                     <h6 class="m-0 fw-bold">Cropped Images</h6>
                                     <small>If You Cropped Images Please Upload and croppd easily.</small>
@@ -692,7 +535,7 @@
                                     <div class="row g-3 mb-3">
                                         <div class="col-xxl-12 col-xl-12 col-lg-12">
                                             <div class="img-container">
-                                                <img id="image" src="/public/assets/images/product/cropimg-upload.jpg" class="img-responsive" alt="Picture">
+                                                <img id="image" src="/assets/images/product/cropimg-upload.jpg" class="img-responsive" alt="Picture">
                                             </div>
                                         </div>
                                         <div class="col-xxl-12 col-xl-12 col-lg-12">
@@ -759,15 +602,15 @@
                                                         <span class="input-group-text">ScaleY</span>
                                                     </div>
                                                     <input type="text" class="form-control" id="dataScaleY" placeholder="scaleY">
-                                                </div>
+                                                </div> -->
                                                 <!-- /.pixels of image -->
-                                            </div>
-                                        </div>
-                                    </div><!-- Row end  --> 
-                                    <div class="row g-3">
-                                        <div class="col-lg-7 col-md-12 docs-buttons">
+                                            <!-- </div>
+                                        </div> -->
+                                    <!-- </div>Row end   -->
+                                    <!-- <div class="row g-3">
+                                        <div class="col-lg-7 col-md-12 docs-buttons"> -->
                                             <!-- .btn groups -->
-                                            <button type="button" class="btn btn-sm btn-info" data-method="setDragMode" data-option="move" title="Move"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setDragMode&quot;, &quot;move&quot;)"> <i class="icofont-drag1"></i> </span></button>
+                                            <!-- <button type="button" class="btn btn-sm btn-info" data-method="setDragMode" data-option="move" title="Move"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setDragMode&quot;, &quot;move&quot;)"> <i class="icofont-drag1"></i> </span></button>
                                             <button type="button" class="btn btn-sm btn-info" data-method="setDragMode" data-option="crop" title="Crop"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setDragMode&quot;, &quot;crop&quot;)"> <i class="icofont-crop"></i> </span></button>
                     
                                             <button type="button" class="btn btn-sm btn-success" data-method="zoom" data-option="0.1" title="Zoom In"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;zoom&quot;, 0.1)"> <i class="icofont-ui-zoom-in"></i> </span></button>
@@ -814,9 +657,9 @@
                                             <button type="button" class="btn btn-secondary" data-method="rotateTo" data-option="180"> <span class="docs-tooltip" data-toggle="tooltip" title="cropper.rotateTo(180)"> 180° </span> </button>
                                             <input type="text" class="form-control" id="putData" placeholder="Get data to here or set data with this value">
                                         </div>
-                                        <div class="col-lg-5 col-md-12 docs-toggles">
+                                        <div class="col-lg-5 col-md-12 docs-toggles"> -->
                                             <!-- .btn groups -->
-                                            <div class="btn-group btn-group-justified" data-toggle="buttons">
+                                            <!-- <div class="btn-group btn-group-justified" data-toggle="buttons">
                                                 <label class="btn btn-secondary active">
                                                     <input type="radio" class="sr-only" id="aspectRatio0" name="aspectRatio" value="1.7777777777777777">
                                                     <span class="docs-tooltip" data-toggle="tooltip" title="aspectRatio: 16 / 9"> 16:9 </span> </label>
@@ -929,15 +772,16 @@
                                                     </li>
                                                 </ul>
                                             </div>
-                                        </div>
-                                    </div><!-- Row end  --> 
-                                </div>
+                                        </div> -->
+                                    <!-- </div>Row end   -->
+                                <!-- </div>
                             </div>
                         </div>
-                    </div><!-- Row end  --> 
+                    </div> -->
+                    <!-- Row end  --> 
                     
-                </div>
-            </div>    
+                <!-- </div>
+            </div>     -->
         
             <!-- Modal Custom Settings-->
             <div class="modal fade right" id="Settingmodal" tabindex="-1"  aria-hidden="true">
@@ -1097,20 +941,74 @@
             </div>
 
         </div>      
-
+        <!-- <div class="col-xl-4 col-lg-4">
+            <div class="sticky-lg-top mb-4">
+                <div class="card mb-3">
+                    <div class="card-header pt-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                        <h6 class="m-0 fw-bold">Category</h6>
+                    </div>
+                    <div class="card-body">
+                        <label  class="form-label">Select Product Category</label>
+                        <select class="form-select" size="4" aria-label="size 3 select example">
+                            <option value="1">Watch</option>
+                            <option value="2">Clothes</option>
+                            <option value="3">Toy</option>
+                            <option value="4">Cosmetic</option>
+                            <option value="5">Laptop</option>
+                            <option value="6">Mobile</option>
+                            <option value="7">Gaming accessories</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card mb-3">
+                    <div class="card-header pt-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                        <h6 class="m-0 fw-bold">SubCategory</h6>
+                    </div>
+                    <div class="card-body">
+                        <label  class="form-label">Select Product SubCategory</label>
+                        <select class="form-select" size="3" aria-label="size 3 select example">
+                            <option value="1">Watch</option>
+                            <option value="2">Clothes</option>
+                            <option value="3">Toy</option>
+                            <option value="4">Cosmetic</option>
+                            <option value="5">Laptop</option>
+                            <option value="6">Mobile</option>
+                            <option value="7">Gaming accessories</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                        <h6 class="m-0 fw-bold">Inventory Info</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3 align-items-center">
+                            <div class="col-md-12">
+                                <label  class="form-label">SKU</label>
+                                <input type="text" class="form-control">
+                            </div>
+                            <div class="col-md-12">
+                                <label  class="form-label">Total Stock Quantity</label>
+                                <input type="text" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            <!-- </div>
+        </div> -->
     </div>
 
     <!-- Jquery Core Js -->      
-    <script src="/public/assets/bundles/libscripts.bundle.js"></script>
+    <script src="/assets/bundles/libscripts.bundle.js"></script>
 
     <!-- Jquery Plugin -->  
     <script src="../../../../../cdn.ckeditor.com/ckeditor5/29.0.0/classic/ckeditor.js"></script>
-    <script src="/public/assets/plugin/multi-select/js/jquery.multi-select.js"></script>
-    <script src="/public/assets/plugin/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>  
-    <script src="/public/assets/plugin/cropper/cropper.min.js"></script>
-    <script src="/public/assets/plugin/cropper/cropper-init.js"></script>
-    <script src="/public/assets/bundles/dropify.bundle.js"></script>
-    <script src="/public/assets/bundles/dataTables.bundle.js"></script>
+    <script src="/assets/plugin/multi-select/js/jquery.multi-select.js"></script>
+    <script src="/assets/plugin/bootstrap-tagsinput/bootstrap-tagsinput.js"></script>  
+    <script src="/assets/plugin/cropper/cropper.min.js"></script>
+    <script src="/assets/plugin/cropper/cropper-init.js"></script>
+    <script src="/assets/bundles/dropify.bundle.js"></script>
+    <script src="/assets/bundles/dataTables.bundle.js"></script>
 
     <!-- Jquery Page Js -->   
     <script src="../js/template.js"></script>
