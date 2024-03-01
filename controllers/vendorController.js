@@ -58,7 +58,10 @@ let vendorSignupPost = async (req,res) => {
   }
 }
 
-
+let productList = async (req,res) => {
+  let vendor = await Vendor.find();
+  res.render('vendor/product-list',{vendor})
+}
 
 let addProduct = async (req,res) => {
   let admin = await Admin.findOne();
@@ -70,24 +73,11 @@ let addProduct = async (req,res) => {
 }
 
 let submitAddProduct = async (req,res) => {
-  let {
-      ProductName,
-      Price,
-      Brand,
-      Stock,
-      Discription,
-      image1,
-      image2,
-      image3,
-      image4,
-      Category,
-      SubCategory
-    } = req.body;
+  let {ProductName,Price,Brand,Stock,Discription,image1,image2,image3,image4,Category,SubCategory} = req.body;
 
   let newProduct = {
     productName:ProductName,discription:Discription,price:Price,brand:Brand,category:Category,subCategory:SubCategory,stockQuantity:Stock
   }
-  console.log("newobjj:",newProduct);
   try {
     let vendor = await Vendor.findOne();
     if(!vendor){
@@ -208,6 +198,7 @@ module.exports = {
     vendorLoginSubmit,
     vendorSignup,
     vendorSignupPost,
+    productList,  
     addProduct,
     submitAddProduct,
     vendorForgotPass,
