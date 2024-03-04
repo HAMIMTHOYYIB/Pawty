@@ -10,8 +10,12 @@ router.get('/admin',adminController.adminLogin);
 router.post('/admin',adminController.submitAdminLogin);
 
 // User Management
-router.get('/Customers',adminAuthMiddleware,adminController.userList);
+router.get('/admin/Customers',adminAuthMiddleware,adminController.userList);
 router.post('/userblock',adminController.userBlock);
+
+// Vendor Management
+router.get('/admin/Vendors',adminAuthMiddleware,adminController.vendorList);
+router.post('/vendorVerify',adminController.vendorVerify);
 
 // Category Management
 router.get('/categories',adminAuthMiddleware,adminController.categoryList);

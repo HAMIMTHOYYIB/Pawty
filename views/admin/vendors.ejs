@@ -1,24 +1,24 @@
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
 
-<!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/categories-add.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 08 Feb 2024 06:56:28 GMT -->
+<!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/customers.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 08 Feb 2024 06:56:28 GMT -->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Add Category </title>
+    <title>Vendors - admin </title>
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
 
-    <!--plugin css file -->
-    <link rel="stylesheet" href="assets/plugin/cropper/cropper.min.css">   
-    <link rel="stylesheet" href="assets/plugin/dropify/dist/css/dropify.min.css"/>
+    <!-- plugin css file  -->
+    <link rel="stylesheet" href="/assets/plugin/datatables/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="/assets/plugin/datatables/dataTables.bootstrap5.min.css">
     
-    <!-- Project css file  -->
-    <link rel="stylesheet" href="assets/css/ebazar.style.min.css">
+    <!-- project css file  -->
+    <link rel="stylesheet" href="/assets/css/ebazar.style.min.css">
 </head>
 <body>
     <div id="ebazar-layout" class="theme-blue">
-        
+
         <!-- sidebar -->
         <div class="sidebar px-4 py-4 py-md-4 me-0">
             <div class="d-flex flex-column h-100">
@@ -47,13 +47,13 @@
                             </ul>
                     </li>
                     <li class="collapsed">
-                        <a class="m-link active" data-bs-toggle="collapse" data-bs-target="#subcategories" href="#">
+                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#subcategories" href="#">
                             <i class="icofont-chart-flow fs-5"></i> <span>Sub-Categories</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
                             <!-- Menu: Sub menu ul -->
                             <ul class="sub-menu collapse" id="subcategories">
                                 <li><a class="ms-link" href="/subCategories">Sub-Categories List</a></li>
                                 <!-- <li><a class="ms-link" href="categories-edit.html">Sub-Categories Edit</a></li> -->
-                                <li><a class="ms-link active" href="/addSubCategory">Sub-Categories Add</a></li>
+                                <li><a class="ms-link" href="/addSubCategory">Sub-Categories Add</a></li>
                             </ul>
                     </li>
                     <li class="">
@@ -62,7 +62,7 @@
                         </a>
                     </li>
                     <li class="">
-                        <a class="m-link"  href="/admin/Vendors">
+                        <a class="m-link active"  href="/admin/Vendors">
                             <i class="icofont-truck-loaded fs-5"></i> <span>Vendors</span>
                         </a>
                     </li>
@@ -145,29 +145,30 @@
 
         <!-- main body area -->
         <div class="main px-lg-4 px-md-4"> 
+
             <!-- Body: Header -->
             <div class="header">
                 <nav class="navbar py-4">
                     <div class="container-xxl">
-        
+
                         <!-- header rightbar icon -->
                         <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
-                            <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-end ms-5 zindex-popover">
+                            <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
                                 <div class="u-info me-2">
-                                    <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">hamimthoyyib</span></p>
+                                    <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">John Quinn</span></p>
                                     <small>Admin Profile</small>
                                 </div>
                                 <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
-                                    <img class="avatar lg rounded-circle img-thumbnail" src="assets/images/profile_av.svg" alt="profile">
+                                    <img class="avatar lg rounded-circle img-thumbnail" src="/assets/images/profile_av.svg" alt="profile">
                                 </a>
                                 <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
                                     <div class="card border-0 w280">
                                         <div class="card-body pb-0">
                                             <div class="d-flex py-1">
-                                                <img class="avatar rounded-circle" src="assets/images/profile_av.svg" alt="profile">
+                                                <img class="avatar rounded-circle" src="/assets/images/profile_av.svg" alt="profile">
                                                 <div class="flex-fill ms-3">
-                                                    <p class="mb-0"><span class="font-weight-bold">Hamim Thoyyib</span></p>
-                                                    <small class="">hamimthoyyib@gmail.com</small>
+                                                    <p class="mb-0"><span class="font-weight-bold">Hamim/span></p>
+                                                    <small class="">Hamimthoyyib</small>
                                                 </div>
                                             </div>
                                             
@@ -176,18 +177,22 @@
                                         <div class="list-group m-2 ">
                                             <a href="admin-profile.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-ui-user fs-5 me-3"></i>Profile Page</a>
                                             <a href="order-invoices.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-file-text fs-5 me-3"></i>Order Invoices</a>
-                                            <a href="/logout" class="list-group-item list-group-item-action border-0 "><i class="icofont-logout fs-5 me-3"></i>Signout</a>
+                                            <a href="ui-elements/auth-signin.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-logout fs-5 me-3"></i>Signout</a>
                                             
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>        
+                            <div class="setting ms-2">
+                                <a href="#" data-bs-toggle="modal" data-bs-target="#Settingmodal"><i class="icofont-gear-alt fs-5"></i></a>
+                            </div>
+                        </div>
+
                         <!-- menu toggler -->
                         <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mainHeader">
                             <span class="fa fa-bars"></span>
                         </button>
-        
+
                         <!-- main menu Search-->
                         <div class="order-0 col-lg-4 col-md-4 col-sm-12 col-12 mb-3 mb-md-0 ">
                             <div class="input-group flex-nowrap input-group-lg">
@@ -196,151 +201,195 @@
                                 
                             </div>
                         </div>
-        
+
                     </div>
                 </nav>
             </div>
 
-            <!-- Body: Body -->
-            <div class="body d-flex py-3">
+            <!-- Body: Body -->       
+            <div class="body d-flex py-lg-3 py-md-2">
                 <div class="container-xxl">
-
                     <div class="row align-items-center">
                         <div class="border-0 mb-4">
                             <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                                <h3 class="fw-bold mb-0">Add New SubCategory</h3>
+                                <h3 class="fw-bold mb-0">Customers Information</h3>
+                                <div class="col-auto d-flex w-sm-100">
+                                    <button type="button" class="btn btn-primary btn-set-task w-sm-100" data-bs-toggle="modal" data-bs-target="#expadd"><i class="icofont-plus-circle me-2 fs-6"></i>Add Customers</button>
+                                </div>
                             </div>
                         </div>
-                    </div> <!-- Row end  -->  
-                    
-                    <!-- <div class="row g-3 mb-3">
-                        <div class="col-lg-4">
-                            <div class="sticky-lg-top">
-                                <div class="card mb-3">
-                                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                                        <h6 class="m-0 fw-bold">Visibility Status</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="couponsstatus" checked>
-                                            <label class="form-check-label">
-                                                Published
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="couponsstatus">
-                                            <label class="form-check-label">
-                                                Scheduled
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="couponsstatus">
-                                            <label class="form-check-label">
-                                                Hidden
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div> -->
-                                <!-- <div class="card mb-3">
-                                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                                        <h6 class="m-0 fw-bold">Publish Schedule</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row g-3 align-items-center">
-                                            <div class="col-md-12">
-                                                <label  class="form-label">Publish Date</label>
-                                                <input type="date" class="form-control w-100">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label  class="form-label">Publish Time</label>
-                                                <input type="time" class="form-control w-100">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="card mb-3">
-                                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                                        <h6 class="m-0 fw-bold">Categories</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <label  class="form-label">Parent category Select</label>
-                                        <select class="form-select" size="3" aria-label="size 3 select example">
-                                            <option value="2">Clothes</option>
-                                            <option value="3">Toy</option>
-                                            <option value="4">Cosmetic</option>
-                                            <option value="5">Laptop</option>
-                                            <option value="6">Mobile</option>
-                                            <option value="7">Watch</option>
-                                        </select>
-                                    </div>
-                                </div> -->
-                                <!-- <div class="card">
-                                    <div class="card-header py-3 bg-transparent border-bottom-0">
-                                        <h6 class="m-0 fw-bold">Categories Image Upload</h6>
-                                        <small>With event and default file try to remove the image</small>
-                                    </div>
-                                    <div class="card-body">
-                                        <input type="file" id="dropify-event" data-default-file="assets/images/product/cropimg-upload.jpg">
-                                    </div>
-                                </div>
-                            </div> 
-                         </div> -->
-                        <div class="col-lg-8">
+                    </div> <!-- Row end  -->
+                    <div class="row clearfix g-3">
+                        <div class="col-sm-12">
                             <div class="card mb-3">
-                                <!-- <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                    <h6 class="mb-0 fw-bold ">Basic information</h6>
-                                </div> -->
                                 <div class="card-body">
-                                    <form method="post" action="/addSubCategory">
-                                        <div class="row g-3 align-items-center">
-                                            <div class="col-12">
-                                                <label for="subCategoryName"  class="form-label">SubCategory Name</label>
-                                                <input name="subCategoryName" id="subCategory"  type="text" class="form-control">
-                                                <small><b><span class="text-danger" id="Errormessage"></span></b></small>
-                                            </div>
-                                            <div class="col-12">
-                                                <button type="submit" style="margin-top:0px;" class="col-6 form-control btn btn-primary py-2 px-5 mt-3 text-uppercase btn-set-task w-sm-100">Add SubCategory</button>
-                                            </div>
-                                            <!-- <div class="col-md-6">
-                                                <label class="form-label">Page Title</label>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label class="form-label">Product Identifier URL</label>
-                                                <div class="input-group mb-3">
-                                                    <span class="input-group-text">https://eBazar.com</span>
-                                                    <input type="text" class="form-control">
-                                                </div>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <label class="form-label">Product Description</label>
-                                                <div id="editor">
-                                                    <h4>Please add Product Description here</h4>
-                                                </div>
-                                            </div>
-                                        </div> -->
-                                    </form>
-                                    <script>
-                                        document.querySelector('form').addEventListener('submit', function(event) {
-                                            let categoryInput = document.getElementById('subCategory');
-                                            let errorMessage = document.getElementById('Errormessage');
+                                    <table id="myProjectTable" class="table table-hover align-middle mb-0" style="width:100%">
+                                        <thead>
+                                            <tr>
+                                                <!-- <th>Id</th> -->
+                                                <th class="col-3">Vendor Name</th> 
+                                                <th class="col-2">Joined On</th>
+                                                <th class="col-3">E-mail</th>
+                                                <th class="col-2">Status</th>  
+                                                <!-- <th class="col-2"></th> -->
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <% vendor.forEach(vendor => { %>                                            
+                                            <tr>
+                                                <!-- <td><strong><%= vendor._id  %></strong></td> -->
+                                                <td class="col-4">
+                                                        <a href="/adminview/<%= vendor._id %>">
+                                                            <img class="avatar rounded" src="/assets/images/xs/avatar1.svg">
+                                                            <span class="fw-bold ms-1"><%= vendor.vendorName %></span>
+                                                        </a>
+                                                </td>
+                                                <td class="col-3"><%= vendor.JoinedAt.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></td>
+                                                <td class="col-3"><%= vendor.email %></td>
+                                                <!-- <td>202-555-0983</td> -->
+                                                <!-- <td>South Africa</td> -->
+                                                <!-- <td>18</td> -->
+                                                <td class="col-2">
+                                                    <% if (!vendor.Status) { %>
+                                                        <form method="post" action="/vendorVerify">
+                                                            <input type="hidden" name="vendorId" value="<%= vendor._id %>">
+                                                            <button type="submit" style="background-color: brown;" class=" text-light">Denied</button>  
+                                                        </form>
+                                                    <% } else { %>
+                                                        <form method="post" action="/vendorVerify">
+                                                            <input type="hidden" name="vendorId" value="<%= vendor._id %>">
+                                                            <button type="submit" class="btn-success btn-outline-secondary">Verified</button>  
+                                                        </form>
+                                                    <% } %>
+                                                    <!-- <div class="btn-group" role="group" aria-label="Basic outlined example"> -->
+                                                        <!-- <button type="button" class="btn-success btn-outline-secondary"  data-bs-toggle="modal" data-bs-target="">Block</button>   -->
+                                                         <!-- <i class="icofont-edit text-success"></i> -->
+                                                        <!-- <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button> -->
+                                                    <!-- </div> -->
+                                                </td>
+                                            </tr>
 
-                                            if (categoryInput.value.trim() === '') {
-                                                errorMessage.textContent = 'subCategory name cannot be empty';
-                                                event.preventDefault(); 
-                                            } else {
-                                                errorMessage.textContent = '';
-                                            }
-                                        });
-                                </script>
+
+                                        <% }) %>
+                                            <!-- <tr>
+                                                <td><strong>#CS-00006</strong></td>
+                                                <td>
+                                                    <a href="customer-detail.html">
+                                                        <img class="avatar rounded" src="/assets/images/xs/avatar2.svg" alt="">
+                                                        <span class="fw-bold ms-1">Ryan	Randall</span>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    12/03/2021
+                                                </td>
+                                                <td>RyanRandall@gmail.com</td>
+                                                <td>303-555-0151</td>
+                                                <td>Australia</td>
+                                                <td>4568</td>
+                                                <td>
+                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#expedit"><i class="icofont-edit text-success"></i></button>
+                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>#CS-00004</strong></td>
+                                                <td>
+                                                    <a href="customer-detail.html">
+                                                        <img class="avatar rounded" src="/assets/images/xs/avatar3.svg" alt="">
+                                                        <span class="fw-bold ms-1">Phil	Glover</span>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    16/03/2021
+                                                </td>
+                                                <td>PhilGlover@gmail.com</td>
+                                                <td>843-555-0175</td>
+                                                <td>Sri Lanka</td>
+                                                <td>05</td>
+                                                <td>
+                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#expedit"><i class="icofont-edit text-success"></i></button>
+                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>#CS-00008</strong></td>
+                                                <td>
+                                                    <a href="customer-detail.html">
+                                                        <img class="avatar rounded" src="/assets/images/xs/avatar4.svg" alt="">
+                                                        <span class="fw-bold ms-1">Victor Rampling</span>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    25/02/2021
+                                                </td>
+                                                <td>VictorRampling@gmail.com</td>
+                                                <td>404-555-0100</td>
+                                                <td>Israel</td>
+                                                <td>14</td>
+                                                <td>
+                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#expedit"><i class="icofont-edit text-success"></i></button>
+                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>#CS-00018</strong></td>
+                                                <td>
+                                                    <a href="customer-detail.html">
+                                                        <img class="avatar rounded" src="/assets/images/xs/avatar5.svg" alt="">
+                                                        <span class="fw-bold ms-1">Sally Graham</span>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    16/02/2021
+                                                </td>
+                                                <td>SallyGraham@gmail.com</td>
+                                                <td>502-555-0118</td>
+                                                <td>Indonesia</td>
+                                                <td>03</td>
+                                                <td>
+                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#expedit"><i class="icofont-edit text-success"></i></button>
+                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td><strong>#CS-00014</strong></td>
+                                                <td>
+                                                    <a href="customer-detail.html">
+                                                        <img class="avatar rounded" src="/assets/images/xs/avatar6.svg" alt="">
+                                                        <span class="fw-bold ms-1">Robert Anderson</span>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                18/01/2021
+                                                </td>
+                                                <td>RobertAnderson@gmail.com</td>
+                                                <td>502-555-0133</td>
+                                                <td>Malaysia</td>
+                                                <td>02</td>
+                                                <td>
+                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#expedit"><i class="icofont-edit text-success"></i></button>
+                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr> -->
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
-                            
-                    </div><!-- Row end  --> 
-
+                        </div>
+                    </div><!-- Row End -->
                 </div>
-            </div>    
-        
+            </div>
+            
             <!-- Modal Custom Settings-->
             <div class="modal fade right" id="Settingmodal" tabindex="-1"  aria-hidden="true">
                 <div class="modal-dialog  modal-sm">
@@ -481,75 +530,161 @@
                 </div>
             </div> 
 
-            <!-- Modal Cropper-->
-            <div class="modal docs-cropped" id="getCroppedCanvasModal" tabindex="-1"  aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Cropped</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <!-- Add Customers-->
+            <div class="modal fade" id="expadd" tabindex="-1"  aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title  fw-bold" id="expaddLabel">Add Customers</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="deadline-form">
+                            <form>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-sm-12">
+                                        <label for="item" class="form-label">Customers Name</label>
+                                        <input type="text" class="form-control" id="item">
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label for="taxtno" class="form-label">Customers Profile</label>
+                                        <input type="File" class="form-control" id="taxtno">
+                                    </div>
+                                </div>
+                                <div class="row g-3 mb-3">
+                                <div class="col-sm-6">
+                                    <label for="depone" class="form-label">Country</label>
+                                    <input type="text" class="form-control" id="depone">
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="abc" class="form-label">Customers Register date</label>
+                                    <input type="date" class="form-control w-100" id="abc">
+                                </div>
+                                </div>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-sm-6">
+                                    <label for="abc11" class="form-label">Mail</label>
+                                    <input type="text" class="form-control" id="abc11">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="abc111" class="form-label">Phone</label>
+                                        <input type="text" class="form-control" id="abc111">
+                                    </div>
+                                </div>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-sm-12">
+                                        <label class="form-label">Total Order</label>
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div>
+                                
+                            </form>
                         </div>
-                        <div class="modal-body"></div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-white border lift" data-bs-dismiss="modal">Close</button>
-                            <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.html">Download</a> </div>
-                        </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Done</button>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </div>
+                </div>
                 </div>
             </div>
 
-        </div>       
+            <!-- Edit Customers-->
+            <div class="modal fade" id="expedit" tabindex="-1"  aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title  fw-bold" id="expeditLabel"> Edit Customers</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <div class="deadline-form">
+                            <form>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-sm-12">
+                                        <label for="item1" class="form-label">Customers Name</label>
+                                        <input type="text" class="form-control" id="item1" value="Cloth"> 
+                                    </div>
+                                    <div class="col-sm-12">
+                                        <label for="taxtno1" class="form-label">Customers Profile</label>
+                                        <input type="file" class="form-control" id="taxtno1">
+                                    </div>
+                                </div>
+                                <div class="row g-3 mb-3">
+                                <div class="col-sm-6">
+                                    <label class="form-label">Country</label>
+                                    <input type="text" class="form-control" value="South Africa">
+                                </div>
+                                <div class="col-sm-6">
+                                    <label for="abc1" class="form-label">Customers Register date</label>
+                                    <input type="date" class="form-control w-100" id="abc1" value="2021-03-12">
+                                </div>
+                                </div>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-sm-6">
+                                    <label for="mailid" class="form-label">Mail</label>
+                                    <input type="text" class="form-control" id="mailid" value="PhilGlover@gmail.com">
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <label for="phoneid" class="form-label">Phone</label>
+                                        <input type="text" class="form-control" id="phoneid" value="843-555-0175">
+                                    </div>
+                                </div>
+                                <div class="row g-3 mb-3">
+                                    <div class="col-sm-6">
+                                        <label class="form-label">Total Order</label>
+                                        <input type="text" class="form-control" value="18">
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Done</button>
+                        <button type="submit" class="btn btn-primary">Save</button>
+                    </div>
+                </div>
+                </div>
+            </div>
 
+        </div> 
+            
     </div>
+    
+    <!-- Jquery Core Js -->
+    <script src="/assets/bundles/libscripts.bundle.js"></script>
 
-    <!-- Jquery Core Js -->      
-    <script src="assets/bundles/libscripts.bundle.js"></script>
+    <!-- Plugin Js-->
+    <script src="/assets/bundles/dataTables.bundle.js"></script>
 
-    <!-- Jquery Plugin -->  
-    <script src="../../../../../cdn.ckeditor.com/ckeditor5/29.0.0/classic/ckeditor.js"></script>
-    <script src="assets/plugin/cropper/cropper.min.js"></script>
-    <script src="assets/plugin/cropper/cropper-init.js"></script>
-    <script src="assets/bundles/dropify.bundle.js"></script>
-
-    <!-- Jquery Page Js -->   
+    <!-- Jquery Page Js -->
     <script src="../js/template.js"></script>
     <script>
-        
+        // project data table
         $(document).ready(function() {
-        //Ch-editer
-        ClassicEditor
-            .create( document.querySelector( '#editor' ) )
-            .catch( error => {
-                console.error( error );
+            $('#myProjectTable')
+            .addClass( 'nowrap' )
+            .dataTable( {
+                responsive: true,
+                columnDefs: [
+                    { targets: [-1, -3], className: 'dt-body-right' }
+                ]
+            });
+            $('.deleterow').on('click',function(){
+            var tablename = $(this).closest('table').DataTable();  
+            tablename
+                    .row( $(this)
+                    .parents('tr') )
+                    .remove()
+                    .draw();
+
             } );
-            //Deleterow
-            $("#tbproduct").on('click', '.deleterow', function () {
-                $(this).closest('tr').remove();
-            });
-            
         });
-
-        $(function() {
-            $('.dropify').dropify();
-
-            var drEvent = $('#dropify-event').dropify();
-            drEvent.on('dropify.beforeClear', function(event, element) {
-                return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
-            });
-
-            drEvent.on('dropify.afterClear', function(event, element) {
-                alert('File deleted');
-            });
-
-            $('.dropify-fr').dropify({
-                messages: {
-                    default: 'Glissez-dÃ©posez un fichier ici ou cliquez',
-                    replace: 'Glissez-dÃ©posez un fichier ou cliquez pour remplacer',
-                    remove: 'Supprimer',
-                    error: 'DÃ©solÃ©, le fichier trop volumineux'
-                }
-            });
-        });
-            
     </script>
 </body>
-</html> 
+
+<!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/customers.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 08 Feb 2024 06:56:29 GMT -->
+</html>

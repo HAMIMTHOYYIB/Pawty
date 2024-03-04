@@ -30,6 +30,10 @@ const vendorSchema = new mongoose.Schema({
         type:Date,
         default:Date.now
     },
+    Status:{
+        type:Boolean,
+        default:false
+    },
     products:[productSchema]
 });
 

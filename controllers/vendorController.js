@@ -23,6 +23,9 @@ let vendorLoginSubmit = async (req,res) => {
         if(!vendorExist){
             res.render('vendor/vendorLogin',{passError:'User Not Found'})
         }else{
+          if(!vendorExist.Status){
+            return res.render('vendor/vendorLogin',{passError:"Sorry, You Are Not Validated by the Admin"})
+          }
             // console.log('Login Vendor :',vendorExist);
             bcrypt.compare(password, vendorExist.password, (err, result) => {
             if(!result){
@@ -67,7 +70,7 @@ let vendorSignupPost = async (req,res) => {
           await newVendor.save();
           console.log('New Vendor Added Successfully');
           vendorExist = newVendor;
-          res.render('vendor/vendorDashboard',{vendorExist});
+          res.redirect('/vendor')
       }
   } catch (error) {
       res.status(500).send('Internal Server Error')

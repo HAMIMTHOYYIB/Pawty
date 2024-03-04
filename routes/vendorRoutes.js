@@ -12,7 +12,7 @@ router.get('/vendor',vendorController.vendorLogin);
 router.post('/vendor',vendorController.vendorLoginSubmit);
 
 // Vendor Signup
-router.get('/vendorSignup',vendorAuth,vendorController.vendorSignup);
+router.get('/vendorSignup',vendorController.vendorSignup);
 router.post('/vendorSignup',vendorController.vendorSignupPost);
 
 // Product Management

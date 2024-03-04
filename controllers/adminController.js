@@ -1,6 +1,7 @@
 
 const Admin = require('../models/admin');
 const User = require('../models/User');
+const Vendor = require('../models/Vendor');
 const jwt = require('jsonwebtoken')
 
 let dashboard = (req,res) => {
@@ -227,13 +228,33 @@ let userBlock = async (req,res) => {
         const user = await User.findOne({_id:userId});
         console.log(user);
         if(user){
-            console.log("user");
             user.Blocked = !user.Blocked;
             await user.save();
         }
-        res.redirect('/Customers');
+        res.redirect('/admin/Customers');
     } catch (error) {
         res.status(500).send('Error on admin Changing User status');
+    }
+}
+
+// Vendor Management
+let vendorList = async (req,res) => {
+    let vendor = await Vendor.find();
+    res.render('admin/vendors',{vendor})
+}
+
+let vendorVerify = async (req,res) => {
+    const vendorId = req.body.vendorId;
+    try {
+        const vendor = await Vendor.findOne({_id:vendorId});
+        if(vendor){
+            console.log("verified Vendor :",vendor);
+            vendor.Status = !(vendor.Status);
+            await vendor.save();
+        }
+        res.redirect('/admin/Vendors')
+    } catch (error) {
+        res.status(500).send('Error on vendor verification')
     }
 }
 
@@ -248,12 +269,6 @@ let adminLogout = (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
-// Vendor Management
-// let userList =async (req,res) => {
-//     let user = await User.find();
-//     res.render('admin/customers',{user});
-// }
-
 
 module.exports = {
     dashboard,
@@ -276,6 +291,9 @@ module.exports = {
 
     userList,
     userBlock,
+
+    vendorList,
+    vendorVerify,
 
     adminLogout
 }

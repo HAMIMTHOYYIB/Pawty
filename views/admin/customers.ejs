@@ -10,11 +10,11 @@
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
 
     <!-- plugin css file  -->
-    <link rel="stylesheet" href="assets/plugin/datatables/responsive.dataTables.min.css">
-    <link rel="stylesheet" href="assets/plugin/datatables/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="/assets/plugin/datatables/responsive.dataTables.min.css">
+    <link rel="stylesheet" href="/assets/plugin/datatables/dataTables.bootstrap5.min.css">
     
     <!-- project css file  -->
-    <link rel="stylesheet" href="assets/css/ebazar.style.min.css">
+    <link rel="stylesheet" href="/assets/css/ebazar.style.min.css">
 </head>
 <body>
     <div id="ebazar-layout" class="theme-blue">
@@ -22,7 +22,7 @@
         <!-- sidebar -->
         <div class="sidebar px-4 py-4 py-md-4 me-0">
             <div class="d-flex flex-column h-100">
-                <a href="index.html" class="mb-0 brand-icon">
+                <a href="/" class="mb-0 brand-icon">
                     <span class="logo-icon">
                         <i class="bi bi-bag-check-fill fs-4"></i>
                     </span>
@@ -56,6 +56,16 @@
                                 <li><a class="ms-link" href="/addSubCategory">Sub-Categories Add</a></li>
                             </ul>
                     </li>
+                    <li class="">
+                        <a class="m-link active" href="/admin/Customers">
+                            <i class="icofont-truck-loaded fs-5"></i> <span>Customers</span>
+                        </a>
+                    </li>
+                    <li class="">
+                        <a class="m-link"  href="/admin/Vendors">
+                            <i class="icofont-truck-loaded fs-5"></i> <span>Vendors</span>
+                        </a>
+                    </li>
                     <li class="collapsed">
                         <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-order" href="#">
                         <i class="icofont-notepad fs-5"></i> <span>Orders</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
@@ -64,15 +74,6 @@
                             <li><a class="ms-link" href="order-list.html">Orders List</a></li>
                             <li><a class="ms-link" href="order-details.html">Order Details</a></li>
                             <li><a class="ms-link" href="order-invoices.html">Order Invoices</a></li>
-                        </ul>
-                    </li>
-                    <li class="collapsed">
-                        <a class="m-link active" data-bs-toggle="collapse" data-bs-target="#customers-info" href="#">
-                        <i class="icofont-funky-man fs-5"></i> <span>Customers</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
-                        <!-- Menu: Sub menu ul -->
-                        <ul class="sub-menu collapse" id="customers-info">
-                            <li><a class="ms-link" href="/Customers">Customers List</a></li>
-                            <li><a class="ms-link" href="customer-detail.html">Customers Details</a></li>
                         </ul>
                     </li>
                     <li class="collapsed">
@@ -108,12 +109,20 @@
                             <li><a class="ms-link" href="create-invoice.html">Create Invoice </a></li>
                         </ul>
                     </li>
+                    <!-- <li class="collapsed"> -->
+                        <!-- <a class="m-link" data-bs-toggle="collapse" data-bs-target="#app" href="#"> -->
+                        <!-- <i class="icofont-code-alt fs-5"></i> <span>App</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a> -->
                         <!-- Menu: Sub menu ul -->
-                        <ul class="sub-menu collapse" id="app">
+                        <!-- <ul class="sub-menu collapse" id="app">
                             <li><a class="ms-link" href="calendar.html">Calandar</a></li>
                             <li><a class="ms-link" href="chat.html"> Chat App</a></li>
-                        </ul>
-                    </li>
+                        </ul> -->
+                    <!-- </li> -->
+                    <!-- <li><a class="m-link" href="store-locator.html"><i class="icofont-focus fs-5"></i> <span>Store Locator</span></a></li> -->
+                    <!-- <li><a class="m-link" href="ui-elements/ui-alerts.html"><i class="icofont-paint fs-5"></i> <span>UI Components</span></a></li> -->
+                    <!-- <li class="collapsed"> -->
+                        <!-- <a class="m-link" data-bs-toggle="collapse" data-bs-target="#page" href="#"> -->
+                        <!-- <i class="icofont-page fs-5"></i> <span>Other Pages</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a> -->
                         <!-- Menu: Sub menu ul -->
                         <ul class="sub-menu collapse" id="page">
                             <li><a class="ms-link" href="admin-profile.html">Profile Page</a></li>
@@ -132,7 +141,7 @@
                     <span class="ms-2"><i class="icofont-bubble-right"></i></span>
                 </button>
             </div>
-        </div>    
+        </div>  
 
         <!-- main body area -->
         <div class="main px-lg-4 px-md-4"> 
@@ -151,25 +160,25 @@
                             </div>
                             <div class="dropdown zindex-popover">
                                 <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
-                                    <img src="assets/images/flag/GB.png" alt="">
+                                    <img src="/assets/images/flag/GB.png" alt="">
                                 </a>
                                 <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-md-end p-0 m-0 mt-3">
                                     <div class="card border-0">
                                         <ul class="list-unstyled py-2 px-3">
                                             <li>
-                                                <a href="#" class=""><img src="assets/images/flag/GB.png" alt=""> English</a>
+                                                <a href="#" class=""><img src="/assets/images/flag/GB.png" alt=""> English</a>
                                             </li>
                                             <li>
-                                                <a href="#" class=""><img src="assets/images/flag/DE.png" alt=""> German</a>
+                                                <a href="#" class=""><img src="/assets/images/flag/DE.png" alt=""> German</a>
                                             </li>
                                             <li>
-                                                <a href="#" class=""><img src="assets/images/flag/FR.png" alt=""> French</a>
+                                                <a href="#" class=""><img src="/assets/images/flag/FR.png" alt=""> French</a>
                                             </li>
                                             <li>
-                                                <a href="#" class=""><img src="assets/images/flag/IT.png" alt=""> Italian</a>
+                                                <a href="#" class=""><img src="/assets/images/flag/IT.png" alt=""> Italian</a>
                                             </li>
                                             <li>
-                                                <a href="#" class=""><img src="assets/images/flag/RU.png" alt=""> Russian</a>
+                                                <a href="#" class=""><img src="/assets/images/flag/RU.png" alt=""> Russian</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -194,7 +203,7 @@
                                                 <ul class="list-unstyled list mb-0">
                                                     <li class="py-2 mb-1 border-bottom">
                                                         <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="assets/images/xs/avatar1.svg" alt="">
+                                                            <img class="avatar rounded-circle" src="/assets/images/xs/avatar1.svg" alt="">
                                                             <div class="flex-fill ms-2">
                                                                 <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Chloe Walkerr</span> <small>2MIN</small></p>
                                                                 <span class="">Added New Product 2021-07-15 <span class="badge bg-success">Add</span></span>
@@ -212,7 +221,7 @@
                                                     </li>
                                                     <li class="py-2 mb-1 border-bottom">
                                                         <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="assets/images/xs/avatar3.svg" alt="">
+                                                            <img class="avatar rounded-circle" src="/assets/images/xs/avatar3.svg" alt="">
                                                             <div class="flex-fill ms-2">
                                                                 <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Melanie	Oliver</span> <small>1HR</small></p>
                                                                 <span class="">Orader  Return RT-00004</span>
@@ -221,7 +230,7 @@
                                                     </li>
                                                     <li class="py-2 mb-1 border-bottom">
                                                         <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="assets/images/xs/avatar5.svg" alt="">
+                                                            <img class="avatar rounded-circle" src="/assets/images/xs/avatar5.svg" alt="">
                                                             <div class="flex-fill ms-2">
                                                                 <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Boris Hart</span> <small>13MIN</small></p>
                                                                 <span class="">Product Order to Toyseller</span>
@@ -230,7 +239,7 @@
                                                     </li>
                                                     <li class="py-2 mb-1 border-bottom">
                                                         <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="assets/images/xs/avatar6.svg" alt="">
+                                                            <img class="avatar rounded-circle" src="/assets/images/xs/avatar6.svg" alt="">
                                                             <div class="flex-fill ms-2">
                                                                 <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Alan	Lambert</span> <small>1HR</small></p>
                                                                 <span class="">Leave Apply</span>
@@ -239,7 +248,7 @@
                                                     </li>
                                                     <li class="py-2">
                                                         <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="assets/images/xs/avatar7.svg" alt="">
+                                                            <img class="avatar rounded-circle" src="/assets/images/xs/avatar7.svg" alt="">
                                                             <div class="flex-fill ms-2">
                                                                 <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Zoe Wright</span> <small class="">1DAY</small></p>
                                                                 <span class="">Product Stoke Entry Updated</span>
@@ -259,13 +268,13 @@
                                     <small>Admin Profile</small>
                                 </div>
                                 <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
-                                    <img class="avatar lg rounded-circle img-thumbnail" src="assets/images/profile_av.svg" alt="profile">
+                                    <img class="avatar lg rounded-circle img-thumbnail" src="/assets/images/profile_av.svg" alt="profile">
                                 </a>
                                 <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
                                     <div class="card border-0 w280">
                                         <div class="card-body pb-0">
                                             <div class="d-flex py-1">
-                                                <img class="avatar rounded-circle" src="assets/images/profile_av.svg" alt="profile">
+                                                <img class="avatar rounded-circle" src="/assets/images/profile_av.svg" alt="profile">
                                                 <div class="flex-fill ms-3">
                                                     <p class="mb-0"><span class="font-weight-bold">John	Quinn</span></p>
                                                     <small class="">Johnquinn@gmail.com</small>
@@ -342,7 +351,7 @@
                                                 <!-- <td><strong><%= user._id  %></strong></td> -->
                                                 <td class="col-4">
                                                         <a href="customer-detail.html">
-                                                            <img class="avatar rounded" src="assets/images/xs/avatar1.svg">
+                                                            <img class="avatar rounded" src="/assets/images/xs/avatar1.svg">
                                                             <span class="fw-bold ms-1"><%= user.username %></span>
                                                         </a>
                                                 </td>
@@ -379,7 +388,7 @@
                                                 <td><strong>#CS-00006</strong></td>
                                                 <td>
                                                     <a href="customer-detail.html">
-                                                        <img class="avatar rounded" src="assets/images/xs/avatar2.svg" alt="">
+                                                        <img class="avatar rounded" src="/assets/images/xs/avatar2.svg" alt="">
                                                         <span class="fw-bold ms-1">Ryan	Randall</span>
                                                     </a>
                                                 </td>
@@ -401,7 +410,7 @@
                                                 <td><strong>#CS-00004</strong></td>
                                                 <td>
                                                     <a href="customer-detail.html">
-                                                        <img class="avatar rounded" src="assets/images/xs/avatar3.svg" alt="">
+                                                        <img class="avatar rounded" src="/assets/images/xs/avatar3.svg" alt="">
                                                         <span class="fw-bold ms-1">Phil	Glover</span>
                                                     </a>
                                                 </td>
@@ -423,7 +432,7 @@
                                                 <td><strong>#CS-00008</strong></td>
                                                 <td>
                                                     <a href="customer-detail.html">
-                                                        <img class="avatar rounded" src="assets/images/xs/avatar4.svg" alt="">
+                                                        <img class="avatar rounded" src="/assets/images/xs/avatar4.svg" alt="">
                                                         <span class="fw-bold ms-1">Victor Rampling</span>
                                                     </a>
                                                 </td>
@@ -445,7 +454,7 @@
                                                 <td><strong>#CS-00018</strong></td>
                                                 <td>
                                                     <a href="customer-detail.html">
-                                                        <img class="avatar rounded" src="assets/images/xs/avatar5.svg" alt="">
+                                                        <img class="avatar rounded" src="/assets/images/xs/avatar5.svg" alt="">
                                                         <span class="fw-bold ms-1">Sally Graham</span>
                                                     </a>
                                                 </td>
@@ -467,7 +476,7 @@
                                                 <td><strong>#CS-00014</strong></td>
                                                 <td>
                                                     <a href="customer-detail.html">
-                                                        <img class="avatar rounded" src="assets/images/xs/avatar6.svg" alt="">
+                                                        <img class="avatar rounded" src="/assets/images/xs/avatar6.svg" alt="">
                                                         <span class="fw-bold ms-1">Robert Anderson</span>
                                                     </a>
                                                 </td>
@@ -759,10 +768,10 @@
     </div>
     
     <!-- Jquery Core Js -->
-    <script src="assets/bundles/libscripts.bundle.js"></script>
+    <script src="/assets/bundles/libscripts.bundle.js"></script>
 
     <!-- Plugin Js-->
-    <script src="assets/bundles/dataTables.bundle.js"></script>
+    <script src="/assets/bundles/dataTables.bundle.js"></script>
 
     <!-- Jquery Page Js -->
     <script src="../js/template.js"></script>
