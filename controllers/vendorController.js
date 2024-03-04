@@ -2,13 +2,18 @@ const Vendor = require('../models/Vendor');
 const Admin = require('../models/admin');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken')
 require('dotenv').config()
 
 let vendorDashboard = (req,res) => {
     res.render('vendor/vendorDashboard')
 }
 let vendorLogin = (req,res) => {
+  if(req.cookies.vendor_jwt){
+    res.redirect('/vendor/dashboard')
+  }else{
     res.render('vendor/vendorLogin',{passError:''})
+  }
 }
 
 let vendorLoginSubmit = async (req,res) => {
@@ -18,13 +23,24 @@ let vendorLoginSubmit = async (req,res) => {
         if(!vendorExist){
             res.render('vendor/vendorLogin',{passError:'User Not Found'})
         }else{
-            console.log('Login Vendor :',vendorExist);
+            // console.log('Login Vendor :',vendorExist);
             bcrypt.compare(password, vendorExist.password, (err, result) => {
             if(!result){
                 res.status(401).render('vendor/vendorLogin',{passError:'Wrong Password.'})
             }else{
-                // let name = vendorExist.vendorName
-                res.render('vendor/vendorDashboard',{vendorExist})
+              const token = jwt.sign({
+                id: vendorExist._id,
+                name: vendorExist.vendorName,
+                email: vendorExist.email,
+              },
+              process.env.JWT_SECRET,
+              {
+                expiresIn: "24h",
+              }
+            );
+            res.cookie("vendor_jwt", token, { httpOnly: true, maxAge: 86400000 }); // 24 hour expiry
+            console.log('Vendor Loggined succesfully : Token created.');
+            res.redirect('/vendor/dashboard')
             }
             })
         }
@@ -39,7 +55,7 @@ let vendorSignup = (req,res) => {
 }
 
 let vendorSignupPost = async (req,res) => {
-  console.log(req.body);
+  // console.log(req.body);
   let {name,email,password} = req.body
   try {
       let vendorExisted = await Vendor.findOne({email});
@@ -191,6 +207,17 @@ const sendOtpEmail = async (email, otp) => {
   // FORGOT PASSWORD -- ENDS HERE
 
 
+let vendorLogout = (req, res) => {
+  try {
+      res.clearCookie("vendor_jwt");
+      res.redirect("/vendor");
+      console.log("Vendor logged out");
+      return;
+  } catch (error) {
+      console.error("Error logging out:", error);
+      res.status(500).send("Internal Server Error");
+  }
+};
 
 module.exports = {
     vendorDashboard,
@@ -202,5 +229,6 @@ module.exports = {
     addProduct,
     submitAddProduct,
     vendorForgotPass,
-    resetVendorPass
+    resetVendorPass,
+    vendorLogout
 }

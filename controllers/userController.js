@@ -12,10 +12,6 @@ let homePage = (req,res) => {
 
 // Get UserAccount
 let account = (req,res) => {
-    // if(req.user){
-    //     console.log('email From Google Login : ',req.user.email);
-    // }
-    if(req.body)
     res.render('users/account')
 }
 
@@ -30,7 +26,10 @@ let product = (req,res) => {
 
 // Get UserLoginPage
 let loginPage = (req,res) => {
-    res.render('users/account-login',{passError :''})
+  if(req.cookies.user_jwt){
+   return  res.redirect('/');
+  }
+  res.render('users/account-login',{passError :''})
 }
 // Post SubmitUserLoginPage
 let submitlogin = async (req, res) => {
@@ -38,12 +37,12 @@ let submitlogin = async (req, res) => {
     const {email, password} = req.body;
     if(email && password){
         try {
-            const User = await User.findOne({email: email});
-            if (!User) {
+            const loginUser = await User.findOne({email: email});
+            if (!loginUser) {
                 return res.status(404).render('users/account-login', { passError: 'User Not Found' });             //send('User Not Found');
             }
-            console.log("loginUser : ", User);
-            bcrypt.compare(password, User.password, (err, result) => {
+            console.log("loginUser : ", loginUser);
+            bcrypt.compare(password, loginUser.password, (err, result) => {
                 if (err) {
                     // console.error("problem : ", err);
                     return res.status(500).send('Internal Server Error');
@@ -51,14 +50,24 @@ let submitlogin = async (req, res) => {
                 if (!result) {
                     return res.status(401).render('users/account-login',{passError : 'Wrong Password'});
                 }
-                // const token = jwt.sign({ userId: User._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-
-                // // Store the token in a cookie or response header
-                // res.cookie('jwt', token, { httpOnly: true });
-                // // Or send the token in the response body
-                // // res.json({ token });
-            
-                res.render('users/account');
+                if (loginUser.Blocked) {
+                  console.log('This Account has been restricted by the Admin');
+                  return res.render('users/account-login', { passError: 'User is blocked' });
+                }
+                const token = jwt.sign({
+                  id: loginUser._id,
+                  name: loginUser.username,
+                  email: loginUser.email,
+                },
+                process.env.JWT_SECRET,
+                {
+                  expiresIn: "24h",
+                }
+              );
+              res.cookie("user_jwt", token, { httpOnly: true, maxAge: 86400000 }); // 24 hour expiry
+              console.log('User Loggined succesfully : Token created.');
+                // res.render('users/account');
+                res.redirect('/');
             });
         } catch (error) {
             console.log("Error on Login Submit",error);
@@ -112,10 +121,28 @@ const succesGoogleLogin = async (req,res) =>{
         })
         await user.save();
         console.log('UserData Saved.');
-        res.redirect('/account')
+        res.redirect('/login')
     }else{
+      if (user.Blocked) {
+        console.log('User is blocked ');
+        return res.render('users/account-login', { passError: 'Your Account has been restricted by the Admin' });
+      }
       console.log("login with google");
-      res.redirect('/account')
+
+      const token = jwt.sign({
+        id: user._id,
+        name: user.username,
+        email: user.email,
+      },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "24h",
+      }
+    );
+    res.cookie("user_jwt", token, { httpOnly: true, maxAge: 86400000 }); // 24 hour expiry
+    console.log('User Loggined succesfully : Token created.');
+      // res.render('users/account');
+      res.redirect('/');
     }
 
 }
@@ -222,13 +249,17 @@ const sendOtpEmail = async (email, otp) => {
   // FORGOT PASSWORD -- ENDS HERE
 
 
-  let logout = (req, res) => {
-    // res.clearCookie('jwt');
-    // console.log('user logged out');
-    res.redirect('/');
-};
-
-
+  let userLogout = (req, res) => {
+    try {
+        res.clearCookie("user_jwt");
+        res.redirect("/");
+        console.log("User logged out");
+        return;
+    } catch (error) {
+        console.error("Error logging out:", error);
+        res.status(500).send("Internal Server Error");
+    }
+  };
 module.exports={
     homePage,
     account,
@@ -243,5 +274,5 @@ module.exports={
     resetPassword,
     succesGoogleLogin,
     failureGooglelogin,
-    logout
+    userLogout
 }

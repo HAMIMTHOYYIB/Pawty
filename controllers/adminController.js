@@ -1,32 +1,47 @@
 
 const Admin = require('../models/admin');
 const User = require('../models/User');
+const jwt = require('jsonwebtoken')
 
 let dashboard = (req,res) => {
-    res.render('admin/index')
+    res.render('admin/index');
 }
-let adminLogin = (req,res) => {
-    res.render('admin/admin-login',{passError:''})
+
+let adminLogin = (req, res) => {
+    if(req.cookies.admin_jwt){
+        res.redirect('/Dashboard')
+    }else{
+        res.render('admin/admin-login', { passError: '' });
+    }
 }
 
 let submitAdminLogin = async (req,res) => {
-    console.log("req.body : ", req.body);
     const {email, password} = req.body;
     if(email && password){
         try {
-            const loginAdmin = await Admin.findOne({email: email});
-            if (!loginAdmin) {
+            const admin = await Admin.findOne({email: email});
+            if (!admin) {
                 return res.status(404).render('admin/admin-login', { passError: 'Admin Not Found' });             //send('User Not Found');
-            }
-            console.log("loginAdmin : ", loginAdmin);
-        
-            if(password !== loginAdmin.password){
+            }        
+            if(password !== admin.password){
                 return res.status(401).render('admin/admin-login',{passError : 'Wrong Password'});
             }else{
-                res.render('admin/index');
+                const token = jwt.sign({
+                      id: admin._id,
+                      name: admin.adminname,
+                      email: admin.email,
+                    },
+                    process.env.JWT_SECRET,
+                    {
+                      expiresIn: "24h",
+                    }
+                  );
+                res.cookie("admin_jwt", token, { httpOnly: true, maxAge: 86400000 }); // 24 hour expiry
+                console.log('Admin Loggined succesfully : Token created.');
+                res.redirect('/Dashboard');
             }
         } catch (error) {
-            console.log("Error on Login Submit",error);
+            console.log("Error on Login Submit.",error);
             res.status(500).send("Internal Server Error");
         }  
     }else{
@@ -222,6 +237,17 @@ let userBlock = async (req,res) => {
     }
 }
 
+let adminLogout = (req, res) => {
+    try {
+        res.clearCookie("admin_jwt");
+        res.redirect("/admin");
+        console.log("Admin logged out");
+        return;
+    } catch (error) {
+        console.error("Error logging out:", error);
+        res.status(500).send("Internal Server Error");
+    }
+};
 // Vendor Management
 // let userList =async (req,res) => {
 //     let user = await User.find();
@@ -249,5 +275,7 @@ module.exports = {
     deleteSubCategory,
 
     userList,
-    userBlock
+    userBlock,
+
+    adminLogout
 }

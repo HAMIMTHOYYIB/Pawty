@@ -1,18 +1,26 @@
 const express = require('express');
 const router = express.Router();
 const vendorController = require('../controllers/vendorController');
+const vendorAuth = require('../middleware/jwt_vendor');
 require('dotenv').config();
 
-router.get('/vendor/dashboard',vendorController.vendorDashboard);
+//Vendor Dashboard
+router.get('/vendor/dashboard',vendorAuth,vendorController.vendorDashboard);
 
-router.get('/vendor', vendorController.vendorLogin);
+// Vendor Login
+router.get('/vendor',vendorController.vendorLogin);
 router.post('/vendor',vendorController.vendorLoginSubmit);
 
-router.get('/vendorSignup',vendorController.vendorSignup);
+// Vendor Signup
+router.get('/vendorSignup',vendorAuth,vendorController.vendorSignup);
 router.post('/vendorSignup',vendorController.vendorSignupPost);
 
-router.get('/vendor/product-list',vendorController.productList);
-router.get('/vendor/add-product',vendorController.addProduct);
+// Product Management
+router.get('/vendor/product-list',vendorAuth,vendorController.productList);
+router.get('/vendor/add-product',vendorAuth,vendorController.addProduct);
 router.post('/vendor/add-product',vendorController.submitAddProduct);
+
+// vendor Logout
+router.get('/vendor/logout',vendorController.vendorLogout);
 
 module.exports = router;

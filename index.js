@@ -2,12 +2,10 @@ const express = require('express');
 const session = require('express-session');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
-const cookieParser = require('cookie-parser');
+const cookieParser = require("cookie-parser");
 require('dotenv').config()
 
 mongoose.connect('mongodb://localhost:27017/Pawty', {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
 }).then(() => {
     console.log('Connected to MongoDB');
 }).catch((err) => {
@@ -31,7 +29,6 @@ app.use(session({
     }
 }));
 app.use(cookieParser());
-// app.use(jwtMiddleware);
 
 const {parsed:config} = require('dotenv').config()
 global.config = config

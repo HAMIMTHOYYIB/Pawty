@@ -1,28 +1,35 @@
 const express = require('express');
 const router = express.Router();
 const adminController = require('../controllers/adminController'); 
+const adminAuthMiddleware = require("../middleware/jwt_admin");
 
+// Dashboard
+router.get('/Dashboard',adminAuthMiddleware,adminController.dashboard);
+// Admin LoginadminController
 router.get('/admin',adminController.adminLogin);
-router.get('/Dashboard',adminController.dashboard);
 router.post('/admin',adminController.submitAdminLogin);
 
-router.get('/Customers',adminController.userList);
+// User Management
+router.get('/Customers',adminAuthMiddleware,adminController.userList);
 router.post('/userblock',adminController.userBlock);
 
 // Category Management
-router.get('/categories',adminController.categoryList);
-router.get('/addCategory',adminController.addCategory);
+router.get('/categories',adminAuthMiddleware,adminController.categoryList);
+router.get('/addCategory',adminAuthMiddleware,adminController.addCategory);
 router.post('/addCategory',adminController.submitAddCategory);
-router.get('/editCategory/:id',adminController.editCategory);
+router.get('/editCategory/:id',adminAuthMiddleware,adminController.editCategory);
 router.post('/editCategory/:id',adminController.submitEditCategory);
 router.post('/deleteCategory/:id',adminController.deleteCategory);
 
 // SubCategory Management
-router.get('/subCategories',adminController.subCategoryList);
-router.get('/addSubCategory',adminController.addSubCategory);
+router.get('/subCategories',adminAuthMiddleware,adminController.subCategoryList);
+router.get('/addSubCategory',adminAuthMiddleware,adminController.addSubCategory);
 router.post('/addSubCategory',adminController.submitAddSubCategory);
-router.get('/editSubCategory/:id',adminController.editSubCategory);
+router.get('/editSubCategory/:id',adminAuthMiddleware,adminController.editSubCategory);
 router.post('/editSubCategory/:id',adminController.submitEditSubCategory);
 router.post('/deleteSubCategory/:id',adminController.deleteSubCategory);
+
+// admin logout
+router.get('/admin/logout',adminController.adminLogout);
 
 module.exports = router;
