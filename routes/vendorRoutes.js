@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const vendorController = require('../controllers/vendorController');
 const vendorAuth = require('../middleware/jwt_vendor');
+const multer = require('multer')
+const upload = require('../config/multer');
 require('dotenv').config();
 
 //Vendor Dashboard
@@ -17,7 +19,7 @@ router.post('/vendorSignup',vendorController.vendorSignupPost);
 
 // Product Management
 router.get('/vendor/product-list',vendorAuth,vendorController.productList);
-router.get('/vendor/add-product',vendorAuth,vendorController.addProduct);
+router.get('/vendor/add-product', upload.array('images', 4), vendorController.addProduct);
 router.post('/vendor/add-product',vendorController.submitAddProduct);
 
 // vendor Logout

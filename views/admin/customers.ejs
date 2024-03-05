@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>::eBazar:: Customers </title>
+    <title>Costomer List - admin</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
 
     <!-- plugin css file  -->
@@ -342,7 +342,7 @@
                                                 <!-- <th>Phone</th>  -->
                                                 <!-- <th>Country</th>  -->
                                                 <!-- <th>Total Order</th> -->
-                                                <th class="col-2">Status</th>  
+                                                <th class="col-1">Status</th> 
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -363,23 +363,16 @@
                                                 <!-- <td>South Africa</td> -->
                                                 <!-- <td>18</td> -->
                                                 <td class="col-2">
-                                                    <% if (user.Blocked) { %>
-                                                        <form method="post" action="/userBlock">
+                                                        <form class="mt-4 ms-2" method="post" action="/userBlock">
                                                             <input type="hidden" name="userId" value="<%= user._id %>">
-                                                            <button type="submit" style="background-color: brown;" class=" text-light">UnBlock</button>  
+                                                            <% if (user.Blocked) { %>
+                                                             <button type="submit" class="border-0 btn-outline-secondary" style="border-radius:5px;"><i class="icofont-ui-lock text-danger"></i><small class="font-weight-bold ms-3">Blocked</small></button>
+                                                            <!-- <button type="submit" style="background-color: brown;" class=" text-light">UnBlock</button>   -->
+                                                            <% } else { %>
+                                                             <button type="submit" class="border-0 btn-outline-secondary" style="border-radius:5px;"><i class="icofont-ui-unlock text-success"></i><small class="font-weight-bold ms-3">Block</small>
+                                                            <% } %></button>
                                                         </form>
-                                                    <% } else { %>
-                                                        <form method="post" action="/userBlock">
-                                                            <input type="hidden" name="userId" value="<%= user._id %>">
-                                                            <button type="submit" class="btn-success btn-outline-secondary">Block</button>  
-                                                        </form>
-                                                    <% } %>
-                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                        <!-- <button type="button" class="btn-success btn-outline-secondary"  data-bs-toggle="modal" data-bs-target="">Block</button>   -->
-                                                         <!-- <i class="icofont-edit text-success"></i> -->
-                                                        <!-- <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button> -->
-                                                    </div>
-                                                </td>
+                                                </td> 
                                             </tr>
 
 

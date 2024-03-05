@@ -179,7 +179,8 @@
                             </div>
                         </div>
                     </div> <!-- Row end  -->  
-                <form id="addProduct" action="/vendor/add-product" method="post" onsubmit="return validateForm()">
+                <form id="addProduct" action="/vendor/add-product" method="post" enctype="multipart/form-data" onsubmit="return validateForm()"> 
+                     <!-- enctype="multipart/form-data" -->
                     <div class="row g-3 mb-3">
                         <div class="col-xl-8 col-lg-8">
                             <div class="sticky-lg-top card mb-3">
@@ -207,19 +208,9 @@
                                             <label for="Stock" class="form-label">Stock Quantity</label>
                                             <input type="number" name="Stock" id="stockQuantity" placeholder="Total Stocks" class="form-control">
                                         </div>
-                                        <!-- <div class="col-md-12">
-                                            <label class="form-label">Product Identifier URL</label>
-                                            <div class="input-group mb-3">
-                                                <span class="input-group-text">https://eBazar.com/</span>
-                                                <input type="text" class="form-control">
-                                            </div>
-                                        </div> -->
                                         <div class="col-md-12">
                                             <label for="Discription" class="form-label col-12">Product Description</label>
                                             <input name="Discription" class="col-12 pb-3 form-control" type="text" placeholder="Add Discription Here">
-                                            <!-- <div id="editor">
-                                                <h4>Enter Product Description Here</h4>
-                                            </div> -->
                                         </div>
                                     </div>
                                     <div class="card my-3">
@@ -229,16 +220,16 @@
                                         <div class="card-body">
                                             <div class="row col-12 g-1 align-items-center">
                                                 <label class="form-label col-3" for="image1">Product Image-1 :</label>
-                                                <input class="col-9" type="file" name="image1" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
+                                                <input class="col-9" type="file" name="image1">
                                             
                                                 <label class="form-label col-3" for="image2">Product Image-2 :</label>
-                                                <input class="col-9" type="file" name="image2" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
+                                                <input class="col-9" type="file" name="image2">
                                                 <br><br>
                                                 <label class="form-label col-3" for="image3">Product Image-3 :</label>
-                                                <input class="col-9" type="file" name="image3" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
+                                                <input class="col-9" type="file" name="image3">
                                                 
                                                 <label class="form-label col-3" for="image4">Product Image-4 :</label>
-                                                <input class="col-9" type="file" name="image4" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
+                                                <input class="col-9" type="file" name="image4">
                                                 
                                             </div>
                                         </div>

@@ -3,6 +3,9 @@ const Admin = require('../models/admin');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
+const multer =  require('multer')
+const cloudinary = require('../config/cloudinary')
+const upload = require('../config/multer.js');
 require('dotenv').config()
 
 let vendorDashboard = (req,res) => {
@@ -43,7 +46,7 @@ let vendorLoginSubmit = async (req,res) => {
             );
             res.cookie("vendor_jwt", token, { httpOnly: true, maxAge: 86400000 }); // 24 hour expiry
             console.log('Vendor Loggined succesfully : Token created.');
-            res.redirect('/vendor/dashboard')
+            res.redirect('/vendor/dashboard');
             }
             })
         }
@@ -91,26 +94,150 @@ let addProduct = async (req,res) => {
   }
 }
 
-let submitAddProduct = async (req,res) => {
-  let {ProductName,Price,Brand,Stock,Discription,image1,image2,image3,image4,Category,SubCategory} = req.body;
+let submitAddProduct = async (req, res) => {
+  console.log("req.body :", req.body);
+  let { ProductName, Price, Brand, Stock, Discription, Category, SubCategory } = req.body;
+  let images = [];
+    
+  // Upload images to Cloudinary
+  try {
+    const imageUpload = async (file) => {
+      const result = await cloudinary.uploader.upload(file.path);
+      return result.secure_url;
+    };
+    console.log("req.files :",req.files);
+    if (req.files) {
+      for (let i = 1; i <= 4; i++) {
+        if (req.files[`image${i}`]) {
+          const file = req.files[`image${i}`][0];
+          const imageUrl = await imageUpload(file);
+          images.push(imageUrl);
+        }
+      }
+    }
+  } catch (error) {
+    console.error("Error uploading images to Cloudinary:", error);
+    return res.status(500).send("Error uploading images to Cloudinary");
+  }
 
   let newProduct = {
-    productName:ProductName,discription:Discription,price:Price,brand:Brand,category:Category,subCategory:SubCategory,stockQuantity:Stock
-  }
+    productName: ProductName,
+    discription: Discription,
+    price: Price,
+    brand: Brand,
+    category: Category,
+    subCategory: SubCategory,
+    stockQuantity: Stock,
+    images: images
+  };
+
   try {
     let vendor = await Vendor.findOne();
-    if(!vendor){
-      res.status(400).send('Vendor Not Found')
-    }else{
+    if (!vendor) {
+      res.status(400).send('Vendor Not Found');
+    } else {
       vendor.products.push(newProduct);
       await vendor.save();
       res.redirect('/vendor/product-list');
     }
   } catch (error) {
     console.log(error);
-    res.status(500).send('Internal Server Error')
+    res.status(500).send('Internal Server Error');
   }
-}
+};
+
+
+
+// let submitAddProduct = async (req, res) => {
+//   let { ProductName, Price, Brand, Stock, Discription, Category, SubCategory } = req.body;
+//   let newProduct = {
+//     productName: ProductName,
+//     discription: Discription,
+//     price: Price,
+//     brand: Brand,
+//     category: Category,
+//     subCategory: SubCategory,
+//     stockQuantity: Stock
+//   }
+//   try {
+//     let vendor = await Vendor.findOne();
+//     if (!vendor) {
+//       res.status(400).send('Vendor Not Found')
+//     } else {
+//       // Upload images to Cloudinary
+//       let imageUrls = [];
+//       for (let i = 1; i <= 4; i++) {
+//         console.log("req.files :" ,req.files);
+//         console.log("req.body :" ,req.body);
+//         if (req.files && req.files[`image${i}`]) {
+//           let file = req.files[`image${i}`][0];
+//           console.log("file :",file);
+//           let result = await cloudinary.uploader.upload(file.path);
+//           imageUrls.push(result.secure_url);
+//         }else{
+//           console.log("No files in req");
+//         }
+//       }
+
+//       // Add image URLs to the new product
+//       newProduct.images = imageUrls;
+
+//       // Add the new product to the vendor's products
+//       vendor.products.push(newProduct);
+//       console.log(vendor);
+//       await vendor.save();
+//       res.redirect('/vendor/product-list');
+//     }
+//   } catch (error) {
+//     console.log(error);
+//     res.status(500).send('Internal Server Error')
+//   }
+// }
+
+
+// const uploadImages = async (req, res) => {
+//   try {
+//     const { files } = req;
+
+//     if (!files || files.length === 0) {
+//       return res.status(400).render(path.join(__dirname, '../views/admin/product'), { noimg: 'ok' });
+//     }
+
+//     const uploadPromises = files.map((file) => cloudinary.uploader.upload(file.path));
+
+//     const results = await Promise.all(uploadPromises);
+//     const imageUrls = results.map((result) => result.secure_url);
+
+//     const {
+//       productName,
+//       productDescription,
+//       productCategory,
+//       productBrand,
+//       productColor,
+//       productConnectivity,
+//       productPrice,
+//       productQuantity,
+//     } = req.body;
+
+//     const newProduct = new Product({
+//       productName,
+//       productDescription,
+//       productCategory,
+//       productBrand,
+//       productColor,
+//       productConnectivity,
+//       productPrice,
+//       productQuantity,
+//       productImage: imageUrls,
+//     });
+
+//     await newProduct.save();
+//     res.redirect('../admin/product');
+//   } catch (error) {
+//     console.error('Error adding product:', error);
+//     res.status(500).json({ error: 'Error adding the product' });
+//   }
+// };
 
 
 // FORGOT PASSWORD 

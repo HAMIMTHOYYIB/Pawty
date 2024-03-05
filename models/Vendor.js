@@ -9,7 +9,8 @@ const productSchema = new mongoose.Schema({
     subCategory:{type:String},
     stockQuantity:{type:String},
     image:{type:String},
-    addedOn:{type:Date,default:Date.now}
+    addedOn:{type:Date,default:Date.now},
+    images:{type:Array}
 });
 
 const vendorSchema = new mongoose.Schema({
