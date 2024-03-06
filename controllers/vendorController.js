@@ -78,12 +78,14 @@ let vendorSignupPost = async (req,res) => {
   } catch (error) {
       res.status(500).send('Internal Server Error')
   }
-}
+};
+
+
 
 let productList = async (req,res) => {
   let vendor = await Vendor.find();
   res.render('vendor/product-list',{vendor})
-}
+};
 
 let addProduct = async (req,res) => {
   let admin = await Admin.findOne();
@@ -92,46 +94,36 @@ let addProduct = async (req,res) => {
   }else{
     res.render('vendor/product-add',{admin})
   }
-}
+};
 
 let submitAddProduct = async (req, res) => {
   console.log("req.body :", req.body);
-  let { ProductName, Price, Brand, Stock, Discription, Category, SubCategory } = req.body;
-  let images = [];
-    
+  console.log("req.file :", req.file);
+  let imageData = req.files;
+  let productData = req.body;
+  let { ProductName, Price, Brand, Stock, Description, Category, SubCategory } = productData;
+  const imageUrls = [];
   // Upload images to Cloudinary
   try {
-    const imageUpload = async (file) => {
-      const result = await cloudinary.uploader.upload(file.path);
-      return result.secure_url;
-    };
-    console.log("req.files :",req.files);
-    if (req.files) {
-      for (let i = 1; i <= 4; i++) {
-        if (req.files[`image${i}`]) {
-          const file = req.files[`image${i}`][0];
-          const imageUrl = await imageUpload(file);
-          images.push(imageUrl);
-        }
+    if(productData){
+      for (const file of imageData) {
+        const result = await cloudinary.uploader.upload(file.path);
+        imageUrls.push(result.secure_url);
       }
+      console.log(imageUrls);
     }
-  } catch (error) {
-    console.error("Error uploading images to Cloudinary:", error);
-    return res.status(500).send("Error uploading images to Cloudinary");
-  }
+    
+    let newProduct = {
+      productName: ProductName,
+      description: Description,
+      price: Price,
+      brand: Brand,
+      category: Category,
+      subCategory: SubCategory,
+      stockQuantity: Stock,
+      images:imageUrls
+    };
 
-  let newProduct = {
-    productName: ProductName,
-    discription: Discription,
-    price: Price,
-    brand: Brand,
-    category: Category,
-    subCategory: SubCategory,
-    stockQuantity: Stock,
-    images: images
-  };
-
-  try {
     let vendor = await Vendor.findOne();
     if (!vendor) {
       res.status(400).send('Vendor Not Found');
@@ -141,103 +133,70 @@ let submitAddProduct = async (req, res) => {
       res.redirect('/vendor/product-list');
     }
   } catch (error) {
-    console.log(error);
-    res.status(500).send('Internal Server Error');
+    console.error("Error uploading images to Cloudinary:", error);
+    return res.status(500).send("Error uploading images to Cloudinary");
+  }
+};
+
+let editProduct = async (req,res) => {
+  let productId = req.params.id;
+  let vendor = await Vendor.findOne();
+  let admin = await Admin.findOne();
+  let product = vendor.products.find(prod => prod._id.toString() === productId);
+  if(!product){
+    return res.status(404).send('Product Not Found')
+  }
+  console.log("prodd :",product);
+  res.render('vendor/product-edit',{product,admin});
+}
+
+let submitEditProduct = async (req, res) => {
+  let productData = req.body;
+  let { ProductName, Price, Brand, Stock, Description, Category, SubCategory } = productData;
+  const imageUrls = [];
+  
+  // Upload images to Cloudinary
+  try {
+    if(req.files){
+      for (const file of req.files) {
+        const result = await cloudinary.uploader.upload(file.path);
+        imageUrls.push(result.secure_url);
+      }
+    }
+
+    let productId = req.params.id; // Assuming you have the productId in the URL
+    console.log("req.parms.productId",productId);
+    let vendor = await Vendor.findOne();
+    if (!vendor) {
+      res.status(400).send('Vendor Not Found');
+    } else {
+      let productIndex = await vendor.products.findIndex(product => product._id === productId);
+      console.log("prodctIndex :",productIndex);
+      if (productIndex === -1) {
+        res.status(404).send('Product Not Found');
+      } else {
+        let updatedProduct = vendor.products[productIndex];
+        updatedProduct.productName = ProductName;
+        updatedProduct.description = Description;
+        updatedProduct.price = Price;
+        updatedProduct.brand = Brand;
+        updatedProduct.category = Category;
+        updatedProduct.subCategory = SubCategory;
+        updatedProduct.stockQuantity = Stock;
+        if (imageUrls.length > 0) {
+          updatedProduct.images = imageUrls;
+        }
+        await vendor.save();
+        res.redirect('/vendor/product-list');
+      }
+    }
+  } catch (error) {
+    console.error("Error uploading images to Cloudinary:", error);
+    return res.status(500).send("Error uploading images to Cloudinary");
   }
 };
 
 
-
-// let submitAddProduct = async (req, res) => {
-//   let { ProductName, Price, Brand, Stock, Discription, Category, SubCategory } = req.body;
-//   let newProduct = {
-//     productName: ProductName,
-//     discription: Discription,
-//     price: Price,
-//     brand: Brand,
-//     category: Category,
-//     subCategory: SubCategory,
-//     stockQuantity: Stock
-//   }
-//   try {
-//     let vendor = await Vendor.findOne();
-//     if (!vendor) {
-//       res.status(400).send('Vendor Not Found')
-//     } else {
-//       // Upload images to Cloudinary
-//       let imageUrls = [];
-//       for (let i = 1; i <= 4; i++) {
-//         console.log("req.files :" ,req.files);
-//         console.log("req.body :" ,req.body);
-//         if (req.files && req.files[`image${i}`]) {
-//           let file = req.files[`image${i}`][0];
-//           console.log("file :",file);
-//           let result = await cloudinary.uploader.upload(file.path);
-//           imageUrls.push(result.secure_url);
-//         }else{
-//           console.log("No files in req");
-//         }
-//       }
-
-//       // Add image URLs to the new product
-//       newProduct.images = imageUrls;
-
-//       // Add the new product to the vendor's products
-//       vendor.products.push(newProduct);
-//       console.log(vendor);
-//       await vendor.save();
-//       res.redirect('/vendor/product-list');
-//     }
-//   } catch (error) {
-//     console.log(error);
-//     res.status(500).send('Internal Server Error')
-//   }
-// }
-
-
-// const uploadImages = async (req, res) => {
-//   try {
-//     const { files } = req;
-
-//     if (!files || files.length === 0) {
-//       return res.status(400).render(path.join(__dirname, '../views/admin/product'), { noimg: 'ok' });
-//     }
-
-//     const uploadPromises = files.map((file) => cloudinary.uploader.upload(file.path));
-
-//     const results = await Promise.all(uploadPromises);
-//     const imageUrls = results.map((result) => result.secure_url);
-
-//     const {
-//       productName,
-//       productDescription,
-//       productCategory,
-//       productBrand,
-//       productColor,
-//       productConnectivity,
-//       productPrice,
-//       productQuantity,
-//     } = req.body;
-
-//     const newProduct = new Product({
-//       productName,
-//       productDescription,
-//       productCategory,
-//       productBrand,
-//       productColor,
-//       productConnectivity,
-//       productPrice,
-//       productQuantity,
-//       productImage: imageUrls,
-//     });
-
-//     await newProduct.save();
-//     res.redirect('../admin/product');
-//   } catch (error) {
-//     console.error('Error adding product:', error);
-//     res.status(500).json({ error: 'Error adding the product' });
-//   }
-// };
 
 
 // FORGOT PASSWORD 
@@ -358,6 +317,8 @@ module.exports = {
     productList,  
     addProduct,
     submitAddProduct,
+    editProduct,
+    submitEditProduct,
     vendorForgotPass,
     resetVendorPass,
     vendorLogout

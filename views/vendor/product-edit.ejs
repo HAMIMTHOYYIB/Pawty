@@ -6,7 +6,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Vendor Add-Products </title>
+    <title>Vendor edit-Products </title>
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
 
     <!--plugin css file -->
@@ -179,7 +179,7 @@
                             </div>
                         </div>
                     </div> <!-- Row end  -->  
-                <form id="addProduct" action="/vendor/add-product" method="post" enctype="multipart/form-data" onsubmit="return validateForm()"> 
+                <form id="editProduct" action="/vendor/submitEditProduct/<%= product.id %>" method="post" enctype="multipart/form-data" onsubmit="return validateForm()"> 
                      <!-- enctype="multipart/form-data" -->
                     <div class="row g-3 mb-3">
                         <div class="col-xl-8 col-lg-8">
@@ -194,23 +194,23 @@
                                     <div class="row g-3 align-items-center">
                                         <div class="col-md-6">
                                             <label for="ProductName"  class="form-label">ProductName</label>
-                                            <input type="text" id="productName" name="ProductName" placeholder="Product Name" class="form-control">
+                                            <input type="text" id="productName" name="ProductName" value="<%= product.productName %>" placeholder="Product Name" class="form-control">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="Price"  class="form-label">Price</label>
-                                            <input name="Price" type="number" id="price" placeholder="Price" class="form-control">
+                                            <input name="Price" type="number" id="price"value="<%= product.price %>" placeholder="Price" class="form-control">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="Brand" class="form-label">Brand</label>
-                                            <input type="text" name="Brand" id="brand" placeholder="Brand Name" class="form-control">
+                                            <input type="text" name="Brand" id="brand" value="<%= product.brand %>" placeholder="Brand Name" class="form-control">
                                         </div>
                                         <div class="col-md-6">
                                             <label for="Stock" class="form-label">Stock Quantity</label>
-                                            <input type="number" name="Stock" id="stockQuantity" placeholder="Total Stocks" class="form-control">
+                                            <input type="number" name="Stock" id="stockQuantity" value="<%= product.stockQuantity %>" placeholder="<%= product.stockQuantity %>" class="form-control">
                                         </div>
                                         <div class="col-md-12">
                                             <label for="Discription" class="form-label col-12">Product Description</label>
-                                            <input name="Discription" class="col-12 pb-3 form-control" type="text" placeholder="Add Discription Here">
+                                            <input name="Discription" class="col-12 pb-3 form-control" value="<%= product.description %>" type="text" placeholder="Add Discription Here">
                                         </div>
                                     </div>
                                     <div class="card my-3">
@@ -219,20 +219,37 @@
                                         </div>
                                         <div class="card-body">
                                             <div class="row col-12 g-1 align-items-center">
-                                                <label class="form-label col-3" for="image1">Product Image-1 :</label>
-                                                <input class="col-9" type="file" name="image">
-                                            
-                                                <label class="form-label col-3" for="image2">Product Image-2 :</label>
-                                                <input class="col-9" type="file" name="image">
+                                                <div class="d-flex mb-2">
+                                                    <img class="" style="max-height:200px;" src="<%= product.images[0] %>" alt="No File Added">
+                                                    <label class="form-label mb-3  ms-2 for="image1">Product Image-1 :</label>
+                                                    <input class="" type="file" name="image">
+                                                    <input type="hidden" name="currentImage" value="<%= product.images[0] %>">
+                                                </div>
+                                        
+                                                <div class="d-flex mb-2">
+                                                    <img class="" style="max-height:200px;" src="<%= product.images[1] %>" alt="No File Added">
+                                                    <label class="form-label mb-3  ms-2" for="image2">Product Image-2 :</label>
+                                                    <input class="" type="file" name="image">
+                                                    <input type="hidden" name="currentImage" value="<%= product.images[1] %>">
+                                                </div>
+                                        
                                                 <br><br>
-                                                <label class="form-label col-3" for="image3">Product Image-3 :</label>
-                                                <input class="col-9" type="file" name="image">
-                                                
-                                                <label class="form-label col-3" for="image4">Product Image-4 :</label>
-                                                <input class="col-9" type="file" name="image">
-                                                
+                                                <div class="d-flex mb-2">
+                                                    <img class="" style="max-height:200px;" src="<%= product.images[2] %>" alt="No File Added">
+                                                    <label class="form-label mb-3  ms-2" for="image3">Product Image-3 :</label>
+                                                    <input class="" type="file" name="image">
+                                                    <input type="hidden" name="currentImage" value="<%= product.images[2] %>">
+                                                </div>
+                                                <div class="d-flex mb-2">
+                                                    <img class="" style="max-height:200px;" src="<%= product.images[3] %>" alt="No File Added">
+                                                    <label class="form-label mb-3  ms-2" for="image4">Product Image-4 :</label>
+                                                    <input class="" type="file" name="image">
+                                                    <input type="hidden" name="currentImage" value="<%= product.images[3] %>">
+                                                </div>
+                                        
                                             </div>
                                         </div>
+                                        
                                     </div>
                                 </div>
                             </div>
@@ -247,14 +264,12 @@
                                         <label for="Category" class="form-label">Select Product Category</label>
                                         <select name="Category" class="form-select" size="2" aria-label="size 3 select example">
                                             <% admin.category.forEach(cat =>{ %>
-                                            <option value="<%= cat.categoryName %>"><%= cat.categoryName %></option>
+                                                <% if (cat.categoryName === product.category) { %>
+                                                    <option value="<%= cat.categoryName %>" selected><%= cat.categoryName %></option>
+                                                <% } else { %>
+                                                    <option value="<%= cat.categoryName %>"><%= cat.categoryName %></option>
+                                                <% } %>
                                             <% }) %>
-                                            <!-- <option value="2">Clothes</option>
-                                            <option value="3">Toy</option>
-                                            <option value="4">Cosmetic</option>
-                                            <option value="5">Laptop</option>
-                                            <option value="6">Mobile</option>
-                                            <option value="7">Gaming accessories</option> -->
                                         </select>
                                     </div>
                                 </div>
@@ -266,19 +281,17 @@
                                         <label for="SubCategory" class="form-label">Select Product SubCategory</label>
                                         <select name="SubCategory" class="form-select" size="2" aria-label="size 3 select example">
                                             <% admin.subCategory.forEach( sub => { %>
-                                            <option value="<%= sub.subCategoryName %>"><%= sub.subCategoryName %></option>
+                                                <% if (sub.subCategoryName === product.subCategory) { %>
+                                                    <option value="<%= sub.subCategoryName %>" selected><%= sub.subCategoryName %></option>
+                                                <% } else { %>
+                                                    <option value="<%= sub.subCategoryName %>"><%= sub.subCategoryName %></option>
+                                                <% } %>
                                             <% }) %>
-                                            <!-- <option value="2">Clothes</option>
-                                            <option value="3">Toy</option>
-                                            <option value="4">Cosmetic</option>
-                                            <option value="5">Laptop</option>
-                                            <option value="6">Mobile</option>
-                                            <option value="7">Gaming accessories</option> -->
                                         </select>
                                     </div>
                                 </div>
                                 <div class="submit">
-                                    <button type="submit" class="btn btn-primary btn-set-task w-100 py-2 px-5 text-uppercase">Add Product</button>
+                                    <button type="submit" class="btn btn-primary btn-set-task w-100 py-2 px-5 text-uppercase">Submit Edit</button>
                                 </div>
                             </div>
                         </div>
