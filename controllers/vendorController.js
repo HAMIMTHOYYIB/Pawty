@@ -101,7 +101,7 @@ let submitAddProduct = async (req, res) => {
   console.log("req user :",req.user);
   let vendorId = req.user.id
   console.log("req.body :", req.body);
-  console.log("req.file :", req.file);
+  console.log("req.file :", req.files);
   let imageData = req.files;
   let productData = req.body;
   let { ProductName, Price, Brand, Stock, Description, Category, SubCategory } = productData;

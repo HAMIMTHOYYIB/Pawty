@@ -77,7 +77,7 @@ let submitlogin = async (req, res) => {
                 }
                 if (loginUser.Blocked) {
                   console.log('This Account has been restricted by the Admin');
-                  return res.render('users/account-login', { passError: 'User is blocked' });
+                  return res.render('users/account-login', { passError: 'This Account is Restricted by the admin' });
                 }
                 const token = jwt.sign({
                   id: loginUser._id,
