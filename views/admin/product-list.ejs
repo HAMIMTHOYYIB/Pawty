@@ -1,24 +1,23 @@
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
 
-<!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/customers.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 08 Feb 2024 06:56:28 GMT -->
+<!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/product-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Feb 2024 11:50:54 GMT -->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Vendors - admin </title>
+    <title>Admin -  Products List </title>
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
-
-    <!-- plugin css file  -->
-    <link rel="stylesheet" href="/assets/plugin/datatables/responsive.dataTables.min.css">
-    <link rel="stylesheet" href="/assets/plugin/datatables/dataTables.bootstrap5.min.css">
     
+    <!--plugin css file -->
+    <link rel="stylesheet" href="/assets/plugin/nouislider/nouislider.min.css">
+
     <!-- project css file  -->
     <link rel="stylesheet" href="/assets/css/ebazar.style.min.css">
 </head>
 <body>
     <div id="ebazar-layout" class="theme-blue">
-
+        
         <!-- sidebar -->
         <div class="sidebar px-4 py-4 py-md-4 me-0">
             <div class="d-flex flex-column h-100">
@@ -30,7 +29,7 @@
                 </a>
                 <!-- Menu: main ul -->
                 <ul class="menu-list flex-grow-1 mt-3">
-                    <li><a class="m-link" href="/Dashboard"><i class="icofont-home fs-5"></i> <span>Dashboard</span></a></li>
+                    <li><a class="m-link active" href="/Dashboard"><i class="icofont-home fs-5"></i> <span>Dashboard</span></a></li>
                     <li class="collapsed">
                         <a class="m-link" data-bs-toggle="collapse" href="/admin-ProductView">
                             <i class="icofont-truck-loaded fs-5"></i> <span>Products</span>
@@ -62,7 +61,7 @@
                         </a>
                     </li>
                     <li class="">
-                        <a class="m-link active"  href="/admin/Vendors">
+                        <a class="m-link"  href="/admin/Vendors">
                             <i class="icofont-truck-loaded fs-5"></i> <span>Vendors</span>
                         </a>
                     </li>
@@ -141,7 +140,7 @@
                     <span class="ms-2"><i class="icofont-bubble-right"></i></span>
                 </button>
             </div>
-        </div>   
+        </div>    
 
         <!-- main body area -->
         <div class="main px-lg-4 px-md-4"> 
@@ -150,7 +149,7 @@
             <div class="header">
                 <nav class="navbar py-4">
                     <div class="container-xxl">
-
+        
                         <!-- header rightbar icon -->
                         <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
                             <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
@@ -167,8 +166,8 @@
                                             <div class="d-flex py-1">
                                                 <img class="avatar rounded-circle" src="/assets/images/profile_av.svg" alt="profile">
                                                 <div class="flex-fill ms-3">
-                                                    <p class="mb-0"><span class="font-weight-bold">Hamim/span></p>
-                                                    <small class="">Hamimthoyyib</small>
+                                                    <p class="mb-0"><span class="font-weight-bold">John	Quinn</span></p>
+                                                    <small class="">Johnquinn@gmail.com</small>
                                                 </div>
                                             </div>
                                             
@@ -177,7 +176,7 @@
                                         <div class="list-group m-2 ">
                                             <a href="admin-profile.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-ui-user fs-5 me-3"></i>Profile Page</a>
                                             <a href="order-invoices.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-file-text fs-5 me-3"></i>Order Invoices</a>
-                                            <a href="/admin/logout" class="list-group-item list-group-item-action border-0 "><i class="icofont-logout fs-5 me-3"></i>Signout</a>
+                                            <a href="ui-elements/auth-signin.html" class="list-group-item list-group-item-action border-0 "><i class="icofont-logout fs-5 me-3"></i>Signout</a>
                                             
                                         </div>
                                     </div>
@@ -187,12 +186,12 @@
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#Settingmodal"><i class="icofont-gear-alt fs-5"></i></a>
                             </div>
                         </div>
-
+        
                         <!-- menu toggler -->
                         <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mainHeader">
                             <span class="fa fa-bars"></span>
                         </button>
-
+        
                         <!-- main menu Search-->
                         <div class="order-0 col-lg-4 col-md-4 col-sm-12 col-12 mb-3 mb-md-0 ">
                             <div class="input-group flex-nowrap input-group-lg">
@@ -201,195 +200,231 @@
                                 
                             </div>
                         </div>
-
+        
                     </div>
                 </nav>
             </div>
 
-            <!-- Body: Body -->       
-            <div class="body d-flex py-lg-3 py-md-2">
+            <!-- Body: Body -->
+            <div class="body d-flex py-3">
                 <div class="container-xxl">
                     <div class="row align-items-center">
-                        <div class="border-0 mb-4">
+                        <div class="border-0 mb-3">
                             <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                                <h3 class="fw-bold mb-0">Customers Information</h3>
-                                <!-- <div class="col-auto d-flex w-sm-100">
-                                    <button type="button" class="btn btn-primary btn-set-task w-sm-100" data-bs-toggle="modal" data-bs-target="#expadd"><i class="icofont-plus-circle me-2 fs-6"></i>Add Customers</button>
+                                <h3 class="fw-bold mb-0">Products</h3>
+                                <a href="/vendor/add-product"><button type="button" class="btn btn-primary btn-set-task py-2 px-5 text-uppercase">Add Product</button></a>
+                                <!-- <div class="btn-group group-link btn-set-task w-sm-100">
+                                    <a href="product-grid.html" class="btn d-inline-flex align-items-center" aria-current="page"><i class="icofont-wall px-2 fs-5"></i>Grid View</a>
+                                    <a href="product-list.html" class="btn active d-inline-flex align-items-center"><i class="icofont-listing-box px-2 fs-5"></i> List View</a>
                                 </div> -->
                             </div>
                         </div>
                     </div> <!-- Row end  -->
-                    <div class="row clearfix g-3">
-                        <div class="col-sm-12">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <table id="myProjectTable" class="table table-hover align-middle mb-0" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <!-- <th>Id</th> -->
-                                                <th class="col-3">Vendor Name</th> 
-                                                <th class="col-2">Joined On</th>
-                                                <th class="col-3">E-mail</th>
-                                                <th class="col-2">Status</th>  
-                                                <!-- <th class="col-2"></th> -->
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        <% vendor.forEach(vendor => { %>                                            
-                                            <tr>
-                                                <!-- <td><strong><%= vendor._id  %></strong></td> -->
-                                                <td class="col-4">
-                                                        <a href="/adminview/<%= vendor._id %>">
-                                                            <img class="avatar rounded" src="/assets/images/xs/avatar1.svg">
-                                                            <span class="fw-bold ms-1"><%= vendor.vendorName %></span>
-                                                        </a>
-                                                </td>
-                                                <td class="col-3"><%= vendor.JoinedAt.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></td>
-                                                <td class="col-3"><%= vendor.email %></td>
-                                                <!-- <td>202-555-0983</td> -->
-                                                <!-- <td>South Africa</td> -->
-                                                <!-- <td>18</td> -->
-                                                <td class="col-2">
-                                                    <% if (!vendor.Status) { %>
-                                                        <form method="post" action="/vendorVerify">
-                                                            <input type="hidden" name="vendorId" value="<%= vendor._id %>">
-                                                            <button type="submit" style="background-color: brown;" class=" text-light">Denied</button>  
-                                                        </form>
-                                                    <% } else { %>
-                                                        <form method="post" action="/vendorVerify">
-                                                            <input type="hidden" name="vendorId" value="<%= vendor._id %>">
-                                                            <button type="submit" class="btn-success btn-outline-secondary">Verified</button>  
-                                                        </form>
-                                                    <% } %>
-                                                    <!-- <div class="btn-group" role="group" aria-label="Basic outlined example"> -->
-                                                        <!-- <button type="button" class="btn-success btn-outline-secondary"  data-bs-toggle="modal" data-bs-target="">Block</button>   -->
-                                                         <!-- <i class="icofont-edit text-success"></i> -->
-                                                        <!-- <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button> -->
-                                                    <!-- </div> -->
-                                                </td>
-                                            </tr>
+                    <div class="row g-2 mb-3">
+                        <!-- <div class="col-md-12 col-lg-4 col-xl-4 col-xxl-3"> -->
+                            <!-- <div class="sticky-lg-top"> -->
+                                <!-- <div class="card mb-3">
+                                    <div class="reset-block">
+                                        <div class="filter-title">
+                                            <h4 class="title">Reset-Filter : </h4>
+                                        </div>
+                                        <div class="filter-btn">
+                                            <a class="btn btn-primary" href="/vendor/product-list">Reset</a>
+                                        </div>
+                                    </div>
+                                </div> -->
+                                <!-- <div class="sticky-lg-top">
+                                    <div class="card mb-3">
+                                        <div class="size-block">
+                                            <div class="filter-title">
+                                                <a class="title" data-bs-toggle="collapse" href="#category" role="button" aria-expanded="true">Select Category</a>
+                                            </div>
+                                            <div class="collapse show" id="category" >
+                                                <div class="filter-size" id="filter-size-1">
+                                                    <ul>
+                                                        <a href=""><li>Cats</li></a>
+                                                        <a href=""><li>Dogs</li></a>
+                                                        <a href=""><li class="">Birds</li></a>
+                                                        <a href=""><li>ABCD</li></a>
+                                                        <a href=""><li>EFG</li></a>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+    
+                                    <div class="card mb-2">
+                                        <div class="categories">
+                                            <div class="filter-title">
+                                                <a class="title" data-bs-toggle="collapse" href="#subcategory" role="button" aria-expanded="true">Select SubCategories</a>
+                                            </div>
+                                            <div class="collapse show" id="subcategory" >
+                                                <div class="filter-search">
+                                                    <form action="#">
+                                                        <input type="text" placeholder="Search" class="form-control">
+                                                        <button><i class="lni lni-search-alt"></i></button>
+                                                    </form>
+                                                </div>
+                                                <div class="filter-category">
+                                                    <ul class="category-list">
+                                                        <li><a href="/cats" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" class="collapsed">Cats</a>
+                                                            <ul id="collapseOne" class="sub-category collapse" data-parent="#subcategory" >
+                                                                <li><a href="#">Food</a></li>
+                                                                <li><a href="#">Grooming Items</a></li>
+                                                                <li><a href="#">Accessories</a></li>
+                                                                <li><a href="#">Toys</a></li>
+                                                            </ul>
+                                                        </li>
+                                                        <li><a class="collapsed" href="/Birds" data-bs-toggle="collapse" data-bs-target="#collapseTwo">Birds</a>
+                                                            <ul id="collapseTwo" class="sub-category collapse" data-parent="#subcategory">
+                                                                <li><a href="#">Food</a></li>
+                                                                <li><a href="#">Accessories</a></li>
+                                                            </ul>
+                                                        </li>
+                                                        <li><a class="collapsed" href="/Dogs" data-bs-toggle="collapse" data-bs-target="#collapseThree">Dogs</a>
+                                                            <ul id="collapseThree" class="sub-category collapse" data-parent="#subcategory">
+                                                                <li><a href="#">Food</a></li>
+                                                                <li><a href="#">Accessories</a></li>
+                                                            </ul>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            <!-- </div> -->
+                        <!-- </div> -->
 
+                        <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                            <div class="row g-3 mb-3 row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-4 row-cols-xxl-4">
 
-                                        <% }) %>
-                                            <!-- <tr>
-                                                <td><strong>#CS-00006</strong></td>
-                                                <td>
-                                                    <a href="customer-detail.html">
-                                                        <img class="avatar rounded" src="/assets/images/xs/avatar2.svg" alt="">
-                                                        <span class="fw-bold ms-1">Ryan	Randall</span>
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    12/03/2021
-                                                </td>
-                                                <td>RyanRandall@gmail.com</td>
-                                                <td>303-555-0151</td>
-                                                <td>Australia</td>
-                                                <td>4568</td>
-                                                <td>
-                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#expedit"><i class="icofont-edit text-success"></i></button>
-                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+                                <% vendor.products.forEach(product => { %>
+                                <div class="col">
+                                    <div class="card h-100">
+                                        <div class="product">
+                                            <div class="product-image">
+                                                <div class="product-item active d-flex align-items-center flex-column">
+                                                    <div class="h-100">
+                                                    <img class="rounded img-fluid" src="<%= product.images[0] %>" style="height:200px;" alt="noImage">
                                                     </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>#CS-00004</strong></td>
-                                                <td>
-                                                    <a href="customer-detail.html">
-                                                        <img class="avatar rounded" src="/assets/images/xs/avatar3.svg" alt="">
-                                                        <span class="fw-bold ms-1">Phil	Glover</span>
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    16/03/2021
-                                                </td>
-                                                <td>PhilGlover@gmail.com</td>
-                                                <td>843-555-0175</td>
-                                                <td>Sri Lanka</td>
-                                                <td>05</td>
-                                                <td>
-                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#expedit"><i class="icofont-edit text-success"></i></button>
-                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>#CS-00008</strong></td>
-                                                <td>
-                                                    <a href="customer-detail.html">
-                                                        <img class="avatar rounded" src="/assets/images/xs/avatar4.svg" alt="">
-                                                        <span class="fw-bold ms-1">Victor Rampling</span>
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    25/02/2021
-                                                </td>
-                                                <td>VictorRampling@gmail.com</td>
-                                                <td>404-555-0100</td>
-                                                <td>Israel</td>
-                                                <td>14</td>
-                                                <td>
-                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#expedit"><i class="icofont-edit text-success"></i></button>
-                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>#CS-00018</strong></td>
-                                                <td>
-                                                    <a href="customer-detail.html">
-                                                        <img class="avatar rounded" src="/assets/images/xs/avatar5.svg" alt="">
-                                                        <span class="fw-bold ms-1">Sally Graham</span>
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    16/02/2021
-                                                </td>
-                                                <td>SallyGraham@gmail.com</td>
-                                                <td>502-555-0118</td>
-                                                <td>Indonesia</td>
-                                                <td>03</td>
-                                                <td>
-                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#expedit"><i class="icofont-edit text-success"></i></button>
-                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><strong>#CS-00014</strong></td>
-                                                <td>
-                                                    <a href="customer-detail.html">
-                                                        <img class="avatar rounded" src="/assets/images/xs/avatar6.svg" alt="">
-                                                        <span class="fw-bold ms-1">Robert Anderson</span>
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                18/01/2021
-                                                </td>
-                                                <td>RobertAnderson@gmail.com</td>
-                                                <td>502-555-0133</td>
-                                                <td>Malaysia</td>
-                                                <td>02</td>
-                                                <td>
-                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                        <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#expedit"><i class="icofont-edit text-success"></i></button>
-                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr> -->
-                                        </tbody>
-                                    </table>
+                                                    <div class="ms-3 "><b><%= product.productName %></b></div>
+                                                </div>                                                
+                                            </div>
+                                            <div class="my-1" style="min-height:100px;">
+                                                <small style="font-weight:600;" class="mb-2"><b class="text-primary">Description :</b><%= product.description %></small>
+                                                <div class="mt-1">
+                                                <small style="font-weight:600;" class=""><span class="text-primary font-weight-bold">Category : </span><%= product.category %></small><br>
+                                                <small style="font-weight:600;" class=""><span class="text-primary font-weight-bold">subCategory : </span><%= product.subCategory %></small>
+                                                </div>
+                                            </div>
+                                            <div class="product-content fw-bold"><small><span class="text-primary">Brand : </span><%= product.brand %></small></div>
+                                            <div class="d-flex justify-content-between mb-1">
+                                                <div>
+                                                <small style="font-weight:600;" class=""><span class="text-success font-weight-bold">Stock Availabe :</span> <%= product.stockQuantity %></small>
+                                                </div>
+                                                <form action="/vendor/editProduct/<%= product._id %>" method="post" class="editProduct">
+                                                    <button type="submit" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></button>
+                                                </form>
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                <div>
+                                                <small style="font-weight:600;" class=""><span class="text-primary font-weight-bold">Price : </span><%= product.price %>/-</small>
+                                                </div>
+                                                <form action="/vendor/deleteProduct/<%= product._id %>" method="post" class="deleteProduct">
+                                                    <button type="submit" class="btn btn-outline-secondary"><i class="icofont-ui-delete text-danger"></i></button>
+                                                </form>
+                                            </div>
+                                            <!-- <div class="product-content p-3">
+                                                <span class="rating mb-2 d-block"><i class="icofont-star text-warning"></i> 4.5 (145)</span>
+                                                <a href="product-detail.html" class="fw-bold">Oculus VR </a>
+                                                <p class="text-muted">Reference 1204</p>
+                                                <span class="d-block fw-bold fs-5 text-secondary">$ 149</span>
+                                                <a href="product-cart.html" class="btn btn-primary mt-3">Add to Cart</a>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                                <% }) %>                                
+                            </div>
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-12">
+                                    <nav class="justify-content-end d-flex">
+                                        <ul class="pagination">
+                                        <li class="page-item disabled">
+                                            <a class="page-link" href="#" tabindex="-1">Previous</a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="#">1</a></li>
+                                        <li class="page-item active" aria-current="page">
+                                            <a class="page-link" href="#">2</a>
+                                        </li>
+                                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                                        <li class="page-item">
+                                            <a class="page-link" href="#">Next</a>
+                                        </li>
+                                        </ul>
+                                    </nav>
                                 </div>
                             </div>
                         </div>
-                    </div><!-- Row End -->
+
+                        <!-- <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12">
+                            <div class="body d-flex py-3">
+                                <div class="container-xxl">
+                                    <div class="row g-3 mb-3">
+                                        <div class="col-md-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <table id="myDataTable" class="table  align-middle mb-0" style="width: 100%;">
+                                                        <thead>
+                                                            <tr>
+                                                                <h4><b>Your Products</b></h4>
+                                                                
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <% vendor.products.forEach(product => { %>
+                                                            <tr class="col-12 g-0">
+                                                                <td class="col-4">
+                                                                        <img class="w120 rounded img-fluid mb-2" src="<%= product.images[0] %>" alt="noImage">
+                                                                        <div class="ms-2 "><b><%= product.productName %></b></div>
+                                                                </td>
+                                                                <td class="col-6">
+                                                                    <div class="mb-5" style="width:250px;">
+                                                                        <p class="mb-1 mt-2"><b>Description :</b><br><span class="text-primary"><%= product.description %></span></p>
+                                                                        <div class="mb-1"><b>Brand: <span><%= product.brand %></span></b></div>
+                                                                        <div class="mt-1"><b>Price: <span class="text-primary"><%= product.price %></span></b></div>
+                                                                    </div>
+                                                                </td>
+                                                                <td class="col-2">
+                                                                    <div class="mb-5">
+                                                                        <button class="text-primary border-1 font-weight-bold text-light" style="width:80px;">View</button>
+                                                                    </div>
+                                                                    <div class="d-flex">
+                                                                        <form action="/vendor/editProduct/<%= product._id %>" method="post" class="editProduct">
+                                                                            <button type="submit" class="btn btn-outline-secondary me-2"><i class="icofont-edit text-success"></i></button>
+                                                                        </form>
+                                                                        <form action="/vendor/deleteProduct/<%= product._id %>" method="post" class="deleteProduct">
+                                                                            <button type="submit" class="btn btn-outline-secondary"><i class="icofont-ui-delete text-danger"></i></button>
+                                                                        </form>
+                                                                    </div>
+                                                                </td>                                                       
+                                                            </tr>
+                                                            <% }) %>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> -->
+                    </div> <!-- Row end  -->
                 </div>
             </div>
-            
+        
             <!-- Modal Custom Settings-->
             <div class="modal fade right" id="Settingmodal" tabindex="-1"  aria-hidden="true">
                 <div class="modal-dialog  modal-sm">
@@ -529,162 +564,40 @@
                     </div>
                 </div>
             </div> 
-
-            <!-- Add Customers-->
-            <div class="modal fade" id="expadd" tabindex="-1"  aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title  fw-bold" id="expaddLabel">Add Customers</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="deadline-form">
-                            <form>
-                                <div class="row g-3 mb-3">
-                                    <div class="col-sm-12">
-                                        <label for="item" class="form-label">Customers Name</label>
-                                        <input type="text" class="form-control" id="item">
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <label for="taxtno" class="form-label">Customers Profile</label>
-                                        <input type="File" class="form-control" id="taxtno">
-                                    </div>
-                                </div>
-                                <div class="row g-3 mb-3">
-                                <div class="col-sm-6">
-                                    <label for="depone" class="form-label">Country</label>
-                                    <input type="text" class="form-control" id="depone">
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="abc" class="form-label">Customers Register date</label>
-                                    <input type="date" class="form-control w-100" id="abc">
-                                </div>
-                                </div>
-                                <div class="row g-3 mb-3">
-                                    <div class="col-sm-6">
-                                    <label for="abc11" class="form-label">Mail</label>
-                                    <input type="text" class="form-control" id="abc11">
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label for="abc111" class="form-label">Phone</label>
-                                        <input type="text" class="form-control" id="abc111">
-                                    </div>
-                                </div>
-                                <div class="row g-3 mb-3">
-                                    <div class="col-sm-12">
-                                        <label class="form-label">Total Order</label>
-                                        <input type="text" class="form-control">
-                                    </div>
-                                </div>
-                                
-                            </form>
-                        </div>
-                        
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Done</button>
-                        <button type="submit" class="btn btn-primary">Add</button>
-                    </div>
-                </div>
-                </div>
-            </div>
-
-            <!-- Edit Customers-->
-            <div class="modal fade" id="expedit" tabindex="-1"  aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-md modal-dialog-scrollable">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title  fw-bold" id="expeditLabel"> Edit Customers</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        
-                        <div class="deadline-form">
-                            <form>
-                                <div class="row g-3 mb-3">
-                                    <div class="col-sm-12">
-                                        <label for="item1" class="form-label">Customers Name</label>
-                                        <input type="text" class="form-control" id="item1" value="Cloth"> 
-                                    </div>
-                                    <div class="col-sm-12">
-                                        <label for="taxtno1" class="form-label">Customers Profile</label>
-                                        <input type="file" class="form-control" id="taxtno1">
-                                    </div>
-                                </div>
-                                <div class="row g-3 mb-3">
-                                <div class="col-sm-6">
-                                    <label class="form-label">Country</label>
-                                    <input type="text" class="form-control" value="South Africa">
-                                </div>
-                                <div class="col-sm-6">
-                                    <label for="abc1" class="form-label">Customers Register date</label>
-                                    <input type="date" class="form-control w-100" id="abc1" value="2021-03-12">
-                                </div>
-                                </div>
-                                <div class="row g-3 mb-3">
-                                    <div class="col-sm-6">
-                                    <label for="mailid" class="form-label">Mail</label>
-                                    <input type="text" class="form-control" id="mailid" value="PhilGlover@gmail.com">
-                                    </div>
-                                    <div class="col-sm-6">
-                                        <label for="phoneid" class="form-label">Phone</label>
-                                        <input type="text" class="form-control" id="phoneid" value="843-555-0175">
-                                    </div>
-                                </div>
-                                <div class="row g-3 mb-3">
-                                    <div class="col-sm-6">
-                                        <label class="form-label">Total Order</label>
-                                        <input type="text" class="form-control" value="18">
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                        
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Done</button>
-                        <button type="submit" class="btn btn-primary">Save</button>
-                    </div>
-                </div>
-                </div>
-            </div>
-
-        </div> 
             
+        </div> 
+
     </div>
-    
+
     <!-- Jquery Core Js -->
     <script src="/assets/bundles/libscripts.bundle.js"></script>
 
-    <!-- Plugin Js-->
-    <script src="/assets/bundles/dataTables.bundle.js"></script>
+    <!-- Jquery Plugin --> 
+    <script src="/assets/plugin/nouislider/nouislider.min.js"></script>
 
-    <!-- Jquery Page Js -->
+    <!-- Jquery Page Js --> 
     <script src="../js/template.js"></script>
     <script>
-        // project data table
-        $(document).ready(function() {
-            $('#myProjectTable')
-            .addClass( 'nowrap' )
-            .dataTable( {
-                responsive: true,
-                columnDefs: [
-                    { targets: [-1, -3], className: 'dt-body-right' }
-                ]
-            });
-            $('.deleterow').on('click',function(){
-            var tablename = $(this).closest('table').DataTable();  
-            tablename
-                    .row( $(this)
-                    .parents('tr') )
-                    .remove()
-                    .draw();
+        var stepsSlider2 = document.getElementById('slider-range2');
+            var input3 = document.getElementById('minAmount2');
+            var input4 = document.getElementById('maxAmount2');
+            var inputs2 = [input3, input4];
+            noUiSlider.create(stepsSlider2, {
+                start: [149, 399],
+                connect: true,
+                step: 1,
+                range: {
+                    'min': [0],
+                    'max': 2000
+                },
 
-            } );
-        });
+            });
+
+            stepsSlider2.noUiSlider.on('update', function (values, handle) {
+                inputs2[handle].value = values[handle];
+            });
     </script>
 </body>
 
-<!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/customers.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 08 Feb 2024 06:56:29 GMT -->
-</html>
+<!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/product-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Feb 2024 11:50:54 GMT -->
+</html> 

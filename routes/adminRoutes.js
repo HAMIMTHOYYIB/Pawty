@@ -32,7 +32,7 @@ router.post('/addSubCategory',adminController.submitAddSubCategory);
 router.get('/editSubCategory/:id',adminAuthMiddleware,adminController.editSubCategory);
 router.post('/editSubCategory/:id',adminController.submitEditSubCategory);
 router.post('/deleteSubCategory/:id',adminController.deleteSubCategory);
-
+router.get('/admin-ProductView',adminAuthMiddleware,adminController.productList);
 // admin logout
 router.get('/admin/logout',adminController.adminLogout);
 

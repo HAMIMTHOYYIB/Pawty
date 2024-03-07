@@ -253,7 +253,7 @@
                         <div class="col-md-12 col-lg-12 col-xl-12 col-xxl-12">
                             <div class="row g-3 mb-3 row-cols-1 row-cols-sm-3 row-cols-md-3 row-cols-lg-3 row-cols-xl-3 row-cols-xxl-4">
 
-                                <% vendor[0].products.forEach(product => { %>
+                                <% vendor.products.forEach(product => { %>
                                 <div class="col">
                                     <div class="card h-100">
                                         <div class="product">
@@ -338,7 +338,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <% vendor[0].products.forEach(product => { %>
+                                                            <% vendor.products.forEach(product => { %>
                                                             <tr class="col-12 g-0">
                                                                 <td class="col-4">
                                                                         <img class="w120 rounded img-fluid mb-2" src="<%= product.images[0] %>" alt="noImage">

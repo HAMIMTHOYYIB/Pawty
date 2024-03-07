@@ -18,10 +18,11 @@ router.post('/vendorSignup',vendorController.vendorSignupPost);
 
 // Product Management
 router.get('/vendor/product-list',vendorAuth,vendorController.productList);
-router.get('/vendor/add-product',vendorController.addProduct);
-router.post('/vendor/add-product', upload.array('image',4), vendorController.submitAddProduct);
-router.post('/vendor/editProduct/:id',vendorController.editProduct);
-router.post('/vendor/submitEditProduct/:id', upload.array('image', 4), vendorController.submitEditProduct);
+router.get('/vendor/add-product',vendorAuth,vendorController.addProduct);
+router.post('/vendor/add-product',vendorAuth, upload.array('image',4), vendorController.submitAddProduct);
+router.post('/vendor/editProduct/:id',vendorAuth,vendorController.editProduct);
+router.post('/vendor/submitEditProduct/:id',vendorAuth, upload.array('image', 4), vendorController.submitEditProduct);
+router.post('/vendor/deleteProduct/:id',vendorAuth,vendorController.deleteProduct);
 // vendor Logout
 router.get('/vendor/logout',vendorController.vendorLogout);
 

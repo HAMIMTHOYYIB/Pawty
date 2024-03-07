@@ -270,6 +270,13 @@ let adminLogout = (req, res) => {
     }
 };
 
+let productList = async (req,res) => {
+    let products =  await Vendor.find().select("products");
+    console.log("products :",products);
+    res.render('users/shop-org',{products})
+  }
+
+
 module.exports = {
     dashboard,
     adminLogin,
@@ -294,6 +301,6 @@ module.exports = {
 
     vendorList,
     vendorVerify,
-
+    productList,
     adminLogout
 }

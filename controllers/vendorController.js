@@ -3,9 +3,9 @@ const Admin = require('../models/admin');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
-const multer =  require('multer')
+// const multer =  require('multer')
 const cloudinary = require('../config/cloudinary')
-const upload = require('../config/multer.js');
+// const upload = require('../config/multer.js');
 require('dotenv').config()
 
 let vendorDashboard = (req,res) => {
@@ -83,7 +83,8 @@ let vendorSignupPost = async (req,res) => {
 
 
 let productList = async (req,res) => {
-  let vendor = await Vendor.find();
+  let email = req.user.email;
+  let vendor = await Vendor.findOne({email});
   res.render('vendor/product-list',{vendor})
 };
 
@@ -97,6 +98,8 @@ let addProduct = async (req,res) => {
 };
 
 let submitAddProduct = async (req, res) => {
+  console.log("req user :",req.user);
+  let vendorId = req.user.id
   console.log("req.body :", req.body);
   console.log("req.file :", req.file);
   let imageData = req.files;
@@ -111,6 +114,8 @@ let submitAddProduct = async (req, res) => {
         imageUrls.push(result.secure_url);
       }
       console.log(imageUrls);
+    }else{
+      console.log("No product data found");
     }
     
     let newProduct = {
@@ -124,7 +129,7 @@ let submitAddProduct = async (req, res) => {
       images:imageUrls
     };
 
-    let vendor = await Vendor.findOne();
+    let vendor = await Vendor.findOne({_id:vendorId});
     if (!vendor) {
       res.status(400).send('Vendor Not Found');
     } else {
@@ -140,7 +145,11 @@ let submitAddProduct = async (req, res) => {
 
 let editProduct = async (req,res) => {
   let productId = req.params.id;
-  let vendor = await Vendor.findOne();
+  let vendorId = req.user.id;
+  let vendor = await Vendor.findOne({_id:vendorId});
+  if(!vendor){
+    return res.status(400).send('Vendor Not found')
+  }
   let admin = await Admin.findOne();
   let product = vendor.products.find(prod => prod._id.toString() === productId);
   if(!product){
@@ -151,6 +160,7 @@ let editProduct = async (req,res) => {
 }
 
 let submitEditProduct = async (req, res) => {
+  let vendorId = req.user.id;
   let productData = req.body;
   let { ProductName, Price, Brand, Stock, Description, Category, SubCategory } = productData;
   const imageUrls = [];
@@ -166,11 +176,11 @@ let submitEditProduct = async (req, res) => {
 
     let productId = req.params.id; // Assuming you have the productId in the URL
     console.log("req.parms.productId",productId);
-    let vendor = await Vendor.findOne();
+    let vendor = await Vendor.findOne({_id:vendorId});
     if (!vendor) {
       res.status(400).send('Vendor Not Found');
     } else {
-      let productIndex = await vendor.products.findIndex(product => product._id === productId);
+      let productIndex = await vendor.products.findIndex(product => product._id.toString() === productId);
       console.log("prodctIndex :",productIndex);
       if (productIndex === -1) {
         res.status(404).send('Product Not Found');
@@ -196,6 +206,18 @@ let submitEditProduct = async (req, res) => {
   }
 };
 
+let deleteProduct = async (req,res) => {
+  let vendorId = req.user.id;
+  let productId = req.params.id;
+  let vendor = await Vendor.findOne({_id:vendorId});
+  if(!vendor){
+    return res.status(400).send('Admin Not Found')
+  }
+  vendor.products = vendor.products.filter(prod => prod._id.toString() !== productId);
+  vendor.save();
+  console.log('Product Deleted');
+  res.redirect('/vendor/product-list');
+}
 
 
 
@@ -310,15 +332,20 @@ let vendorLogout = (req, res) => {
 
 module.exports = {
     vendorDashboard,
+
     vendorLogin,
     vendorLoginSubmit,
+    
     vendorSignup,
     vendorSignupPost,
+    
     productList,  
     addProduct,
     submitAddProduct,
     editProduct,
     submitEditProduct,
+    deleteProduct,
+
     vendorForgotPass,
     resetVendorPass,
     vendorLogout

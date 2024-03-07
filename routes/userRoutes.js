@@ -21,7 +21,7 @@ router.post('/signupUser',userController.submitSignup);
 
 router.get('/account',userAuth,userController.account);
 router.get('/shop',userController.shop);
-router.get('/product',userController.product);
+router.get('/product/:id',userController.product);
 
 // Logout
 router.get('/logout',userController.userLogout);

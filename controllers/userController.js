@@ -1,5 +1,7 @@
 const bcrypt = require('bcrypt');
 const User = require('../models/User');
+const Vendor = require('../models/Vendor');
+const Admin = require('../models/admin');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
@@ -11,17 +13,40 @@ let homePage = (req,res) => {
 }
 
 // Get UserAccount
-let account = (req,res) => {
-    res.render('users/account')
+let account = async (req,res) => {
+  let userId = req.user.id;
+  let user = await User.findOne({_id:userId});
+  console.log("user : ",user);
+  if(!user){
+    return res.status(400).send('User Not found');
+  }
+  res.render('users/account',{user});
 }
 
 // Get ProductPage
-let shop = (req,res) => {
-    res.render('users/shop-org')
+let shop = async (req,res) => {
+  let admin = await Admin.findOne();
+  let products =  await Vendor.find().select("products");
+  console.log("products :",products);
+  res.render('users/shop-org',{products,admin})
 }
 
-let product = (req,res) => {
-    res.render('users/single-product')
+let product = async (req,res) => {
+  let productId = req.params.id;
+  let vendors = await Vendor.find();
+  let product;
+  vendors.forEach(vendor => {
+    vendor.products.forEach(prod => {
+      if(prod._id.toString() === productId){
+        product = prod;
+      }
+    })
+  })
+  // let products =await Vendor.find().select("products");
+  // let product = vendor.products.find(product => product.id.toString() === productId);
+  // let product = vendor.products.find(product => product._id === productId);
+  console.log("The Product :",product);
+  res.render('users/single-product',{product});
 }
 
 // Get UserLoginPage
