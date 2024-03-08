@@ -7999,3 +7999,14 @@ table p {
     margin-top: 4px;
   }
 }
+
+  .input-group {
+    position: relative;
+  }
+
+  .input-group-append {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }

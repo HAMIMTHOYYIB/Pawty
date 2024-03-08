@@ -36,6 +36,13 @@
 
     <!--== Main Style CSS ==-->
     <link href="assets/css/style.css" rel="stylesheet" />
+
+    <!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 </head>
 
 <body>
@@ -300,7 +307,7 @@
                 <ul class="breadcrumb">
                   <li><a href="/">Home</a></li>
                   <li class="breadcrumb-sep">//</li>
-                  <li>Account</li>
+                  <li>User Profile</li>
                 </ul>
               </nav>
             </div>
@@ -311,7 +318,7 @@
     <!--== End Page Header Area Wrapper ==-->
 
     <!--== Start My Account Wrapper ==-->
-    <section class="my-account-area">
+    <section class="my-account-area m-0">
       <div class="container pt--0 pb--0">
         <div class="row">
         <div class="col-lg-12">
@@ -322,23 +329,62 @@
                   <div class="myaccount-tab-menu nav nav-tabs" id="nav-tab" role="tablist">
                     <button class="nav-link active" id="dashboad-tab" data-bs-toggle="tab" data-bs-target="#dashboad" type="button" role="tab" aria-controls="dashboad" aria-selected="true">Dashboard</button>
                     <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab" aria-controls="orders" aria-selected="false"> Orders</button>
-                    <button class="nav-link" id="download-tab" data-bs-toggle="tab" data-bs-target="#download" type="button" role="tab" aria-controls="download" aria-selected="false">Download</button>
+                    <!-- <button class="nav-link" id="download-tab" data-bs-toggle="tab" data-bs-target="#download" type="button" role="tab" aria-controls="download" aria-selected="false">Download</button> -->
                     <button class="nav-link" id="payment-method-tab" data-bs-toggle="tab" data-bs-target="#payment-method" type="button" role="tab" aria-controls="payment-method" aria-selected="false">Payment Method</button>
                     <button class="nav-link" id="address-edit-tab" data-bs-toggle="tab" data-bs-target="#address-edit" type="button" role="tab" aria-controls="address-edit" aria-selected="false">address</button>
-                    <button class="nav-link" id="account-info-tab" data-bs-toggle="tab" data-bs-target="#account-info" type="button" role="tab" aria-controls="account-info" aria-selected="false">Account Details</button>
+                    <button class="nav-link" id="change-password-tab" data-bs-toggle="tab" data-bs-target="#password-info" type="button" role="tab" aria-controls="account-info" aria-selected="false">ChangeYour Password</button>
                     <button class="nav-link" onclick="window.location.href='/logout' "type="button">Logout</button>
                   </div>
                 </nav>
               </div>
               <div class="col-lg-9 col-md-8">
                 <div class="tab-content" id="nav-tabContent">
+
                   <div class="tab-pane fade show active" id="dashboad" role="tabpanel" aria-labelledby="dashboad-tab">
                     <div class="myaccount-content">
-                      <h3>Dashboard</h3>
-                      <div class="welcome">
+                      <div>
+                        <h3>Dashboard</h3>
+                        <!-- Button trigger modal -->
+                        <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editProfileModal">
+                          <i class="fas fa-edit"></i>
+                        </button>  
+                      </div>
+                     <div class="welcome">
                         <p>Hello, <strong><%= user.username %></strong></p>
                       </div>
                       <p>From your account dashboard. you can easily check & view your recent orders, manage your shipping and billing addresses and edit your password and account details.</p>
+                      <div class="welcome">
+                        <p>Your email : <strong><%= user.email %></strong></p>
+                        <p>Joined On : <strong><%= user.signedAt.toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }) %></strong></p>
+                      </div>
+                      
+                      <!-- Modal -->
+                      <div class="modal fade" id="editProfileModal" tabindex="-1" aria-labelledby="editProfileModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              <!-- Your form for editing profile here -->
+                              <!-- Example form inputs -->
+                              <div class="form-group">
+                                <label for="editUsername">Username</label>
+                                <input type="text" class="form-control" id="editUsername" value="<%= user.username %>">
+                              </div>
+                              <div class="form-group">
+                                <label for="editEmail">Email</label>
+                                <input type="email" class="form-control" id="editEmail" value="<%= user.email %>">
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                              <button type="button" class="btn btn-primary">Save changes</button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
@@ -382,7 +428,8 @@
                       </div>
                     </div>
                   </div>
-                  <div class="tab-pane fade" id="download" role="tabpanel" aria-labelledby="download-tab">
+
+                  <!-- <div class="tab-pane fade" id="download" role="tabpanel" aria-labelledby="download-tab">
                     <div class="myaccount-content">
                       <h3>Downloads</h3>
                       <div class="myaccount-table table-responsive text-center">
@@ -412,13 +459,15 @@
                         </table>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
+
                   <div class="tab-pane fade" id="payment-method" role="tabpanel" aria-labelledby="payment-method-tab">
                     <div class="myaccount-content">
                       <h3>Payment Method</h3>
                       <p class="saved-message">You Can't Saved Your Payment Method yet.</p>
                     </div>
                   </div>
+
                   <div class="tab-pane fade" id="address-edit" role="tabpanel" aria-labelledby="address-edit-tab">
                     <div class="myaccount-content">
                       <h3>Billing Address</h3>
@@ -431,12 +480,13 @@
                       <a href="#/" class="check-btn sqr-btn"><i class="fa fa-edit"></i> Edit Address</a>
                     </div>
                   </div>
-                  <div class="tab-pane fade" id="account-info" role="tabpanel" aria-labelledby="account-info-tab">
+
+                  <div class="tab-pane fade" id="password-info" role="tabpanel" aria-labelledby="change-password-tab">
                     <div class="myaccount-content">
-                      <h3>Account Details</h3>
+                      <!-- <h3>Account Details</h3> -->
                       <div class="account-details-form">
-                        <form action="/saveUserProfile" method="post" >
-                          <div class="row">
+                        <form action="/changePassword" method="post" >
+                          <!-- <div class="row"> -->
                             <!-- <div class="col-lg-6">
                               <div class="single-input-item">
                                 <label for="first-name" class="required">First Name</label>
@@ -449,7 +499,7 @@
                                 <input type="text" id="last-name" />
                               </div>
                             </div> -->
-                          </div>
+                          <!-- </div>
                           <div class="single-input-item">
                             <label for="display-name" class="required">Name</label>
                             <input type="text" id="display-name" value="<%= user.username %>" />
@@ -457,36 +507,59 @@
                           <div class="single-input-item">
                             <label for="email" class="required">Email Addres</label>
                             <input type="email" id="email" value="<%= user.email %>" />
-                          </div>
+                          </div> -->
                           <fieldset>
-                            <legend>Password change</legend>
-                            <div class="single-input-item">
-                              <label for="current-pwd" class="required">Current Password</label>
-                              <input type="password" id="current-pwd" />
-                            </div>
-                            <div class="row">
-                              <div class="col-lg-6">
-                                <div class="single-input-item">
-                                  <label for="new-pwd" class="required">New Password</label>
-                                  <input type="password" id="new-pwd" />
+                            <legend><h3>Change Password</h3></legend>
+                              <div class="single-input-item">
+                                <label for="current-pwd" class="required">Current Password</label>
+                                <div class="input-group">
+                                  <input type="password" checked value="" id="current-pwd" />
+                                  <div class="input-group-append">
+                                    <button class="btn bg-transparent text-dark" type="button" id="toggle-current-pwd">
+                                      <i class="fa fa-eye" aria-hidden="true"></i>
+                                    </button>
+                                  </div>
                                 </div>
                               </div>
-                              <div class="col-lg-6">
-                                <div class="single-input-item">
-                                  <label for="confirm-pwd" class="required">Confirm Password</label>
-                                  <input type="password" id="confirm-pwd" />
+                              <div class="row">
+                                <div class="col-lg-6">
+                                  <div class="single-input-item">
+                                    <label for="new-pwd" class="required">New Password</label>
+                                    <div class="input-group">
+                                      <input type="password" id="new-pwd" />
+                                      <div class="input-group-append">
+                                        <button class="btn bg-transparent text-dark" type="button" id="toggle-new-pwd">
+                                          <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="col-lg-6">
+                                  <div class="single-input-item">
+                                    <label for="confirm-pwd" class="required">Confirm Password</label>
+                                    <div class="input-group">
+                                      <input type="password" id="confirm-pwd" />
+                                      <div class="input-group-append">
+                                        <button class="btn bg-transparent text-dark" type="button" id="toggle-confirm-pwd">
+                                          <i class="fa fa-eye" aria-hidden="true"></i>
+                                        </button>
+                                      </div>
+                                    </div>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
                           </fieldset>
-                          <div class="single-input-item">
+                          <div class="single-input-item d-flex justify-content-between">
                             <button type="submit" class="check-btn sqr-btn">Save Changes</button>
+                            <button type="reset" class="">Reset</button>
                           </div>
-                          <button type="reset" class="btn-success bg-success border-0">Reset</button>
+                          
                         </form>
                       </div>
                     </div>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -495,6 +568,22 @@
       </div>
       </div>
     </section>
+    <script>
+      document.getElementById('toggle-current-pwd').addEventListener('click', function() {
+        var pwdInput = document.getElementById('current-pwd');
+        pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
+      });
+    
+      document.getElementById('toggle-new-pwd').addEventListener('click', function() {
+        var pwdInput = document.getElementById('new-pwd');
+        pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
+      });
+    
+      document.getElementById('toggle-confirm-pwd').addEventListener('click', function() {
+        var pwdInput = document.getElementById('confirm-pwd');
+        pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
+      });
+    </script>
     <!--== End My Account Wrapper ==-->
 
     <!--== Start Feature Area Wrapper ==-->
