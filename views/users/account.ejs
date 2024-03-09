@@ -342,11 +342,11 @@
 
                   <div class="tab-pane fade show active" id="dashboad" role="tabpanel" aria-labelledby="dashboad-tab">
                     <div class="myaccount-content">
-                      <div>
+                      <div class="d-flex justify-content-between">
                         <h3>Dashboard</h3>
                         <!-- Button trigger modal -->
                         <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#editProfileModal">
-                          <i class="fas fa-edit"></i>
+                          <i class="fa fa-edit fa-lg"></i>
                         </button>  
                       </div>
                      <div class="welcome">
@@ -366,22 +366,22 @@
                               <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <div class="modal-body">
-                              <!-- Your form for editing profile here -->
-                              <!-- Example form inputs -->
-                              <div class="form-group">
-                                <label for="editUsername">Username</label>
-                                <input type="text" class="form-control" id="editUsername" value="<%= user.username %>">
+                            <form action="/editprofile" method="post">
+                              <div class="modal-body">
+                                <div class="form-group">
+                                  <label for="editUsername">Username</label>
+                                  <input type="text" class="form-control" id="editUsername" value="<%= user.username %>">
+                                </div>
+                                <div class="form-group">
+                                  <label for="editEmail">Email</label>
+                                  <input type="email" class="form-control" id="editEmail" value="<%= user.email %>">
+                                </div>
                               </div>
-                              <div class="form-group">
-                                <label for="editEmail">Email</label>
-                                <input type="email" class="form-control" id="editEmail" value="<%= user.email %>">
+                              <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-success">Save changes</button>
                               </div>
-                            </div>
-                            <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                              <button type="button" class="btn btn-primary">Save changes</button>
-                            </div>
+                            </form>
                           </div>
                         </div>
                       </div>
@@ -468,18 +468,247 @@
                     </div>
                   </div>
 
-                  <div class="tab-pane fade" id="address-edit" role="tabpanel" aria-labelledby="address-edit-tab">
+                  <div class="tab-pane fade " id="address-edit" role="tabpanel" aria-labelledby="address-edit-tab">
                     <div class="myaccount-content">
-                      <h3>Billing Address</h3>
-                      <address>
-                        <p><strong>Alex Tuntuni</strong></p>
+                      <div class="d-flex justify-content-between mb-2">
+                        <h3>Billing Address</h3>
+                        <!-- <button class="btn">Add New Address</button> -->
+                        <button type="button" class="btn  btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addAddress">
+                          Add New Address
+                        </button> 
+                      </div>
+                      <div class="col-12">
+                        <% user.address.forEach((add, index) => { %>
+                          <!-- Address details -->
+                          <address class="col-lg-4 p-2 d-inline-flex" style="border-radius: 5px; border: 1px solid black;">
+                            <!-- Address content -->
+                            <div class="address-details">
+                              <!-- Name and edit button -->
+                              <div class="name d-flex justify-content-between">
+                                <strong class="mt-1 text-uppercase"><%= add.name %></strong>
+                                <button type="button" class="btn text-success" data-bs-toggle="modal" data-bs-target="#editAddress<%= index %>">
+                                  <i class="fa fa-edit"></i>
+                                </button>
+                              </div>
+                              <!-- Location -->
+                              <div class="location d-flex">
+                                <p><%= add.street %></p>,<p><%= add.locality %></p>
+                              </div>
+                              <!-- City and state -->
+                              <div class="city-state d-flex">
+                                <p><%= add.city %></p>,<p><%= add.state %></p>
+                              </div>
+                              <!-- Contact -->
+                              <div class="contact">
+                                <p>Mobile: <span><%= add.phone %></span></p>
+                              </div>
+                              <!-- Pincode -->
+                              <div class="pincode">
+                                <p>Pincode : <span><%= add.pincode %></span></p>
+                              </div>
+                            </div>
+                          </address>
+                        
+                          <!-- Modal edit address -->
+                          <div class="modal fade" id="editAddress<%= index %>" tabindex="-1" aria-labelledby="editAddressLabel<%= index %>" aria-hidden="true">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <h5 class="modal-title" id="editAddressLabel<%= index %>">Edit Address</h5>
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <!-- Address edit form -->
+                                <!-- Address edit form -->
+                                <form id="editaddressForm" action="/editAddress/<%= add._id %>" method="post">
+                                  <div class="modal-body">
+                                    <!-- Name input -->
+                                    <div class="form-group">
+                                      <label for="name<%= index %>">Name</label>
+                                      <input type="text" class="form-control" value="<%= add.name %>" id="name<%= index %>" name="name">
+                                    </div>
+                                    <!-- Locality and street inputs -->
+                                    <div class="form-row g-0">
+                                      <div class="form-group">
+                                        <label for="locality<%= index %>">Locality</label>
+                                        <input type="text" class="form-control" id="locality<%= index %>" value="<%= add.locality %>" name="locality">
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="street<%= index %>">Street</label>
+                                        <input type="text" class="form-control" id="street<%= index %>" value="<%= add.street %>" name="street">
+                                      </div>
+                                    </div>
+                                    <!-- City and state inputs -->
+                                    <div class="form-row g-0">
+                                      <div class="form-group">
+                                        <label for="city<%= index %>">City</label>
+                                        <input type="text" class="form-control" id="city<%= index %>" value="<%= add.city %>" name="city">
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="state<%= index %>">State</label>
+                                        <select id="state<%= index %>" class="form-control" name="state">
+                                          <option value="">Select State</option>
+                                          <option value="Karnataka" <%= add.state === 'Karnataka' ? 'selected' : '' %>>Karnataka</option>
+                                          <option value="Kerala" <%= add.state === 'Kerala' ? 'selected' : '' %>>Kerala</option>
+                                          <option value="TamilNadu" <%= add.state === 'TamilNadu' ? 'selected' : '' %>>TamilNadu</option>
+                                          <option value="AndraPradesh" <%= add.state === 'AndraPradesh' ? 'selected' : '' %>>AndraPradesh</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                    <!-- Phone input -->
+                                    <div class="form-group">
+                                      <label for="phone<%= index %>">Phone</label>
+                                      <input type="text" class="form-control" id="phone<%= index %>" value="<%= add.phone %>" name="phone">
+                                    </div>
+                                    <!-- Pincode input -->
+                                    <div class="form-group">
+                                      <label for="pincode<%= index %>">Pincode</label>
+                                      <input type="text" class="form-control" id="pincode<%= index %>" value="<%= add.pincode %>" name="pincode">
+                                    </div>
+                                    <div id="error-message" class="text-danger"></div>
+                                  </div>
+                                  <!-- Modal footer -->
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="submit" class="btn btn-success" onclick=`return validateAndSubmit(<%= index %>)`>Save Changes</button>
+                                  </div>
+                                </form>
+                              </div>
+                            </div>
+                          </div>
+                        <% }) %>                        
+                    </div>
+
+                    <script>
+                      function validateAndSubmit(index) {
+                          const name = document.getElementById('name' + index).value;
+                          const locality = document.getElementById('locality' + index).value;
+                          const street = document.getElementById('street' + index).value;
+                          const city = document.getElementById('city' + index).value;
+                          const state = document.getElementById('state' + index).value;
+                          const phone = document.getElementById('phone' + index).value;
+                          const pincode = document.getElementById('pincode' + index).value;
+
+                          // Check if any field is empty
+                          if (!name || !locality || !street || !city || !state || !phone || !pincode) {
+                              document.getElementById('error-message').innerText = 'All fields are required';
+                              return;
+                          }
+
+                          // Validate phone number (10 digits)
+                          if (!/^\d{10}$/.test(phone)) {
+                              document.getElementById('error-message').innerText = 'Phone number must be 10 digits';
+                              return;
+                          }
+
+                          // Validate pincode (6 digits)
+                          if (!/^\d{6}$/.test(pincode)) {
+                              document.getElementById('error-message').innerText = 'Pincode must be 6 digits';
+                              return;
+                          }
+
+                          // If all fields are valid, submit the form using AJAX fetch
+                          fetch('/editAddress', {
+                              method: 'POST',
+                              headers: {
+                                  'Content-Type': 'application/json'
+                              },
+                              body: JSON.stringify({
+                                  name,
+                                  locality,
+                                  street,
+                                  city,
+                                  state,
+                                  phone,
+                                  pincode
+                              })
+                          }).then(response => {
+                              if (response.ok) {
+                                  window.location.href="/"
+                                  document.getElementById('editAddress' + index).modal('hide');
+                              } else {
+                                  // Display an error message if the submission failed
+                                  document.getElementById('error-message').innerText = 'Failed to submit the form';
+                              }
+                          }).catch(error => {
+                              console.error('Error:', error);
+                              document.getElementById('error-message').innerText = 'An error occurred';
+                          });
+                      }
+                    </script>
+                      <!-- <address>
+                        <p class="welcome">
+                          <strong>Alex Tuntuni</strong>
+                          <button type="button" class="btn text-success" data-bs-toggle="modal" data-bs-target="#editAddress">
+                            <i class="fa fa-edit"></i>
+                          </button> </p>
                         <p>1355 Market St, Suite 900 <br>
                           San Francisco, CA 94103</p>
                         <p>Mobile: (123) 456-7890</p>
-                      </address>
-                      <a href="#/" class="check-btn sqr-btn"><i class="fa fa-edit"></i> Edit Address</a>
+                      </address>   -->
+                      
+                      <!-- Modal -->
+                      <div class="modal fade" id="addAddress" tabindex="-1" aria-labelledby="addAddress" aria-hidden="true">
+                        <div class="modal-dialog">
+                          <div class="modal-content">
+                            <div class="modal-header">
+                              <h5 class="modal-title" id="editProfileModalLabel">Add Address</h5>
+                              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form id="addressForm" action="/addAddress" method="post">
+                              <div class="modal-body">
+                                  <div class="form-group">
+                                      <label for="name">Name</label>
+                                      <input type="text" class="form-control" id="name" name="name">
+                                  </div>
+                                  <div class="form-row g-0">
+                                      <div class="form-group ">
+                                          <label for="locality">Locality</label>
+                                          <input type="text" class="form-control" id="locality" name="locality">
+                                      </div>
+                                      <div class="form-group ">
+                                          <label for="street">Street</label>
+                                          <input type="text" class="form-control" id="street" name="street">
+                                      </div>
+                                  </div>
+                                  <div class="form-row g-0">
+                                      <div class="form-group ">
+                                          <label for="city">City</label>
+                                          <input type="text" class="form-control" id="city" name="city">
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="state">State</label>
+                                          <select id="state" class="form-control" name="state">
+                                              <option value="">Select State</option>
+                                              <option value="Karnataka">Karnataka</option>
+                                              <option value="Kerala">Kerala</option>
+                                              <option value="TamilNadu">TamilNadu</option>
+                                              <option value="AndraPradesh">AndraPradesh</option>
+                                              <!-- Add more options for other states -->
+                                          </select>
+                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="phone">Phone</label>
+                                      <input type="number" class="form-control" id="phone" name="phone">
+                                  </div>
+                                  <div class="form-group">
+                                      <label for="pincode">Pincode</label>
+                                      <input type="number" class="form-control" id="pincode" name="pincode">
+                                  </div>
+                                  <div id="error-message" class="text-danger"></div>
+                              </div>
+                              <div class="modal-footer">
+                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                  <button type="submit" class="btn btn-success" onclick="return validateForm()">Add New Address</button>
+                              </div>
+                          </form>
+                          
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
+
 
                   <div class="tab-pane fade" id="password-info" role="tabpanel" aria-labelledby="change-password-tab">
                     <div class="myaccount-content">
@@ -1033,7 +1262,6 @@
 </div>
 
 <!--=======================Javascript============================-->
-
 <!--=== jQuery Modernizr Min Js ===-->
 <script src="assets/js/modernizr.js"></script>
 <!--=== jQuery Min Js ===-->

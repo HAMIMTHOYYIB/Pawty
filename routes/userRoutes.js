@@ -20,6 +20,11 @@ router.get('/signup',userController.signupPage);
 router.post('/signupUser',userController.submitSignup);
 
 router.get('/account',userAuth,userController.account);
+router.post('/addAddress',userAuth,userController.addAddress)
+router.post('/editAddress/:addressId',userAuth,userController.editAddress)
+
+
+
 router.get('/shop',userController.shop);
 router.get('/product/:id',userController.product);
 

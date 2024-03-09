@@ -23,6 +23,53 @@ let account = async (req,res) => {
   res.render('users/account',{user});
 }
 
+// Add New Address
+let addAddress = async (req,res) => {
+  let {name,locality,street,city,state,phone,pincode} =req.body;
+  let userId = req.user.id;
+  if(!userId){
+    res.status(404).send('user Not Found')
+  }
+  let user = await User.findOne({_id:userId});
+  if(user.address.length >4){
+    alert('Maximum 4 Address can be saved');
+     return res.redirect('/account')
+  }
+  console.log("lenghttt :",user.address.length);
+  let newAddress = {name,locality,street,city,state,phone,pincode};
+  user.address.push(newAddress);
+  user.save();
+  res.redirect('/account');
+}
+
+let editAddress = async (req, res) => {
+  const userId = req.user.id;
+  const { name, locality, street, city, state, phone, pincode, _id } = req.body;
+  console.log("_id of adress : ",req.params.addressId);
+  let user = await User.findById(userId)
+  console.log("user : ",user);
+
+    // Find the index of the address to be edited
+    const addressIndex = user.address.findIndex(address => address._id.toString() === req.params.addressId);
+
+    if (addressIndex === -1) {
+      return res.status(404).json({ message: 'Address not found' });
+    }
+
+    // Update the address
+    user.address[addressIndex].name = name;
+    user.address[addressIndex].locality = locality;
+    user.address[addressIndex].street = street;
+    user.address[addressIndex].city = city;
+    user.address[addressIndex].state = state;
+    user.address[addressIndex].phone = phone;
+    user.address[addressIndex].pincode = pincode;
+
+    // Save the updated user
+   await user.save();
+  res.status(200)
+};
+
 // Get ProductPage
 let shop = async (req,res) => {
   let admin = await Admin.findOne();
@@ -288,6 +335,8 @@ const sendOtpEmail = async (email, otp) => {
 module.exports={
     homePage,
     account,
+    addAddress,
+    editAddress,
     shop,
     product,
     loginPage,
