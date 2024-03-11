@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const Vendor = require('../models/Vendor');
 const Admin = require('../models/admin');
+let Address = User.address;
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
@@ -16,11 +17,11 @@ let homePage = (req,res) => {
 let account = async (req,res) => {
   let userId = req.user.id;
   let user = await User.findOne({_id:userId});
-  console.log("user : ",user);
   if(!user){
     return res.status(400).send('User Not found');
   }
-  res.render('users/account',{user});
+  let addError = ''
+  res.render('users/account',{user,addError});
 }
 
 // Add New Address
@@ -31,44 +32,69 @@ let addAddress = async (req,res) => {
     res.status(404).send('user Not Found')
   }
   let user = await User.findOne({_id:userId});
-  if(user.address.length >4){
-    alert('Maximum 4 Address can be saved');
-     return res.redirect('/account')
+  if(user.address.length >= 4){
+    let addError = 'Maximum 4 Address can be saved.'
+     return res.render('users/account',{addError,user});
   }
-  console.log("lenghttt :",user.address.length);
+  console.log("addresss lenghttt :",user.address.length);
   let newAddress = {name,locality,street,city,state,phone,pincode};
   user.address.push(newAddress);
   user.save();
   res.redirect('/account');
 }
 
+// let editAddress = async (req, res) => {
+//   // Update the address in the database based on the request body
+//   // This is just an example, you should implement your own logic
+//   await Address.findByIdAndUpdate(req.body.id, req.body, { new: true }, (err, updatedAddress) => {
+//       if (err) {
+//           res.status(500).send('Failed to update address');
+//       } else {
+//           res.status(200).send('Address updated successfully');
+//       }
+//   });
+// };
+
+
 let editAddress = async (req, res) => {
-  const userId = req.user.id;
-  const { name, locality, street, city, state, phone, pincode, _id } = req.body;
-  console.log("_id of adress : ",req.params.addressId);
-  let user = await User.findById(userId)
-  console.log("user : ",user);
-
-    // Find the index of the address to be edited
-    const addressIndex = user.address.findIndex(address => address._id.toString() === req.params.addressId);
-
-    if (addressIndex === -1) {
-      return res.status(404).json({ message: 'Address not found' });
+  try {
+    // console.log(req.user);
+    const { id } = req.user;
+    console.log("req.body :",req.body);
+    const { name, locality, street, city, state, phone, pincode } = req.body;
+    
+    // Find the user by userId
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
 
     // Update the address
-    user.address[addressIndex].name = name;
-    user.address[addressIndex].locality = locality;
-    user.address[addressIndex].street = street;
-    user.address[addressIndex].city = city;
-    user.address[addressIndex].state = state;
-    user.address[addressIndex].phone = phone;
-    user.address[addressIndex].pincode = pincode;
+    const addressIndex = user.address.findIndex(add => add._id.toString() === req.params.id);
+    if (addressIndex === -1) {
+      return res.status(404).json({ message: "Address not found" });
+    }
 
-    // Save the updated user
-   await user.save();
-  res.status(200)
+    user.address[addressIndex] = {
+      _id: req.params.id,
+      name,
+      locality,
+      street,
+      city,
+      state,
+      phone,
+      pincode
+    };
+
+    await user.save();
+    res.status(200).redirect('/account')
+    // res.json({ message: "Address updated successfully", user: user.address });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
 };
+
 
 // Get ProductPage
 let shop = async (req,res) => {
@@ -101,7 +127,8 @@ let loginPage = (req,res) => {
   if(req.cookies.user_jwt){
    return  res.redirect('/');
   }
-  res.render('users/account-login',{passError :''})
+  let addError = '';
+  res.render('users/account-login',{passError :'',addError})
 }
 // Post SubmitUserLoginPage
 let submitlogin = async (req, res) => {
@@ -138,7 +165,7 @@ let submitlogin = async (req, res) => {
               );
               res.cookie("user_jwt", token, { httpOnly: true, maxAge: 86400000 }); // 24 hour expiry
               console.log('User Loggined succesfully : Token created.');
-                // res.render('users/account');
+                // res.render('users/account',{addError:''});
                 res.redirect('/');
             });
         } catch (error) {
@@ -174,7 +201,8 @@ let submitSignup = async (req,res) => {
         const newUser = new User({username,email,password:hashedPassword});
         await newUser.save();
         console.log(newUser);
-        res.render('users/account');     
+        let addError = ''
+        res.render('users/account',{addError});     
     } catch (error) {
         res.status(500).send("Internal Server Error")
     }

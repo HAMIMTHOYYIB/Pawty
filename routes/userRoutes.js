@@ -20,8 +20,10 @@ router.get('/signup',userController.signupPage);
 router.post('/signupUser',userController.submitSignup);
 
 router.get('/account',userAuth,userController.account);
-router.post('/addAddress',userAuth,userController.addAddress)
-router.post('/editAddress/:addressId',userAuth,userController.editAddress)
+router.post('/addAddress',userAuth,userController.addAddress);
+// router.post('/editAddress',userAuth,userController.editAddress);
+router.post('/editAddress/:id', userAuth, userController.editAddress);
+
 
 
 
