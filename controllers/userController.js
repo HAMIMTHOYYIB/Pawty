@@ -20,8 +20,65 @@ let account = async (req,res) => {
   if(!user){
     return res.status(400).send('User Not found');
   }
-  let addError = ''
-  res.render('users/account',{user,addError});
+  const { tab } = req.query;
+  res.render('users/account', { initialTab:'dashboard',user});
+  // res.render('users/account',{user,addError});
+}
+
+let editProfile = async (req,res) => {
+  let userId = req.user.id;
+  let user = await User.findOne({_id:userId});
+  const {userName,email} = req.body;
+  user.username = userName;
+  user.email = email;
+  await user.save();
+  res.redirect('/account');
+}
+
+let changePass = async (req, res) => {
+  const { currentPass, newPass, confirmPass } = req.body;
+  let userId = req.user.id;
+  let user = await User.findOne({ _id: userId });
+  console.log("find user :",user);
+  bcrypt.compare(currentPass, user.password, async (err, result) => {
+    if (err) {
+      return res.status(500).send('Internal Server Error');
+    }
+    if (!result) {
+      return res.render('users/account', { initialTab:'dashboard',user, passErr: 'Wrong Password' });
+    }
+    if (!newPass || !confirmPass) {
+      return res.status(400).send('Password empty');
+    }
+    if (newPass !== newPass) {
+      return res.status(400).send('Passwords do not match');
+    }
+    const hashedPassword = await bcrypt.hash(newPass, 10);
+    user.password = hashedPassword;
+    await user.save();
+    res.redirect('/accountChangePass');
+  });
+};
+
+
+let accountAddress = async(req,res) => {
+  let userId = req.user.id;
+  let user = await User.findOne({_id:userId});
+  if(!user){
+    return res.status(400).send('User Not found');
+  }
+  const { tab } = req.query;
+  res.render('users/account', { initialTab: tab || 'address-edit',user});
+}
+
+let accountChangePass = async(req,res) => {
+  let userId = req.user.id;
+  let user = await User.findOne({_id:userId});
+  if(!user){
+    return res.status(400).send('User Not found');
+  }
+  const { tab } = req.query;
+  res.render('users/account', { initialTab: tab || 'changePass',user});
 }
 
 // Add New Address
@@ -34,28 +91,18 @@ let addAddress = async (req,res) => {
   let user = await User.findOne({_id:userId});
   if(user.address.length >= 4){
     let addError = 'Maximum 4 Address can be saved.'
-     return res.render('users/account',{addError,user});
+    console.log(addError);
+    return res.redirect('/account');
+    // return res.render('users/account',{addError,user});
   }
   console.log("addresss lenghttt :",user.address.length);
   let newAddress = {name,locality,street,city,state,phone,pincode};
   user.address.push(newAddress);
   user.save();
-  res.redirect('/account');
+  res.redirect('/accountAddress');
 }
 
-// let editAddress = async (req, res) => {
-//   // Update the address in the database based on the request body
-//   // This is just an example, you should implement your own logic
-//   await Address.findByIdAndUpdate(req.body.id, req.body, { new: true }, (err, updatedAddress) => {
-//       if (err) {
-//           res.status(500).send('Failed to update address');
-//       } else {
-//           res.status(200).send('Address updated successfully');
-//       }
-//   });
-// };
-
-
+// Edit Address
 let editAddress = async (req, res) => {
   try {
     // console.log(req.user);
@@ -87,7 +134,7 @@ let editAddress = async (req, res) => {
     };
 
     await user.save();
-    res.status(200).redirect('/account')
+    res.status(200).redirect('/accountAddress')
     // res.json({ message: "Address updated successfully", user: user.address });
   } catch (error) {
     console.error(error);
@@ -95,6 +142,18 @@ let editAddress = async (req, res) => {
   }
 };
 
+let deleteAddress = async (req,res) => {
+  const { addressId } = req.params;
+  let userId = req.user.id;
+  // console.log("addressId :",addressId,"user :",req.user);
+  let user = await User.findOne({_id:userId});
+  let updatedAdd = user.address.filter(add => add._id != addressId);
+  user.address = updatedAdd
+  user.save();
+  console.log("updated Adres : ",updatedAdd);
+  // await updatedUser.save();
+  res.redirect('/accountAddress');
+}
 
 // Get ProductPage
 let shop = async (req,res) => {
@@ -176,7 +235,6 @@ let submitlogin = async (req, res) => {
         res.render('users/account-login',{passError:'Please Complete the fields :'})
     }
 }
-
 
 // Get SignUpPage
 let signupPage = (req,res) => {
@@ -363,8 +421,13 @@ const sendOtpEmail = async (email, otp) => {
 module.exports={
     homePage,
     account,
+    editProfile,
+    changePass,
+    accountAddress,
+    accountChangePass,
     addAddress,
     editAddress,
+    deleteAddress,
     shop,
     product,
     loginPage,

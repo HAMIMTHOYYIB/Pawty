@@ -139,20 +139,21 @@
               <div class="col-lg-3 col-md-4">
                 <nav>
                   <div class="myaccount-tab-menu nav nav-tabs" id="nav-tab" role="tablist">
-                    <button class="nav-link active" id="dashboad-tab" data-bs-toggle="tab" data-bs-target="#dashboad" type="button" role="tab" aria-controls="dashboad" aria-selected="true">Dashboard</button>
-                    <button class="nav-link" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab" aria-controls="orders" aria-selected="false"> Orders</button>
+                    <button class="nav-link <%= initialTab === 'dashboard' ? 'active' : '' %>" id="dashboad-tab" data-bs-toggle="tab" data-bs-target="#dashboad" type="button" role="tab" aria-controls="dashboad" aria-selected="<%= initialTab === 'dashboard' %>">Dashboard</button>
+                    <button class="nav-link <%= initialTab === 'orders' ? 'active' : '' %>" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab" aria-controls="orders" aria-selected="<%= initialTab === 'orders' %>"> Orders</button>
                     <!-- <button class="nav-link" id="download-tab" data-bs-toggle="tab" data-bs-target="#download" type="button" role="tab" aria-controls="download" aria-selected="false">Download</button> -->
                     <button class="nav-link" id="payment-method-tab" data-bs-toggle="tab" data-bs-target="#payment-method" type="button" role="tab" aria-controls="payment-method" aria-selected="false">Payment Method</button>
-                    <button class="nav-link" id="address-edit-tab" data-bs-toggle="tab" data-bs-target="#address-edit" type="button" role="tab" aria-controls="address-edit" aria-selected="false">address</button>
-                    <button class="nav-link" id="change-password-tab" data-bs-toggle="tab" data-bs-target="#password-info" type="button" role="tab" aria-controls="account-info" aria-selected="false">ChangeYour Password</button>
-                    <button class="nav-link" onclick="window.location.href='/logout' "type="button">Logout</button>
+                    <button class="nav-link nav-link <%= initialTab === 'address-edit' ? 'active' : '' %>" id="address-edit-tab" data-bs-toggle="tab" data-bs-target="#address-edit" type="button" role="tab" aria-controls="address-edit" aria-selected="<%= initialTab === 'address-edit' %>">address</button>
+                    <button class="nav-link <%= initialTab === 'changePass' ? 'active' : '' %>" id="change-password-tab" data-bs-toggle="tab" data-bs-target="#password-info" type="button" role="tab" aria-controls="changePass" aria-selected="<%= initialTab === 'changePass' %>">ChangeYour Password</button>
+                    <button class="nav-link" onclick="window.location.href = '/logout'" type="button">Logout</button>
                   </div>
                 </nav>
               </div>
+
               <div class="col-lg-9 col-md-8">
                 <div class="tab-content" id="nav-tabContent">
 
-                  <div class="tab-pane fade show active" id="dashboad" role="tabpanel" aria-labelledby="dashboad-tab">
+                  <div class="tab-pane fade <%= initialTab === 'dashboard' ? 'show active' : '' %>" id="dashboad" role="tabpanel" aria-labelledby="dashboad-tab">
                     <div class="myaccount-content">
                       <div class="d-flex justify-content-between">
                         <h3>Dashboard</h3>
@@ -182,11 +183,11 @@
                               <div class="modal-body">
                                 <div class="form-group">
                                   <label for="editUsername">Username</label>
-                                  <input type="text" class="form-control" id="editUsername" value="<%= user.username %>">
+                                  <input type="text" class="form-control" name="userName" id="editUsername" value="<%= user.username %>">
                                 </div>
                                 <div class="form-group">
                                   <label for="editEmail">Email</label>
-                                  <input type="email" class="form-control" id="editEmail" value="<%= user.email %>">
+                                  <input type="email" name="email" class="form-control" id="editEmail" value="<%= user.email %>">
                                 </div>
                               </div>
                               <div class="modal-footer">
@@ -248,46 +249,54 @@
                     </div>
                   </div>
 
-                  <div class="tab-pane fade " id="address-edit" role="tabpanel" aria-labelledby="address-edit-tab">
+                  <div class="tab-pane fade <%= initialTab === 'address-edit' ? 'show active' : '' %>" id="address-edit" role="tabpanel" aria-labelledby="address-edit-tab">
                     <div class="myaccount-content">
                       <div class="d-flex justify-content-between mb-2">
                         <h3>Billing Address</h3>
                         <!-- <button class="btn">Add New Address</button> -->
-                        <button type="button" class="btn  btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addAddress">
-                          Add New Address
-                        </button> 
+                        <div class="d-flex flex-column">
+                          <button type="button" class="btn  btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addAddress">
+                            Add New Address
+                          </button> 
+                          <small class="text-success">Upto 4 Address can be saved</small>
+                        </div>
                       </div>
                       <div class="col-12">
                         <% user.address.forEach((add, index) => { %>
                           <!-- Address details -->
-                          <address class="col-lg-4 p-2 d-inline-flex" style="border-radius: 5px; border: 1px solid black;">
+                          <address class="col-lg-4 ps-2 d-inline-flex" style="border-radius: 5px; border: 1px solid black;">
                             <!-- Address content -->
-                            <div class="address-details">
-                              <!-- Name and edit button -->
-                              <div class="name d-flex justify-content-between">
-                                <strong class="mt-1 text-uppercase"><%= add.name %></strong>
-                                <button type="button" class="btn text-success" data-bs-toggle="modal" data-bs-target="#editAddress<%= index %>">
-                                  <i class="fa fa-edit"></i>
-                                </button>
-                              </div>
-                              <!-- Location -->
-                              <div class="location d-flex">
-                                <p><%= add.street %></p>,<p><%= add.locality %></p>
-                              </div>
-                              <!-- City and state -->
-                              <div class="city-state d-flex">
-                                <p><%= add.city %></p>,<p><%= add.state %></p>
-                              </div>
-                              <!-- Contact -->
-                              <div class="contact">
-                                <p>Mobile: <span><%= add.phone %></span></p>
-                              </div>
-                              <!-- Pincode -->
-                              <div class="pincode">
-                                <p>Pincode : <span><%= add.pincode %></span></p>
-                              </div>
+                            <div class="address-details col-9">
+                                <!-- Name and edit button -->
+                                <div class="name d-flex justify-content-between">
+                                    <strong class="mt-1 text-uppercase"><%= add.name %></strong>
+                                </div>
+                                <!-- Location -->
+                                <div class="location d-flex">
+                                    <p><%= add.street %></p>,<p><%= add.locality %></p>
+                                </div>
+                                <!-- City and state -->
+                                <div class="city-state d-flex">
+                                    <p><%= add.city %></p>,<p><%= add.state %></p>
+                                </div>
+                                <!-- Contact -->
+                                <div class="contact">
+                                    <p>Mobile: <span><%= add.phone %></span></p>
+                                </div>
+                                <!-- Pincode -->
+                                <div class="pincode">
+                                    <p>Pincode : <span><%= add.pincode %></span></p>
+                                </div>
                             </div>
-                          </address>
+                            <div class="col-3" style="display: flex;justify-content:flex-end;align-items:flex-start;">
+                                <button type="button" class="btn text-success" data-bs-toggle="modal" data-bs-target="#editAddress<%= index %>">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                                <button type="button" onclick="window.location.href = `/addressDelete/<%= add._id %>`" class="btn text-danger">
+                                    <i class="fa fa-trash text-danger"></i>
+                                </button>
+                            </div>
+                        </address>
                         
                           <!-- Modal edit address -->
                           <div class="modal fade" id="editAddress<%= index %>" tabindex="-1" aria-labelledby="editAddressLabel<%= index %>" aria-hidden="true">
@@ -374,8 +383,8 @@
                                     });
 
                                     if (response.ok) {
-                                        $('#editAddress').modal('hide');
-                                        window.location.href = "/account";
+                                        // $('#editAddress').modal('hide');
+                                        // window.location.href = "/account";
                                     } else {
                                         throw new Error("Failed to update address");
                                     }
@@ -383,7 +392,6 @@
                                     console.error(error.message);
                                 }
                             });
-
                           </script>
                         <% }) %>     
                                            
@@ -464,7 +472,7 @@
                   </div>
 
 
-                  <div class="tab-pane fade" id="password-info" role="tabpanel" aria-labelledby="change-password-tab">
+                  <div class="tab-pane fade <%= initialTab === 'changePass' ? 'show active' : '' %>" id="password-info" role="tabpanel" aria-labelledby="change-password-tab">
                     <div class="myaccount-content">
                       <!-- <h3>Account Details</h3> -->
                       <div class="account-details-form">
@@ -474,7 +482,7 @@
                               <div class="single-input-item">
                                 <label for="current-pwd" class="required">Current Password</label>
                                 <div class="input-group">
-                                  <input type="password" checked value="" id="current-pwd" />
+                                  <input type="password" name="currentPass" checked value="" id="current-pwd" />
                                   <div class="input-group-append">
                                     <button class="btn bg-transparent text-dark" type="button" id="toggle-current-pwd">
                                       <i class="fa fa-eye" aria-hidden="true"></i>
@@ -487,7 +495,7 @@
                                   <div class="single-input-item">
                                     <label for="new-pwd" class="required">New Password</label>
                                     <div class="input-group">
-                                      <input type="password" id="new-pwd" />
+                                      <input type="password" name="newPass" id="new-pwd" />
                                       <div class="input-group-append">
                                         <button class="btn bg-transparent text-dark" type="button" id="toggle-new-pwd">
                                           <i class="fa fa-eye" aria-hidden="true"></i>
@@ -500,7 +508,7 @@
                                   <div class="single-input-item">
                                     <label for="confirm-pwd" class="required">Confirm Password</label>
                                     <div class="input-group">
-                                      <input type="password" id="confirm-pwd" />
+                                      <input type="password" name="confirmPass" id="confirm-pwd" />
                                       <div class="input-group-append">
                                         <button class="btn bg-transparent text-dark" type="button" id="toggle-confirm-pwd">
                                           <i class="fa fa-eye" aria-hidden="true"></i>
