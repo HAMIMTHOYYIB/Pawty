@@ -153,12 +153,12 @@
                     <% userCart.products.forEach(product => { %>
                     <tr class="tbody-item">
                       <td class="product-remove">
-                        <a class="remove" href="javascript:void(0)">×</a>
+                        <a class="remove"href="/removeFromCart/<%= product._id %>">×</a>
                       </td>
                       <td class="product-thumbnail">
                         <div class="thumb">
                           <a href="single-product.html">
-                            <img src="/assets/img/shop/product-mini/cart1.jpg" width="75" height="75" alt="Image-HasTech">
+                            <img src="<%= product.images[0] %>" width="75" height="75" alt="Image-HasTech">
                           </a>
                         </div>
                       </td>
@@ -170,66 +170,14 @@
                       </td>
                       <td class="product-quantity">
                         <div class="pro-qty">
-                          <input type="text" class="quantity" title="Quantity" value="1">
+                          <input type="text" class="quantity" onclick="changeQuantity()" title="Quantity" value="<%= product.quantity %>">
                         </div>
                       </td>
                       <td class="product-subtotal">
-                        <span class="price">$115.00</span>
+                        <span class="price"><%= product.price * product.quantity %></span>
                       </td>
                     </tr>
                     <% }) %>
-                    <tr class="tbody-item">
-                      <td class="product-remove">
-                        <a class="remove" href="javascript:void(0)">×</a>
-                      </td>
-                      <td class="product-thumbnail">
-                        <div class="thumb">
-                          <a href="single-product.html">
-                            <img src="/assets/img/shop/product-mini/cart2.jpg" width="75" height="75" alt="Image-HasTech">
-                          </a>
-                        </div>
-                      </td>
-                      <td class="product-name">
-                        <a class="title" href="single-product.html">Kaoreet</a>
-                      </td>
-                      <td class="product-price">
-                        <span class="price">$95.00</span>
-                      </td>
-                      <td class="product-quantity">
-                        <div class="pro-qty">
-                          <input type="text" class="quantity" title="Quantity" value="1">
-                        </div>
-                      </td>
-                      <td class="product-subtotal">
-                        <span class="price">$95.00</span>
-                      </td>
-                    </tr>
-                    <tr class="tbody-item">
-                      <td class="product-remove">
-                        <a class="remove" href="javascript:void(0)">×</a>
-                      </td>
-                      <td class="product-thumbnail">
-                        <div class="thumb">
-                          <a href="single-product.html">
-                            <img src="/assets/img/shop/product-mini/cart3.jpg" width="75" height="75" alt="Image-HasTech">
-                          </a>
-                        </div>
-                      </td>
-                      <td class="product-name">
-                        <a class="title" href="single-product.html">exercitationem </a>
-                      </td>
-                      <td class="product-price">
-                        <span class="price">$79.00</span>
-                      </td>
-                      <td class="product-quantity">
-                        <div class="pro-qty">
-                          <input type="text" class="quantity" title="Quantity" value="1">
-                        </div>
-                      </td>
-                      <td class="product-subtotal">
-                        <span class="price">$79.00</span>
-                      </td>
-                    </tr>
                     <!-- <tr class="tbody-item-actions">
                       <td colspan="6">
                         <button type="submit" class="btn-update-cart disabled" disabled>Update cart</button>
@@ -249,7 +197,7 @@
                 <tr class="cart-subtotal">
                   <th>Subtotal</th>
                   <td>
-                    <span class="amount">$499.00</span>
+                    <span class="amount"><%= userCart.total %></span>
                   </td>
                 </tr>
               </tbody>
@@ -267,6 +215,49 @@
     </section>
     <!--== End Blog Area Wrapper ==-->
   </main>
+
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const quantityInputs = document.querySelectorAll('.quantity');
+  
+      quantityInputs.forEach(input => {
+        input.addEventListener('change', function() {
+          const productId = input.dataset.productId;
+          const newQuantity = parseInt(input.value);
+  
+          // Send AJAX request to update quantity
+          updateProductQuantity(productId, newQuantity);
+        });
+      });
+    });
+  
+    function updateProductQuantity(productId, newQuantity) {
+      fetch(`/updateCart/${productId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ quantity: newQuantity })
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.json();
+        } else {
+          throw new Error('Failed to update quantity');
+        }
+      })
+      .then(data => {
+        console.log(data.message);
+        // Optionally, update the UI to reflect the new quantity
+      })
+      .catch(error => {
+        console.error(error.message);
+      });
+    }
+  </script>
+  
+  
 
   <!--== Start Footer Area Wrapper ==-->
   <footer class="footer-area">

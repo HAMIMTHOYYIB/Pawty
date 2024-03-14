@@ -160,7 +160,6 @@ let deleteAddress = async (req,res) => {
 let shop = async (req,res) => {
   let admin = await Admin.findOne();
   let products =  await Vendor.find().select("products");
-  console.log("products :",products);
   res.render('users/shop-org',{products,admin})
 }
 
@@ -182,40 +181,96 @@ let product = async (req,res) => {
   res.render('users/single-product',{product});
 }
 
-let getcart = async (req,res) => {
-  let user = await User.findOne({ _id: req.user.id }).populate({
-    path: 'cart.products.product',
-    model: 'Vendor'
-  });
-  console.log("user getcart :",user.cart);
-  userCart = user.cart;
-  res.render('users/cart',{ userCart });
+let getcart = async (req, res) => {
+  try {
+    let user = await User.findOne({ _id: req.user.id });
+    let cart = user.cart;
+    res.render('users/cart', { userCart: cart });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Internal Server Error');
+  }
 }
+
 
 let addtocart = async (req,res) => {
   let vendors = await Vendor.find();
-  let productId = req.params.id;
+  let _id = req.params.id;
 
   let products = [];
   vendors.forEach(vendor => {
     products = products.concat(vendor.products);
   });
-  let thisProduct = products.filter(prod => prod._id.toString() === productId);
+  let thisProduct = products.find(prod => prod._id.toString() === _id);
 
-  productPrice = parseInt(thisProduct[0].price)
-  let user = await User.findOne({_id:req.user.id});
-  let prod = {
-    productId,
-    quantity:1
+  if (!thisProduct) {
+    console.log("Product not found");
+    return res.redirect(`/shop`);
   }
-  user.cart.products.push(prod);
 
-  let total = user.cart.total;
-  total+=productPrice
-  user.cart.total = total;
+  let user = await User.findOne({_id:req.user.id});
+
+  let existingProduct = user.cart.products.find(prod => prod._id.toString() === _id);
+  if (existingProduct) {
+    console.log("existing product :",existingProduct);
+    existingProduct.quantity += 1;
+    user.cart.total += parseFloat(existingProduct.price);
+  } else {
+    let prod = {
+      _id,
+      quantity:1,
+      productName:thisProduct.productName,
+      price: parseFloat(thisProduct.price),
+      images:thisProduct.images
+    }
+    user.cart.products.push(prod);
+    user.cart.total += parseFloat(thisProduct.price);
+  }
 
   await user.save();
+  console.log("Product added to cart successfully");
   res.redirect(`/shop`);
+}
+
+let removefromcart = async (req,res) => {
+  let productId = req.params.productId;
+  let user = await User.findOne({_id:req.user.id});
+  let product  = user.cart.products.filter(prod => prod._id.toString() === productId);
+  user.cart.products = user.cart.products.filter(prod => prod._id.toString() !== productId);
+  user.cart.total = user.cart.total - (product[0].price * product[0].quantity);
+  console.log("user cart :",user.cart);
+  console.log("product removed from cart");
+  await user.save();
+  res.redirect('/cart');
+}
+
+let changeQuantity = async (req, res) => {
+  const { productId } = req.params;
+  const { quantity } = req.body;
+
+  try {
+    const user = await User.findById(req.user._id);
+
+    // Find the product in the cart
+    const productIndex = user.cart.products.findIndex(product => product._id.toString() === productId);
+    if (productIndex !== -1) {
+      // Update the quantity of the product in the cart
+      user.cart.products[productIndex].quantity = quantity;
+
+      // Calculate the new total price
+      user.cart.total = user.cart.products.reduce((total, product) => total + (product.price * product.quantity), 0);
+
+      // Save the updated cart
+      await user.save();
+
+      res.status(200).json({ message: 'Quantity updated successfully' });
+    } else {
+      res.status(404).json({ message: 'Product not found in cart' });
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
 }
 
 // Get UserLoginPage
@@ -468,6 +523,8 @@ module.exports={
     product,
     getcart,
     addtocart,
+    changeQuantity,
+    removefromcart,
     loginPage,
     submitlogin,
     signupPage,
