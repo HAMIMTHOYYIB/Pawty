@@ -98,7 +98,7 @@
   
   <main class="main-content">
     <!--== Start Page Header Area Wrapper ==-->
-    <div class="page-header-area" data-bg-img="assets/img/photos/header-bg.jpg">
+    <div style="height: 200px;" class="page-header-area" data-bg-img="assets/img/photos/header-bg.jpg">
       <div class="container pt--0 pb--0">
         <div class="row">
           <div class="col-12">
@@ -122,36 +122,46 @@
     <section class="account-area">
       <div class="container">
         <div class="row">
-          <div class="col-12">
+          <div class="col-12 mb-0">
             <div class="register-form-content">
-              <span id="errMessage" class="text-danger"><%= errMsg %></span> <br>
+              <span id="errMessage" class="text-danger"><%= errMsg %></span>
               <form action="/signupUser" method="post" onsubmit="return signupValid()">
                 <div class="row">
-                  <div class="col-12">
+                  <div class="col-12 my-0">
                     <div class="form-group">
                       <label for="username">Username <span class="required">*</span></label>
                       <input id="username" name="username" class="form-control" type="text">
-                      <span id="nameErr" class="text-danger"></span> <br>
+                      <span id="nameErr" class="text-danger my-0">-</span>
                     </div>
                   </div>
-                  <div class="col-12">
+                  <div class="col-12 my-0">
                     <div class="form-group">
                       <label for="email">Email address <span class="required">*</span></label>
-                      <input  id="email" name="email" class="form-control" type="email">
-                      <span id="emailErr" class="text-danger"></span> <br>
+                      <input  id="email" name="email" class="form-control" type="type">
+                      <span id="emailErr" class="text-danger my-0">-</span>
                     </div>
                   </div>
-                  <div class="col-12">
+                  <div class="col-12 my-0">
+                    <div class="form-group">
+                      <label for="phone">Phone<span class="required">*</span></label>
+                      <input id="phone" name="phone" class="form-control" type="number">
+                      <span id="phoneErr" class="text-danger my-0">-</span>
+                    </div>
+                  </div>
+                  <div class="col-12my-0">
                     <div class="form-group">
                       <label for="password">Password<span class="required">*</span></label>
                       <input id="password" class="form-control" name="password" type="password">
+                      
+                    </div>
+                    <div class="form-group ">
                       <label for="Confirm-password">Confirm-Password<span class="required">*</span></label>
                       <input id="confirm-password" class="form-control" name="confirmPassword" type="password">
-                      <span id="passwordErr" class="text-danger"></span> <br>
+                      <span id="passwordErr" class="text-danger">-</span>
                     </div>
                   </div>
-                  <div class="col-12">
-                    <div class="form-group mb--0">
+                  <div class="col-12 ">
+                    <div class="form-group my-0">
                       <button class="btn-register" onclick="signupValid" type="submit">Signup</button>
                       <!-- <a class="btn-register" href="shop.html">Signup</a> -->
                     </div>

@@ -8,7 +8,6 @@ const productSchema = new mongoose.Schema({
     category:{type:String},
     subCategory:{type:String},
     stockQuantity:{type:String},
-    image:{type:String},
     addedOn:{type:Date,default:Date.now},
     images:{type:Array}
 });

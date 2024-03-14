@@ -226,9 +226,11 @@
                           <input type="text" title="Quantity" value="01">
                         </div>
                       </div>
-                      <button type="button" class="btn-product-cart" data-bs-toggle="modal" data-bs-target="#action-CartAddModal">
-                        Add To Cart
-                      </button>
+                      <form action="/addToCart/<%= product._id %>" method="post">
+                        <button type="submit" class="btn-product-cart">
+                          Add To Cart
+                        </button>
+                      </form>
                         <button type="button" class="btn-product-wishlist" data-bs-toggle="modal" data-bs-target="#action-WishlistModal">
                           <i class="pe-7s-like"></i>
                         </button>

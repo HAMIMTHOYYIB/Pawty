@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const Vendor = require('../models/Vendor');
 const Admin = require('../models/admin');
-let Address = User.address;
+// let Address = User.address;
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
@@ -28,9 +28,10 @@ let account = async (req,res) => {
 let editProfile = async (req,res) => {
   let userId = req.user.id;
   let user = await User.findOne({_id:userId});
-  const {userName,email} = req.body;
+  const {userName,email,phone} = req.body;
   user.username = userName;
   user.email = email;
+  user.phone = phone;
   await user.save();
   res.redirect('/account');
 }
@@ -181,6 +182,42 @@ let product = async (req,res) => {
   res.render('users/single-product',{product});
 }
 
+let getcart = async (req,res) => {
+  let user = await User.findOne({ _id: req.user.id }).populate({
+    path: 'cart.products.product',
+    model: 'Vendor'
+  });
+  console.log("user getcart :",user.cart);
+  userCart = user.cart;
+  res.render('users/cart',{ userCart });
+}
+
+let addtocart = async (req,res) => {
+  let vendors = await Vendor.find();
+  let productId = req.params.id;
+
+  let products = [];
+  vendors.forEach(vendor => {
+    products = products.concat(vendor.products);
+  });
+  let thisProduct = products.filter(prod => prod._id.toString() === productId);
+
+  productPrice = parseInt(thisProduct[0].price)
+  let user = await User.findOne({_id:req.user.id});
+  let prod = {
+    productId,
+    quantity:1
+  }
+  user.cart.products.push(prod);
+
+  let total = user.cart.total;
+  total+=productPrice
+  user.cart.total = total;
+
+  await user.save();
+  res.redirect(`/shop`);
+}
+
 // Get UserLoginPage
 let loginPage = (req,res) => {
   if(req.cookies.user_jwt){
@@ -243,7 +280,7 @@ let signupPage = (req,res) => {
 //Post SubmitSignup
 let submitSignup = async (req,res) => {
     console.log(req.body);
-    const { username,email,password,confirmPassword} = req.body;
+    const { username,email,phone,password,confirmPassword} = req.body;
     try {
         const userExist= await User.findOne({email:email});
         if(userExist){
@@ -256,11 +293,10 @@ let submitSignup = async (req,res) => {
             res.status(400).send('password does not match');
         }
         const hashedPassword = await bcrypt.hash(password,10);
-        const newUser = new User({username,email,password:hashedPassword});
+        const newUser = new User({username,email,phone,password:hashedPassword});
         await newUser.save();
         console.log(newUser);
-        let addError = ''
-        res.render('users/account',{addError});     
+        res.redirect('/login')
     } catch (error) {
         res.status(500).send("Internal Server Error")
     }
@@ -430,6 +466,8 @@ module.exports={
     deleteAddress,
     shop,
     product,
+    getcart,
+    addtocart,
     loginPage,
     submitlogin,
     signupPage,

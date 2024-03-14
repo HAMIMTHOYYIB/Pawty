@@ -32,6 +32,8 @@ router.get('/addressDelete/:addressId', userAuth, userController.deleteAddress);
 
 router.get('/shop',userController.shop);
 router.get('/product/:id',userController.product);
+router.get('/cart',userAuth,userController.getcart);
+router.post('/addToCart/:id',userAuth,userController.addtocart);
 
 // Logout
 router.get('/logout',userController.userLogout);

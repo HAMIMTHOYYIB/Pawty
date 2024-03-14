@@ -183,10 +183,15 @@
                               <i class="pe-7s-like"></i>
                             </button>
                             <div class="product-action-links">
-                              <button type="button" class="btn-product-cart" data-bs-toggle="modal" data-bs-target="#action-CartAddModal">
+                              <!-- <button type="button" class="btn-product-cart" data-bs-toggle="modal" data-bs-target="#action-CartAddModal">
                                 <i class="pe-7s-shopbag"></i>
-                              </button>
-                              <button type="button" class="btn-product-quick-view" data-bs-toggle="modal" data-bs-target="#action-QuickViewModal">
+                              </button> -->
+                              <form action="/addToCart/<%= product._id %>" method="post">
+                                <button type="submit" class="btn-product-cart">
+                                  <i class="pe-7s-shopbag"></i>
+                                </button>
+                              </form>
+                             <button type="button" class="btn-product-quick-view" data-bs-toggle="modal" data-bs-target="#action-QuickViewModal">
                                 <i class="pe-7s-look"></i>
                               </button>
                             </div>

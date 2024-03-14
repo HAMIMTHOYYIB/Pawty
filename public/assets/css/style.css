@@ -3863,13 +3863,13 @@ table p {
 
 .cart-totals-wrap {
   background: #f9f9f9;
-  margin-bottom: 30px;
-  padding: 33px 30px 35px;
+  /* margin-bottom: 30px; */
+  /* padding: 33px 30px 35px; */
   width: 100%;
 }
 @media only screen and (max-width: 991px) {
   .cart-totals-wrap {
-    margin-top: 40px;
+    /* margin-top: 40px; */
   }
 }
 .cart-totals-wrap .title {
@@ -3877,7 +3877,7 @@ table p {
   font-size: 18px;
   font-weight: 800;
   margin: 0 0 4px;
-  padding: 0 0 10px;
+  /* padding: 0 0 10px; */
   text-transform: uppercase;
 }
 .cart-totals-wrap table {

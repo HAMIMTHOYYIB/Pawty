@@ -10,6 +10,14 @@ const addressSchema = new mongoose.Schema({
     pincode: {type: String,required: true}
 });
 
+const cartSchema = new mongoose.Schema({
+    products: [{
+        product: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' },
+        quantity: { type: Number }
+    }],
+    total: { type: Number }
+});
+
 
 const userSchema = new mongoose.Schema({
     username:{
@@ -21,10 +29,17 @@ const userSchema = new mongoose.Schema({
         required:true,
         unique:true
     },
+    phone:{
+        type:Number
+    },
     password:{
-        type:String,
+        type:String
     },
     address:[addressSchema],
+    cart:{
+        type: cartSchema,
+        default: { products: [], total: 0 }
+    },
     otp:{
         type:String
     },
