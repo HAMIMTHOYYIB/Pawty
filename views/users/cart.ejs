@@ -170,7 +170,7 @@
                       <td class="product-quantity">
                         <div class="">
                           <button type="button" class="qty-minus">-</button>
-                          <input type="text" style="width: 25px; border:2px solid black;" class="quantity" title="Quantity" value="<%= product.quantity %>" min="1" data-productId="<%= product._id %>">
+                          <input type="text" style="width: 28px; border:2px solid black;" class="quantity" title="Quantity" readonly value="<%= product.quantity %>" min="1" data-productId="<%= product._id %>">
                           <button type="button" class="qty-plus">+</button>
                         </div>
                       </td>                      
@@ -261,9 +261,7 @@
       function updateCart(productId, quantity) {
         axios.post('/updateCart', { productId, quantity })
           .then(response => {
-            // Handle successful update (optional)
             console.log('Cart quantity updated successfully:', response.data);
-            // You might update the UI to reflect the new quantity or fetch the updated cart data
           })
           .catch(error => {
             console.error('Error updating cart quantity:', error.response);

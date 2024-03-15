@@ -192,45 +192,45 @@ let getcart = async (req, res) => {
   }
 }
 
-
-let addtocart = async (req,res) => {
-  let vendors = await Vendor.find();
-  let _id = req.params.id;
-
-  let products = [];
-  vendors.forEach(vendor => {
-    products = products.concat(vendor.products);
-  });
-  let thisProduct = products.find(prod => prod._id.toString() === _id);
-
-  if (!thisProduct) {
-    console.log("Product not found");
-    return res.redirect(`/shop`);
-  }
-
-  let user = await User.findOne({_id:req.user.id});
-
-  let existingProduct = user.cart.products.find(prod => prod._id.toString() === _id);
-  if (existingProduct) {
-    console.log("existing product :",existingProduct);
-    existingProduct.quantity += 1;
-    user.cart.total += parseFloat(existingProduct.price);
-  } else {
-    let prod = {
-      _id,
-      quantity:1,
-      productName:thisProduct.productName,
-      price: parseFloat(thisProduct.price),
-      images:thisProduct.images
+let addtocart = async (req, res) => {
+  const { productId } = req.body;
+  const userId = req.user.id;
+  try {
+    const vendor = await Vendor.findOne({ "products._id": productId });
+    if (!vendor) {
+      return res.status(404).json({ error: "Vendor not found" });
     }
-    user.cart.products.push(prod);
-    user.cart.total += parseFloat(thisProduct.price);
+    const product = vendor.products.find(
+      (prod) => prod._id.toString() === productId
+    );
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    const existingProductIndex = user.cart.products.findIndex((cartItem) => cartItem._id.toString() === productId);
+    if (existingProductIndex !== -1) {
+      user.cart.products[existingProductIndex].quantity += 1;
+    } else {
+      user.cart.products.push({
+        _id: productId,
+        quantity: 1,
+        productName: product.productName,
+        price: product.price,
+        images: product.images,
+      });
+    };
+    user.cart.total += parseFloat(product.price);
+    console.log("usercart", user.cart);
+    await user.save();
+    res.json({ message: "Product added to cart successfully", user });
+  } catch (error) {
+    console.error("Error adding product to cart:", error);
+    res.status(500).json({ error: "Unable to add product to cart" });
   }
-
-  await user.save();
-  console.log("Product added to cart successfully");
-  res.redirect(`/shop`);
-}
+};
 
 let removefromcart = async (req,res) => {
   let productId = req.params.productId;

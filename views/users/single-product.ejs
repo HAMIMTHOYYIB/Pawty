@@ -36,6 +36,25 @@
 
     <!--== Main Style CSS ==-->
     <link href="/assets/css/style.css" rel="stylesheet" />
+    <style>
+      .toast {
+        position: fixed;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        max-width: 300px;
+        background-color: #203e5a;
+        color:#fff;
+        border-radius: 10px;
+        padding: 10px;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        }
+        .toast.show {
+        opacity: 1;
+        }
+    </style>
 </head>
 
 <body>
@@ -148,7 +167,7 @@
                         </div>
                         <div class="swiper-slide">
                           <a class="lightbox-image" data-fancybox="gallery" href="<%= product.images[2] %>">
-                            <img src="/<%= product.images[2] %>" width="570" height="675" alt="Image-HasTech">
+                            <img src="<%= product.images[2] %>" width="570" height="675" alt="Image-HasTech">
                           </a>
                         </div>
                         <div class="swiper-slide">
@@ -221,22 +240,27 @@
                       </ul>
                     </div>
                     <div class="product-quick-action">
-                      <div class="qty-wrap">
+                      <!-- <div class="qty-wrap">
                         <div class="pro-qty">
                           <input type="text" title="Quantity" value="01">
                         </div>
-                      </div>
-                      <form action="/addToCart/<%= product._id %>" method="post">
-                        <button type="submit" class="btn-product-cart">
-                          Add To Cart
-                        </button>
-                      </form>
-                        <button type="button" class="btn-product-wishlist" data-bs-toggle="modal" data-bs-target="#action-WishlistModal">
-                          <i class="pe-7s-like"></i>
-                        </button>
-                      <button type="button" class="btn-product-quick-view" data-bs-toggle="modal" data-bs-target="#action-QuickViewModal">
-                        <i class="pe-7s-look"></i>
+                      </div> -->
+                      <button type="button" id="addToCart" class="btn-product-cart" data-product-id="<%= product._id %>">
+                        Add To Cart
                       </button>
+
+                      <div id="cartNotification" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="500">
+                        <div class="toast-body">
+                          Product added to cart !
+                        </div>
+                      </div>
+
+                      <button type="button" class="btn-product-wishlist" data-bs-toggle="modal" data-bs-target="#action-WishlistModal">
+                        <i class="pe-7s-like"></i>
+                      </button>
+                      <!-- <button type="button" class="btn-product-quick-view" data-bs-toggle="modal" data-bs-target="#action-QuickViewModal">
+                        <i class="pe-7s-look"></i>
+                      </button> -->
                     </div>
                     <div class="product-review-tabs-content">
                       <ul class="nav product-tab-nav" id="ReviewTab" role="tablist">
@@ -859,7 +883,38 @@
 </div>
 
 <!--=======================Javascript============================-->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    const addToCart = document.getElementById('addToCart');
+    addToCart.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevent default button behavior
+        const productId = this.getAttribute('data-product-id');
+        addToCartf(productId);
+    });
 
+    function addToCartf(productId) {
+            console.log("add to cart function triggered :",productId )
+            axios.post('/addToCart', {
+                productId: productId
+            })
+            .then(function (response) {
+                console.log(response.data);
+
+                // Show the toast when product is added
+                const toast = document.getElementById('cartNotification');
+                toast.classList.add('show');
+
+                // Hide the toast after 0.5 seconds
+                setTimeout(function () {
+                    toast.classList.remove('show');
+                }, 2000);
+            })
+            .catch(function (error) {
+                console.error('Error adding product to cart:', error);
+                // Optionally, show an error message to the user
+            });
+        }
+</script>
 <!--=== jQuery Modernizr Min Js ===-->
 <script src="/assets/js/modernizr.js"></script>
 <!--=== jQuery Min Js ===-->
