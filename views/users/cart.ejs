@@ -1,8 +1,5 @@
 <!DOCTYPE html>
 <html lang="zxx">
-
-
-<!-- Mirrored from htmldemo.net/tuime/tuime/shop-cart.html by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 10 Feb 2024 04:43:17 GMT -->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -36,6 +33,8 @@
 
     <!--== Main Style CSS ==-->
     <link href="/assets/css/style.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 </head>
 
 <body>
@@ -142,7 +141,7 @@
                   <thead>
                     <tr>
                       <th class="product-remove">&nbsp;</th>
-                      <th class="product-thumbnail">&nbsp;</th>
+                      <th class="product-thumbnail">&nbsp;product View</th>
                       <th class="product-name">Product</th>
                       <th class="product-price">Price</th>
                       <th class="product-quantity">Quantity</th>
@@ -166,15 +165,17 @@
                         <a class="title" href="single-product.html"><%= product.productName %></a>
                       </td>
                       <td class="product-price">
-                        <span class="price"><%= product.price %></span>
+                        <span class="price">$<%= product.price %></span>
                       </td>
                       <td class="product-quantity">
-                        <div class="pro-qty">
-                          <input type="text" class="quantity" onclick="changeQuantity()" title="Quantity" value="<%= product.quantity %>">
+                        <div class="">
+                          <button type="button" class="qty-minus">-</button>
+                          <input type="text" style="width: 25px; border:2px solid black;" class="quantity" title="Quantity" value="<%= product.quantity %>" min="1" data-productId="<%= product._id %>">
+                          <button type="button" class="qty-plus">+</button>
                         </div>
-                      </td>
+                      </td>                      
                       <td class="product-subtotal">
-                        <span class="price"><%= product.price * product.quantity %></span>
+                        <span class="price">$<%= product.price * product.quantity %> /-</span>
                       </td>
                     </tr>
                     <% }) %>
@@ -197,7 +198,7 @@
                 <tr class="cart-subtotal">
                   <th>Subtotal</th>
                   <td>
-                    <span class="amount"><%= userCart.total %></span>
+                    <span class="amount">$<%= userCart.total %> /-</span>
                   </td>
                 </tr>
               </tbody>
@@ -218,43 +219,59 @@
 
 
   <script>
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', () => {
+      const minusButtons = document.querySelectorAll('.qty-minus');
+      const plusButtons = document.querySelectorAll('.qty-plus');
       const quantityInputs = document.querySelectorAll('.quantity');
-  
-      quantityInputs.forEach(input => {
-        input.addEventListener('change', function() {
-          const productId = input.dataset.productId;
-          const newQuantity = parseInt(input.value);
-  
-          // Send AJAX request to update quantity
-          updateProductQuantity(productId, newQuantity);
+
+      // const updateCartUrl = '/updateCart'; // Replace with your API endpoint
+
+      minusButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const input = button.nextElementSibling;
+          const currentValue = parseInt(input.value);
+
+          if (currentValue > 1) {
+            input.value = currentValue - 1;
+
+            // Access the product ID
+            const productId = input.getAttribute('data-productId');
+            // const productId = input.dataset.productId;
+            console.log("input.dataset.productId :",productId);
+            updateCart(productId, currentValue - 1);
+          }
         });
       });
-    });
-  
-    function updateProductQuantity(productId, newQuantity) {
-      fetch(`/updateCart/${productId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ quantity: newQuantity })
-      })
-      .then(response => {
-        if (response.ok) {
-          return response.json();
-        } else {
-          throw new Error('Failed to update quantity');
-        }
-      })
-      .then(data => {
-        console.log(data.message);
-        // Optionally, update the UI to reflect the new quantity
-      })
-      .catch(error => {
-        console.error(error.message);
+
+      plusButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const input = button.previousElementSibling;
+          const currentValue = parseInt(input.value);
+
+          input.value = currentValue + 1;
+
+          // Access the product ID
+            const productId = input.getAttribute('data-productId');
+            // const productId = input.dataset.productId;
+            console.log("input.dataset.productId :",productId);
+          updateCart(productId, currentValue + 1);
+        });
       });
-    }
+
+      function updateCart(productId, quantity) {
+        axios.post('/updateCart', { productId, quantity })
+          .then(response => {
+            // Handle successful update (optional)
+            console.log('Cart quantity updated successfully:', response.data);
+            // You might update the UI to reflect the new quantity or fetch the updated cart data
+          })
+          .catch(error => {
+            console.error('Error updating cart quantity:', error.response);
+            // Handle errors gracefully (e.g., display an error message to the user)
+          });
+      }
+    });
+
   </script>
   
   
@@ -527,7 +544,7 @@
         </li>
       </ul>
       <p class="cart-total"><span>Subtotal:</span><span class="amount">£89.99</span></p>
-      <a class="btn-total" href="shop-cart.html">View cart</a>
+      <a class="btn-total" href="/cart">View cart</a>
       <a class="btn-total" href="shop-checkout.html">Checkout</a>
       <a class="d-block text-end lh-1" href="shop-checkout.html"><img src="/assets/img/photos/paypal.webp" width="133" height="26" alt="Has-image"></a>
     </div>
@@ -602,7 +619,7 @@
               <li>
                 <a class="offcanvas-nav-item" href="javascript:void(0)">Others Pages</a>
                 <ul>
-                  <li><a href="shop-cart.html"><span>Shopping Cart</span></a></li>
+                  <li><a href="/cart"><span>Shopping Cart</span></a></li>
                   <li><a href="shop-checkout.html"><span>Checkout</span></a></li>
                   <li><a href="shop-wishlist.html"><span>Wishlist</span></a></li>
                   <li><a href="shop-compare.html"><span>Compare</span></a></li>

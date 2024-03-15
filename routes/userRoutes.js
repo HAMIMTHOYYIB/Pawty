@@ -34,7 +34,7 @@ router.get('/shop',userController.shop);
 router.get('/product/:id',userController.product);
 router.get('/cart',userAuth,userController.getcart);
 router.post('/addToCart/:id',userAuth,userController.addtocart);
-router.post('/updateCart/:productId',userAuth,userController.changeQuantity);
+router.post('/updateCart',userAuth,userController.changeQuantity);
 router.get('/removeFromCart/:productId',userAuth,userController.removefromcart);
 
 // Logout

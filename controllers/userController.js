@@ -245,24 +245,16 @@ let removefromcart = async (req,res) => {
 }
 
 let changeQuantity = async (req, res) => {
-  const { productId } = req.params;
-  const { quantity } = req.body;
-
+  const { productId,quantity } = req.body;
+  console.log("req.body :",req.body);
   try {
-    const user = await User.findById(req.user._id);
+    const user = await User.findById(req.user.id);
 
-    // Find the product in the cart
     const productIndex = user.cart.products.findIndex(product => product._id.toString() === productId);
     if (productIndex !== -1) {
-      // Update the quantity of the product in the cart
       user.cart.products[productIndex].quantity = quantity;
-
-      // Calculate the new total price
       user.cart.total = user.cart.products.reduce((total, product) => total + (product.price * product.quantity), 0);
-
-      // Save the updated cart
       await user.save();
-
       res.status(200).json({ message: 'Quantity updated successfully' });
     } else {
       res.status(404).json({ message: 'Product not found in cart' });
