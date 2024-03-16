@@ -16,10 +16,21 @@ const cartSchema = new mongoose.Schema({
         quantity: { type: Number },
         productName: { type: String },
         price: { type: Number },
-        images: { type: Array }
+        images: { type: Array },
+        stockQuantity: {type:Number }
     }],
     total: { type: Number }
 });
+
+const wishlistSchema = new mongoose.Schema({
+    products:[{
+        _id:{type:mongoose.Schema.Types.ObjectId, ref:'Vendor'},
+        productName:{ type: String },
+        price:{ type: Number },
+        images:{ type: Array},
+        stockQuantity: {type: Number}
+    }]
+})
 
 
 const userSchema = new mongoose.Schema({
@@ -42,6 +53,10 @@ const userSchema = new mongoose.Schema({
     cart:{
         type: cartSchema,
         default: { products: [], total: 0 }
+    },
+    wishlist:{
+        type: wishlistSchema,
+        default:{ products:[] }
     },
     otp:{
         type:String

@@ -2,7 +2,6 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const Vendor = require('../models/Vendor');
 const Admin = require('../models/admin');
-// let Address = User.address;
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
@@ -24,7 +23,6 @@ let account = async (req,res) => {
   res.render('users/account', { initialTab:'dashboard',user});
   // res.render('users/account',{user,addError});
 }
-
 let editProfile = async (req,res) => {
   let userId = req.user.id;
   let user = await User.findOne({_id:userId});
@@ -35,7 +33,6 @@ let editProfile = async (req,res) => {
   await user.save();
   res.redirect('/account');
 }
-
 let changePass = async (req, res) => {
   const { currentPass, newPass, confirmPass } = req.body;
   let userId = req.user.id;
@@ -60,8 +57,6 @@ let changePass = async (req, res) => {
     res.redirect('/accountChangePass');
   });
 };
-
-
 let accountAddress = async(req,res) => {
   let userId = req.user.id;
   let user = await User.findOne({_id:userId});
@@ -71,7 +66,6 @@ let accountAddress = async(req,res) => {
   const { tab } = req.query;
   res.render('users/account', { initialTab: tab || 'address-edit',user});
 }
-
 let accountChangePass = async(req,res) => {
   let userId = req.user.id;
   let user = await User.findOne({_id:userId});
@@ -81,8 +75,6 @@ let accountChangePass = async(req,res) => {
   const { tab } = req.query;
   res.render('users/account', { initialTab: tab || 'changePass',user});
 }
-
-// Add New Address
 let addAddress = async (req,res) => {
   let {name,locality,street,city,state,phone,pincode} =req.body;
   let userId = req.user.id;
@@ -102,8 +94,6 @@ let addAddress = async (req,res) => {
   user.save();
   res.redirect('/accountAddress');
 }
-
-// Edit Address
 let editAddress = async (req, res) => {
   try {
     // console.log(req.user);
@@ -142,7 +132,6 @@ let editAddress = async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 };
-
 let deleteAddress = async (req,res) => {
   const { addressId } = req.params;
   let userId = req.user.id;
@@ -160,9 +149,19 @@ let deleteAddress = async (req,res) => {
 let shop = async (req,res) => {
   let admin = await Admin.findOne();
   let products =  await Vendor.find().select("products");
-  res.render('users/shop-org',{products,admin})
+  console.log("req.user exist :",req.user);
+  // let user = await User.findOne({_id : req.user.id});
+  return res.render('users/shop-org',{products,admin,user:req.user});
 }
+// let shop = async (req, res) => {
+//   let admin = await Admin.findOne();
+//   let products =  await Vendor.find().select("products");
+//   let user = req.user; // Get the user object from req.user if it exists
+//   res.render('users/shop-org', { products, admin, user }); // Pass user to the template
+// }
 
+
+// single product
 let product = async (req,res) => {
   let productId = req.params.id;
   let vendors = await Vendor.find();
@@ -181,6 +180,7 @@ let product = async (req,res) => {
   res.render('users/single-product',{product});
 }
 
+// cart
 let getcart = async (req, res) => {
   try {
     let user = await User.findOne({ _id: req.user.id });
@@ -191,7 +191,6 @@ let getcart = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 }
-
 let addtocart = async (req, res) => {
   const { productId } = req.body;
   const userId = req.user.id;
@@ -230,8 +229,7 @@ let addtocart = async (req, res) => {
     console.error("Error adding product to cart:", error);
     res.status(500).json({ error: "Unable to add product to cart" });
   }
-};
-
+}
 let removefromcart = async (req,res) => {
   let productId = req.params.productId;
   let user = await User.findOne({_id:req.user.id});
@@ -243,7 +241,6 @@ let removefromcart = async (req,res) => {
   await user.save();
   res.redirect('/cart');
 }
-
 let changeQuantity = async (req, res) => {
   const { productId,quantity } = req.body;
   console.log("req.body :",req.body);
@@ -265,6 +262,67 @@ let changeQuantity = async (req, res) => {
   }
 }
 
+//wishlist
+let getwishlist = async (req,res) => {
+  try {
+    let user = await User.findOne({_id:req.user.id})
+    let wishlist = user.wishlist;
+    res.render('users/wishlist',{wishlist});
+  } catch (error) {
+    consoler.error(error);
+    res.status(500).send('Internal Server Error');
+  }
+}
+let addtowishlist  = async (req, res) => {
+  const { productId } = req.body;
+  const userId = req.user.id;
+  try {
+    const vendor = await Vendor.findOne({ "products._id": productId });
+    if (!vendor) {
+      return res.status(404).json({ error: "Vendor not found" });
+    }
+    const product = vendor.products.find(
+      (prod) => prod._id.toString() === productId
+    );
+    if (!product) {
+      return res.status(404).json({ error: "Product not found" });
+    }
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    const existingProductIndex = user.wishlist.products.findIndex((Item) => Item._id.toString() === productId);
+    if (existingProductIndex !== -1) { //if exist
+      user.wishlist.products = user.wishlist.products.filter((prod) => prod._id.toString() !== productId )
+    } else {
+      user.wishlist.products.push({
+        _id: productId,
+        productName: product.productName,
+        price: parseFloat(product.price),
+        images: product.images,
+        stockQuantity: parseFloat(product.stockQuantity)
+      });
+    };
+    console.log("userwishlist :", user.wishlist);
+    await user.save();
+    res.json({ message: "Product added to wishlist successfully", user });
+  }catch (error) {
+    console.error("Error adding product to wishlist:", error);
+    res.status(500).json({ error: "Unable to add product to wishlist" });
+  }
+}
+let removefromwishlist = async (req,res) => {
+  let productId = req.params.productId;
+  let user = await User.findOne({_id:req.user.id});
+  let product  = user.wishlist.products.filter(prod => prod._id.toString() === productId);
+  user.wishlist.products = user.wishlist.products.filter(prod => prod._id.toString() !== productId);
+  user.wishlist.total = user.wishlist.total - (product[0].price * product[0].quantity);
+  console.log("user wishlist :",user.wishlist);
+  console.log("product removed from wishlist");
+  await user.save();
+  res.redirect('/wishlist');
+}
+
 // Get UserLoginPage
 let loginPage = (req,res) => {
   if(req.cookies.user_jwt){
@@ -273,8 +331,7 @@ let loginPage = (req,res) => {
   let addError = '';
   res.render('users/account-login',{passError :'',addError})
 }
-// Post SubmitUserLoginPage
-let submitlogin = async (req, res) => {
+let submitlogin = async (req, res) => { 
     console.log("req.body : ", req.body);
     const {email, password} = req.body;
     if(email && password){
@@ -324,7 +381,6 @@ let submitlogin = async (req, res) => {
 let signupPage = (req,res) => {
     res.render('users/account-signup',{errMsg:''})
 }
-//Post SubmitSignup
 let submitSignup = async (req,res) => {
     console.log(req.body);
     const { username,email,phone,password,confirmPassword} = req.body;
@@ -387,7 +443,6 @@ const succesGoogleLogin = async (req,res) =>{
     }
 
 }
-
 const failureGooglelogin = (req,res) =>{
     res.send('Error')
 }
@@ -399,8 +454,7 @@ let forgotGetPage = async (req, res) => {
     } catch (error) {
       res.status(404).send("page not found");
     }
-  }; 
-  
+}; 
 const transporter = nodemailer.createTransport({
   service: "gmail",
   host: 'smtp.gmail.com',
@@ -410,7 +464,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.PASS,
   },
 });
-  
 const sendOtpEmail = async (email, otp) => {
   const mailOptions = {
     from: process.env.EMAIL,
@@ -425,82 +478,79 @@ const sendOtpEmail = async (email, otp) => {
     console.error("Error sending email:", error);
   }
 };
-  
-  
-  // FORGOT EMAIL POST + OTP GENERATION AND MAIL SEND
-  let forgotPassPost = async (req, res) => {
-    const { email } = req.body;
-  
-    try {
-      const user = await User.findOne({ email });
-  
-      if (!user) {
-        return res.status(404).render('users/forgetPass',{passError: "User not found with this email" });
-      }
-  
-      const otp = Math.floor(100000 + Math.random() * 900000).toString();
-      user.otp = otp;
-      user.otpExpiration = Date.now() + 10 * 60 * 1000; // OTP expires in 10 minutes
-      await user.save();
-  
-      await sendOtpEmail(email, otp);
-  
-      res.render("users/otpVerification",{email})
-    } catch (error) {
-      console.error("Error sending OTP:", error);
-      res.status(500).json({ message: "Server Error" });
-    }
-  };
-  
-  // RESET PASSWORD
-  let resetPassword = async (req, res) => {
-    const { email, otp, newPassword, confirmPassword } = req.body;
-  
-    try {
-      const user = await User.findOne({ email });
-  
-      if (!user) {
-        return res.status(404).render('users/otpVerification',{ passError: "User not found" });
-      }
-  
-      if (user.otp !== otp || Date.now() > user.otpExpiration) {
-        return res.status(400).json({ message: "Invalid or expired OTP" });
-      }
-  
-      if (newPassword !== confirmPassword) {
-        return res.status(400).json({ message: "Passwords do not match" });
-      }
-  
-      const bcryptedNewPassword = await bcrypt.hash(newPassword, 10)
-      // Reset password
-      user.password = bcryptedNewPassword;
-      // Clear OTP fields
-      user.otp = undefined;
-      user.otpExpiration = undefined;
-      await user.save();
-      console.log("password resetted");
+// FORGOT EMAIL POST + OTP GENERATION AND MAIL SEND
+let forgotPassPost = async (req, res) => {
+  const { email } = req.body;
 
-    
-      res.status(200).render("users/account-login",{passError:''});
-    } catch (error) {
-      console.error("Error resetting password:", error);
-      res.status(500).json({ message: "Server Error" });
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).render('users/forgetPass',{passError: "User not found with this email" });
     }
-  };
-  // FORGOT PASSWORD -- ENDS HERE
+
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    user.otp = otp;
+    user.otpExpiration = Date.now() + 10 * 60 * 1000; // OTP expires in 10 minutes
+    await user.save();
+
+    await sendOtpEmail(email, otp);
+
+    res.render("users/otpVerification",{email})
+  } catch (error) {
+    console.error("Error sending OTP:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+// RESET PASSWORD
+let resetPassword = async (req, res) => {
+  const { email, otp, newPassword, confirmPassword } = req.body;
+
+  try {
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).render('users/otpVerification',{ passError: "User not found" });
+    }
+
+    if (user.otp !== otp || Date.now() > user.otpExpiration) {
+      return res.status(400).json({ message: "Invalid or expired OTP" });
+    }
+
+    if (newPassword !== confirmPassword) {
+      return res.status(400).json({ message: "Passwords do not match" });
+    }
+
+    const bcryptedNewPassword = await bcrypt.hash(newPassword, 10)
+    // Reset password
+    user.password = bcryptedNewPassword;
+    // Clear OTP fields
+    user.otp = undefined;
+    user.otpExpiration = undefined;
+    await user.save();
+    console.log("password resetted");
+
+  
+    res.status(200).render("users/account-login",{passError:''});
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
 
 
-  let userLogout = (req, res) => {
-    try {
-        res.clearCookie("user_jwt");
-        res.redirect("/");
-        console.log("User logged out");
-        return;
-    } catch (error) {
-        console.error("Error logging out:", error);
-        res.status(500).send("Internal Server Error");
-    }
-  };
+let userLogout = (req, res) => {
+  try {
+      res.clearCookie("user_jwt");
+      res.redirect("/");
+      console.log("User logged out");
+      return;
+  } catch (error) {
+      console.error("Error logging out:", error);
+      res.status(500).send("Internal Server Error");
+  }
+};
+
 module.exports={
     homePage,
     account,
@@ -517,6 +567,9 @@ module.exports={
     addtocart,
     changeQuantity,
     removefromcart,
+    getwishlist,
+    addtowishlist,
+    removefromwishlist,
     loginPage,
     submitlogin,
     signupPage,

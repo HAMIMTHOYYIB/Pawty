@@ -34,6 +34,9 @@
     <!--== Range Slider Min CSS ==-->
     <link href="assets/css/ion.rangeSlider.min.css" rel="stylesheet" />
 
+
+    <!-- bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!--== Main Style CSS ==-->
     <link href="assets/css/style.css" rel="stylesheet" />
 
@@ -99,7 +102,7 @@
                   </a>
                 </div>
                 <div class="shopping-wishlist">
-                  <a class="shopping-wishlist-btn" href="shop-wishlist.html">
+                  <a class="shopping-wishlist-btn" href="/wishlist">
                     <i class="pe-7s-like icon"></i>
                   </a>
                 </div>
@@ -199,19 +202,21 @@
                             </div>
                           </div>
                           <div class="product-action">
-                            <button type="button" class="btn-product-wishlist" data-bs-toggle="modal" data-bs-target="#action-WishlistModal">
+                            <button type="button" class="addToWishlist btn-product-wishlist bg-transparent" data-product-id="<%= product._id %>">
+                              <% if(user) { %>
+                                <i class="bi bi-heart-fill text-danger fs-5"></i>
+                              <% }else{ %>
                               <i class="pe-7s-like"></i>
+                              <% } %>
                             </button>
                             <div class="product-action-links">
-                              <button type="button" class="addToCart btn-product-cart" data-product-id="<%= product._id %>">
-                                <i class="pe-7s-shopbag"></i>
+                              <button type="button" class="addToCart btn-product-cart bg-transparent" data-product-id="<%= product._id %>">
+                                <!-- <i class="pe-7s-shopbag"></i> -->
+                                <i class="bi bi-bag fs-5"></i>
                               </button>
-
-                              
-
-                             <button type="button" class="btn-product-quick-view" data-bs-toggle="modal" data-bs-target="#action-QuickViewModal">
+                              <!-- <button type="button" class="btn-product-quick-view" data-bs-toggle="modal" data-bs-target="#action-QuickViewModal">
                                 <i class="pe-7s-look"></i>
-                              </button>
+                              </button> -->
                             </div>
                           </div>
                         </div>
@@ -593,7 +598,7 @@
                 <ul>
                   <li><a href="/cart"><span>Shopping Cart</span></a></li>
                   <li><a href="shop-checkout.html"><span>Checkout</span></a></li>
-                  <li><a href="shop-wishlist.html"><span>Wishlist</span></a></li>
+                  <li><a href="/wishlist"><span>Wishlist</span></a></li>
                   <li><a href="shop-compare.html"><span>Compare</span></a></li>
                 </ul>
               </li>
@@ -643,6 +648,7 @@
 <!--=======================Javascript============================-->
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- Add To Cart -->
 <script>
 document.addEventListener('DOMContentLoaded', function() {
   const addToCartButtons = document.getElementsByClassName('addToCart');
@@ -680,6 +686,44 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 </script>
+<!-- Add To Wishlist -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const addToWishlistButtons = document.getElementsByClassName('addToWishlist');
+  
+    Array.from(addToWishlistButtons).forEach(function(button) {
+      button.addEventListener('click', function(event) {
+        event.preventDefault();
+        const productId = this.getAttribute('data-product-id');
+        addToWishlistf(productId);
+      });
+    });
+  
+    function addToWishlistf(productId) {
+      console.log("add to wishlist function triggered :", productId)
+      axios.post('/addToWishlist', {
+          productId: productId
+        })
+        .then(function(response) {
+          console.log(response.data);
+  
+          // // Show the toast when product is added
+          // const toast = document.getElementById('wishlistNotification');
+          // toast.classList.add('show');
+  
+          // Hide the toast after 0.5 seconds
+          // setTimeout(function() {
+          //   toast.classList.remove('show');
+          // }, 2000);
+        })
+        .catch(function(error) {
+          console.error('Error adding product to wishlist:', error);
+          // Optionally, show an error message to the user
+        });
+    }
+  });
+  
+  </script>
 
 <!--=== jQuery Modernizr Min Js ===-->
 <script src="assets/js/modernizr.js"></script>
