@@ -91,7 +91,7 @@
                 <div class="shopping-cart">
                   <button class="shopping-cart-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasCart" aria-controls="AsideOffcanvasCart">
                     <i class="pe-7s-shopbag icon"></i>
-                    <sup class="shop-count">2</sup>
+                    <sup class="shop-count"><%= user.cart.products.length %></sup>
                   </button>
                 </div>
                 <button class="btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasMenu" aria-controls="AsideOffcanvasMenu">
@@ -170,14 +170,18 @@
                         <span class="wishlist-in-stock">In Stock</span>
                       </td>
                       <td class="product-add-to-cart">
-                        <a class="btn-shop-cart" href="shop-cart.html">Add to Cart</a>
+                        <button type="button" id="addToCart" class="btn-shop-cart" data-product-id="<%= product._id %>">
+                          Add To Cart
+                        </button>
                       </td>
                       <% }else{ %>
                       <td class="product-stock-status">
                           <span class="wishlist-in-stock text-danger">Out Of Stock</span>
                       </td>
                       <td class="product-add-to-cart">
-                        <a class="btn-shop-cart" href="#">Add to Cart</a>
+                        <button type="button" id="addToCart" class="btn-shop-cart" data-product-id="<%= product._id %>">
+                          Add To Cart
+                        </button>
                       </td>
                       <% } %>                      
                     </tr>

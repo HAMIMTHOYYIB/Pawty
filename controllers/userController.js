@@ -149,17 +149,22 @@ let deleteAddress = async (req,res) => {
 let shop = async (req,res) => {
   let admin = await Admin.findOne();
   let products =  await Vendor.find().select("products");
-  console.log("req.user exist :",req.user);
-  // let user = await User.findOne({_id : req.user.id});
-  return res.render('users/shop-org',{products,admin,user:req.user});
-}
-// let shop = async (req, res) => {
-//   let admin = await Admin.findOne();
-//   let products =  await Vendor.find().select("products");
-//   let user = req.user; // Get the user object from req.user if it exists
-//   res.render('users/shop-org', { products, admin, user }); // Pass user to the template
-// }
 
+  if (req.cookies.user_jwt) {
+    jwt.verify(req.cookies.user_jwt, process.env.JWT_SECRET, async (err, decodedToken)=>{
+      if(err){
+        return res.render('users/shop-org',{products,admin,user:undefined});
+      }else{
+        req.user = decodedToken
+        let user = await User.findOne({_id:req.user.id});
+        return res.render('users/shop-org',{products,admin,user:user});
+      }
+    });
+  }else{
+    console.log("shop page without login");
+    return res.render('users/shop-org',{products,admin,user:undefined});
+  }
+}
 
 // single product
 let product = async (req,res) => {
@@ -172,12 +177,20 @@ let product = async (req,res) => {
         product = prod;
       }
     })
-  })
-  // let products =await Vendor.find().select("products");
-  // let product = vendor.products.find(product => product.id.toString() === productId);
-  // let product = vendor.products.find(product => product._id === productId);
-  console.log("The Product :",product);
-  res.render('users/single-product',{product});
+  });
+  if (req.cookies.user_jwt) {
+    jwt.verify(req.cookies.user_jwt, process.env.JWT_SECRET, async (err, decodedToken)=>{
+      if(err){
+        return res.render('users/single-product',{product,user:undefined});
+      }else{
+        req.user = decodedToken
+        let user = await User.findOne({_id:req.user.id});
+        return res.render('users/single-product',{product,user});
+      }
+    });
+  }else{
+    return res.render('users/single-product',{product,user:undefined});
+  }
 }
 
 // cart
@@ -185,7 +198,7 @@ let getcart = async (req, res) => {
   try {
     let user = await User.findOne({ _id: req.user.id });
     let cart = user.cart;
-    res.render('users/cart', { userCart: cart });
+    res.render('users/cart', { userCart: cart,user });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
@@ -267,7 +280,7 @@ let getwishlist = async (req,res) => {
   try {
     let user = await User.findOne({_id:req.user.id})
     let wishlist = user.wishlist;
-    res.render('users/wishlist',{wishlist});
+    res.render('users/wishlist',{wishlist,user});
   } catch (error) {
     consoler.error(error);
     res.status(500).send('Internal Server Error');

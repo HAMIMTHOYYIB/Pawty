@@ -34,6 +34,10 @@
     <!--== Range Slider Min CSS ==-->
     <link href="/assets/css/ion.rangeSlider.min.css" rel="stylesheet" />
 
+    
+    <!-- bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
     <!--== Main Style CSS ==-->
     <link href="/assets/css/style.css" rel="stylesheet" />
     <style>
@@ -255,8 +259,12 @@
                         </div>
                       </div>
 
-                      <button type="button" class="btn-product-wishlist" data-bs-toggle="modal" data-bs-target="#action-WishlistModal">
+                      <button type="button" class="addToWishlist btn-product-wishlist" data-product-id="<%= product._id %>">
+                        <% if(user !== undefined && user.wishlist.products.some( wProduct => wProduct._id.toString() === product._id.toString())) { %>
+                          <i class="bi bi-heart-fill text-danger fs-5"></i>
+                        <% }else{ %>
                         <i class="pe-7s-like"></i>
+                        <% } %>
                       </button>
                       <!-- <button type="button" class="btn-product-quick-view" data-bs-toggle="modal" data-bs-target="#action-QuickViewModal">
                         <i class="pe-7s-look"></i>
@@ -914,6 +922,45 @@
                 // Optionally, show an error message to the user
             });
         }
+</script>
+
+<!-- Add To Wishlist -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const addToWishlistButtons = document.getElementsByClassName('addToWishlist');
+  
+    Array.from(addToWishlistButtons).forEach(function(button) {
+      button.addEventListener('click', function(event) {
+        event.preventDefault();
+        const productId = this.getAttribute('data-product-id');
+        addToWishlistf(productId);
+      });
+    });
+  
+    function addToWishlistf(productId) {
+      console.log("add to wishlist function triggered :", productId)
+      axios.post('/addToWishlist', {
+          productId: productId
+        })
+        .then(function(response) {
+          console.log(response.data);
+  
+          // // Show the toast when product is added
+          // const toast = document.getElementById('wishlistNotification');
+          // toast.classList.add('show');
+  
+          // Hide the toast after 0.5 seconds
+          // setTimeout(function() {
+          //   toast.classList.remove('show');
+          // }, 2000);
+        })
+        .catch(function(error) {
+          console.error('Error adding product to wishlist:', error);
+          // Optionally, show an error message to the user
+        });
+    }
+  });
+  
 </script>
 <!--=== jQuery Modernizr Min Js ===-->
 <script src="/assets/js/modernizr.js"></script>

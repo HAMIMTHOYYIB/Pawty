@@ -356,7 +356,7 @@
                                                         </a>
                                                 </td>
                                                 <td class="col-3">
-                                                        12/03/2021
+                                                        <%= user.signedAt.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %>
                                                 </td>
                                                 <td class="col-3"><%= user.email %></td>
                                                 <!-- <td>202-555-0983</td> -->
