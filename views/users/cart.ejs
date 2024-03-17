@@ -93,7 +93,7 @@
                 <div class="shopping-cart">
                   <button class="shopping-cart-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasCart" aria-controls="AsideOffcanvasCart">
                     <i class="pe-7s-shopbag icon"></i>
-                    <sup class="shop-count">2</sup>
+                    <sup class="shop-count"><%= user.cart.products.length %></sup>
                   </button>
                 </div>
                 <button class="btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasMenu" aria-controls="AsideOffcanvasMenu">
@@ -170,12 +170,12 @@
                       <td class="product-quantity">
                         <div class="">
                           <button type="button" class="qty-minus">-</button>
-                          <input type="text" style="width: 28px; border:2px solid black;" class="quantity" title="Quantity" readonly value="<%= product.quantity %>" min="1" data-productId="<%= product._id %>">
+                          <input type="text" style="width: 28px; border:2px solid black;" class="quantity" title="Quantity" readonly value="<%= product.quantity %>" min="1" data-productId="<%= product._id %>" onchange="updateCart('<%= product._id %>',this.value)">
                           <button type="button" class="qty-plus">+</button>
                         </div>
                       </td>                      
                       <td class="product-subtotal">
-                        <span class="price">$<%= product.price * product.quantity %> /-</span>
+                        <span id="total-<%= product._id %>" class="price">$<%= product.price * product.quantity %> /-</span>
                       </td>
                     </tr>
                     <% }) %>
@@ -198,7 +198,7 @@
                 <tr class="cart-subtotal">
                   <th>Subtotal</th>
                   <td>
-                    <span class="amount">$<%= userCart.total %> /-</span>
+                    <span id="amount" class="amount">$<%= userCart.total %> /-</span>
                   </td>
                 </tr>
               </tbody>
@@ -258,18 +258,23 @@
         });
       });
 
-      function updateCart(productId, quantity) {
-        axios.post('/updateCart', { productId, quantity })
-          .then(response => {
-            console.log('Cart quantity updated successfully:', response.data);
-          })
-          .catch(error => {
-            console.error('Error updating cart quantity:', error.response);
-            // Handle errors gracefully (e.g., display an error message to the user)
-          });
-      }
     });
-
+    function updateCart(productId, quantity) {
+      axios.post('/updateCart', { productId, quantity })
+        .then(response => {
+          let subTotal = 0;
+          response.data.user.cart.products.forEach(prod => {
+            subTotal += prod.price * prod.quantity;
+            document.getElementById(`total-${prod._id}`).textContent = `$${prod.price * prod.quantity} /-`;
+          });
+          document.getElementById('amount').textContent = `$${subTotal.toFixed(2)} /-`;
+          console.log('Cart quantity updated successfully:', response.data);
+        })
+        .catch(error => {
+          console.error('Error updating cart quantity:', error.response);
+          // Handle errors gracefully (e.g., display an error message to the user)
+      });
+    }
   </script>
   
   

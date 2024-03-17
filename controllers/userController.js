@@ -265,7 +265,7 @@ let changeQuantity = async (req, res) => {
       user.cart.products[productIndex].quantity = quantity;
       user.cart.total = user.cart.products.reduce((total, product) => total + (product.price * product.quantity), 0);
       await user.save();
-      res.status(200).json({ message: 'Quantity updated successfully' });
+      res.status(200).json({ message: 'Quantity updated successfully',user,quantity});
     } else {
       res.status(404).json({ message: 'Product not found in cart' });
     }

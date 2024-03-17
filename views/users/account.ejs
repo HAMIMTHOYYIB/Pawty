@@ -91,7 +91,7 @@
                 <div class="shopping-cart">
                   <button class="shopping-cart-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasCart" aria-controls="AsideOffcanvasCart">
                     <i class="pe-7s-shopbag icon"></i>
-                    <sup class="shop-count">2</sup>
+                    <sup class="shop-count"><%= user.cart.products.length %></sup>
                   </button>
                 </div>
                 <button class="btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasMenu" aria-controls="AsideOffcanvasMenu">
