@@ -36,11 +36,11 @@ router.get('/product/:id',userController.product);
 router.get('/cart',userAuth,userController.getcart);
 router.post('/addToCart',userAuth,userController.addtocart);
 router.post('/updateCart',userAuth,userController.changeQuantity);
-router.get('/removeFromCart/:productId',userAuth,userController.removefromcart);
+router.post('/removeFromCart',userAuth,userController.removefromcart);
 
 router.get('/wishlist',userAuth,userController.getwishlist);
 router.post('/addToWishlist',userAuth,userController.addtowishlist);
-router.get('/removeFromWishlist/:productId',userAuth,userController.removefromwishlist);
+router.post('/removeFromWishlist',userAuth,userController.removefromwishlist);
 
 // Logout
 router.get('/logout',userController.userLogout);

@@ -11,7 +11,6 @@ require('dotenv').config()
 let homePage = (req,res) => {
     res.render('users/index-two')
 }
-
 // Get UserAccount
 let account = async (req,res) => {
   let userId = req.user.id;
@@ -161,7 +160,6 @@ let shop = async (req,res) => {
       }
     });
   }else{
-    console.log("shop page without login");
     return res.render('users/shop-org',{products,admin,user:undefined});
   }
 }
@@ -235,7 +233,6 @@ let addtocart = async (req, res) => {
       });
     };
     user.cart.total += parseFloat(product.price);
-    console.log("usercart", user.cart);
     await user.save();
     res.json({ message: "Product added to cart successfully", user });
   } catch (error) {
@@ -244,19 +241,23 @@ let addtocart = async (req, res) => {
   }
 }
 let removefromcart = async (req,res) => {
-  let productId = req.params.productId;
-  let user = await User.findOne({_id:req.user.id});
-  let product  = user.cart.products.filter(prod => prod._id.toString() === productId);
-  user.cart.products = user.cart.products.filter(prod => prod._id.toString() !== productId);
-  user.cart.total = user.cart.total - (product[0].price * product[0].quantity);
-  console.log("user cart :",user.cart);
-  console.log("product removed from cart");
-  await user.save();
-  res.redirect('/cart');
+  try {
+    let  { productId } = req.body;
+    let user = await User.findOne({_id:req.user.id});
+    let product  = user.cart.products.filter(prod => prod._id.toString() === productId);
+    user.cart.products = user.cart.products.filter(prod => prod._id.toString() !== productId);
+    user.cart.total = user.cart.total - (product[0].price * product[0].quantity);
+    console.log("user cart total :",user.cart.total);
+    console.log("product removed from cart");
+    await user.save();
+    res.json({message:"product removed",user,product})
+  } catch (error) {
+    res.status(500).send("Internal Server Error on product removal in cart")
+  }
+  // res.redirect('/cart');
 }
 let changeQuantity = async (req, res) => {
   const { productId,quantity } = req.body;
-  console.log("req.body :",req.body);
   try {
     const user = await User.findById(req.user.id);
 
@@ -289,6 +290,7 @@ let getwishlist = async (req,res) => {
 let addtowishlist  = async (req, res) => {
   const { productId } = req.body;
   const userId = req.user.id;
+  let existInWishlist = false;
   try {
     const vendor = await Vendor.findOne({ "products._id": productId });
     if (!vendor) {
@@ -305,9 +307,11 @@ let addtowishlist  = async (req, res) => {
       return res.status(404).json({ error: "User not found" });
     }
     const existingProductIndex = user.wishlist.products.findIndex((Item) => Item._id.toString() === productId);
-    if (existingProductIndex !== -1) { //if exist
+    if (existingProductIndex !== -1) { //if exist remove from wishlist
+      existInWishlist = false;
       user.wishlist.products = user.wishlist.products.filter((prod) => prod._id.toString() !== productId )
     } else {
+      existInWishlist = true;
       user.wishlist.products.push({
         _id: productId,
         productName: product.productName,
@@ -318,22 +322,24 @@ let addtowishlist  = async (req, res) => {
     };
     console.log("userwishlist :", user.wishlist);
     await user.save();
-    res.json({ message: "Product added to wishlist successfully", user });
+    res.json({ message: "Product added to wishlist successfully", user, productId, existInWishlist});
   }catch (error) {
     console.error("Error adding product to wishlist:", error);
     res.status(500).json({ error: "Unable to add product to wishlist" });
   }
 }
 let removefromwishlist = async (req,res) => {
-  let productId = req.params.productId;
-  let user = await User.findOne({_id:req.user.id});
-  let product  = user.wishlist.products.filter(prod => prod._id.toString() === productId);
-  user.wishlist.products = user.wishlist.products.filter(prod => prod._id.toString() !== productId);
-  user.wishlist.total = user.wishlist.total - (product[0].price * product[0].quantity);
-  console.log("user wishlist :",user.wishlist);
-  console.log("product removed from wishlist");
-  await user.save();
-  res.redirect('/wishlist');
+  try {
+    let  { productId } = req.body;
+    let user = await User.findOne({_id:req.user.id});
+    let product  = user.wishlist.products.filter(prod => prod._id.toString() === productId);
+    user.wishlist.products = user.wishlist.products.filter(prod => prod._id.toString() !== productId);
+    console.log("product removed from wishlist");
+    await user.save();
+    res.json({message:"product removed"});
+  } catch (error) {
+    res.status(500).send("Internal Server Error on product removal in wishlist");
+  }
 }
 
 // Get UserLoginPage

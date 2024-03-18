@@ -33,6 +33,7 @@
 
     <!--== Main Style CSS ==-->
     <link href="/assets/css/style.css" rel="stylesheet" />
+
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 </head>
@@ -152,17 +153,17 @@
                     <% userCart.products.forEach(product => { %>
                     <tr class="tbody-item">
                       <td class="product-remove">
-                        <a class="remove"href="/removeFromCart/<%= product._id %>">×</a>
+                        <button type="button" id="remove-<%= product._id %>" class="remove border-0">x</button>
                       </td>
                       <td class="product-thumbnail">
                         <div class="thumb">
-                          <a href="single-product.html">
+                          <a href="/product/<%= product._id %>">
                             <img src="<%= product.images[0] %>" width="75" height="75" alt="Image-HasTech">
                           </a>
                         </div>
                       </td>
                       <td class="product-name">
-                        <a class="title" href="single-product.html"><%= product.productName %></a>
+                        <a class="title" href="/product/<%= product._id %>"><%= product.productName %></a>
                       </td>
                       <td class="product-price">
                         <span class="price">$<%= product.price %></span>
@@ -190,19 +191,35 @@
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-12 col-lg-6 cart-totals-wrap">
-            <h2 class="title">Cart total</h2>
-            <table>
-              <tbody>
-                <tr class="cart-subtotal">
-                  <th>Subtotal</th>
-                  <td>
-                    <span id="amount" class="amount">$<%= userCart.total %> /-</span>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+        <div class="row col-12 g-0 d-flex">
+          <div class="col-6 g-0 col-lg-6">
+            <div class="coupon-wrap">
+              <h4 class="title">Coupon</h4>
+              <p class="desc">Enter your coupon code if you have one.</p>
+              <input type="text" class="form-control" placeholder="Coupon code">
+              <button type="button" class="btn-coupon">Apply coupon</button>
+            </div>
+          </div>
+          <div class="col-6 g-0 col-lg-6">
+            <div class="cart-totals-wrap">
+              <h4 class="title mt-2">Cart total</h4>
+              <table>
+                <tbody>
+                  <tr class="cart-subtotal">
+                    <th>Subtotal</th>
+                    <td>
+                      <span id="amount" class="amount">$<%= userCart.total %> /-</span>
+                    </td>
+                  </tr>
+                  <tr class="cart-subtotal">
+                    <th class="">Total</th>
+                    <td>
+                      <span id="amount" class="amount">$ 1000 /-</span>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
 
           <div class="cart-totals-wrap col-12 col-lg-6">
@@ -223,9 +240,9 @@
       const minusButtons = document.querySelectorAll('.qty-minus');
       const plusButtons = document.querySelectorAll('.qty-plus');
       const quantityInputs = document.querySelectorAll('.quantity');
+      const removeButtons = document.querySelectorAll('.remove');
 
-      // const updateCartUrl = '/updateCart'; // Replace with your API endpoint
-
+//  Decreasing the quantity
       minusButtons.forEach(button => {
         button.addEventListener('click', () => {
           const input = button.nextElementSibling;
@@ -242,7 +259,7 @@
           }
         });
       });
-
+//  Increasing the quantity
       plusButtons.forEach(button => {
         button.addEventListener('click', () => {
           const input = button.previousElementSibling;
@@ -258,7 +275,27 @@
         });
       });
 
+      
+
+// Remove product from cart
+    removeButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const productId = button.id.split('-')[1]; // Extract the product ID from the button ID
+      axios.post('/removeFromCart', { productId })
+        .then(response => {
+          // Handle the response as needed
+          console.log('Product removed from cart:', response.data);
+          button.closest('.tbody-item').remove(); //remove the specific row  
+          document.getElementById('amount').textContent = `$${response.data.user.cart.total.toFixed(2)} /-`;
+        })
+        .catch(error => {
+          console.error('Error removing product from cart:', error.response);
+          // Handle errors gracefully (e.g., display an error message to the user)
+        });
+      });
     });
+  });
+
     function updateCart(productId, quantity) {
       axios.post('/updateCart', { productId, quantity })
         .then(response => {

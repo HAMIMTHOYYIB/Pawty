@@ -3862,6 +3862,12 @@ table p {
 }
 
 .cart-totals-wrap {
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 18px;
+  margin: 0 0 22px;
+  padding: 0 0 10px;
+  text-transform: uppercase;
+  font-weight: 800;
   background: #f9f9f9;
   /* margin-bottom: 30px; */
   /* padding: 33px 30px 35px; */

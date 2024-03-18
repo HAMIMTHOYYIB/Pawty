@@ -33,6 +33,30 @@
 
     <!--== Main Style CSS ==-->
     <link href="/assets/css/style.css" rel="stylesheet" />
+
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+
+    <style>
+      .toast {
+        position: fixed;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        z-index: 1000;
+        max-width: 300px;
+        background-color: #203e5a;
+        color:#fff;
+        border-radius: 10px;
+        padding: 10px;
+        opacity: 0;
+        transition: opacity 0.5s ease-in-out;
+        }
+        .toast.show {
+        opacity: 1;
+        }
+    </style>
+
 </head>
 
 <body>
@@ -150,7 +174,7 @@
                     <% wishlist.products.forEach(product => { %>
                     <tr class="tbody-item">
                       <td class="product-remove">
-                        <a class="remove" href="/removeFromWishlist/<%= product._id %>">×</a>
+                        <button type="button" id="remove-<%= product._id %>" class="remove border-0">x</button>
                       </td>
                       <td class="product-thumbnail">
                         <div class="thumb">
@@ -170,7 +194,7 @@
                         <span class="wishlist-in-stock">In Stock</span>
                       </td>
                       <td class="product-add-to-cart">
-                        <button type="button" id="addToCart" class="btn-shop-cart" data-product-id="<%= product._id %>">
+                        <button type="button"  class="addToCart btn-shop-cart" data-product-id="<%= product._id %>">
                           Add To Cart
                         </button>
                       </td>
@@ -179,13 +203,18 @@
                           <span class="wishlist-in-stock text-danger">Out Of Stock</span>
                       </td>
                       <td class="product-add-to-cart">
-                        <button type="button" id="addToCart" class="btn-shop-cart" data-product-id="<%= product._id %>">
+                        <button type="button" id="addToCart" class="addToCart btn-shop-cart" data-product-id="<%= product._id %>">
                           Add To Cart
                         </button>
                       </td>
                       <% } %>                      
                     </tr>
                     <% }) %>
+                    <div id="cartNotification" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="500">
+                      <div class="toast-body">
+                        Product added to cart !
+                      </div>
+                    </div>
                   </tbody>
                 </table>
               </form>
@@ -196,6 +225,28 @@
     </section>
     <!--== End Wishlist Area Wrapper ==-->
   </main>
+
+  <script>
+   document.addEventListener('DOMContentLoaded', () => {
+    const removeButtons = document.querySelectorAll('.remove');  
+// Remove product from wishlist
+    removeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const productId = button.id.split('-')[1]; // Extract the product ID from the button ID
+        axios.post('/removeFromWishlist', { productId })
+        .then(response => {
+          // Handle the response as needed
+          console.log('Product removed from wishlist:');
+          button.closest('.tbody-item').remove(); //remove the specific row  
+        })
+        .catch(error => {
+          console.error('Error removing product from cart:', error.response);
+          // Handle errors gracefully (e.g., display an error message to the user)
+        });
+      });
+    }); 
+  });
+  </script>
 
   <!--== Start Footer Area Wrapper ==-->
   <footer class="footer-area">
@@ -465,7 +516,7 @@
         </li>
       </ul>
       <p class="cart-total"><span>Subtotal:</span><span class="amount">£89.99</span></p>
-      <a class="btn-total" href="shop-cart.html">View cart</a>
+      <a class="btn-total" href="/cart">View cart</a>
       <a class="btn-total" href="shop-checkout.html">Checkout</a>
       <a class="d-block text-end lh-1" href="shop-checkout.html"><img src="/assets/img/photos/paypal.webp" width="133" height="26" alt="Has-image"></a>
     </div>
@@ -591,6 +642,45 @@
 
 <!--=======================Javascript============================-->
 
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!-- Add To Cart -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const addToCartButtons = document.getElementsByClassName('addToCart');
+
+  Array.from(addToCartButtons).forEach(function(button) {
+    button.addEventListener('click', function(event) {
+      event.preventDefault();
+      const productId = this.getAttribute('data-product-id');
+      addToCartf(productId);
+    });
+  });
+
+  function addToCartf(productId) {
+    console.log("add to cart function triggered :", productId)
+    axios.post('/addToCart', {
+        productId: productId
+      })
+      .then(function(response) {
+        console.log(response.data);
+
+        // Show the toast when product is added
+        const toast = document.getElementById('cartNotification');
+        toast.classList.add('show');
+
+        // Hide the toast after 0.5 seconds
+        setTimeout(function() {
+          toast.classList.remove('show');
+        }, 2000);
+      })
+      .catch(function(error) {
+        console.error('Error adding product to cart:', error);
+        // Optionally, show an error message to the user
+      });
+  }
+});
+
+</script>
 <!--=== jQuery Modernizr Min Js ===-->
 <script src="/assets/js/modernizr.js"></script>
 <!--=== jQuery Min Js ===-->

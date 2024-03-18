@@ -109,7 +109,7 @@
                 <div class="shopping-cart">
                   <button class="shopping-cart-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasCart" aria-controls="AsideOffcanvasCart">
                     <i class="pe-7s-shopbag icon"></i>
-                    <sup class="shop-count"><%= user.cart.products.length %> </sup>
+                    <sup class="shop-count"></sup>
                   </button>
                 </div>
                 <button class="btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasMenu" aria-controls="AsideOffcanvasMenu">
@@ -202,7 +202,7 @@
                             </div>
                           </div>
                           <div class="product-action">
-                            <button type="button" class="addToWishlist btn-product-wishlist bg-transparent" data-product-id="<%= product._id %>">
+                            <button type="button" id="addToWishlist-<%= product._id %>" class="addToWishlist btn-product-wishlist bg-transparent" data-product-id="<%= product._id %>">
                               <% if(user !== undefined && user.wishlist.products.some( wProduct => wProduct._id.toString() === product._id.toString() )) { %>
                                 <i class="bi bi-heart-fill text-danger fs-5"></i>
                               <% }else{ %>
@@ -211,7 +211,6 @@
                             </button>
                             <div class="product-action-links">
                               <button type="button" class="addToCart btn-product-cart bg-transparent" data-product-id="<%= product._id %>">
-                                <!-- <i class="pe-7s-shopbag"></i> -->
                                 <i class="bi bi-bag fs-5"></i>
                               </button>
                               <!-- <button type="button" class="btn-product-quick-view" data-bs-toggle="modal" data-bs-target="#action-QuickViewModal">
@@ -695,26 +694,21 @@ document.addEventListener('DOMContentLoaded', function() {
       button.addEventListener('click', function(event) {
         event.preventDefault();
         const productId = this.getAttribute('data-product-id');
-        addToWishlistf(productId);
+        addToWishlistf(productId,this);  //In this the button is passed
       });
     });
   
-    function addToWishlistf(productId) {
+    function addToWishlistf(productId,button) {
       console.log("add to wishlist function triggered :", productId)
-      axios.post('/addToWishlist', {
-          productId: productId
-        })
+      axios.post('/addToWishlist', { productId })
         .then(function(response) {
           console.log(response.data);
-  
-          // // Show the toast when product is added
-          // const toast = document.getElementById('wishlistNotification');
-          // toast.classList.add('show');
-  
-          // Hide the toast after 0.5 seconds
-          // setTimeout(function() {
-          //   toast.classList.remove('show');
-          // }, 2000);
+          if (response.data.existInWishlist) {
+            button.innerHTML = '<i class="bi bi-heart-fill text-danger fs-5"></i>'
+          }
+          else{
+            button.innerHTML = '<i class="pe-7s-like"></i>';
+          }
         })
         .catch(function(error) {
           console.error('Error adding product to wishlist:', error);
