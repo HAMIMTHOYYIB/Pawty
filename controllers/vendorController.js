@@ -11,6 +11,8 @@ require('dotenv').config()
 let vendorDashboard = (req,res) => {
     res.render('vendor/vendorDashboard')
 }
+
+
 let vendorLogin = (req,res) => {
   if(req.cookies.vendor_jwt){
     res.redirect('/vendor/dashboard')
@@ -18,7 +20,6 @@ let vendorLogin = (req,res) => {
     res.render('vendor/vendorLogin',{passError:''})
   }
 }
-
 let vendorLoginSubmit = async (req,res) => {
     let {email,password} = req.body
     if(email && password){
@@ -59,7 +60,6 @@ let vendorLoginSubmit = async (req,res) => {
 let vendorSignup = (req,res) => {
   res.render('vendor/vendorSignup',{passError:''})
 }
-
 let vendorSignupPost = async (req,res) => {
   // console.log(req.body);
   let {name,email,password} = req.body
@@ -81,13 +81,11 @@ let vendorSignupPost = async (req,res) => {
 };
 
 
-
 let productList = async (req,res) => {
   let email = req.user.email;
   let vendor = await Vendor.findOne({email});
   res.render('vendor/product-list',{vendor})
 };
-
 let addProduct = async (req,res) => {
   let admin = await Admin.findOne();
   if (!admin.category) {
@@ -96,7 +94,6 @@ let addProduct = async (req,res) => {
     res.render('vendor/product-add',{admin})
   }
 };
-
 let submitAddProduct = async (req, res) => {
   console.log("req user :",req.user);
   let vendorId = req.user.id
@@ -142,7 +139,6 @@ let submitAddProduct = async (req, res) => {
     return res.status(500).send("Error uploading images to Cloudinary");
   }
 };
-
 let editProduct = async (req,res) => {
   let productId = req.params.id;
   let vendorId = req.user.id;
@@ -158,7 +154,6 @@ let editProduct = async (req,res) => {
   console.log("prodd :",product);
   res.render('vendor/product-edit',{product,admin});
 }
-
 let submitEditProduct = async (req, res) => {
   let vendorId = req.user.id;
   let productData = req.body;
@@ -205,7 +200,6 @@ let submitEditProduct = async (req, res) => {
     return res.status(500).send("Error uploading images to Cloudinary");
   }
 };
-
 let deleteProduct = async (req,res) => {
   let vendorId = req.user.id;
   let productId = req.params.id;
@@ -219,6 +213,48 @@ let deleteProduct = async (req,res) => {
   res.redirect('/vendor/product-list');
 }
 
+
+let addCoupon = (req,res) => {
+  res.render('vendor/coupon-add')
+}
+let listCoupon = async (req,res) => {
+  let vendor = await Vendor.findOne({_id:req.user.id});
+  if(!vendor){
+    return res.status(404).send('Vendor Not Found');
+  }
+  res.render('vendor/coupons-list',{vendor});
+}
+let submitAddCoupon = async (req,res) => {
+  let {status,startDate,endDate,couponCode,category,subCategory,limit,type,value} = req.body;
+  console.log("req.user :",req.body);
+  let vendor = await Vendor.findOne({_id:req.user.id});
+  if(!vendor){
+    return res.status(404).send('Vendor Not found')
+  }
+  if(!vendor.coupons){
+    vendor.coupons = [];
+  }
+  if(startDate === ""){
+    startDate = undefined;
+  };
+  let discountProducts = {category,subCategory};
+  let newCoupon = {status,startDate,endDate,couponCode,limit,type,value,discountProducts}
+  vendor.coupons.push(newCoupon);
+  await vendor.save();
+  console.log("coupon added succesfully");
+  res.redirect('/vendor/couponList')
+}
+let editCoupon = async (req,res) =>{
+  let vendor = await Vendor.findOne({_id:req.user.id});
+  if(!vendor){
+    return res.status(404).send("vendor Not Found")
+  }
+  let coupon = vendor.coupons.filter(coup => coup._id.toString() === req.params.couponId)
+  if(!coupon){
+    return res.status(404).send("Coupon Not Found");
+  }
+  res.render('vendor/coupon-edit',{coupon:coupon[0]})
+}
 
 
 // FORGOT PASSWORD 
@@ -345,6 +381,11 @@ module.exports = {
     editProduct,
     submitEditProduct,
     deleteProduct,
+
+    addCoupon,
+    listCoupon,
+    submitAddCoupon,
+    editCoupon,
 
     vendorForgotPass,
     resetVendorPass,

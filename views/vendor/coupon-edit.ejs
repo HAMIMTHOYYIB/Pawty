@@ -1,20 +1,14 @@
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
-
-<!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/coupons-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Feb 2024 11:51:13 GMT -->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>::eBazar:: Coupons List </title>
+    <title>EditCoupon : Vendor</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
-
-    <!-- plugin css file  -->
-    <link rel="stylesheet" href="assets/plugin/datatables/responsive.dataTables.min.css">
-    <link rel="stylesheet" href="assets/plugin/datatables/dataTables.bootstrap5.min.css">
     
     <!-- project css file  -->
-    <link rel="stylesheet" href="assets/css/ebazar.style.min.css">
+    <link rel="stylesheet" href="/assets/css/ebazar.style.min.css">
 </head>
 <body>
     <div id="ebazar-layout" class="theme-blue">
@@ -26,44 +20,35 @@
                     <span class="logo-icon">
                         <i class="bi bi-bag-check-fill fs-4"></i>
                     </span>
-                    <span class="logo-text">eBazar</span>
+                    <span class="logo-text">Pawty</span>
                 </a>
                 <!-- Menu: main ul -->
                 <ul class="menu-list flex-grow-1 mt-3">
-                    <li><a class="m-link" href="index.html"><i class="icofont-home fs-5"></i> <span>Dashboard</span></a></li>
-                    <li class="collapsed">
-                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-product" href="#">
-                            <i class="icofont-truck-loaded fs-5"></i> <span>Products</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
-                            <!-- Menu: Sub menu ul -->
-                            <ul class="sub-menu collapse" id="menu-product">
-                                <li><a class="ms-link" href="product-grid.html">Product Grid</a></li>
-                                <li><a class="ms-link" href="product-list.html">Product List</a></li>
-                                <li><a class="ms-link" href="product-edit.html">Product Edit</a></li>
-                                <li><a class="ms-link" href="product-detail.html">Product Details</a></li>
-                                <li><a class="ms-link" href="product-add.html">Product Add</a></li>
-                                <li><a class="ms-link" href="product-cart.html">Shopping Cart</a></li>
-                                <li><a class="ms-link" href="checkout.html">Checkout</a></li>
-                            </ul>
+                    <li><a class="m-link" href="/vendor/dashboard"><i class="icofont-home fs-5"></i> <span>Dashboard</span></a></li>
+                    <li><a class="m-link" href="/vendor/product-list"><i class="icofont-shopping-cart fs-5"></i> <span>Products</span></a></li>
+                    <li><a class="m-link" href="/vendor/add-product"><i class="icofont-plus-circle fs-5"></i> <span>Add Products</span></a></li>
+                    <li><a class="m-link" href="/vendor/couponList"><i class="icofont-sale-discount fs-5"></i> <span>Coupons</span> </a></li>
+                    <li><a class="m-link" href="/vendor/addCoupon"><i class="icofont-file-text"></i>Add Coupons</a></li>
+
+                    <!-- <li class="collapsed">
+                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-product" href="/vendor/product-list">
+                            <i class="icofont-truck-loaded fs-5"></i> <span>Products</span>
+                        </a>
                     </li>
-                    <li class="collapsed">
-                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#categories" href="#">
-                            <i class="icofont-chart-flow fs-5"></i> <span>Categories</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
-                            <!-- Menu: Sub menu ul -->
-                            <ul class="sub-menu collapse" id="categories">
-                                <li><a class="ms-link" href="categorie-list.html">Categories List</a></li>
-                                <li><a class="ms-link" href="categories-edit.html">Categories Edit</a></li>
-                                <li><a class="ms-link" href="categories-add.html">Categories Add</a></li>
-                            </ul>
-                    </li>
+                    <li>
+                        <a class="m-link" data-bs-toggle="collapse"  href="/vendor">
+                            <i class="icofont-truck-loaded fs-5"></i> <span>Add Products</span>
+                        </a>
+                    </li>                      -->
                     <li class="collapsed">
                         <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-order" href="#">
-                        <i class="icofont-notepad fs-5"></i> <span>Orders</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
+                        <i class="icofont-notepad fs-5"></i> <span>Orders</span></a>
                         <!-- Menu: Sub menu ul -->
-                        <ul class="sub-menu collapse" id="menu-order">
+                        <!-- <ul class="sub-menu collapse" id="menu-order">
                             <li><a class="ms-link" href="order-list.html">Orders List</a></li>
                             <li><a class="ms-link" href="order-details.html">Order Details</a></li>
                             <li><a class="ms-link" href="order-invoices.html">Order Invoices</a></li>
-                        </ul>
+                        </ul> -->
                     </li>
                     <li class="collapsed">
                         <a class="m-link" data-bs-toggle="collapse" data-bs-target="#customers-info" href="#">
@@ -74,19 +59,18 @@
                             <li><a class="ms-link" href="customer-detail.html">Customers Details</a></li>
                         </ul>
                     </li>
-                    <li class="collapsed">
+                    <!-- <li class="collapsed">
                         <a class="m-link active" data-bs-toggle="collapse" data-bs-target="#menu-sale" href="#">
-                        <i class="icofont-sale-discount fs-5"></i> <span>Sales Promotion</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
+                        <i class="icofont-sale-discount fs-5"></i> <span>Coupons</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a> -->
                         <!-- Menu: Sub menu ul -->
-                        <ul class="sub-menu collapse show" id="menu-sale">
-                            <li><a class="ms-link active" href="coupons-list.html">Coupons List</a></li>
-                            <li><a class="ms-link" href="coupon-add.html">Coupons Add</a></li>
-                            <li><a class="ms-link" href="coupon-edit.html">Coupons Edit</a></li>
+                        <!-- <ul class="sub-menu collapse show" id="menu-sale">
+                            <li><a class="ms-link" href="/vendor/couponList">Coupons List</a></li>
+                            <li><a class="ms-link" href="/vendor/addCoupon">Coupons Add</a></li>
                         </ul>
-                    </li>
-                    <li class="collapsed">
-                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-inventory" href="#">
-                        <i class="icofont-chart-histogram fs-5"></i> <span>Inventory</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
+                    </li> -->
+                    <!-- <li class="collapsed"> -->
+                        <!-- <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-inventory" href="#"> -->
+                        <!-- <i class="icofont-chart-histogram fs-5"></i> <span>Inventory</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a> -->
                         <!-- Menu: Sub menu ul -->
                         <ul class="sub-menu collapse" id="menu-inventory">
                             <li><a class="ms-link" href="inventory-info.html">Stock List</a></li>
@@ -96,9 +80,9 @@
                             <li><a class="ms-link" href="department.html">Department</a></li>
                         </ul>
                     </li>
-                    <li class="collapsed">
-                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-Componentsone" href="#"><i
-                                class="icofont-ui-calculator"></i> <span>Accounts</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
+                    <!-- <li class="collapsed"> -->
+                        <!-- <a class="m-link" data-bs-toggle="collapse" data-bs-target="#menu-Componentsone" href="#"><i -->
+                                <!-- class="icofont-ui-calculator"></i> <span>Accounts</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a> -->
                         <!-- Menu: Sub menu ul -->
                         <ul class="sub-menu collapse" id="menu-Componentsone">
                             <li><a class="ms-link" href="invoices.html">Invoices </a></li>
@@ -107,32 +91,8 @@
                             <li><a class="ms-link" href="create-invoice.html">Create Invoice </a></li>
                         </ul>
                     </li>
-                    <li class="collapsed">
-                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#app" href="#">
-                        <i class="icofont-code-alt fs-5"></i> <span>App</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
-                        <!-- Menu: Sub menu ul -->
-                        <ul class="sub-menu collapse" id="app">
-                            <li><a class="ms-link" href="calendar.html">Calandar</a></li>
-                            <li><a class="ms-link" href="chat.html"> Chat App</a></li>
-                        </ul>
-                    </li>
-                    <li><a class="m-link" href="store-locator.html"><i class="icofont-focus fs-5"></i> <span>Store Locator</span></a></li>
-                    <li><a class="m-link" href="ui-elements/ui-alerts.html"><i class="icofont-paint fs-5"></i> <span>UI Components</span></a></li>
-                    <li class="collapsed">
-                        <a class="m-link" data-bs-toggle="collapse" data-bs-target="#page" href="#">
-                        <i class="icofont-page fs-5"></i> <span>Other Pages</span> <span class="arrow icofont-rounded-down ms-auto text-end fs-5"></span></a>
-                        <!-- Menu: Sub menu ul -->
-                        <ul class="sub-menu collapse" id="page">
-                            <li><a class="ms-link" href="admin-profile.html">Profile Page</a></li>
-                            <li><a class="ms-link" href="purchase-plan.html">Price Plan Example</a></li>
-                            <li><a class="ms-link" href="charts.html">Charts Example</a></li>
-                            <li><a class="ms-link" href="table.html">Table Example</a></li>
-                            <li><a class="ms-link" href="forms.html">Forms Example</a></li>
-                            <li><a class="ms-link" href="icon.html">Icons</a></li>
-                            <li><a class="ms-link" href="contact.html">Contact Us</a></li>
-                            <li><a class="ms-link" href="todo-list.html">Todo List</a></li>
-                        </ul>
-                    </li>
+                   
+                    
                 </ul>
                 <!-- Menu: menu collepce btn -->
                 <button type="button" class="btn btn-link sidebar-mini-btn text-light">
@@ -158,25 +118,25 @@
                             </div>
                             <div class="dropdown zindex-popover">
                                 <a class="nav-link dropdown-toggle pulse" href="#" role="button" data-bs-toggle="dropdown">
-                                    <img src="assets/images/flag/GB.png" alt="">
+                                    <img src="/assets/images/flag/GB.png" alt="">
                                 </a>
                                 <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-md-end p-0 m-0 mt-3">
                                     <div class="card border-0">
                                         <ul class="list-unstyled py-2 px-3">
                                             <li>
-                                                <a href="#" class=""><img src="assets/images/flag/GB.png" alt=""> English</a>
+                                                <a href="#" class=""><img src="/assets/images/flag/GB.png" alt=""> English</a>
                                             </li>
                                             <li>
-                                                <a href="#" class=""><img src="assets/images/flag/DE.png" alt=""> German</a>
+                                                <a href="#" class=""><img src="/assets/images/flag/DE.png" alt=""> German</a>
                                             </li>
                                             <li>
-                                                <a href="#" class=""><img src="assets/images/flag/FR.png" alt=""> French</a>
+                                                <a href="#" class=""><img src="/assets/images/flag/FR.png" alt=""> French</a>
                                             </li>
                                             <li>
-                                                <a href="#" class=""><img src="assets/images/flag/IT.png" alt=""> Italian</a>
+                                                <a href="#" class=""><img src="/assets/images/flag/IT.png" alt=""> Italian</a>
                                             </li>
                                             <li>
-                                                <a href="#" class=""><img src="assets/images/flag/RU.png" alt=""> Russian</a>
+                                                <a href="#" class=""><img src="/assets/images/flag/RU.png" alt=""> Russian</a>
                                             </li>
                                         </ul>
                                     </div>
@@ -201,7 +161,7 @@
                                                 <ul class="list-unstyled list mb-0">
                                                     <li class="py-2 mb-1 border-bottom">
                                                         <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="assets/images/xs/avatar1.svg" alt="">
+                                                            <img class="avatar rounded-circle" src="/assets/images/xs/avatar1.svg" alt="">
                                                             <div class="flex-fill ms-2">
                                                                 <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Chloe Walkerr</span> <small>2MIN</small></p>
                                                                 <span class="">Added New Product 2021-07-15 <span class="badge bg-success">Add</span></span>
@@ -219,7 +179,7 @@
                                                     </li>
                                                     <li class="py-2 mb-1 border-bottom">
                                                         <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="assets/images/xs/avatar3.svg" alt="">
+                                                            <img class="avatar rounded-circle" src="/assets/images/xs/avatar3.svg" alt="">
                                                             <div class="flex-fill ms-2">
                                                                 <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Melanie	Oliver</span> <small>1HR</small></p>
                                                                 <span class="">Orader  Return RT-00004</span>
@@ -228,7 +188,7 @@
                                                     </li>
                                                     <li class="py-2 mb-1 border-bottom">
                                                         <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="assets/images/xs/avatar5.svg" alt="">
+                                                            <img class="avatar rounded-circle" src="/assets/images/xs/avatar5.svg" alt="">
                                                             <div class="flex-fill ms-2">
                                                                 <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Boris Hart</span> <small>13MIN</small></p>
                                                                 <span class="">Product Order to Toyseller</span>
@@ -237,7 +197,7 @@
                                                     </li>
                                                     <li class="py-2 mb-1 border-bottom">
                                                         <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="assets/images/xs/avatar6.svg" alt="">
+                                                            <img class="avatar rounded-circle" src="/assets/images/xs/avatar6.svg" alt="">
                                                             <div class="flex-fill ms-2">
                                                                 <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Alan	Lambert</span> <small>1HR</small></p>
                                                                 <span class="">Leave Apply</span>
@@ -246,7 +206,7 @@
                                                     </li>
                                                     <li class="py-2">
                                                         <a href="javascript:void(0);" class="d-flex">
-                                                            <img class="avatar rounded-circle" src="assets/images/xs/avatar7.svg" alt="">
+                                                            <img class="avatar rounded-circle" src="/assets/images/xs/avatar7.svg" alt="">
                                                             <div class="flex-fill ms-2">
                                                                 <p class="d-flex justify-content-between mb-0 "><span class="font-weight-bold">Zoe Wright</span> <small class="">1DAY</small></p>
                                                                 <span class="">Product Stoke Entry Updated</span>
@@ -263,16 +223,16 @@
                             <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
                                 <div class="u-info me-2">
                                     <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">John Quinn</span></p>
-                                    <small>Admin Profile</small>
+                                    <small>Vendor Profile</small>
                                 </div>
                                 <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
-                                    <img class="avatar lg rounded-circle img-thumbnail" src="assets/images/profile_av.svg" alt="profile">
+                                    <img class="avatar lg rounded-circle img-thumbnail" src="/assets/images/profile_av.svg" alt="profile">
                                 </a>
                                 <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
                                     <div class="card border-0 w280">
                                         <div class="card-body pb-0">
                                             <div class="d-flex py-1">
-                                                <img class="avatar rounded-circle" src="assets/images/profile_av.svg" alt="profile">
+                                                <img class="avatar rounded-circle" src="/assets/images/profile_av.svg" alt="profile">
                                                 <div class="flex-fill ms-3">
                                                     <p class="mb-0"><span class="font-weight-bold">John	Quinn</span></p>
                                                     <small class="">Johnquinn@gmail.com</small>
@@ -319,134 +279,187 @@
                     <div class="row align-items-center">
                         <div class="border-0 mb-4">
                             <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                                <h3 class="fw-bold mb-0">Coupons</h3>
-                                <div class="col-auto d-flex w-sm-100">
-                                    <a href="coupon-add.html" class="btn btn-primary btn-set-task w-sm-100"><i class="icofont-plus-circle me-2 fs-6"></i>Add Coupons</a>
-                                </div>
+                                <h3 class="fw-bold mb-0">Edit Coupon</h3>
                             </div>
                         </div>
                     </div> <!-- Row end  -->
-                    <div class="row clearfix g-3">
-                    <div class="col-sm-12">
-                            <div class="card mb-3">
-                                <div class="card-body">
-                                    <table id="myProjectTable" class="table table-hover align-middle mb-0" style="width:100%">
-                                        <thead>
-                                            <tr>
-                                                <th>Coupons Code</th>
-                                                <th>Type</th> 
-                                                <th>Discount</th>
-                                                <th>Start Date</th>
-                                                <th>End Date</th> 
-                                                <th>Status</th> 
-                                                <th>Discount Country</th>
-                                                <th>Discount Product</th>
-                                                <th>Actions</th>  
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                            <td><span class="fw-bold ms-1">DTZQT-8547</span></td>
-                                            <td>Fixed Amount</td>
-                                            <td>$12.6</td>
-                                            <td>18/08/2021</td>
-                                            <td>06/09/2021</td>
-                                            <td><span class="badge bg-success">Active</span></td>
-                                            <td>South Africa</td>
-                                            <td>Clothes</td>
-                                            <td>
-                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                        <a href="coupon-edit.html" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
-                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="fw-bold ms-1">AXXQT-2547</span></td>
-                                                <td>Percentage</td>
-                                                <td>20%</td>
-                                                <td>08/03/2021</td>
-                                                <td>30/03/2021</td>
-                                                <td><span class="badge bg-danger">In Active</span></td>
-                                                <td>India</td>
-                                                <td>Watches</td>
-                                                <td>
-                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                        <a href="coupon-edit.html" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
-                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="fw-bold ms-1">FiFty-50%</span></td>
-                                                <td>Percentage</td>
-                                                <td>50%</td>
-                                                <td>08/03/2021</td>
-                                                <td>30/03/2021</td>
-                                                <td><span class="badge bg-warning">Future Plann</span></td>
-                                                <td>India</td>
-                                                <td>Toy</td>
-                                                <td>
-                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                        <a href="coupon-edit.html" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
-                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="fw-bold ms-1">BATTT-XA47</span></td>
-                                                <td>Fixed Amount</td>
-                                                <td>$18.00</td>
-                                                <td>06/05/2021</td>
-                                                <td>06/09/2021</td>
-                                                <td><span class="badge bg-success">Active</span></td>
-                                                <td>Oman</td>
-                                                <td>Shoes</td>
-                                                <td>
-                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                        <a href="coupon-edit.html" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
-                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="fw-bold ms-1">FALT-40</span></td>
-                                                <td>Percentage</td>
-                                                <td>18%</td>
-                                                <td>16/04/2021</td>
-                                                <td>06/09/2021</td>
-                                                <td><span class="badge bg-success">Active</span></td>
-                                                <td>Oman</td>
-                                                <td>Shoes</td>
-                                                <td>
-                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                        <a href="coupon-edit.html" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
-                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="fw-bold ms-1">SHIP-ZERO</span></td>
-                                                <td>Free shipping</td>
-                                                <td>$0.0</td>
-                                                <td>12/05/2021</td>
-                                                <td>06/10/2021</td>
-                                                <td><span class="badge bg-success">Active</span></td>
-                                                <td>Denmark</td>
-                                                <td>Cream Tube</td>
-                                                <td>
-                                                    <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                        <a href="coupon-edit.html" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
-                                                        <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
+                    <form id="couponForm" action="/vendor/editCoupon" method="post">
+                        <div class="row clearfix g-3">
+                            <div class="col-lg-4">
+                                <div class="card mb-3">
+                                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                                        <h6 class="m-0 fw-bold">Coupon Status</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" value="Active" name="status" <%= coupon.status === 'Active' ? 'checked' : '' %>>
+                                            <label class="form-check-label">
+                                                Active
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" value="InActive" type="radio" name="status" <%= coupon.status === 'InActive' ? 'checked' : '' %>>
+                                            <label class="form-check-label">
+                                                In Active
+                                            </label>
+                                        </div>
+                                        <!-- <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="couponsstatus">
+                                            <label class="form-check-label">
+                                                Future Plan
+                                            </label>
+                                        </div> -->
+                                    </div>
+                                </div>
+                                <div class="card">
+                                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                                        <h6 class="m-0 fw-bold">Date Schedule</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row g-3 align-items-center">
+                                            <div class="col-md-12">
+                                                <label class="form-label">Start Date</label>
+                                                <input id="startDate" name="startDate" type="date" class="form-control w-100" value="<%= coupon.startDate.toISOString().split('T')[0] %>">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label">End Date</label>
+                                                <input id="endDate" type="date" name="endDate" class="form-control w-100" value="<%= coupon.endDate.toISOString().split('T')[0] %>">
+                                                <small id="endDateError" class="text-danger d-none"><b>Please enter a valid end date.</b></small>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                    </div>
-                    </div><!-- Row End -->
+                            <div class="col-lg-8">
+                                <div class="card pt-3">
+                                    <div class="card-header py-0 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                                        <h6 class="m-0 fw-bold">Coupon Information</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row g-3 align-items-center">
+                                            <div class="col-md-6">
+                                                <label class="form-label">Coupons Code</label>
+                                                <input id="couponCode" name="couponCode" type="text" class="form-control" value="<%= coupon.couponCode %>">
+                                                <small id="couponCodeError" class="text-danger d-none"><b>Please enter a valid coupon code.</b></small>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Discount On Category</label>
+                                                <select name="category" id="discountCategory" class="form-select" aria-label="Default select example">
+                                                    <option selected value="<%= coupon.discountProducts.category %>"><%= coupon.discountProducts.category %></option>
+                                                    <option value="dog">Dog</option>
+                                                    <option value="cat">Cats</option>
+                                                    <option value="3">Fishes</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Discount On SubCategory</label>
+                                                <select name="subCategory" id="discountSubCategory" class="form-select" aria-label="Default select example">
+                                                    <option selected value="<%= coupon.discountProducts.subCategory %>"><%= coupon.discountProducts.subCategory %></option>
+                                                    <option value="1">Food Items</option>
+                                                    <option value="2">Accessories</option>
+                                                    <option value="3">Grooming-Items</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label">Coupons Limits</label>
+                                                <input id="couponLimit" name="limit" type="number" class="form-control" value="<%= coupon.limit %>" >
+                                                <small id="couponLimitError" class="text-danger d-none"><b>Please enter a valid coupon limit.</b></small>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label">Coupons Types</label>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" value="percentage" name="type" <%= coupon.type === 'percentage' ? 'checked' : '' %>>
+                                                    <label class="form-check-label">
+                                                        Percentage
+                                                    </label>
+                                                </div>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="radio" value="fixedPrice" name="type" <%= coupon.type === 'fixedPrice' ? 'checked' : '' %>>
+                                                    <label class="form-check-label">
+                                                        Fixed Amount
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label class="form-label">Discount value <small class="text-dark">(Price/Percentage)</small></label>
+                                                <input id="discountValue" name="value" type="text" class="form-control"  value="<%= coupon.value %>" >
+                                                <small id="discountValueError" class="text-danger d-none"><b>Please enter a valid discount value.</b></small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div class="card">
+                                    <div class="card-header py-0 mb-3 d-flex justify-content-center align-items-center bg-transparent border-bottom-0">
+                                        <button id="submitButton" type="button" class="btn btn-primary mt-4 text-uppercase px-5">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- Row End -->
+                    </form>
+                    
+                    <script>
+                        document.getElementById('submitButton').addEventListener('click', function () {
+                            let formValid = true;
+                    
+                            // // Validate start date
+                            // const startDate = document.getElementById('startDate');
+                            // const startDateError = document.getElementById('startDateError');
+                            // if (!startDate.value) {
+                            //     startDateError.classList.remove('d-none');
+                            //     formValid = false;
+                            // } else {
+                            //     startDateError.classList.add('d-none');
+                            // }
+                    
+                            // Validate end date
+                            const endDate = document.getElementById('endDate');
+                            const endDateError = document.getElementById('endDateError');
+                            if (!endDate.value) {
+                                endDateError.classList.remove('d-none');
+                                formValid = false;
+                            } else {
+                                endDateError.classList.add('d-none');
+                            }
+                    
+                            // Validate coupon code
+                            const couponCode = document.getElementById('couponCode');
+                            const couponCodeError = document.getElementById('couponCodeError');
+                            if (!couponCode.value) {
+                                couponCodeError.classList.remove('d-none');
+                                formValid = false;
+                            } else {
+                                couponCodeError.classList.add('d-none');
+                            }
+                    
+                            // Validate coupon limit
+                            const couponLimit = document.getElementById('couponLimit');
+                            const couponLimitError = document.getElementById('couponLimitError');
+                            if (!couponLimit.value) {
+                                couponLimitError.classList.remove('d-none');
+                                formValid = false;
+                            } else {
+                                couponLimitError.classList.add('d-none');
+                            }
+                    
+                            // Validate discount value
+                            const discountValue = document.getElementById('discountValue');
+                            const discountValueError = document.getElementById('discountValueError');
+                            if (!discountValue.value) {
+                                discountValueError.classList.remove('d-none');
+                                formValid = false;
+                            } else {
+                                discountValueError.classList.add('d-none');
+                            }
+                    
+                            // If form is valid, submit the form
+                            if (formValid) {
+                                document.getElementById('couponForm').submit();
+                            }
+                        });
+                    </script>
+                    
                 </div>
             </div>
             
@@ -591,39 +604,15 @@
             </div> 
 
         </div>     
+        
     </div>
     
     <!-- Jquery Core Js -->
-    <script src="assets/bundles/libscripts.bundle.js"></script>
-
-    <!-- Plugin Js-->
-    <script src="assets/bundles/dataTables.bundle.js"></script>
+    <script src="/assets/bundles/libscripts.bundle.js"></script>
 
     <!-- Jquery Page Js -->
     <script src="../js/template.js"></script>
-    <script>
-        // project data table
-        $(document).ready(function() {
-            $('#myProjectTable')
-            .addClass( 'nowrap' )
-            .dataTable( {
-                responsive: true,
-                columnDefs: [
-                    { targets: [-1, -3], className: 'dt-body-right' }
-                ]
-            });
-            $('.deleterow').on('click',function(){
-            var tablename = $(this).closest('table').DataTable();  
-            tablename
-                    .row( $(this)
-                    .parents('tr') )
-                    .remove()
-                    .draw();
-
-            } );
-        });
-    </script>
 </body>
 
-<!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/coupons-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Feb 2024 11:51:13 GMT -->
+<!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/coupon-add.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 08 Feb 2024 06:56:29 GMT -->
 </html>

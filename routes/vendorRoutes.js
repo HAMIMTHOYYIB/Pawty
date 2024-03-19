@@ -23,6 +23,13 @@ router.post('/vendor/add-product',vendorAuth, upload.array('image',4), vendorCon
 router.post('/vendor/editProduct/:id',vendorAuth,vendorController.editProduct);
 router.post('/vendor/submitEditProduct/:id',vendorAuth, upload.array('image', 4), vendorController.submitEditProduct);
 router.post('/vendor/deleteProduct/:id',vendorAuth,vendorController.deleteProduct);
+
+// Coupon Management
+router.get('/vendor/addCoupon',vendorAuth,vendorController.addCoupon)
+router.get('/vendor/couponList',vendorAuth,vendorController.listCoupon)
+router.post('/vendor/addCoupon',vendorAuth,vendorController.submitAddCoupon)
+router.get('/vendor/editCoupon/:couponId',vendorAuth,vendorController.editCoupon)
+
 // vendor Logout
 router.get('/vendor/logout',vendorController.vendorLogout);
 

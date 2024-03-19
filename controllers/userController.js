@@ -154,7 +154,7 @@ let shop = async (req,res) => {
       if(err){
         return res.render('users/shop-org',{products,admin,user:undefined});
       }else{
-        req.user = decodedToken
+        req.user = decodedToken;
         let user = await User.findOne({_id:req.user.id});
         return res.render('users/shop-org',{products,admin,user:user});
       }
@@ -196,7 +196,9 @@ let getcart = async (req, res) => {
   try {
     let user = await User.findOne({ _id: req.user.id });
     let cart = user.cart;
-    res.render('users/cart', { userCart: cart,user });
+    let coupons = await Vendor.find().select("coupons")
+    console.log("coupons :",coupons);
+    res.render('users/cart', { userCart:cart,user,coupons });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
@@ -275,6 +277,27 @@ let changeQuantity = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+let checkCoupon = async (req, res) => {
+  const { couponCode } = req.body;
+  try {
+    const VendorCoupons = await Vendor.find().select("coupons");
+    let coupons = VendorCoupons.map(val => val.coupons)
+    console.log("coupons:",coupons);
+    let flatcoupon = coupons.flat(1);
+    let coupon = flatcoupon.filter(val => val.couponCode == couponCode)
+    console.log("myCoup :",coupon);
+    if (coupon[0]) {
+      res.json({ valid: true });
+    } else {
+      // If the coupon code does not exist, send a failure response
+      res.json({ valid: false });
+    }
+  } catch (error) {
+    console.error('Failed to check coupon:', error);
+    res.status(500).json({ error: 'Failed to check coupon' });
+  }
+};
 
 //wishlist
 let getwishlist = async (req,res) => {
@@ -586,6 +609,7 @@ module.exports={
     addtocart,
     changeQuantity,
     removefromcart,
+    checkCoupon,
     getwishlist,
     addtowishlist,
     removefromwishlist,

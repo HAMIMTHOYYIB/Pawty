@@ -196,8 +196,9 @@
             <div class="coupon-wrap">
               <h4 class="title">Coupon</h4>
               <p class="desc">Enter your coupon code if you have one.</p>
-              <input type="text" class="form-control" placeholder="Coupon code">
-              <button type="button" class="btn-coupon">Apply coupon</button>
+              <input id="coupon-code" type="text" class="form-control" placeholder="Coupon code">
+              <button id="apply-coupon-btn" type="button" class="btn-coupon">Apply coupon</button>
+              <p id="coupon-message"></p>
             </div>
           </div>
           <div class="col-6 g-0 col-lg-6">
@@ -312,6 +313,27 @@
           // Handle errors gracefully (e.g., display an error message to the user)
       });
     }
+
+      const applyCouponBtn = document.getElementById('apply-coupon-btn');
+      const couponCodeInput = document.getElementById('coupon-code');
+      const couponMessage = document.getElementById('coupon-message');
+
+      applyCouponBtn.addEventListener('click', async () => {
+        const couponCode = couponCodeInput.value;
+
+        try {
+          const response = await axios.post('/check-coupon', { couponCode });
+          if (response.data.valid) {
+            couponMessage.textContent = 'Coupon applied successfully.';
+            couponMessage.style.color = 'green';
+          } else {
+            couponMessage.textContent = 'Invalid coupon code.';
+            couponMessage.style.color = 'red';
+          }
+        } catch (error) {
+          console.error('Failed to apply coupon:', error);
+        }
+      });
   </script>
   
   

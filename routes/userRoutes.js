@@ -37,6 +37,7 @@ router.get('/cart',userAuth,userController.getcart);
 router.post('/addToCart',userAuth,userController.addtocart);
 router.post('/updateCart',userAuth,userController.changeQuantity);
 router.post('/removeFromCart',userAuth,userController.removefromcart);
+router.post('/check-coupon',userAuth,userController.checkCoupon);
 
 router.get('/wishlist',userAuth,userController.getwishlist);
 router.post('/addToWishlist',userAuth,userController.addtowishlist);
