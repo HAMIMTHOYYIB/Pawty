@@ -244,7 +244,7 @@ let submitAddCoupon = async (req,res) => {
   console.log("coupon added succesfully");
   res.redirect('/vendor/couponList')
 }
-let editCoupon = async (req,res) =>{
+let editCoupon = async (req,res) => {
   let vendor = await Vendor.findOne({_id:req.user.id});
   if(!vendor){
     return res.status(404).send("vendor Not Found")
@@ -255,6 +255,42 @@ let editCoupon = async (req,res) =>{
   }
   res.render('vendor/coupon-edit',{coupon:coupon[0]})
 }
+let submitEditCoupon = async (req, res) => {
+  let couponId = req.params.couponId;
+  let vendor = await Vendor.findOne({_id:req.user.id});
+  if(!vendor){
+    return res.status(404).send('Vendor Not found');
+  }
+
+  let {status, startDate, endDate, couponCode, category, subCategory, limit, type, value} = req.body;
+  let updatedCoup = {status, startDate, endDate, couponCode, category, subCategory, limit, type, value};
+
+  let coupon = vendor.coupons.find(val => val._id.toString() === couponId);
+  if (!coupon) {
+    return res.status(404).send('Coupon Not found');
+  }
+
+  // Update the coupon object with the values from updatedCoup
+  Object.assign(coupon, updatedCoup);
+
+  // Save the updated vendor object
+  await vendor.save();
+
+  console.log("Updated coupon:", coupon);
+  res.redirect('/vendor/couponList');
+};
+
+// let submitEditCoupon = async (req,res) => {
+//   let couponId = req.params.couponId;
+//   let vendor = await Vendor.findOne({_id:req.user.id});
+//   if(!vendor){
+//     return res.status(404).send('Vendor Not found')
+//   }
+//   let {status,startDate,endDate,couponCode,category,subCategory,limit,type,value} = req.body;
+//   let updatedCoup = {status,startDate,couponCode,category,subCategory,limit,type,value};
+//   let coupon = vendor.coupons.filter(val => val._id.toString() === couponId)[0]
+//   console.log("coupon:",coupon);
+// }
 
 
 // FORGOT PASSWORD 
@@ -386,6 +422,7 @@ module.exports = {
     listCoupon,
     submitAddCoupon,
     editCoupon,
+    submitEditCoupon,
 
     vendorForgotPass,
     resetVendorPass,

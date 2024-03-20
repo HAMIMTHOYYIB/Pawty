@@ -197,8 +197,11 @@
               <h4 class="title">Coupon</h4>
               <p class="desc">Enter your coupon code if you have one.</p>
               <input id="coupon-code" type="text" class="form-control" placeholder="Coupon code">
+                <p class="d-flex"><small id="coupon-message"></small>
+                <span style="display: none;" id="checktrue" class="mt-1"><i class="fa fa-check text-success"></i></span>
+                <span style="display: none;" id="checkfalse" class="mt-1"><i class="fa fa-times text-danger"></i></span>
+              </p>
               <button id="apply-coupon-btn" type="button" class="btn-coupon">Apply coupon</button>
-              <p id="coupon-message"></p>
             </div>
           </div>
           <div class="col-6 g-0 col-lg-6">
@@ -209,13 +212,19 @@
                   <tr class="cart-subtotal">
                     <th>Subtotal</th>
                     <td>
-                      <span id="amount" class="amount">$<%= userCart.total %> /-</span>
+                      <span id="Amount" class="amount">₹ <span id="amount"><%= userCart.total %></span> /-</span>
                     </td>
                   </tr>
                   <tr class="cart-subtotal">
-                    <th class="">Total</th>
+                    <th>Discount</th>
                     <td>
-                      <span id="amount" class="amount">$ 1000 /-</span>
+                      <span id="discount" class="amount">₹ <span id="discountVal">0</span> /-</span>
+                    </td>
+                  </tr>
+                  <tr class="cart-subtotal">
+                    <th class="">grandTotal</th>
+                    <td>
+                      <span id="grandTotal" class="amount">₹ <span id="totVal"><%= userCart.total %></span> /-</span>
                     </td>
                   </tr>
                 </tbody>
@@ -242,6 +251,7 @@
       const plusButtons = document.querySelectorAll('.qty-plus');
       const quantityInputs = document.querySelectorAll('.quantity');
       const removeButtons = document.querySelectorAll('.remove');
+      const discountVal = document.getElementById('discountVal');
 
 //  Decreasing the quantity
       minusButtons.forEach(button => {
@@ -287,7 +297,7 @@
           // Handle the response as needed
           console.log('Product removed from cart:', response.data);
           button.closest('.tbody-item').remove(); //remove the specific row  
-          document.getElementById('amount').textContent = `$${response.data.user.cart.total.toFixed(2)} /-`;
+          document.getElementById('amount').textContent = `${response.data.user.cart.total.toFixed(2)}`;
         })
         .catch(error => {
           console.error('Error removing product from cart:', error.response);
@@ -298,14 +308,27 @@
   });
 
     function updateCart(productId, quantity) {
+      const totVal = document.getElementById('totVal');
+      const Amount = document.getElementById('amount');
+      const InputCoup = document.getElementById('coupon-code');
+      const tickmark = document.getElementById('checktrue');
+      const crossmark = document.getElementById('checkfalse');
+      const couponMessage = document.getElementById('coupon-message');
+      discountVal.textContent = 0;
+      
       axios.post('/updateCart', { productId, quantity })
         .then(response => {
           let subTotal = 0;
           response.data.user.cart.products.forEach(prod => {
             subTotal += prod.price * prod.quantity;
-            document.getElementById(`total-${prod._id}`).textContent = `$${prod.price * prod.quantity} /-`;
+            document.getElementById(`total-${prod._id}`).textContent = `${prod.price * prod.quantity} /-`;
           });
-          document.getElementById('amount').textContent = `$${subTotal.toFixed(2)} /-`;
+          document.getElementById('amount').textContent = `${subTotal.toFixed(2)}`;
+          totVal.textContent = Amount.textContent - discountVal.textContent;
+          InputCoup.value = '';
+          tickmark.style.display = 'none';
+          crossmark.style.display = 'none';
+          couponMessage.textContent = ''
           console.log('Cart quantity updated successfully:', response.data);
         })
         .catch(error => {
@@ -317,18 +340,32 @@
       const applyCouponBtn = document.getElementById('apply-coupon-btn');
       const couponCodeInput = document.getElementById('coupon-code');
       const couponMessage = document.getElementById('coupon-message');
+      const tickmark = document.getElementById('checktrue');
+      const crossmark = document.getElementById('checkfalse');
+      const discountVal = document.getElementById('discountVal');
+      const totVal = document.getElementById('totVal');
+      const Amount = document.getElementById('amount');
 
       applyCouponBtn.addEventListener('click', async () => {
         const couponCode = couponCodeInput.value;
-
         try {
           const response = await axios.post('/check-coupon', { couponCode });
           if (response.data.valid) {
             couponMessage.textContent = 'Coupon applied successfully.';
             couponMessage.style.color = 'green';
+            tickmark.style.display = 'flex';
+            crossmark.style.display = 'none';
+            discountVal.textContent = response.data.value;
+            let tot = parseFloat(Amount.textContent) - parseFloat(discountVal.textContent);
+            console.log("tot :",tot);
+            totVal.textContent = tot ;
           } else {
             couponMessage.textContent = 'Invalid coupon code.';
             couponMessage.style.color = 'red';
+            crossmark.style.display = 'flex';
+            tickmark.style.display = 'none';
+            discountVal.textContent = 0;
+            totVal.textContent = Amount.textContent - 0;
           }
         } catch (error) {
           console.error('Failed to apply coupon:', error);

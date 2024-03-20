@@ -19,6 +19,10 @@ const cartSchema = new mongoose.Schema({
         images: { type: Array },
         stockQuantity: {type:Number }
     }],
+    discount : {
+        type: Number,
+        default : 0
+    },
     total: { type: Number }
 });
 

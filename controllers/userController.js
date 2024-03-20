@@ -277,7 +277,6 @@ let changeQuantity = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
-
 let checkCoupon = async (req, res) => {
   const { couponCode } = req.body;
   try {
@@ -286,11 +285,17 @@ let checkCoupon = async (req, res) => {
     console.log("coupons:",coupons);
     let flatcoupon = coupons.flat(1);
     let coupon = flatcoupon.filter(val => val.couponCode == couponCode)
-    console.log("myCoup :",coupon);
-    if (coupon[0]) {
-      res.json({ valid: true });
+    if (coupon[0] && coupon[0].status === 'Active') {
+      let value; 
+      if(coupon[0].type === 'percentage'){
+        let user = await User.findOne({_id:req.user.id});
+        subtotal = user.cart.total;
+        value = (subtotal * coupon[0].value)/100;
+      }else{
+        value = coupon[0].value
+      }
+      res.json({ valid: true , value});
     } else {
-      // If the coupon code does not exist, send a failure response
       res.json({ valid: false });
     }
   } catch (error) {
@@ -428,9 +433,13 @@ let submitSignup = async (req,res) => {
     const { username,email,phone,password,confirmPassword} = req.body;
     try {
         const userExist= await User.findOne({email:email});
+        const phoneExist = await User.findOne({phone:phone});
         if(userExist){
             return res.status(400).render('users/account-signup',{errMsg:'User exist with this email.'})
         }
+        if(phoneExist){
+          return res.status(400).render('users/account-signup',{errMsg:'User exist with this Phone Number.'})
+      }
         if(!password){
             res.status(400).send("Password empty");
         }
