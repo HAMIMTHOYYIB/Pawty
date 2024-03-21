@@ -30,7 +30,8 @@ let editProfile = async (req,res) => {
   user.email = email;
   user.phone = phone;
   await user.save();
-  res.redirect('/account');
+  res.json({ message: "Profile Updated."});
+  
 }
 let changePass = async (req, res) => {
   const { currentPass, newPass, confirmPass } = req.body;
