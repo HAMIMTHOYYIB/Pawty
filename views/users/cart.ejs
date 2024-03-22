@@ -360,7 +360,7 @@
             console.log("tot :",tot);
             totVal.textContent = tot ;
           } else {
-            couponMessage.textContent = 'Invalid coupon code.';
+            couponMessage.textContent = response.data.message || 'Invalid coupon code.';
             couponMessage.style.color = 'red';
             crossmark.style.display = 'flex';
             tickmark.style.display = 'none';

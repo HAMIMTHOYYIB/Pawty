@@ -307,9 +307,9 @@
                                                 <th>Actions</th>  
                                             </tr>
                                         </thead>
-                                        <tbody>
+                                        <tbody class="">
                                             <% vendor.coupons.forEach(coupon =>{ %>
-                                            <tr>
+                                            <tr class="tbody-item">
                                             <td><span class="fw-bold ms-1"><%= coupon.couponCode %></span></td>
                                             <!-- <td><b><%= coupon.type %></b></td> -->
                                             <% if(coupon.type === "percentage"){ %>
@@ -329,7 +329,7 @@
                                             <td>
                                                 <div class="btn-group" role="group" aria-label="Basic outlined example">
                                                     <a href="/vendor/editCoupon/<%= coupon._id %>" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
-                                                    <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
+                                                    <button type="button" id="removeCoup-<%= coupon._id %>" class="btn btn-outline-secondary deleterrow"><i class="icofont-ui-delete text-danger"></i></button>
                                                 </div>
                                             </td>
                                             </tr>
@@ -342,7 +342,27 @@
                     </div><!-- Row End -->
                 </div>
             </div>
-            
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+            <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const removeButtons = document.querySelectorAll('.deleterrow');
+                // Remove product from cart
+                removeButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                    const couponId = button.id.split('-')[1]; // Extract the product ID from the button ID
+                    axios.post('/vendor/removeCoupon', { couponId })
+                        .then(response => {
+                        // Handle the response as needed
+                        console.log('Coupon removed:', response.data);
+                        button.closest('.tbody-item').remove(); //remove the specific row  
+                        })
+                        .catch(error => {
+                        console.error('Error removing coupon :', error.response);
+                        });
+                    });
+                });
+            });
+            </script>
             <!-- Modal Custom Settings-->
             <div class="modal fade right" id="Settingmodal" tabindex="-1"  aria-hidden="true">
                 <div class="modal-dialog  modal-sm">

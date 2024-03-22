@@ -98,7 +98,6 @@ let editAddress = async (req, res) => {
   try {
     // console.log(req.user);
     const { id } = req.user;
-    console.log("req.body :",req.body);
     const { name, locality, street, city, state, phone, pincode } = req.body;
     
     // Find the user by userId
@@ -106,15 +105,16 @@ let editAddress = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
+    console.log(req.params);
 
     // Update the address
-    const addressIndex = user.address.findIndex(add => add._id.toString() === req.params.id);
+    const addressIndex = req.params.id
+    console.log(addressIndex)
     if (addressIndex === -1) {
       return res.status(404).json({ message: "Address not found" });
     }
 
     user.address[addressIndex] = {
-      _id: req.params.id,
       name,
       locality,
       street,
@@ -125,8 +125,8 @@ let editAddress = async (req, res) => {
     };
 
     await user.save();
-    res.status(200).redirect('/accountAddress')
-    // res.json({ message: "Address updated successfully", user: user.address });
+    // res.status(200)
+    res.json({ message: "Address updated successfully", userAddress: user.address });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
@@ -283,27 +283,33 @@ let checkCoupon = async (req, res) => {
   try {
     const VendorCoupons = await Vendor.find().select("coupons");
     let coupons = VendorCoupons.map(val => val.coupons)
-    console.log("coupons:",coupons);
     let flatcoupon = coupons.flat(1);
     let coupon = flatcoupon.filter(val => val.couponCode == couponCode)
     if (coupon[0] && coupon[0].status === 'Active') {
-      let value; 
-      if(coupon[0].type === 'percentage'){
-        let user = await User.findOne({_id:req.user.id});
-        subtotal = user.cart.total;
-        value = (subtotal * coupon[0].value)/100;
-      }else{
-        value = coupon[0].value
+      let currentDate = new Date();
+      let endDate = new Date(coupon[0].endDate);
+      if (currentDate <= endDate) {
+        let value;
+        if (coupon[0].type === 'percentage') {
+          let user = await User.findOne({_id:req.user.id});
+          subtotal = user.cart.total;
+          value = (subtotal * coupon[0].value) / 100;
+        } else {
+          value = coupon[0].value
+        }
+        res.json({ valid: true, value });
+      } else {
+        res.json({ valid: false, message: 'Coupon has expired' });
       }
-      res.json({ valid: true , value});
     } else {
-      res.json({ valid: false });
+      res.json({ valid: false, message: 'Coupon is inactive or does not exist' });
     }
   } catch (error) {
     console.error('Failed to check coupon:', error);
     res.status(500).json({ error: 'Failed to check coupon' });
   }
 };
+
 
 //wishlist
 let getwishlist = async (req,res) => {

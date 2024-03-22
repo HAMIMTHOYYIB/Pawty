@@ -209,6 +209,49 @@
                       </div>
                     </div>
                   </div>
+                  <script>
+                    const editProfileForm = document.getElementById('editProfileForm');
+
+                    editProfileForm.addEventListener('submit', (event) => {
+                        event.preventDefault();
+
+                        const emailInput = document.getElementById('editEmail');
+                        const phoneInput = document.getElementById('editPhone');
+
+                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                        const phoneRegex = /^\d{10}$/;
+
+                        let isValid = true;
+
+                        if (!emailRegex.test(emailInput.value)) {
+                            document.getElementById('emailError').innerText = 'Please enter a valid email address.';
+                            isValid = false;
+                        } else {
+                            document.getElementById('emailError').innerText = '';
+                        }
+
+                        if (!phoneRegex.test(phoneInput.value)) {
+                            document.getElementById('phoneError').innerText = 'Please enter a valid phone number (10 digits).';
+                            isValid = false;
+                        } else {
+                            document.getElementById('phoneError').innerText = '';
+                        }
+
+                        if (isValid) {
+                            axios.post('/editprofile', {
+                                userName: document.getElementById('editUsername').value,
+                                email: emailInput.value,
+                                phone: phoneInput.value
+                            })
+                            .then((response) => {
+                              $('#editProfileModal').modal('hide');
+                                window.location.href = "/account";                                    })
+                            .catch((error) => {
+                                // Handle error
+                            });
+                        }
+                    });
+                  </script>  
                   <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
                     <div class="myaccount-content">
                       <h3>Orders</h3>
@@ -224,22 +267,23 @@
                             </tr>
                           </thead>
                           <tbody>
+                            <% let count = 0 ; %>
                             <tr>
-                              <td>1</td>
+                              <td><%= ++count %></td>
                               <td>Aug 22, 2018</td>
                               <td>Pending</td>
                               <td>$3000</td>
                               <td><a href="/cart" class="check-btn sqr-btn ">View</a></td>
                             </tr>
                             <tr>
-                              <td>2</td>
+                              <td><%= ++count %></td>
                               <td>July 22, 2018</td>
                               <td>Approved</td>
                               <td>$200</td>
                               <td><a href="/cart" class="check-btn sqr-btn ">View</a></td>
                             </tr>
                             <tr>
-                              <td>3</td>
+                              <td><%= ++count %></td>
                               <td>June 12, 2017</td>
                               <td>On Hold</td>
                               <td>$990</td>
@@ -298,7 +342,7 @@
                                 </div>
                             </div>
                             <div class="col-3" style="display: flex;justify-content:flex-end;align-items:flex-start;">
-                                <button type="button" class="btn text-success" data-bs-toggle="modal" data-bs-target="#editAddress<%= index %>">
+                                <button type="button" class="btn text-success" data-bs-toggle="modal"  data-bs-target="#editAddress<%= index %>">
                                     <i class="fa fa-edit"></i>
                                 </button>
                                 <button type="button" onclick="window.location.href = `/addressDelete/<%= add._id %>`" class="btn text-danger">
@@ -314,26 +358,25 @@
                                   <h5 class="modal-title" id="editAddressLabel<%= index %>">Edit Address</h5>
                                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-                                <!-- Address edit form -->
-                                <!-- Address edit form -->
-                                <form id="editaddressForm" action="/editAddress/<%= add._id %>" method="post">
-                                <!-- <form id="editaddressForm"> -->
-                                <!-- <form id="editaddressForm" action="/editAddress/<%= add._id %>" method="post"> -->
+                                <form class="editaddressForm" action="/editAddress/<%= add._id %>" method="post">
                                   <div class="modal-body">
                                     <!-- Name input -->
                                     <div class="form-group">
                                       <label for="name<%= index %>">Name</label>
                                       <input type="text" class="form-control" value="<%= add.name %>" id="name<%= index %>" name="name">
+                                      <div id="name-error" class="text-danger"></div>
                                     </div>
                                     <!-- Locality and street inputs -->
                                     <div class="form-row g-0">
                                       <div class="form-group">
                                         <label for="locality<%= index %>">Locality</label>
                                         <input type="text" class="form-control" id="locality<%= index %>" value="<%= add.locality %>" name="locality">
+                                        <div id="locality-error" class="text-danger"></div>
                                       </div>
                                       <div class="form-group">
                                         <label for="street<%= index %>">Street</label>
                                         <input type="text" class="form-control" id="street<%= index %>" value="<%= add.street %>" name="street">
+                                        <div id="street-error" class="text-danger"></div>
                                       </div>
                                     </div>
                                     <!-- City and state inputs -->
@@ -341,6 +384,7 @@
                                       <div class="form-group">
                                         <label for="city<%= index %>">City</label>
                                         <input type="text" class="form-control" id="city<%= index %>" value="<%= add.city %>" name="city">
+                                        <div id="city-error" class="text-danger"></div>
                                       </div>
                                       <div class="form-group">
                                         <label for="state<%= index %>">State</label>
@@ -351,97 +395,126 @@
                                           <option value="TamilNadu" <%= add.state === 'TamilNadu' ? 'selected' : '' %>>TamilNadu</option>
                                           <option value="AndraPradesh" <%= add.state === 'AndraPradesh' ? 'selected' : '' %>>AndraPradesh</option>
                                         </select>
+                                        <div id="state-error" class="text-danger"></div>
                                       </div>
                                     </div>
                                     <!-- Phone input -->
                                     <div class="form-group">
                                       <label for="phone<%= index %>">Phone</label>
                                       <input type="text" class="form-control" id="phone<%= index %>" value="<%= add.phone %>" name="phone">
+                                      <div id="phone-error" class="text-danger"></div>
                                     </div>
                                     <!-- Pincode input -->
                                     <div class="form-group">
                                       <label for="pincode<%= index %>">Pincode</label>
                                       <input type="text" class="form-control" id="pincode<%= index %>" value="<%= add.pincode %>" name="pincode">
+                                      <div id="pincode-error" class="text-danger"></div>
                                     </div>
                                     <div id="error-message" class="text-danger"></div>
                                   </div>
                                   <!-- Modal footer -->
                                   <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-success">Save Changes</button>
+                                    <button type="button" class="btn btn-success" onclick="validateAndSubmit('<%=index%>')">Save Changes</button>
                                   </div>
                                 </form>
+                                
+                                <script>
+                                  function validateAndSubmit(index) {
+                                    const name = document.getElementById(`name${index}`).value.trim();
+                                    const locality = document.getElementById(`locality${index}`).value.trim();
+                                    const street = document.getElementById(`street${index}`).value.trim();
+                                    const city = document.getElementById(`city${index}`).value.trim();
+                                    const state = document.getElementById(`state${index}`).value.trim();
+                                    const phone = document.getElementById(`phone${index}`).value.trim();
+                                    const pincode = document.getElementById(`pincode${index}`).value.trim();
+                                
+                                    const nameError = document.getElementById('name-error');
+                                    const localityError = document.getElementById('locality-error');
+                                    const streetError = document.getElementById('street-error');
+                                    const cityError = document.getElementById('city-error');
+                                    const stateError = document.getElementById('state-error');
+                                    const phoneError = document.getElementById('phone-error');
+                                    const pincodeError = document.getElementById('pincode-error');
+                                
+                                    let isValid = true;
+                                
+                                    // Reset errors
+                                    nameError.textContent = '';
+                                    localityError.textContent = '';
+                                    streetError.textContent = '';
+                                    cityError.textContent = '';
+                                    stateError.textContent = '';
+                                    phoneError.textContent = '';
+                                    pincodeError.textContent = '';
+                                
+                                    if (!name) {
+                                      nameError.textContent = 'Name is required';
+                                      isValid = false;
+                                    }
+                                
+                                    if (!locality) {
+                                      localityError.textContent = 'Locality is required';
+                                      isValid = false;
+                                    }
+                                
+                                    if (!street) {
+                                      streetError.textContent = 'Street is required';
+                                      isValid = false;
+                                    }
+                                
+                                    if (!city) {
+                                      cityError.textContent = 'City is required';
+                                      isValid = false;
+                                    }
+                                
+                                    if (!state) {
+                                      stateError.textContent = 'State is required';
+                                      isValid = false;
+                                    }
+                                
+                                    if (!phone) {
+                                      phoneError.textContent = 'Phone is required';
+                                      isValid = false;
+                                    } else if (!/^\d{10}$/.test(phone)) {
+                                      phoneError.textContent = 'Phone number must be 10 digits';
+                                      isValid = false;
+                                    }
+                                
+                                    if (!pincode) {
+                                      pincodeError.textContent = 'Pincode is required';
+                                      isValid = false;
+                                    } else if (!/^\d{6}$/.test(pincode)) {
+                                      pincodeError.textContent = 'Pincode must be 6 digits';
+                                      isValid = false;
+                                    }
+                                
+                                    if (isValid) {
+                                      // Send data to server
+                                      axios.post(`/editAddress/${index}`, {
+                                        name,
+                                        locality,
+                                        street,
+                                        city,
+                                        state,
+                                        phone,
+                                        pincode
+                                      })
+                                      .then(response => {
+                                          console.log(response.data);
+                                          window.location.href = '/accountAddress';
+                                        })
+                                        .catch(error => {
+                                          // Handle error
+                                          console.error(error);
+                                        });
+
+                                    }
+                                  }
+                                </script>                                
                               </div>
                             </div>
-                          </div>
-                          <script>
-                            const editProfileForm = document.getElementById('editProfileForm');
-
-                            editProfileForm.addEventListener('submit', (event) => {
-                                event.preventDefault();
-
-                                const emailInput = document.getElementById('editEmail');
-                                const phoneInput = document.getElementById('editPhone');
-
-                                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                                const phoneRegex = /^\d{10}$/;
-
-                                let isValid = true;
-
-                                if (!emailRegex.test(emailInput.value)) {
-                                    document.getElementById('emailError').innerText = 'Please enter a valid email address.';
-                                    isValid = false;
-                                } else {
-                                    document.getElementById('emailError').innerText = '';
-                                }
-
-                                if (!phoneRegex.test(phoneInput.value)) {
-                                    document.getElementById('phoneError').innerText = 'Please enter a valid phone number (10 digits).';
-                                    isValid = false;
-                                } else {
-                                    document.getElementById('phoneError').innerText = '';
-                                }
-
-                                if (isValid) {
-                                    axios.post('/editprofile', {
-                                        userName: document.getElementById('editUsername').value,
-                                        email: emailInput.value,
-                                        phone: phoneInput.value
-                                    })
-                                    .then((response) => {
-                                      $('#editProfileModal').modal('hide');
-                                        window.location.href = "/account";                                    })
-                                    .catch((error) => {
-                                        // Handle error
-                                    });
-                                }
-                            });
-                            const editAddressForm = document.getElementById("editAddressForm");
-                            editAddressForm.addEventListener("submit", async (event) => {
-                                event.preventDefault(); 
-
-                                const formData = new FormData(editAddressForm);
-                                const addressId = editAddressForm.getAttribute("action").split("/").pop();
-                                const url = `/editAddress/${addressId}`; // Create the URL for the POST request
-
-                                try {
-                                    console.log("edit addres form data : ",editAddressForm);
-                                    const response = await fetch(url, {
-                                        method: "POST",
-                                        body: formData // Include formData in the body of the request
-                                    });
-
-                                    if (response.ok) {
-                                        $('#editAddress').modal('hide');
-                                        window.location.href = "/account";
-                                    } else {
-                                        throw new Error("Failed to update address");
-                                    }
-                                } catch (error) {
-                                    console.error(error.message);
-                                }
-                            });
-                          </script>   
+                          </div> 
                         <% }) %>      
                       </div>
 
@@ -466,58 +539,136 @@
                             </div>
                             <form id="addressForm" action="/addAddress" method="post">
                               <div class="modal-body">
-                                  <div class="form-group">
-                                      <label for="name">Name</label>
-                                      <input type="text" class="form-control" id="name" name="name">
+                                <div class="form-group">
+                                  <label for="name">Name</label>
+                                  <input type="text" class="form-control" id="name" name="name">
+                                  <div id="name-error" class="text-danger"></div>
+                                </div>
+                                <div class="form-row g-0">
+                                  <div class="form-group ">
+                                    <label for="locality">Locality</label>
+                                    <input type="text" class="form-control" id="locality" name="locality">
+                                    <div id="locality-error" class="text-danger"></div>
                                   </div>
-                                  <div class="form-row g-0">
-                                      <div class="form-group ">
-                                          <label for="locality">Locality</label>
-                                          <input type="text" class="form-control" id="locality" name="locality">
-                                      </div>
-                                      <div class="form-group ">
-                                          <label for="street">Street</label>
-                                          <input type="text" class="form-control" id="street" name="street">
-                                      </div>
+                                  <div class="form-group ">
+                                    <label for="street">Street</label>
+                                    <input type="text" class="form-control" id="street" name="street">
+                                    <div id="street-error" class="text-danger"></div>
                                   </div>
-                                  <div class="form-row g-0">
-                                      <div class="form-group ">
-                                          <label for="city">City</label>
-                                          <input type="text" class="form-control" id="city" name="city">
-                                      </div>
-                                      <div class="form-group">
-                                          <label for="state">State</label>
-                                          <select id="state" class="form-control" name="state">
-                                              <option value="">Select State</option>
-                                              <option value="Karnataka">Karnataka</option>
-                                              <option value="Kerala">Kerala</option>
-                                              <option value="TamilNadu">TamilNadu</option>
-                                              <option value="AndraPradesh">AndraPradesh</option>
-                                              <!-- Add more options for other states -->
-                                          </select>
-                                      </div>
+                                </div>
+                                <div class="form-row g-0">
+                                  <div class="form-group ">
+                                    <label for="city">City</label>
+                                    <input type="text" class="form-control" id="city" name="city">
+                                    <small id="city-error" class="text-danger"></small>
                                   </div>
                                   <div class="form-group">
-                                      <label for="phone">Phone</label>
-                                      <input type="number" class="form-control" id="phone" name="phone">
+                                    <label for="state">State</label>
+                                    <select id="state" class="form-control" name="state">
+                                      <option value="">Select State</option>
+                                      <option value="Karnataka">Karnataka</option>
+                                      <option value="Kerala">Kerala</option>
+                                      <option value="TamilNadu">TamilNadu</option>
+                                      <option value="AndraPradesh">AndraPradesh</option>
+                                      <!-- Add more options for other states -->
+                                    </select>
+                                    <small id="state-error" class="text-danger"></small>
                                   </div>
-                                  <div class="form-group">
-                                      <label for="pincode">Pincode</label>
-                                      <input type="number" class="form-control" id="pincode" name="pincode">
-                                  </div>
-                                  <div id="error-message" class="text-danger"></div>
+                                </div>
+                                <div class="form-group">
+                                  <label for="phone">Phone</label>
+                                  <input type="number" class="form-control" id="phone" name="phone">
+                                  <small id="phone-error" class="text-danger"></small>
+                                </div>
+                                <div class="form-group">
+                                  <label for="pincode">Pincode</label>
+                                  <input type="number" class="form-control" id="pincode" name="pincode">
+                                  <small id="pincode-error" class="text-danger"></small>
+                                </div>
+                                <div id="error-message" class="text-danger">Please fill all input field with valid inputs</div>
                               </div>
                               <div class="modal-footer">
-                                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                  <button type="submit" class="btn btn-success">Add New Address</button>
+                                <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                                <button type="submit" class="btn btn-success">Add New Address</button>
                               </div>
-                          </form>
-                          
+                            </form>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
+                      <script>
+                        document.getElementById('addressForm').addEventListener('submit', function(event) {
+                          console.log('Form submitted'); // Add this line
+                        // document.getElementById('addressForm').addEventListener('submit', function(event) {
+                          const name = document.getElementById('name').value;
+                          const locality = document.getElementById('locality').value;
+                          const street = document.getElementById('street').value.trim();
+                          const city = document.getElementById('city').value.trim();
+                          const state = document.getElementById('state').value.trim();
+                          const phone = document.getElementById('phone').value.trim();
+                          const pincode = document.getElementById('pincode').value.trim();
+
+                          const nameError = document.getElementById('name-error');
+                          const localityError = document.getElementById('locality-error');
+                          const streetError = document.getElementById('street-error');
+                          const cityError = document.getElementById('city-error');
+                          const stateError = document.getElementById('state-error');
+                          const phoneError = document.getElementById('phone-error');
+                          const pincodeError = document.getElementById('pincode-error');
+                          console.log("haaai");
+
+                          let isValid = true;
+                          // Reset errors
+                          nameError.textContent = '';
+                          localityError.textContent = '';
+                          streetError.textContent = '';
+                          cityError.textContent = '';
+                          stateError.textContent = '';
+                          phoneError.textContent = '';
+                          pincodeError.textContent = '';
+
+                          if (!name) {
+                            nameError.textContent = 'Name is required';
+                            console.log("sadfkahksd");
+                            isValid = false;
+                          }
+
+                          if (!locality) {
+                            localityError.textContent = 'Locality is required';
+                            console.log("jhgj");
+                            isValid = false;
+                          }
+                          if (!street) {
+                            streetError.textContent = 'Street is required';
+                            isValid = false;
+                          }
+                          if (!city) {
+                            cityError.textContent = 'City is required';
+                            isValid = false;
+                          }
+                          if (!state) {
+                            stateError.textContent = 'State is required';
+                            isValid = false;
+                          }
+                          if (!phone) {
+                            phoneError.textContent = 'Phone is required';
+                            isValid = false;
+                          } else if (!/^\d{10}$/.test(phone)) {
+                            phoneError.textContent = 'Phone number must be 10 digits';
+                            isValid = false;
+                          }
+                          if (!pincode) {
+                            pincodeError.textContent = 'Pincode is required';
+                            isValid = false;
+                          } else if (!/^\d{6}$/.test(pincode)) {
+                            pincodeError.textContent = 'Pincode must be 6 digits';
+                            isValid = false;
+                          }
+                          if (!isValid) {
+                            event.preventDefault(); // Prevent form submission if there are errors
+                          }
+                        });
+                      </script>
+
 
 
                   <div class="tab-pane fade <%= initialTab === 'changePass' ? 'show active' : '' %>" id="password-info" role="tabpanel" aria-labelledby="change-password-tab">

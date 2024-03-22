@@ -280,6 +280,10 @@ let submitEditCoupon = async (req, res) => {
   res.redirect('/vendor/couponList');
 };
 
+let deleteCoupon = async (req,res) => {
+  
+}
+
 // let submitEditCoupon = async (req,res) => {
 //   let couponId = req.params.couponId;
 //   let vendor = await Vendor.findOne({_id:req.user.id});
