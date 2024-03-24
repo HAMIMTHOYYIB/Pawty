@@ -281,21 +281,12 @@ let submitEditCoupon = async (req, res) => {
 };
 
 let deleteCoupon = async (req,res) => {
-  
+  let {couponId} = req.body;
+  let vendor = await Vendor.findById(req.user.id);
+  vendor.coupons = vendor.coupons.filter(coup => coup._id.toString() !== couponId)
+  await vendor.save();
+  res.json({message:"coupon removed succesfully"})
 }
-
-// let submitEditCoupon = async (req,res) => {
-//   let couponId = req.params.couponId;
-//   let vendor = await Vendor.findOne({_id:req.user.id});
-//   if(!vendor){
-//     return res.status(404).send('Vendor Not found')
-//   }
-//   let {status,startDate,endDate,couponCode,category,subCategory,limit,type,value} = req.body;
-//   let updatedCoup = {status,startDate,couponCode,category,subCategory,limit,type,value};
-//   let coupon = vendor.coupons.filter(val => val._id.toString() === couponId)[0]
-//   console.log("coupon:",coupon);
-// }
-
 
 // FORGOT PASSWORD 
 let forgotGetPage = async (req, res) => {
@@ -427,6 +418,7 @@ module.exports = {
     submitAddCoupon,
     editCoupon,
     submitEditCoupon,
+    deleteCoupon,
 
     vendorForgotPass,
     resetVendorPass,

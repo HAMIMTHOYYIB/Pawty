@@ -288,7 +288,8 @@ let checkCoupon = async (req, res) => {
     if (coupon[0] && coupon[0].status === 'Active') {
       let currentDate = new Date();
       let endDate = new Date(coupon[0].endDate);
-      if (currentDate <= endDate) {
+      let startDate = new Date(coupon[0].startDate);
+      if (currentDate <= endDate && currentDate >= startDate) {
         let value;
         if (coupon[0].type === 'percentage') {
           let user = await User.findOne({_id:req.user.id});
@@ -375,6 +376,13 @@ let removefromwishlist = async (req,res) => {
   } catch (error) {
     res.status(500).send("Internal Server Error on product removal in wishlist");
   }
+}
+
+
+// checkout
+let getCheckout = async (req,res) => {
+  let user = await User.findById(req.user.id);
+  res.render('users/checkout',{user})
 }
 
 // Get UserLoginPage
@@ -611,24 +619,32 @@ let userLogout = (req, res) => {
 
 module.exports={
     homePage,
+
     account,
     editProfile,
     changePass,
+
     accountAddress,
     accountChangePass,
     addAddress,
     editAddress,
     deleteAddress,
+
     shop,
     product,
+
     getcart,
     addtocart,
     changeQuantity,
     removefromcart,
     checkCoupon,
+
     getwishlist,
     addtowishlist,
     removefromwishlist,
+
+    getCheckout,
+
     loginPage,
     submitlogin,
     signupPage,

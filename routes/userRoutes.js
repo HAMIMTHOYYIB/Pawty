@@ -43,6 +43,8 @@ router.get('/wishlist',userAuth,userController.getwishlist);
 router.post('/addToWishlist',userAuth,userController.addtowishlist);
 router.post('/removeFromWishlist',userAuth,userController.removefromwishlist);
 
+
+router.get('/checkout',userAuth,userController.getCheckout)
 // Logout
 router.get('/logout',userController.userLogout);
 

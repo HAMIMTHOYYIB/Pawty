@@ -354,7 +354,7 @@
                         .then(response => {
                         // Handle the response as needed
                         console.log('Coupon removed:', response.data);
-                        button.closest('.tbody-item').remove(); //remove the specific row  
+                        button.closest('.tbody-item').remove(); 
                         })
                         .catch(error => {
                         console.error('Error removing coupon :', error.response);
@@ -513,7 +513,7 @@
     <script src="/assets/bundles/dataTables.bundle.js"></script>
 
     <!-- Jquery Page Js -->
-    <script src="../js/template.js"></script>
+    <script src="/assets/js/template.js"></script>
     <script>
         // project data table
         $(document).ready(function() {
@@ -537,6 +537,4 @@
         });
     </script>
 </body>
-
-<!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/coupons-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Feb 2024 11:51:13 GMT -->
 </html>

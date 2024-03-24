@@ -14,7 +14,7 @@
     <title>Checkout :: Tuime - Animal Food Website Template</title>
 
     <!--== Favicon ==-->
-    <link rel="shortcut icon" href="/public/assets/img/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="/assets/img/favicon.ico" type="image/x-icon" />
 
     <!--== Google Fonts ==-->
     <link rel="preconnect" href="https://fonts.googleapis.com/">
@@ -22,20 +22,36 @@
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600&amp;display=swap" rel="stylesheet">
 
     <!--== Bootstrap CSS ==-->
-    <link href="/public/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" />
     <!--== Font Awesome Min Icon CSS ==-->
-    <link href="/public/assets/css/font-awesome.min.css" rel="stylesheet" />
+    <link href="/assets/css/font-awesome.min.css" rel="stylesheet" />
     <!--== 7 Stroke Icon CSS ==-->
-    <link href="/public/assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
+    <link href="/assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
     <!--== Swiper CSS ==-->
-    <link href="/public/assets/css/swiper.min.css" rel="stylesheet" />
+    <link href="/assets/css/swiper.min.css" rel="stylesheet" />
     <!--== Fancybox Min CSS ==-->
-    <link href="/public/assets/css/fancybox.min.css" rel="stylesheet" />
+    <link href="/assets/css/fancybox.min.css" rel="stylesheet" />
     <!--== Range Slider Min CSS ==-->
-    <link href="/public/assets/css/ion.rangeSlider.min.css" rel="stylesheet" />
+    <link href="/assets/css/ion.rangeSlider.min.css" rel="stylesheet" />
 
     <!--== Main Style CSS ==-->
-    <link href="/public/assets/css/style.css" rel="stylesheet" />
+    <link href="/assets/css/style.css" rel="stylesheet" />
+
+    <style>
+      .address-card {
+          border: 1px solid #ccc;
+          padding: 10px;
+          margin-bottom: 10px;
+          height: 300px;
+          position: relative;
+      }
+
+      .address-card input[type="radio"] {
+          position: absolute;
+          top: 10px;
+          right: 10px;
+      }
+  </style>
 </head>
 
 <body>
@@ -53,82 +69,24 @@
   <!--== End Preloader Content ==-->
 
   <!--== Start Header Wrapper ==-->
-  <header class="header-area header-default" data-bg-img="/public/assets/img/photos/asset32.png">
+  <header class="header-area header-default" data-bg-img="assets/img/photos/asset32.png">
     <div class="container">
       <div class="row no-gutter align-items-center position-relative">
         <div class="col-12">
           <div class="header-align">
             <div class="header-align-start">
               <div class="header-logo-area">
-                <a href="index.html">
-                  <img class="logo-main" src="/public/assets/img/logo-light.png" alt="Logo" />
+                <a href="/">
+                  <img class="logo-main" src="assets/img/logo-light.png" width="158" height="36" alt="Logo" />
                 </a>
               </div>
             </div>
             <div class="header-align-center">
               <div class="header-navigation-area position-relative">
                 <ul class="main-menu nav">
-                  <li class="has-submenu"><a href="#/"><span>Home</span></a>
-                    <ul class="submenu-nav">
-                      <li><a href="index.html"><span>Home One</span></a></li>
-                      <li><a href="index-two.html"><span>Home Two</span></a></li>
-                    </ul>
-                  </li>
+                  <li><a href="/"><span>Home</span></a></li>
                   <li><a href="about-us.html"><span>About</span></a></li>
-                  <li class="has-submenu position-static"><a href="#/"><span>Shop</span></a>
-                    <ul class="submenu-nav submenu-nav-mega column-3">
-                      <li class="mega-menu-item"><a href="#/" class="mega-title"><span>Shop Layout</span></a>
-                        <ul>
-                          <li><a href="shop-three-columns.html"><span>Shop 3 Column</span></a></li>
-                          <li><a href="shop-four-columns.html"><span>Shop 4 Column</span></a></li>
-                          <li><a href="shop-left-sidebar.html"><span>Shop Left Sidebar</span></a></li>
-                          <li><a href="shop.html"><span>Shop Right Sidebar</span></a></li>
-                        </ul>
-                      </li>
-                      <li class="mega-menu-item"><a href="#/" class="mega-title"><span>Single Product</span></a>
-                        <ul>
-                          <li><a href="single-normal-product.html"><span>Single Product Normal</span></a></li>
-                          <li><a href="single-product.html"><span>Single Product Variable</span></a></li>
-                          <li><a href="single-group-product.html"><span>Single Product Group</span></a></li>
-                          <li><a href="single-affiliate-product.html"><span>Single Product Affiliate</span></a></li>
-                        </ul>
-                      </li>
-                      <li class="mega-menu-item"><a href="#/" class="mega-title"><span>Others Pages</span></a>
-                        <ul>
-                          <li><a href="shop-cart.html"><span>Shopping Cart</span></a></li>
-                          <li><a href="shop-checkout.html"><span>Checkout</span></a></li>
-                          <li><a href="shop-wishlist.html"><span>Wishlist</span></a></li>
-                          <li><a href="shop-compare.html"><span>Compare</span></a></li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="has-submenu"><a href="#/"><span>Blog</span></a>
-                    <ul class="submenu-nav submenu-nav-mega">
-                      <li class="mega-menu-item"><a href="#/" class="mega-title">Blog Layout</a>
-                        <ul>
-                          <li><a href="blog-grid.html">Blog Grid</a></li>
-                          <li><a href="blog.html">Blog Left Sidebar</a></li>
-                          <li><a href="blog-right-sidebar.html">Blog Right Sidebar</a></li>
-                        </ul>
-                      </li>
-                      <li class="mega-menu-item"><a href="#/" class="mega-title">Single Blog</a>
-                        <ul>
-                          <li><a href="blog-details-no-sidebar.html">Blog Details</a></li>
-                          <li><a href="blog-details.html">Blog Details Left Sidebar</a></li>
-                          <li><a href="blog-details-right-sidebar.html">Blog Details Right Sidebar</a></li>
-                        </ul>
-                      </li>
-                    </ul>
-                  </li>
-                  <li class="has-submenu"><a href="#/"><span>Pages</span></a>
-                    <ul class="submenu-nav">
-                      <li><a href="account.html"><span>Account</span></a></li>
-                      <li><a href="account-login.html"><span>Login</span></a></li>
-                      <li><a href="account-register.html"><span>Register</span></a></li>
-                      <li><a href="page-not-found.html"><span>Page Not Found</span></a></li>
-                    </ul>
-                  </li>
+                  <li><a href="/shop"><span>Shop</span></a></li>
                   <li><a href="contact.html"><span>Contact</span></a></li>
                 </ul>
               </div>
@@ -138,20 +96,21 @@
                 <div class="shopping-search">
                   <button class="shopping-search-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasSearch" aria-controls="AsideOffcanvasSearch"><i class="pe-7s-search icon"></i></button>
                 </div>
+                
                 <div class="shopping-account">
-                  <a class="shopping-account-btn" href="account-login.html">
+                  <a class="shopping-account-btn" href="/account">
                     <i class="pe-7s-users icon"></i>
                   </a>
                 </div>
                 <div class="shopping-wishlist">
-                  <a class="shopping-wishlist-btn" href="shop-wishlist.html">
+                  <a class="shopping-wishlist-btn" href="/wishlist">
                     <i class="pe-7s-like icon"></i>
                   </a>
                 </div>
-                <div class="shopping-cart">
+                <div class="shopping-cart Active">
                   <button class="shopping-cart-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasCart" aria-controls="AsideOffcanvasCart">
                     <i class="pe-7s-shopbag icon"></i>
-                    <sup class="shop-count">2</sup>
+                    <sup class="shop-count"><%= user.cart.products.length %></sup>
                   </button>
                 </div>
                 <button class="btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasMenu" aria-controls="AsideOffcanvasMenu">
@@ -168,7 +127,7 @@
   
   <main class="main-content">
     <!--== Start Page Header Area Wrapper ==-->
-    <div class="page-header-area" data-bg-img="/public/assets/img/photos/header-bg.jpg">
+    <div class="page-header-area" data-bg-img="/assets/img/photos/header-bg.jpg">
       <div class="container pt--0 pb--0">
         <div class="row">
           <div class="col-12">
@@ -231,191 +190,27 @@
           <div class="col-lg-6">
             <!--== Start Billing Accordion ==-->
             <div class="checkout-billing-details-wrap">
-              <h2 class="title">Billing details</h2>
+              <h2 class="title">Select Billing Address</h2>
               <div class="billing-form-wrap">
-                <form action="#" method="post">
+                <form>
                   <div class="row">
+                    <% user.address.forEach(add => { %>
                     <div class="col-md-6">
-                      <div class="form-group">
-                        <label for="f_name">First name <abbr class="required" title="required">*</abbr></label>
-                        <input id="f_name" type="text"  class="form-control">
-                      </div>
-                    </div>
-                    <div class="col-md-6">
-                      <div class="form-group">
-                        <label for="l_name">Last name <abbr class="required" title="required">*</abbr></label>
-                        <input id="l_name" type="text"  class="form-control">
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label for="com_name">Company name (optional)</label>
-                        <input id="com_name" type="text"  class="form-control">
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label for="country">Country <abbr class="required" title="required">*</abbr></label>
-                        <select id="country" class="form-control">
-                          <option>Bangladesh</option>
-                          <option>Afghanistan</option>
-                          <option>Albania</option>
-                          <option>Algeria</option>
-                          <option>Armenia</option>
-                          <option>India</option>
-                          <option>Pakistan</option>
-                          <option>England</option>
-                          <option>London</option>
-                          <option>London</option>
-                          <option>China</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label for="street-address">Street address <abbr class="required" title="required">*</abbr></label>
-                        <input id="street-address" type="text"  class="form-control" placeholder="House number and street name">
-                      </div>
-                      <div class="form-group">
-                        <label for="street-address2" class="visually-hidden">Street address 2 <abbr class="required" title="required">*</abbr></label>
-                        <input id="street-address2" type="text"  class="form-control" placeholder="Apartment, suite, unit etc. (optional)">
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label for="town">Town / City <abbr class="required" title="required">*</abbr></label>
-                        <input id="town" type="text"  class="form-control">
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label for="district">District <abbr class="required" title="required">*</abbr></label>
-                        <select id="district" class="form-control">
-                          <option>Afghanistan</option>
-                          <option>Albania</option>
-                          <option>Algeria</option>
-                          <option>Armenia</option>
-                          <option>India</option>
-                          <option>Pakistan</option>
-                          <option>England</option>
-                          <option>London</option>
-                          <option>London</option>
-                          <option>China</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label for="pz-code">Postcode / ZIP (optional)</label>
-                        <input id="pz-code" type="text"  class="form-control">
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label for="phone">Phone (optional)</label>
-                        <input id="phone" type="text"  class="form-control">
-                      </div>
-                    </div>
-                    <div class="col-md-12">
-                      <div class="form-group" data-margin-bottom="30">
-                        <label for="email">Email address <abbr class="required" title="required">*</abbr></label>
-                        <input id="email" type="text"  class="form-control">
-                      </div>
-                    </div>
-                    <div id="CheckoutBillingAccordion2" class="col-md-12">
-                      <div class="checkout-box" data-margin-bottom="25" data-bs-toggle="collapse" data-bs-target="#CheckoutTwo" aria-expanded="false" role="toolbar">
-                        <div class="custom-control custom-checkbox">
-                          <input type="checkbox" class="custom-control-input visually-hidden" id="ship-to-different-address">
-                          <label class="custom-control-label" for="ship-to-different-address">Ship to a different address?</label>
-                        </div>
-                      </div>
-                      <div id="CheckoutTwo" class="collapse" data-margin-top="30"  data-bs-parent="#CheckoutBillingAccordion2">
-                        <div class="row">
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label for="f_name2">First name <abbr class="required" title="required">*</abbr></label>
-                              <input id="f_name2" type="text"  class="form-control">
-                            </div>
+                          <div class="address-card">
+                              <input type="radio" name="address" id="<%= add._id %>" value="<%= add._id %>" checked>
+                              <label for="<%= add._id %>"><strong>Name:</strong><%= add.name %></label><br>
+                              <strong>Address:</strong> <br>
+                              Street: <%= add.locality %><br>
+                              Locality: <%= add.street %><br>
+                              City: <%= add.city %><br>
+                              State: <%= add.state %><br>
+                              Pincode: <%= add. pincode%><br>
+                              <strong>Phone:</strong> <%= add.phone %>
                           </div>
-                          <div class="col-md-6">
-                            <div class="form-group">
-                              <label for="l_name2">Last name <abbr class="required" title="required">*</abbr></label>
-                              <input id="l_name2" type="text"  class="form-control">
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label for="com_name2">Company name (optional)</label>
-                              <input id="com_name2" type="text"  class="form-control">
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label for="country2">Country <abbr class="required" title="required">*</abbr></label>
-                              <select id="country2" class="form-control">
-                                <option>Bangladesh</option>
-                                <option>Afghanistan</option>
-                                <option>Albania</option>
-                                <option>Algeria</option>
-                                <option>Armenia</option>
-                                <option>India</option>
-                                <option>Pakistan</option>
-                                <option>England</option>
-                                <option>London</option>
-                                <option>London</option>
-                                <option>China</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label for="street-address2-3">Street address <abbr class="required" title="required">*</abbr></label>
-                              <input id="street-address2-3" type="text"  class="form-control" placeholder="House number and street name">
-                            </div>
-                            <div class="form-group">
-                              <label for="street-address2-2" class="visually-hidden">Street address 2 <abbr class="required" title="required">*</abbr></label>
-                              <input id="street-address2-2" type="text"  class="form-control" placeholder="Apartment, suite, unit etc. (optional)">
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label for="town3">Town / City <abbr class="required" title="required">*</abbr></label>
-                              <input id="town3" type="text"  class="form-control">
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label for="district2">District <abbr class="required" title="required">*</abbr></label>
-                              <select id="district2" class="form-control">
-                                <option>Afghanistan</option>
-                                <option>Albania</option>
-                                <option>Algeria</option>
-                                <option>Armenia</option>
-                                <option>India</option>
-                                <option>Pakistan</option>
-                                <option>England</option>
-                                <option>London</option>
-                                <option>London</option>
-                                <option>China</option>
-                              </select>
-                            </div>
-                          </div>
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label for="pz-code2">Postcode / ZIP (optional)</label>
-                              <input id="pz-code2" type="text"  class="form-control">
-                            </div>
-                          </div>
-                        </div>
-                      </div>
                     </div>
-                    <div class="col-md-12">
-                      <div class="form-group mb--0">
-                        <label for="order-notes">Order notes (optional)</label>
-                        <textarea id="order-notes" class="form-control" placeholder="Notes about your order, e.g. special notes for delivery."></textarea>
-                      </div>
-                    </div>
+                    <% }) %>
                   </div>
+                  <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
                 </form>
               </div>
             </div>
@@ -434,27 +229,29 @@
                     </tr>
                   </thead>
                   <tbody class="table-body">
+                    <% user.cart.products.forEach(prod => { %>
                     <tr class="cart-item">
-                      <td class="product-name">Satin gown <span class="product-quantity">× 1</span></td>
-                      <td class="product-total">£69.99</td>
+                      <td class="product-name"><%= prod.productName  %> <span class="product-quantity">× <%= prod.quantity%></span></td>
+                      <td class="product-total">£<%= prod.price %></td>
                     </tr>
-                    <tr class="cart-item">
-                      <td class="product-name">Printed cotton t-shirt <span class="product-quantity">× 1</span></td>
-                      <td class="product-total">£20.00</td>
-                    </tr>
+                    <% }) %>
                   </tbody>
                   <tfoot class="table-foot">
                     <tr class="cart-subtotal">
                       <th>Subtotal</th>
-                      <td>£89.99</td>
+                      <td>£<%= user.cart.total %></td>
+                    </tr>
+                    <tr class="cart-discount">
+                      <th>Discount</th>
+                      <td>£<%= user.cart.discount %></td>
                     </tr>
                     <tr class="shipping">
                       <th>Shipping</th>
-                      <td>Flat rate: £2.00</td>
+                      <td>£ 0.00</td>
                     </tr>
                     <tr class="order-total">
                       <th>Total </th>
-                      <td>£91.99</td>
+                      <td>£<%= user.cart.total - user.cart.discount %></td>
                     </tr>
                   </tfoot>
                 </table>
@@ -620,7 +417,7 @@
             <div class="footer-bottom-content">
               <p class="copyright">© 2021 Tuime. Made with <i class="fa fa-heart"></i> by <a target="_blank" href="https://themeforest.net/user/codecarnival">Codecarnival.</a></p>
               <div class="payment">
-                <a href="account.html"><img src="/public/assets/img/photos/payment.png" width="192" height="21" alt="Payment Logo"></a>
+                <a href="account.html"><img src="/assets/img/photos/payment.png" width="192" height="21" alt="Payment Logo"></a>
               </div>
             </div>
           </div>
@@ -648,7 +445,7 @@
             </div>
             <div class="modal-action-product">
               <div class="thumb">
-                <img src="/public/assets/img/shop/modal1.jpg" alt="Organic Food Juice" width="466" height="320">
+                <img src="/assets/img/shop/modal1.jpg" alt="Organic Food Juice" width="466" height="320">
               </div>
               <h4 class="product-name"><a href="single-product.html">Joust Duffle Bag</a></h4>
             </div>
@@ -673,7 +470,7 @@
             </div>
             <div class="modal-action-product">
               <div class="thumb">
-                <img src="/public/assets/img/shop/modal1.jpg" alt="Organic Food Juice" width="466" height="320">
+                <img src="/assets/img/shop/modal1.jpg" alt="Organic Food Juice" width="466" height="320">
               </div>
               <h4 class="product-name"><a href="single-product.html">Joust Duffle Bag</a></h4>
             </div>
@@ -698,7 +495,7 @@
                 <div class="col-lg-6">
                   <!--== Start Product Thumbnail Area ==-->
                   <div class="product-single-thumb">
-                    <img src="/public/assets/img/shop/quick-view1.jpg" width="544" height="560" alt="Image-HasTech">
+                    <img src="/assets/img/shop/quick-view1.jpg" width="544" height="560" alt="Image-HasTech">
                   </div>
                   <!--== End Product Thumbnail Area ==-->
                 </div>
@@ -773,7 +570,7 @@
         <li class="aside-product-list-item">
           <a href="#/" class="remove">×</a>
           <a href="single-product.html">
-            <img src="/public/assets/img/shop/product-mini/1.jpg" width="90" height="110" alt="Image-HasTech">
+            <img src="/assets/img/shop/product-mini/1.jpg" width="90" height="110" alt="Image-HasTech">
             <span class="product-title">Leather Mens Slipper</span>
           </a>
           <span class="product-price">1 × £69.99</span>
@@ -781,7 +578,7 @@
         <li class="aside-product-list-item">
           <a href="#/" class="remove">×</a>
           <a href="single-product.html">
-            <img src="/public/assets/img/shop/product-mini/2.jpg" width="90" height="110" alt="Image-HasTech">
+            <img src="/assets/img/shop/product-mini/2.jpg" width="90" height="110" alt="Image-HasTech">
             <span class="product-title">Quickiin Mens shoes</span>
           </a>
           <span class="product-price">1 × £20.00</span>
@@ -790,7 +587,7 @@
       <p class="cart-total"><span>Subtotal:</span><span class="amount">£89.99</span></p>
       <a class="btn-total" href="shop-cart.html">View cart</a>
       <a class="btn-total" href="shop-checkout.html">Checkout</a>
-      <a class="d-block text-end lh-1" href="shop-checkout.html"><img src="/public/assets/img/photos/paypal.webp" width="133" height="26" alt="Has-image"></a>
+      <a class="d-block text-end lh-1" href="shop-checkout.html"><img src="/assets/img/photos/paypal.webp" width="133" height="26" alt="Has-image"></a>
     </div>
   </aside>
   <!--== End Aside Cart ==-->
@@ -915,28 +712,28 @@
 <!--=======================Javascript============================-->
 
 <!--=== jQuery Modernizr Min Js ===-->
-<script src="/public/assets/js/modernizr.js"></script>
+<script src="/assets/js/modernizr.js"></script>
 <!--=== jQuery Min Js ===-->
-<script src="/public/assets/js/jquery-main.js"></script>
+<script src="/assets/js/jquery-main.js"></script>
 <!--=== jQuery Migration Min Js ===-->
-<script src="/public/assets/js/jquery-migrate.js"></script>
+<script src="/assets/js/jquery-migrate.js"></script>
 <!--=== jQuery Popper Min Js ===-->
-<script src="/public/assets/js/popper.min.js"></script>
+<script src="/assets/js/popper.min.js"></script>
 <!--=== jQuery Bootstrap Min Js ===-->
-<script src="/public/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
 <!--=== jQuery Swiper Min Js ===-->
-<script src="/public/assets/js/swiper.min.js"></script>
+<script src="/assets/js/swiper.min.js"></script>
 <!--=== jQuery Fancybox Min Js ===-->
-<script src="/public/assets/js/fancybox.min.js"></script>
+<script src="/assets/js/fancybox.min.js"></script>
 <!--=== jQuery Countdown Min Js ===-->
-<script src="/public/assets/js/countdown.js"></script>
+<script src="/assets/js/countdown.js"></script>
 <!--=== jQuery Isotope Min Js ===-->
-<script src="/public/assets/js/isotope.pkgd.min.js"></script>
+<script src="/assets/js/isotope.pkgd.min.js"></script>
 <!--=== jQuery Range Slider Min Js ===-->
-<script src="/public/assets/js/ion.rangeSlider.min.js"></script>
+<script src="/assets/js/ion.rangeSlider.min.js"></script>
 
 <!--=== jQuery Custom Js ===-->
-<script src="/public/assets/js/custom.js"></script>
+<script src="/assets/js/custom.js"></script>
 
 </body>
 

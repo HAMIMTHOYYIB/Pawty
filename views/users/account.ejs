@@ -142,7 +142,7 @@
                 <nav>
                   <div class="myaccount-tab-menu nav nav-tabs" id="nav-tab" role="tablist">
                     <button class="nav-link <%= initialTab === 'dashboard' ? 'active' : '' %>" id="dashboad-tab" data-bs-toggle="tab" data-bs-target="#dashboad" type="button" role="tab" aria-controls="dashboad" aria-selected="<%= initialTab === 'dashboard' %>">Dashboard</button>
-                    <button class="nav-link <%= initialTab === 'orders' ? 'active' : '' %>" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab" aria-controls="orders" aria-selected="<%= initialTab === 'orders' %>"> Order History</button>
+                    <button class="nav-link <%= initialTab === 'orders' ? 'active' : '' %>" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab" aria-controls="orders" aria-selected="<%= initialTab === 'orders' %>"> Orders</button>
                     <!-- <button class="nav-link" id="download-tab" data-bs-toggle="tab" data-bs-target="#download" type="button" role="tab" aria-controls="download" aria-selected="false">Download</button> -->
                     <button class="nav-link" id="payment-method-tab" data-bs-toggle="tab" data-bs-target="#payment-method" type="button" role="tab" aria-controls="payment-method" aria-selected="false">Payment Method</button>
                     <button class="nav-link nav-link <%= initialTab === 'address-edit' ? 'active' : '' %>" id="address-edit-tab" data-bs-toggle="tab" data-bs-target="#address-edit" type="button" role="tab" aria-controls="address-edit" aria-selected="<%= initialTab === 'address-edit' %>">address</button>
@@ -595,82 +595,8 @@
                           </div>
                         </div>
                       </div>
-                      <script>
-                        document.getElementById('addressForm').addEventListener('submit', function(event) {
-                          console.log('Form submitted'); // Add this line
-                        // document.getElementById('addressForm').addEventListener('submit', function(event) {
-                          const name = document.getElementById('name').value;
-                          const locality = document.getElementById('locality').value;
-                          const street = document.getElementById('street').value.trim();
-                          const city = document.getElementById('city').value.trim();
-                          const state = document.getElementById('state').value.trim();
-                          const phone = document.getElementById('phone').value.trim();
-                          const pincode = document.getElementById('pincode').value.trim();
-
-                          const nameError = document.getElementById('name-error');
-                          const localityError = document.getElementById('locality-error');
-                          const streetError = document.getElementById('street-error');
-                          const cityError = document.getElementById('city-error');
-                          const stateError = document.getElementById('state-error');
-                          const phoneError = document.getElementById('phone-error');
-                          const pincodeError = document.getElementById('pincode-error');
-                          console.log("haaai");
-
-                          let isValid = true;
-                          // Reset errors
-                          nameError.textContent = '';
-                          localityError.textContent = '';
-                          streetError.textContent = '';
-                          cityError.textContent = '';
-                          stateError.textContent = '';
-                          phoneError.textContent = '';
-                          pincodeError.textContent = '';
-
-                          if (!name) {
-                            nameError.textContent = 'Name is required';
-                            console.log("sadfkahksd");
-                            isValid = false;
-                          }
-
-                          if (!locality) {
-                            localityError.textContent = 'Locality is required';
-                            console.log("jhgj");
-                            isValid = false;
-                          }
-                          if (!street) {
-                            streetError.textContent = 'Street is required';
-                            isValid = false;
-                          }
-                          if (!city) {
-                            cityError.textContent = 'City is required';
-                            isValid = false;
-                          }
-                          if (!state) {
-                            stateError.textContent = 'State is required';
-                            isValid = false;
-                          }
-                          if (!phone) {
-                            phoneError.textContent = 'Phone is required';
-                            isValid = false;
-                          } else if (!/^\d{10}$/.test(phone)) {
-                            phoneError.textContent = 'Phone number must be 10 digits';
-                            isValid = false;
-                          }
-                          if (!pincode) {
-                            pincodeError.textContent = 'Pincode is required';
-                            isValid = false;
-                          } else if (!/^\d{6}$/.test(pincode)) {
-                            pincodeError.textContent = 'Pincode must be 6 digits';
-                            isValid = false;
-                          }
-                          if (!isValid) {
-                            event.preventDefault(); // Prevent form submission if there are errors
-                          }
-                        });
-                      </script>
-
-
-
+                    </div>
+                  </div>
                   <div class="tab-pane fade <%= initialTab === 'changePass' ? 'show active' : '' %>" id="password-info" role="tabpanel" aria-labelledby="change-password-tab">
                     <div class="myaccount-content">
                       <!-- <h3>Account Details</h3> -->
@@ -735,6 +661,80 @@
       </div>
       </div>
     </section>
+    <script>
+      document.getElementById('addressForm').addEventListener('submit', function(event) {
+        console.log('Form submitted'); // Add this line
+      // document.getElementById('addressForm').addEventListener('submit', function(event) {
+        const name = document.getElementById('name').value;
+        const locality = document.getElementById('locality').value;
+        const street = document.getElementById('street').value.trim();
+        const city = document.getElementById('city').value.trim();
+        const state = document.getElementById('state').value.trim();
+        const phone = document.getElementById('phone').value.trim();
+        const pincode = document.getElementById('pincode').value.trim();
+
+        const nameError = document.getElementById('name-error');
+        const localityError = document.getElementById('locality-error');
+        const streetError = document.getElementById('street-error');
+        const cityError = document.getElementById('city-error');
+        const stateError = document.getElementById('state-error');
+        const phoneError = document.getElementById('phone-error');
+        const pincodeError = document.getElementById('pincode-error');
+        console.log("haaai");
+
+        let isValid = true;
+        // Reset errors
+        nameError.textContent = '';
+        localityError.textContent = '';
+        streetError.textContent = '';
+        cityError.textContent = '';
+        stateError.textContent = '';
+        phoneError.textContent = '';
+        pincodeError.textContent = '';
+
+        if (!name) {
+          nameError.textContent = 'Name is required';
+          console.log("sadfkahksd");
+          isValid = false;
+        }
+
+        if (!locality) {
+          localityError.textContent = 'Locality is required';
+          console.log("jhgj");
+          isValid = false;
+        }
+        if (!street) {
+          streetError.textContent = 'Street is required';
+          isValid = false;
+        }
+        if (!city) {
+          cityError.textContent = 'City is required';
+          isValid = false;
+        }
+        if (!state) {
+          stateError.textContent = 'State is required';
+          isValid = false;
+        }
+        if (!phone) {
+          phoneError.textContent = 'Phone is required';
+          isValid = false;
+        } else if (!/^\d{10}$/.test(phone)) {
+          phoneError.textContent = 'Phone number must be 10 digits';
+          isValid = false;
+        }
+        if (!pincode) {
+          pincodeError.textContent = 'Pincode is required';
+          isValid = false;
+        } else if (!/^\d{6}$/.test(pincode)) {
+          pincodeError.textContent = 'Pincode must be 6 digits';
+          isValid = false;
+        }
+        if (!isValid) {
+          event.preventDefault(); // Prevent form submission if there are errors
+        }
+      });
+    </script>
+
     <script>
       document.getElementById('toggle-current-pwd').addEventListener('click', function() {
         var pwdInput = document.getElementById('current-pwd');
