@@ -22,6 +22,7 @@ router.post('/signupUser',userController.submitSignup);
 router.get('/account',userAuth,userController.account);
 router.post('/editprofile',userAuth,userController.editProfile);
 router.post('/changePassword',userAuth,userController.changePass);
+router.get('/orders',userAuth,userController.userOrder);
 
 // Address management
 router.get('/accountAddress',userAuth,userController.accountAddress);
@@ -38,13 +39,15 @@ router.post('/addToCart',userAuth,userController.addtocart);
 router.post('/updateCart',userAuth,userController.changeQuantity);
 router.post('/removeFromCart',userAuth,userController.removefromcart);
 router.post('/check-coupon',userAuth,userController.checkCoupon);
+router.post('/remove-coupon',userAuth,userController.removeCoupon)
 
 router.get('/wishlist',userAuth,userController.getwishlist);
 router.post('/addToWishlist',userAuth,userController.addtowishlist);
 router.post('/removeFromWishlist',userAuth,userController.removefromwishlist);
 
 
-router.get('/checkout',userAuth,userController.getCheckout)
+router.get('/checkout',userAuth,userController.getCheckout);
+router.post('/checkout',userAuth,userController.submitCheckout);
 // Logout
 router.get('/logout',userController.userLogout);
 

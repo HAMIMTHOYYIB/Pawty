@@ -148,8 +148,8 @@
     <!--== End Page Header Area Wrapper ==-->
 
     <!--== Start Shopping Checkout Area Wrapper ==-->
-    <section class="shopping-checkout-wrap">
-      <div class="container">
+    <section class="shopping-checkout-wrap my-0">
+      <div class="container my-0">
         <div class="row">
           <div class="col-12">
             <div class="checkout-page-coupon-wrap">
@@ -169,11 +169,11 @@
                           <div class="row">
                             <div class="col-md-6">
                               <div class="form-group">
-                                <input class="form-control" type="text" placeholder="Coupon code">
+                                <input class="form-control" id="coupon-code" type="text" placeholder="Coupon code">
                               </div>
                             </div>
                             <div class="col-md-6">
-                              <button type="button" class="btn-coupon">Apply coupon</button>
+                              <button id="apply-coupon-btn" type="button" class="btn-coupon">Apply coupon</button>
                             </div>
                           </div>
                         </form>
@@ -186,137 +186,273 @@
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col-lg-6">
-            <!--== Start Billing Accordion ==-->
-            <div class="checkout-billing-details-wrap">
-              <h2 class="title">Select Billing Address</h2>
-              <div class="billing-form-wrap">
-                <form>
-                  <div class="row">
-                    <% user.address.forEach(add => { %>
-                    <div class="col-md-6">
-                          <div class="address-card">
-                              <input type="radio" name="address" id="<%= add._id %>" value="<%= add._id %>" checked>
-                              <label for="<%= add._id %>"><strong>Name:</strong><%= add.name %></label><br>
-                              <strong>Address:</strong> <br>
-                              Street: <%= add.locality %><br>
-                              Locality: <%= add.street %><br>
-                              City: <%= add.city %><br>
-                              State: <%= add.state %><br>
-                              Pincode: <%= add. pincode%><br>
-                              <strong>Phone:</strong> <%= add.phone %>
-                          </div>
-                    </div>
-                    <% }) %>
-                  </div>
-                  <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
-                </form>
+        <form action="/checkout" method="post">
+          <div class="row my-0">
+            <div class="col-lg-6 my-0">
+              <div id="checktrue" style="display: none;" class="alert alert-success" role="alert">
+                Coupon applied successfully! <i class="fa fa-check text-success mt-1 ms-1"></i>
               </div>
-            </div>
-            <!--== End Billing Accordion ==-->
-          </div>
-          <div class="col-lg-6">
-            <!--== Start Order Details Accordion ==-->
-            <div class="checkout-order-details-wrap">
-              <div class="order-details-table-wrap table-responsive">
-                <h2 class="title mb-25">Your order</h2>
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th class="product-name">Product</th>
-                      <th class="product-total">Total</th>
-                    </tr>
-                  </thead>
-                  <tbody class="table-body">
-                    <% user.cart.products.forEach(prod => { %>
-                    <tr class="cart-item">
-                      <td class="product-name"><%= prod.productName  %> <span class="product-quantity">× <%= prod.quantity%></span></td>
-                      <td class="product-total">£<%= prod.price %></td>
-                    </tr>
-                    <% }) %>
-                  </tbody>
-                  <tfoot class="table-foot">
-                    <tr class="cart-subtotal">
-                      <th>Subtotal</th>
-                      <td>£<%= user.cart.total %></td>
-                    </tr>
-                    <tr class="cart-discount">
-                      <th>Discount</th>
-                      <td>£<%= user.cart.discount %></td>
-                    </tr>
-                    <tr class="shipping">
-                      <th>Shipping</th>
-                      <td>£ 0.00</td>
-                    </tr>
-                    <tr class="order-total">
-                      <th>Total </th>
-                      <td>£<%= user.cart.total - user.cart.discount %></td>
-                    </tr>
-                  </tfoot>
-                </table>
-                <div class="shop-payment-method">
-                  <div id="PaymentMethodAccordion">
-                    <div class="card">
-                      <div class="card-header" id="check_payments">
-                        <h5 class="title" data-bs-toggle="collapse" data-bs-target="#itemOne" aria-controls="itemOne" aria-expanded="true">Direct bank transfer</h5>
+              <div id="checkfalse" style="display: none;" class="alert alert-warning" role="alert">
+                  coupon expired or inActive! <i class="fa fa-times text-danger mt-1 ms-1"></i>
+              </div>
+              <!--== Start Billing Accordion ==-->
+              <div class="checkout-billing-details-wrap">
+                <h2 class="title">Select Billing Address</h2>
+                <div class="billing-form-wrap">
+                  <form>
+                    <div class="row">
+                      <% user.address.forEach(add => { %>
+                      <div class="col-md-6">
+                            <div class="address-card">
+                                <input type="radio" name="addressId" id="<%= add._id %>" value="<%= add._id %>" checked>
+                                <label for="<%= add._id %>"><strong>Name:</strong><%= add.name %></label><br>
+                                <strong>Address:</strong> <br>
+                                Street: <%= add.locality %><br>
+                                Locality: <%= add.street %><br>
+                                City: <%= add.city %><br>
+                                State: <%= add.state %><br>
+                                Pincode: <%= add. pincode%><br>
+                                <strong>Phone:</strong> <%= add.phone %>
+                            </div>
                       </div>
-                      <div id="itemOne" class="collapse show" aria-labelledby="check_payments" data-bs-parent="#PaymentMethodAccordion">
-                        <div class="card-body">
-                          <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.</p>
-                        </div>
-                      </div>
+                      <% }) %>
                     </div>
-                    <div class="card">
-                      <div class="card-header" id="check_payments2">
-                        <h5 class="title" data-bs-toggle="collapse" data-bs-target="#itemTwo" aria-controls="itemTwo" aria-expanded="false">Check payments</h5>
-                      </div>
-                      <div id="itemTwo" class="collapse" aria-labelledby="check_payments2" data-bs-parent="#PaymentMethodAccordion">
-                        <div class="card-body">
-                          <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card">
-                      <div class="card-header" id="check_payments3">
-                        <h5 class="title" data-bs-toggle="collapse" data-bs-target="#itemThree" aria-controls="itemTwo" aria-expanded="false">Cash on delivery</h5>
-                      </div>
-                      <div id="itemThree" class="collapse" aria-labelledby="check_payments3" data-bs-parent="#PaymentMethodAccordion">
-                        <div class="card-body">
-                          <p>Pay with cash upon delivery.</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="card">
-                      <div class="card-header" id="check_payments4">
-                        <h5 class="title" data-bs-toggle="collapse" data-bs-target="#itemFour" aria-controls="itemTwo" aria-expanded="false">PayPal Express Checkout</h5>
-                      </div>
-                      <div id="itemFour" class="collapse" aria-labelledby="check_payments4" data-bs-parent="#PaymentMethodAccordion">
-                        <div class="card-body">
-                          <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <p class="p-text">Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a href="#/">privacy policy.</a></p>
-                  <div class="agree-policy">
-                    <div class="custom-control custom-checkbox">
-                      <input type="checkbox" id="privacy" class="custom-control-input visually-hidden">
-                      <label for="privacy" class="custom-control-label">I have read and agree to the website terms and conditions <span class="required">*</span></label>
-                    </div>
-                  </div>
-                  <a href="account.html" class="btn-place-order">Place order</a>
+                    <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
+                  </form>
                 </div>
               </div>
+              <!--== End Billing Accordion ==-->
             </div>
-            <!--== End Order Details Accordion ==-->
+            <div class="col-lg-6">
+              <!--== Start Order Details Accordion ==-->
+              <div class="checkout-order-details-wrap">
+                <div class="order-details-table-wrap table-responsive">
+                  <h2 class="title mb-25">Your order</h2>
+                  <table class="table">
+                    <thead>
+                      <tr>
+                        <th class="product-name">Product</th>
+                        <th class="product-total">Total</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-body">
+                      <% user.cart.products.forEach(prod => { %>
+                      <tr class="cart-item">
+                        <td class="product-name text-dark"><%= prod.productName  %> <span class="product-quantity">× <%= prod.quantity%></span></td>
+                        <td class="product-total text-success">£ <%= prod.price*prod.quantity %></td>
+                      </tr>
+                      <% }) %>
+                    </tbody>
+                    <tfoot class="table-foot">
+                      <tr class="cart-subtotal">
+                        <th>Subtotal</th>
+                        <td class=" text-success">£<span id="amount" class=" text-success"><%= user.cart.total %></span></td>
+                      </tr>
+                      <tr class="cart-discount">
+                        <th>Discount</th>
+                        <td class=" text-success">£<span id="discountVal" class=" text-success"><%= user.cart.discount %></span></td>
+                      </tr>
+                      <tr class="shipping">
+                        <th>Shipping Charge</th>
+                        <td class="text-success">£ 0.00</td>
+                      </tr>
+                      <tr class="order-total">
+                        <th>Total </th>
+                        <td class=" text-success">£<span id="totVal" class=" text-success"><%= user.cart.total - user.cart.discount %></span></td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                  <div class="shop-payment-method">
+                    <div id="PaymentMethodAccordion">
+                      <div class="card">
+                        <div class="card-header" id="check_payments">
+                          <input type="radio" name="paymentMethod" value="bank" checked> Direct bank transfer
+                        </div>
+                        <div id="itemOne" class="collapse show" aria-labelledby="check_payments" data-bs-parent="#PaymentMethodAccordion">
+                          <div class="card-body">
+                            <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card">
+                        <div class="card-header" id="check_payments2">
+                          <input type="radio" name="paymentMethod" value="check"> Check payments
+                        </div>
+                        <div id="itemTwo" class="collapse" aria-labelledby="check_payments2" data-bs-parent="#PaymentMethodAccordion">
+                          <div class="card-body">
+                            <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card">
+                        <div class="card-header" id="check_payments3">
+                          <input type="radio" name="paymentMethod" value="cod"> Cash on delivery</h5>
+                        </div>
+                        <div id="itemThree" class="collapse" aria-labelledby="check_payments3" data-bs-parent="#PaymentMethodAccordion">
+                          <div class="card-body">
+                            <p>Pay with cash upon delivery.</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card">
+                        <div class="card-header" id="check_payments4">
+                          <input type="radio" name="paymentMethod" value="paypal">PayPal Express Checkout
+                        </div>
+                        <div id="itemFour" class="collapse" aria-labelledby="check_payments4" data-bs-parent="#PaymentMethodAccordion">
+                          <div class="card-body">
+                            <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <p class="p-text">Your personal data will be used to process your order, support your experience throughout this website, and for other purposes described in our <a href="#/">privacy policy.</a></p>
+                    <div class="agree-policy">
+                      <div class="custom-control custom-checkbox">
+                        <input type="checkbox" id="privacy" class="custom-control-input visually-hidden">
+                        <label for="privacy" class="custom-control-label">I have read and agree to the website terms and conditions <span class="required">*</span></label><br>
+                        <small id="errMsg" class="text-danger"></small>
+                      </div>
+                    </div>
+                    <button class="btn-place-order w-100" type="submit">Place Order</button>
+                    <!-- <a href="/placeOrder" class="btn-place-order">Place order</a> -->
+                  </div>
+                </div>
+              </div>
+              <!--== End Order Details Accordion ==-->
+            </div>
           </div>
-        </div>
+        </form>
       </div>
     </section>
     <!--== End Shopping Checkout Area Wrapper ==-->
   </main>
+  <script>
+    const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
+    const paymentCollapse = {
+        bank: document.getElementById('itemOne'),
+        check: document.getElementById('itemTwo'),
+        cod: document.getElementById('itemThree'),
+        paypal: document.getElementById('itemFour')
+    };
 
+    paymentRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            for (const key in paymentCollapse) {
+                if (radio.value === key) {
+                    paymentCollapse[key].classList.add('show');
+                } else {
+                    paymentCollapse[key].classList.remove('show');
+                }
+            }
+        });
+    });
+
+
+    document.querySelector('.btn-place-order').addEventListener('click', function(event) {
+      const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked');
+      const agreeCheckbox = document.getElementById('privacy');
+      const errMsg = document.getElementById('errMsg');
+      let isValid = true;
+
+      // Check if a payment method is selected
+      if (!selectedPayment) {
+        errMsg.innerText = 'Please select a payment method.';
+        isValid = false;
+      } else {
+        errMsg.innerText = '';
+      }
+
+      // Check if terms and conditions are agreed
+      if (!agreeCheckbox.checked) {
+        errMsg.innerText = 'Please agree to the terms and conditions.';
+        isValid = false;
+      } else if (errMsg.innerText === '') {
+        errMsg.innerText = '';
+      }
+
+      if (isValid) {
+        // Submit the form using Axios
+        axios.post('/checkout', {
+          addressId: addressId,
+          paymentMethod: selectedPayment.value
+        })
+        .then(function (response) {
+          // Handle the response
+          console.log(response);
+        })
+        .catch(function (error) {
+          // Handle the error
+          console.error(error);
+        });
+      } else {
+        event.preventDefault(); // Prevent form submission
+      }
+    });
+
+  </script>
+  <div id="userData" data-user='<%= JSON.stringify(user) %>'></div>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  <script>
+    const applyCouponBtn = document.getElementById('apply-coupon-btn');
+    const couponCodeInput = document.getElementById('coupon-code');
+    const tickmark = document.getElementById('checktrue');
+    const crossmark = document.getElementById('checkfalse');
+    const discountVal = document.getElementById('discountVal');
+    const totVal = document.getElementById('totVal');
+    const Amount = document.getElementById('amount');
+    const user = JSON.parse(document.getElementById('userData').dataset.user);
+
+    // Function to update UI and user object when applying or removing coupon
+    const updateCoupon = async (couponCode, remove = false) => {
+        try {
+            let response;
+            if (remove) {
+                response = await axios.post('/remove-coupon');
+            } else {
+                response = await axios.post('/check-coupon', { couponCode });
+            }
+
+            if (response.data.valid) {
+                tickmark.style.display = remove? 'none' : 'flex';
+                crossmark.style.display = 'none';
+                discountVal.textContent = remove ? 0 : response.data.value;
+                let tot = parseFloat(Amount.textContent) - parseFloat(discountVal.textContent);
+                totVal.textContent = tot;
+                applyCouponBtn.textContent = remove ? 'Apply Coupon' : 'Remove Coupon';
+                couponCodeInput.disabled = remove ? false : true;
+                couponCodeInput.placeholder = remove ? 'Coupon code' : 'Coupon Applied!';
+                user.cart.discount = remove ? 0 : response.data.value;
+            } else {
+                crossmark.style.display = 'flex';
+                tickmark.style.display = 'none';
+                discountVal.textContent = 0;
+                totVal.textContent = Amount.textContent - 0;
+            }
+        } catch (error) {
+            console.error('Failed to apply coupon:', error);
+        }
+    };
+
+    // Check if a coupon is already applied
+    if (user.cart.discount !== 0) {
+        tickmark.style.display = 'flex';
+        applyCouponBtn.textContent = "Remove Coupon";
+        couponCodeInput.disabled = true;
+        couponCodeInput.placeholder = 'Coupon Applied!';
+    }
+
+    // Add event listener to apply or remove coupon
+    applyCouponBtn.addEventListener('click', async () => {
+        const couponCode = couponCodeInput.value;
+        if (user.cart.discount !== 0) {
+            // Coupon is applied, so remove it
+            updateCoupon(couponCode, true);
+        } else {
+            // Coupon is not applied, so apply it
+            updateCoupon(couponCode);
+        }
+    });
+</script>
   <!--== Start Footer Area Wrapper ==-->
   <footer class="footer-area">
     <!--== Start Footer Main ==-->

@@ -145,6 +145,16 @@ let deleteAddress = async (req,res) => {
   res.redirect('/accountAddress');
 }
 
+let userOrder = async (req,res) => {
+  let userId = req.user.id;
+  let user = await User.findOne({_id:userId});
+  if(!user){
+    return res.status(400).send('User Not found');
+  }
+  const { tab } = req.query;
+  res.render('users/account', { initialTab:'orders',user});
+}
+
 // Get ProductPage
 let shop = async (req,res) => {
   let admin = await Admin.findOne();
@@ -164,6 +174,7 @@ let shop = async (req,res) => {
     return res.render('users/shop-org',{products,admin,user:undefined});
   }
 }
+
 
 // single product
 let product = async (req,res) => {
@@ -279,6 +290,7 @@ let changeQuantity = async (req, res) => {
   }
 }
 let checkCoupon = async (req, res) => {
+  let user = await User.findById(req.user.id)
   const { couponCode } = req.body;
   try {
     const VendorCoupons = await Vendor.find().select("coupons");
@@ -298,6 +310,8 @@ let checkCoupon = async (req, res) => {
         } else {
           value = coupon[0].value
         }
+        user.cart.discount = value
+        await user.save()
         res.json({ valid: true, value });
       } else {
         res.json({ valid: false, message: 'Coupon has expired' });
@@ -310,7 +324,16 @@ let checkCoupon = async (req, res) => {
     res.status(500).json({ error: 'Failed to check coupon' });
   }
 };
-
+let removeCoupon = async (req,res) => {
+  let user =  await User.findById(req.user.id);
+  if(!user){
+    return res.status(500).json({valid:false,message:'cannot find user'})
+  }
+  console.log("removed coupon");
+  user.cart.discount = 0;
+  user.save();
+  res.json({valid:true,message:'discount removed from the checkout'})
+}
 
 //wishlist
 let getwishlist = async (req,res) => {
@@ -382,7 +405,41 @@ let removefromwishlist = async (req,res) => {
 // checkout
 let getCheckout = async (req,res) => {
   let user = await User.findById(req.user.id);
-  res.render('users/checkout',{user})
+  res.render('users/checkout',{user,coupon:false})
+}
+let submitCheckout = async (req,res) => {
+  console.log("req :",req.body);
+  const { addressId, paymentMethod } = req.body;
+
+  try {
+    // Find the user
+    let user = await User.findById(req.user.id);
+  
+    // Create a new order object
+    let newOrder = new Order({
+      products: user.cart.products,
+      total: user.cart.total,
+      discount: user.cart.discount,
+      addressId: addressId,
+      paymentMethod: paymentMethod
+    });
+  
+    // Add the new order to the user's orders
+    user.orders.push(newOrder);
+  
+    // Clear the user's cart
+    user.cart = { products: [], total: 0, discount: 0 };
+  
+    // Save the user
+    await user.save();
+  
+    // Respond with a success message or redirect
+    res.status(200).redirect('/orders');
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }  
+
 }
 
 // Get UserLoginPage
@@ -623,6 +680,7 @@ module.exports={
     account,
     editProfile,
     changePass,
+    userOrder,
 
     accountAddress,
     accountChangePass,
@@ -644,6 +702,8 @@ module.exports={
     removefromwishlist,
 
     getCheckout,
+    removeCoupon,
+    submitCheckout,
 
     loginPage,
     submitlogin,

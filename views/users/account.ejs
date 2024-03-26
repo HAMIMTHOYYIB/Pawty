@@ -209,50 +209,7 @@
                       </div>
                     </div>
                   </div>
-                  <script>
-                    const editProfileForm = document.getElementById('editProfileForm');
-
-                    editProfileForm.addEventListener('submit', (event) => {
-                        event.preventDefault();
-
-                        const emailInput = document.getElementById('editEmail');
-                        const phoneInput = document.getElementById('editPhone');
-
-                        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                        const phoneRegex = /^\d{10}$/;
-
-                        let isValid = true;
-
-                        if (!emailRegex.test(emailInput.value)) {
-                            document.getElementById('emailError').innerText = 'Please enter a valid email address.';
-                            isValid = false;
-                        } else {
-                            document.getElementById('emailError').innerText = '';
-                        }
-
-                        if (!phoneRegex.test(phoneInput.value)) {
-                            document.getElementById('phoneError').innerText = 'Please enter a valid phone number (10 digits).';
-                            isValid = false;
-                        } else {
-                            document.getElementById('phoneError').innerText = '';
-                        }
-
-                        if (isValid) {
-                            axios.post('/editprofile', {
-                                userName: document.getElementById('editUsername').value,
-                                email: emailInput.value,
-                                phone: phoneInput.value
-                            })
-                            .then((response) => {
-                              $('#editProfileModal').modal('hide');
-                                window.location.href = "/account";                                    })
-                            .catch((error) => {
-                                // Handle error
-                            });
-                        }
-                    });
-                  </script>  
-                  <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                  <div class="tab-pane fade <%= initialTab === 'orders' ? 'show active' : '' %>"  id="orders" role="tabpanel" aria-labelledby="orders-tab">
                     <div class="myaccount-content">
                       <h3>Orders</h3>
                       <div class="myaccount-table table-responsive text-center">
@@ -418,7 +375,49 @@
                                     <button type="button" class="btn btn-success" onclick="validateAndSubmit('<%=index%>')">Save Changes</button>
                                   </div>
                                 </form>
-                                
+                                <script>
+                                  const editProfileForm = document.getElementById('editProfileForm');
+              
+                                  editProfileForm.addEventListener('submit', (event) => {
+                                      event.preventDefault();
+              
+                                      const emailInput = document.getElementById('editEmail');
+                                      const phoneInput = document.getElementById('editPhone');
+              
+                                      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                                      const phoneRegex = /^\d{10}$/;
+              
+                                      let isValid = true;
+              
+                                      if (!emailRegex.test(emailInput.value)) {
+                                          document.getElementById('emailError').innerText = 'Please enter a valid email address.';
+                                          isValid = false;
+                                      } else {
+                                          document.getElementById('emailError').innerText = '';
+                                      }
+              
+                                      if (!phoneRegex.test(phoneInput.value)) {
+                                          document.getElementById('phoneError').innerText = 'Please enter a valid phone number (10 digits).';
+                                          isValid = false;
+                                      } else {
+                                          document.getElementById('phoneError').innerText = '';
+                                      }
+              
+                                      if (isValid) {
+                                          axios.post('/editprofile', {
+                                              userName: document.getElementById('editUsername').value,
+                                              email: emailInput.value,
+                                              phone: phoneInput.value
+                                          })
+                                          .then((response) => {
+                                            $('#editProfileModal').modal('hide');
+                                              window.location.href = "/account";                                    })
+                                          .catch((error) => {
+                                              // Handle error
+                                          });
+                                      }
+                                  });
+                                </script>  
                                 <script>
                                   function validateAndSubmit(index) {
                                     const name = document.getElementById(`name${index}`).value.trim();
