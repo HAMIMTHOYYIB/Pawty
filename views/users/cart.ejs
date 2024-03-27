@@ -192,19 +192,8 @@
           </div>
         </div>
         <div class="row col-12 g-0 d-flex">
-          <div class="col-6 g-0 col-lg-6">
-            <div class="coupon-wrap">
-              <h4 class="title">Coupon</h4>
-              <p class="desc">Enter your coupon code if you have one.</p>
-              <input id="coupon-code" type="text" class="form-control" placeholder="Coupon code">
-                <p class="d-flex"><small id="coupon-message"></small>
-                <span style="display: none;" id="checktrue" class="mt-1"><i class="fa fa-check text-success"></i></span>
-                <span style="display: none;" id="checkfalse" class="mt-1"><i class="fa fa-times text-danger"></i></span>
-              </p>
-              <button id="apply-coupon-btn" type="button" class="btn-coupon">Apply coupon</button>
-            </div>
-          </div>
-          <div class="col-6 g-0 col-lg-6">
+
+          <div class="col-12 g-0 col-lg-12">
             <div class="cart-totals-wrap">
               <h4 class="title mt-2">Cart total</h4>
               <table>
@@ -227,25 +216,36 @@
                       <span id="grandTotal" class="amount">₹ <span id="totVal"><%= userCart.total %></span> /-</span>
                     </td>
                   </tr>
+                  <tr id="emptyCart" style="display:none;">
+                    <td><b><small class="text-danger">Your Cart is Empty !</small></b></td>
+                  </tr>
                 </tbody>
               </table>
             </div>
           </div>
-
           <div class="cart-totals-wrap col-12 col-lg-6">
             <div class="text-end">
-              <a href="/checkout" class="checkout-button">Proceed to checkout</a>
+              <a onclick="toCheckout()" class="checkout-button">Proceed to checkout</a>
             </div>
           </div>
-
         </div>
       </div>
     </section>
     <!--== End Blog Area Wrapper ==-->
   </main>
 
-
+  <div id="userData" data-user='<%= JSON.stringify(user) %>'></div>
   <script>
+    const user = JSON.parse(document.getElementById('userData').dataset.user);
+    function toCheckout() {
+      if(user.cart.products.length === 0){
+        document.getElementById('emptyCart').style.display = ('flex')
+      }else{
+        window.location.href = '/checkout'
+      }
+    }
+
+
     document.addEventListener('DOMContentLoaded', () => {
       const minusButtons = document.querySelectorAll('.qty-minus');
       const plusButtons = document.querySelectorAll('.qty-plus');

@@ -2,6 +2,7 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const Vendor = require('../models/Vendor');
 const Admin = require('../models/admin');
+const Order = require('../models/order')
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
@@ -18,8 +19,10 @@ let account = async (req,res) => {
   if(!user){
     return res.status(400).send('User Not found');
   }
+  let orders = await Order.find({userId});
+  console.log("orders : ",orders.length)
   const { tab } = req.query;
-  res.render('users/account', { initialTab:'dashboard',user});
+  res.render('users/account', { initialTab:'dashboard',user,orders});
   // res.render('users/account',{user,addError});
 }
 let editProfile = async (req,res) => {
@@ -63,8 +66,10 @@ let accountAddress = async(req,res) => {
   if(!user){
     return res.status(400).send('User Not found');
   }
+  let orders = await Order.find({userId});
+  console.log("orders : ",orders.length)
   const { tab } = req.query;
-  res.render('users/account', { initialTab: tab || 'address-edit',user});
+  res.render('users/account', { initialTab:'dashboard',user,orders});
 }
 let accountChangePass = async(req,res) => {
   let userId = req.user.id;
@@ -72,8 +77,10 @@ let accountChangePass = async(req,res) => {
   if(!user){
     return res.status(400).send('User Not found');
   }
+  let orders = await Order.find({userId});
+  console.log("orders : ",orders.length)
   const { tab } = req.query;
-  res.render('users/account', { initialTab: tab || 'changePass',user});
+  res.render('users/account', { initialTab: tab || 'changePass',user,orders});
 }
 let addAddress = async (req,res) => {
   let {name,locality,street,city,state,phone,pincode} =req.body;
@@ -151,8 +158,10 @@ let userOrder = async (req,res) => {
   if(!user){
     return res.status(400).send('User Not found');
   }
+  let orders = await Order.find({userId});
+  console.log("orders : ",orders.length)
   const { tab } = req.query;
-  res.render('users/account', { initialTab:'orders',user});
+  res.render('users/account', { initialTab:'orders',user,orders});
 }
 
 // Get ProductPage
@@ -405,42 +414,66 @@ let removefromwishlist = async (req,res) => {
 // checkout
 let getCheckout = async (req,res) => {
   let user = await User.findById(req.user.id);
+  if(user.cart.products.length === 0){
+    return res.redirect('/cart');
+  }
   res.render('users/checkout',{user,coupon:false})
 }
-let submitCheckout = async (req,res) => {
-  console.log("req :",req.body);
-  const { addressId, paymentMethod } = req.body;
 
+let submitCheckout = async (req, res) => {
+  const { addressId, paymentMethod } = req.body;
+  console.log("req.body : ", req.body);
   try {
-    // Find the user
     let user = await User.findById(req.user.id);
-  
-    // Create a new order object
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    let vendors = await Vendor.find()
+    let address = user.address.filter(add => add._id.toString() === addressId)
+    console.log("address : ",address[0]);
+    
+    let products = [];
+    for (const prod of user.cart.products) {
+      let vendorId = null;
+      // Find the vendor ID for each product
+      for (const vendor of vendors) {
+        for (const product of vendor.products) {
+          if (product._id.toString() === prod._id.toString()) {
+            vendorId = vendor._id.toString();
+            break;
+          }
+        }
+        if (vendorId) {
+          break;
+        }
+      }
+      products.push({
+        _id: prod._id,
+        quantity: prod.quantity,
+        vendorId: vendorId
+      });
+    }
+
+    let shippingAddress = address[0]
     let newOrder = new Order({
-      products: user.cart.products,
+      products: products,
       total: user.cart.total,
       discount: user.cart.discount,
-      addressId: addressId,
-      paymentMethod: paymentMethod
+      shippingAddress,
+      paymentMethod: paymentMethod,
+      userId: req.user.id
     });
-  
-    // Add the new order to the user's orders
-    user.orders.push(newOrder);
-  
-    // Clear the user's cart
+    await newOrder.save();
     user.cart = { products: [], total: 0, discount: 0 };
-  
-    // Save the user
     await user.save();
-  
-    // Respond with a success message or redirect
-    res.status(200).redirect('/orders');
+    res.status(201).json({ message: 'Order placed successfully', order: newOrder , shippingAddress });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ message: 'Internal Server Error' });
-  }  
+    res.status(500).json({ message: 'Failed to place order' });
+  }
+};
 
-}
+
 
 // Get UserLoginPage
 let loginPage = (req,res) => {

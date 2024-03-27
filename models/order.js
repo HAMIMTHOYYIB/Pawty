@@ -1,9 +1,19 @@
 const mongoose = require('mongoose');
 
+const addressSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  locality: { type: String, required: true },
+  street: { type: String, required: true },
+  city: { type: String, required: true },
+  state: { type: String, required: true },
+  phone: { type: String, required: true },
+  pincode: { type: String, required: true }
+});
+
 const orderSchema = new mongoose.Schema({
   products: [
     {
-      productId: {
+      _id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Product',
         required: true
@@ -11,7 +21,15 @@ const orderSchema = new mongoose.Schema({
       quantity: {
         type: Number,
         required: true
-      }
+      },
+      price: {
+        type: Number,
+        // required:true
+      },
+      vendorId:{
+        type:String,
+        required:true
+      },
     }
   ],
   total: {
@@ -22,22 +40,25 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  addressId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'Address',
+  userId: {
+    type: String,
+    required: true
+  },
+  shippingAddress: {
+    type: addressSchema,
     required: true
   },
   paymentMethod: {
     type: String,
-    enum: ['bank', 'check', 'cod', 'paypal'],
+    enum: ['Cash On Delivery', 'Razorpay'],
     required: true
   },
   status: {
     type: String,
-    enum: ['pending', 'completed', 'cancelled'],
-    default: 'pending'
+    enum: ['Pending', 'Delivered', 'Cancelled', 'Out Of Delivery'],
+    default: 'Pending'
   },
-  createdAt: {
+  orderDate: {
     type: Date,
     default: Date.now
   }

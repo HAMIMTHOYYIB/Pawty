@@ -1,5 +1,6 @@
 const Vendor = require('../models/Vendor');
 const Admin = require('../models/admin');
+const Order = require('../models/order')
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
@@ -288,6 +289,39 @@ let deleteCoupon = async (req,res) => {
   res.json({message:"coupon removed succesfully"})
 }
 
+let getOrderList = async (req, res) => {
+  try {
+    let vendor = await Vendor.findById(req.user.id);
+    if (!vendor) {
+      return res.status(404).json({ message: 'Vendor not found' });
+    }
+    let orders = await Order.find({ 'products.vendorId': vendor._id });
+    console.log("orders : ",orders);
+    let arr = [];
+    orders.forEach(order => {
+      orders.products.forEach(product => {
+        if(product.vendorId === vendor._id){
+          let obj = {
+            productId:product._id,
+            status:order.status,
+            shippingAddress:order.shippingAddress,
+            total:order.total,
+            discount:order.discount,
+            payment : order.paymentMethod
+          }
+          arr.push(obj)
+        }
+      })
+    })
+    console.log("arrray : ",arr);
+    res.render('vendor/orderList', { orders:arr });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Failed to get orders' });
+  }
+};
+
+
 // FORGOT PASSWORD 
 let forgotGetPage = async (req, res) => {
     try {
@@ -419,6 +453,8 @@ module.exports = {
     editCoupon,
     submitEditCoupon,
     deleteCoupon,
+
+    getOrderList,
 
     vendorForgotPass,
     resetVendorPass,

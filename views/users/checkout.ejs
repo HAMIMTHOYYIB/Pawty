@@ -37,6 +37,8 @@
     <!--== Main Style CSS ==-->
     <link href="/assets/css/style.css" rel="stylesheet" />
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
     <style>
       .address-card {
           border: 1px solid #ccc;
@@ -186,7 +188,7 @@
             </div>
           </div>
         </div>
-        <form action="/checkout" method="post">
+        <form>
           <div class="row my-0">
             <div class="col-lg-6 my-0">
               <div id="checktrue" style="display: none;" class="alert alert-success" role="alert">
@@ -199,7 +201,6 @@
               <div class="checkout-billing-details-wrap">
                 <h2 class="title">Select Billing Address</h2>
                 <div class="billing-form-wrap">
-                  <form>
                     <div class="row">
                       <% user.address.forEach(add => { %>
                       <div class="col-md-6">
@@ -218,7 +219,6 @@
                       <% }) %>
                     </div>
                     <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
-                  </form>
                 </div>
               </div>
               <!--== End Billing Accordion ==-->
@@ -266,41 +266,21 @@
                     <div id="PaymentMethodAccordion">
                       <div class="card">
                         <div class="card-header" id="check_payments">
-                          <input type="radio" name="paymentMethod" value="bank" checked> Direct bank transfer
+                          <input type="radio" name="paymentMethod" value="Razorpay" checked> Razorpay Payment
                         </div>
                         <div id="itemOne" class="collapse show" aria-labelledby="check_payments" data-bs-parent="#PaymentMethodAccordion">
                           <div class="card-body">
-                            <p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="card-header" id="check_payments2">
-                          <input type="radio" name="paymentMethod" value="check"> Check payments
-                        </div>
-                        <div id="itemTwo" class="collapse" aria-labelledby="check_payments2" data-bs-parent="#PaymentMethodAccordion">
-                          <div class="card-body">
-                            <p>Please send a check to Store Name, Store Street, Store Town, Store State / County, Store Postcode.</p>
+                            <p>Pay using Razorpay. Your order will be processed once the payment is successfully made.</p>
                           </div>
                         </div>
                       </div>
                       <div class="card">
                         <div class="card-header" id="check_payments3">
-                          <input type="radio" name="paymentMethod" value="cod"> Cash on delivery</h5>
+                          <input type="radio" name="paymentMethod" value="Cash On Delivery"> Cash on delivery</h5>
                         </div>
                         <div id="itemThree" class="collapse" aria-labelledby="check_payments3" data-bs-parent="#PaymentMethodAccordion">
                           <div class="card-body">
                             <p>Pay with cash upon delivery.</p>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="card">
-                        <div class="card-header" id="check_payments4">
-                          <input type="radio" name="paymentMethod" value="paypal">PayPal Express Checkout
-                        </div>
-                        <div id="itemFour" class="collapse" aria-labelledby="check_payments4" data-bs-parent="#PaymentMethodAccordion">
-                          <div class="card-body">
-                            <p>Pay via PayPal; you can pay with your credit card if you don’t have a PayPal account.</p>
                           </div>
                         </div>
                       </div>
@@ -313,7 +293,7 @@
                         <small id="errMsg" class="text-danger"></small>
                       </div>
                     </div>
-                    <button class="btn-place-order w-100" type="submit">Place Order</button>
+                    <button class="w-100 btn-place-order" type="button">Place Order</button>
                     <!-- <a href="/placeOrder" class="btn-place-order">Place order</a> -->
                   </div>
                 </div>
@@ -326,72 +306,76 @@
     </section>
     <!--== End Shopping Checkout Area Wrapper ==-->
   </main>
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
-    const paymentRadios = document.querySelectorAll('input[name="paymentMethod"]');
-    const paymentCollapse = {
-        bank: document.getElementById('itemOne'),
-        check: document.getElementById('itemTwo'),
-        cod: document.getElementById('itemThree'),
-        paypal: document.getElementById('itemFour')
-    };
-
-    paymentRadios.forEach(radio => {
-        radio.addEventListener('change', () => {
-            for (const key in paymentCollapse) {
-                if (radio.value === key) {
-                    paymentCollapse[key].classList.add('show');
-                } else {
-                    paymentCollapse[key].classList.remove('show');
-                }
-            }
-        });
-    });
-
-
-    document.querySelector('.btn-place-order').addEventListener('click', function(event) {
-      const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked');
+      document.addEventListener('DOMContentLoaded', () => {
+      const placeOrderBtn = document.querySelector('.btn-place-order');
       const agreeCheckbox = document.getElementById('privacy');
       const errMsg = document.getElementById('errMsg');
-      let isValid = true;
 
-      // Check if a payment method is selected
-      if (!selectedPayment) {
-        errMsg.innerText = 'Please select a payment method.';
-        isValid = false;
-      } else {
+      placeOrderBtn.addEventListener('click', async () => {
+        const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked').value;
+        const selectedAddress = document.querySelector('input[name="addressId"]:checked').value;
+
+        if (!selectedPayment) {
+          errMsg.innerText = 'Please select a payment method.';
+          return;
+        }
+
+        if (!selectedAddress) {
+          errMsg.innerText = 'Please select a billing address.';
+          return;
+        }
+
+        if (!agreeCheckbox.checked) {
+          errMsg.innerText = 'Please agree to the terms and conditions.';
+          return;
+        }
         errMsg.innerText = '';
-      }
-
-      // Check if terms and conditions are agreed
-      if (!agreeCheckbox.checked) {
-        errMsg.innerText = 'Please agree to the terms and conditions.';
-        isValid = false;
-      } else if (errMsg.innerText === '') {
-        errMsg.innerText = '';
-      }
-
-      if (isValid) {
-        // Submit the form using Axios
-        axios.post('/checkout', {
-          addressId: addressId,
-          paymentMethod: selectedPayment.value
-        })
-        .then(function (response) {
-          // Handle the response
-          console.log(response);
-        })
-        .catch(function (error) {
-          // Handle the error
-          console.error(error);
-        });
-      } else {
-        event.preventDefault(); // Prevent form submission
-      }
+        try {
+          const orderData = {
+            paymentMethod: selectedPayment,
+            addressId: selectedAddress,
+          };
+          const response = await axios.post('/checkout', orderData);
+          if (response.status === 201) { // Check for successful order creation (201 Created)
+            const orderDetails = response.data.order; // Assuming order details are in response.data.order
+            Swal.fire({
+              title: 'Order Placed!',
+              text: `Your order has been placed successfully!`,
+              icon: 'success',
+              html: `
+                <p><b>Payment Method:</b> ${orderDetails.paymentMethod}</p>
+                <small class="text-uppercase" ><b>Billing Address : </b>${orderDetails.shippingAddress.name}<br>${orderDetails.shippingAddress.street} , ${orderDetails.shippingAddress.locality} , ${orderDetails.shippingAddress.city} , ${orderDetails.shippingAddress.state}.<br>${orderDetails.shippingAddress.pincode}</small><br>
+                <small><b>OrderId : </b>${orderDetails._id}</small>
+              `,
+              confirmButtonText: 'View Orders',
+            }).then(() => {
+              window.location.href = '/orders';
+            });
+          } else {
+            Swal.fire({
+              title: 'Error!',
+              text: message,
+              icon: 'error',
+            });
+          }
+        } catch (error) {
+          console.error('Error placing order:', error.response.data);
+          Swal.fire({
+            title: 'Error!',
+            text: message,
+            icon: 'error',
+          });
+        }
+      });
     });
 
   </script>
-  <div id="userData" data-user='<%= JSON.stringify(user) %>'></div>
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  
+
+  
+  <div id="userData" data-user ='<%= JSON.stringify(user) %>'></div>
   <script>
     const applyCouponBtn = document.getElementById('apply-coupon-btn');
     const couponCodeInput = document.getElementById('coupon-code');
