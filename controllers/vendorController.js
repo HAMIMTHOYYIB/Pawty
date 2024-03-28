@@ -1,6 +1,7 @@
 const Vendor = require('../models/Vendor');
 const Admin = require('../models/admin');
-const Order = require('../models/order')
+const Order = require('../models/order');
+const User = require('../models/User')
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
@@ -291,35 +292,70 @@ let deleteCoupon = async (req,res) => {
 
 let getOrderList = async (req, res) => {
   try {
+    // Find the vendor
     let vendor = await Vendor.findById(req.user.id);
     if (!vendor) {
       return res.status(404).json({ message: 'Vendor not found' });
     }
-    let orders = await Order.find({ 'products.vendorId': vendor._id });
-    console.log("orders : ",orders);
-    let arr = [];
-    orders.forEach(order => {
-      orders.products.forEach(product => {
-        if(product.vendorId === vendor._id){
-          let obj = {
-            productId:product._id,
-            status:order.status,
-            shippingAddress:order.shippingAddress,
-            total:order.total,
-            discount:order.discount,
-            payment : order.paymentMethod
-          }
-          arr.push(obj)
-        }
-      })
-    })
-    console.log("arrray : ",arr);
-    res.render('vendor/orderList', { orders:arr });
+
+    // Aggregate orders to unwind products array
+    let orders= await Order.aggregate([
+      {$unwind:'$products'},
+      {$match:{'products.vendorId':req.user.id}}
+    ]);
+    for (let order of orders) {
+      const vendor = await Vendor.findOne({ 'products._id': order.products._id });
+      if (vendor) {
+        const product = vendor.products.find(p => p._id.equals(order.products._id));
+        order.products = {
+          _id: product._id,
+          productName: product.productName,
+          description: product.description,
+          price: product.price,
+          brand: product.brand,
+          category: product.category,
+          subCategory: product.subCategory,
+          stockQuantity: product.stockQuantity,
+          addedOn: product.addedOn,
+          images: product.images,
+          status:order.products.status,
+          quantity:order.products.quantity          
+        };
+      }
+      let user = await User.findById(order.userId);
+      // console.log("userr :",user);
+      if (user) {
+        order.userName = user.username;
+        order.userEmail = user.email;
+      }
+    }
+    console.log("orders :",orders)
+    res.render('vendor/orderList', { orders: orders});
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Failed to get orders' });
   }
 };
+let updateStatus = async (req, res) => {
+  console.log("update status Workingg")
+  try {
+    let {  productId, orderId } = req.params;
+    let { status } = req.body;
+    let order = await Order.findById(orderId);
+    let product = order.products.find(prod => prod._id.toString() === productId.toString());
+    if (product) {
+      product.status = status;
+      await order.save();
+      res.json({ message: "Order Status Updated.", status  });
+    } else {
+      res.status(404).json({ message: "Product not found in order."});
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Error on updating status' });
+  }
+};
+
 
 
 // FORGOT PASSWORD 
@@ -455,6 +491,7 @@ module.exports = {
     deleteCoupon,
 
     getOrderList,
+    updateStatus,
 
     vendorForgotPass,
     resetVendorPass,

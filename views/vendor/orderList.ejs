@@ -15,6 +15,8 @@
 
     <!-- project css file  -->
     <link rel="stylesheet" href="/assets/css/ebazar.style.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 </head>
 <body>
     <div id="ebazar-layout" class="theme-blue">                          
@@ -292,7 +294,7 @@
                                     <table id="myDataTable" class="table table-hover align-middle mb-0" style="width: 100%;">  
                                         <thead>
                                             <tr>
-                                                <th>Id</th>
+                                                <th> </th>
                                                 <th>Item</th>
                                                 <th>Customer Name</th>
                                                 <th>Payment Info</th>
@@ -301,76 +303,69 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            <% let count = 0; %>
+                                            <% orders.forEach((order, index) => { %>
                                             <tr>
-                                                <td><a href="order-details.html"><strong>#Order-78414</strong></a></td>
-                                                <td><img src="/assets/images/product/product-1.jpg" class="avatar lg rounded me-2" alt="profile-image"><span> Oculus VR </span></td>
-                                                <td>Molly</td>
-                                                <td>Credit Card</td>
+                                                <td><a href="/orderView/<%= order._id %>"><strong><%= ++count %></strong></a></td>
                                                 <td>
-                                                    $420
+                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal-<%= index %>">
+                                                        <img src="<%= order.products.images[0] %>" class="avatar lg rounded me-2" alt="profile-image">
+                                                        <span><%= order.products.productName %></span>
+                                                    </a>
                                                 </td>
-                                                <td><span class="badge bg-warning">Progress</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td><a href="order-details.html"><strong>#Order-58414</strong></a></td>
-                                                <td><img src="/assets/images/product/product-2.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Wall Clock</span></td>
-                                                <td>Brian</td>
-                                                <td>Debit Card</td>
+                                                <td><%= order.userName %></td>
+                                                <td><%= order.paymentMethod %></td>
+                                                <td><%= order.products.price %></td>
                                                 <td>
-                                                    $220
+                                                    <form id="statusForm-<%= order._id %>-<%= index %>">
+                                                        <select name="status" id="status" onchange="updateOrderStatus(event, '<%= order._id %>', '<%= order.products._id %>', '<%= index %>')">
+                                                            <option value="Pending" <%= order.products.status === 'Pending' ? 'selected' : '' %>>Pending</option>
+                                                            <option value="Delivered" <%= order.products.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
+                                                            <option value="Cancelled" <%= order.products.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                                            <option value="Out Of Delivery" <%= order.products.status === 'Out Of Delivery' ? 'selected' : '' %>>Out Of Delivery</option>
+                                                        </select>
+                                                    </form>
                                                 </td>
-                                                <td><span class="badge bg-success">Complited</span></td>
                                             </tr>
-                                            <tr>
-                                                <td><a href="order-details.html"><strong>#Order-48414</strong></a></td>
-                                                <td><img src="/assets/images/product/product-3.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Note Diaries</span></td>
-                                                <td>Julia</td>
-                                                <td>Debit Card</td>
-                                                <td>
-                                                    $250
-                                                </td>
-                                                <td><span class="badge bg-success">Complited</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td><a href="order-details.html"><strong>#Order-38414</strong></a></td>
-                                                <td><img src="/assets/images/product/product-4.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Flower Port</span></td>
-                                                <td>Sonia</td>
-                                                <td>Credit Card</td>
-                                                <td>
-                                                    $320
-                                                </td>
-                                                <td><span class="badge bg-warning">Progress</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td><a href="order-details.html"><strong>#Order-28414</strong></a></td>
-                                                <td><img src="/assets/images/product/product-1.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Oculus VR</span></td>
-                                                <td>Adam H</td>
-                                                <td>Debit Card</td>
-                                                <td>
-                                                    $20
-                                                </td>
-                                                <td><span class="badge bg-warning">Progress</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td><a href="order-details.html"><strong>#Order-18414</strong></a></td>
-                                                <td><img src="/assets/images/product/product-2.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Wall Clock</span></td>
-                                                <td>Alexander</td>
-                                                <td>Debit Card</td>
-                                                <td>
-                                                    $820
-                                                </td>
-                                                <td><span class="badge bg-success">Complited</span></td>
-                                            </tr>
-                                            <tr>
-                                                <td><a href="order-details.html"><strong>#Order-11414</strong></a></td>
-                                                <td><img src="/assets/images/product/product-3.jpg" class="avatar lg rounded me-2" alt="profile-image"><span>Note Diaries</span></td>
-                                                <td>Gabrielle</td>
-                                                <td>Bank Emi</td>
-                                                <td>
-                                                    $620
-                                                </td>
-                                                <td><span class="badge bg-success">Complited</span></td>
-                                            </tr>
+
+                                            <!-- Modal -->
+                                            <div class="modal fade" id="orderModal-<%= index %>" tabindex="-1" aria-labelledby="orderModalLabel-<%= index %>" aria-hidden="true">
+                                                <div class="modal-dialog modal-lg">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="orderModalLabel-<%= index %>">Order Details</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="col-12 row">
+                                                                <div class="col-6 justify-content-between">
+                                                                    <img src="<%= order.products.images[0] %>" class="img-fluid" alt="order-image">
+                                                                </div>
+                                                                <div class="col-6 my-auto">
+                                                                    <p><b>#<%= order.products._id %></b></p>
+                                                                    <p><b>Product Name : </b> <%= order.products.productName %></p>
+                                                                    <p><b>Price : </b> <%= order.products.price %></p>
+                                                                    <p><b>Brand : </b> <%= order.products.brand %></p>
+                                                                    <p><b>Quantity : </b> <%= order.products.quantity %></p>
+                                                                    <!-- <p><b>Order Status : </b> <%= order.products.status %></p> -->
+                                                                    <p><b class="w-100">Delivery Address :</b><br>
+                                                                        <b>Customer Name : </b><span class="text-uppercase"><%= order.shippingAddress.name %></span> <br>
+                                                                        <span class="text-uppercase"> 
+                                                                        <%= order.shippingAddress.locality %> , <%= order.shippingAddress.street %>
+                                                                        <%= order.shippingAddress.city %> , <%= order.shippingAddress.state %> <br>
+                                                                       </span>
+                                                                        <b>Pin : </b> <span class="text-uppercase"><%= order.shippingAddress.city %></span><br>
+                                                                        <b>Phone No : </b><span class="text-uppercase"><%= order.shippingAddress.phone %></span>
+                                                                    </p>
+                                                                    <p><b>Payment Method : </b><span><%= order.paymentMethod %></span></p>
+                                                                    <p><b>Ordered on : </b><span><%= order.orderDate.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></span></p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <% }) %>
                                         </tbody>
                                     </table>
                                 </div>
@@ -379,6 +374,48 @@
                     </div> <!-- Row end  -->
                 </div>
             </div>
+
+            <script>
+                function updateOrderStatus(event, orderId, productId, index) {
+                    event.preventDefault(); // Prevent default form submission
+                    console.log(orderId, productId);
+                    const form = document.querySelector(`#statusForm-${orderId}-${index}`);
+                    const status = form.querySelector('select[name="status"]').value;
+                    axios.post(`/vendor/orderStatus/${orderId}/${productId}`, { status })
+                        .then(response => {
+                            // Handle success response, if needed
+                            console.log(response.data);
+                        })
+                        .catch(error => {
+                            // Handle error response, if needed
+                            console.error(error);
+                        });
+                }
+            </script>                   
+
+            <!-- <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="orderModalLabel">Order Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                    <div class="col-md-4">
+                        <img id="orderImage" src="" class="img-fluid rounded" alt="Order Image">
+                    </div>
+                    <div class="col-md-8">
+                        <h4 id="orderProductName"></h4>
+                        <p><span id="orderUserName"></span> - <span id="orderPaymentMethod"></span></p>
+                        <p id="orderPrice"></p>
+                        <p id="orderStatus"></p>
+                    </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+            </div>                         -->
         
             <!-- Modal Custom Settings-->
             <div class="modal fade right" id="Settingmodal" tabindex="-1"  aria-hidden="true">
@@ -519,11 +556,10 @@
                     </div>
                 </div>
             </div> 
-            
         </div>                                 
 
     </div> 
-
+    
     <!-- Jquery Core Js -->
     <script src="/assets/bundles/libscripts.bundle.js"></script>
 

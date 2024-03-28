@@ -154,14 +154,47 @@ let deleteAddress = async (req,res) => {
 
 let userOrder = async (req,res) => {
   let userId = req.user.id;
-  let user = await User.findOne({_id:userId});
-  if(!user){
-    return res.status(400).send('User Not found');
+  try {
+    let user = await User.findOne({_id:userId});
+    if(!user){
+      return res.status(400).send('User Not found');
+    }
+    let orders= await Order.aggregate([
+      {$unwind:'$products'},
+      {$match:{'userId':req.user.id}}
+    ]);
+    for (let order of orders) {
+      const vendor = await Vendor.findOne({ 'products._id': order.products._id });
+      if (vendor) {
+        const product = vendor.products.find(p => p._id.equals(order.products._id));
+        order.products = {
+          _id: product._id,
+          productName: product.productName,
+          description: product.description,
+          price: product.price,
+          brand: product.brand,
+          category: product.category,
+          subCategory: product.subCategory,
+          stockQuantity: product.stockQuantity,
+          addedOn: product.addedOn,
+          images: product.images,
+          status:order.products.status,
+          quantity:order.products.quantity          
+        };
+      }
+      let user = await User.findById(order.userId);
+      // console.log("userr :",user);
+      if (user) {
+        order.userName = user.username;
+        order.userEmail = user.email;
+      }
+    }
+    console.log("orders :",orders)
+    res.render('users/account', { initialTab:'orders',user,orders});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message:"Error on getting User Orders"})
   }
-  let orders = await Order.find({userId});
-  console.log("orders : ",orders.length)
-  const { tab } = req.query;
-  res.render('users/account', { initialTab:'orders',user,orders});
 }
 
 // Get ProductPage

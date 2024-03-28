@@ -33,6 +33,7 @@ router.post('/vendor/editCoupon/:couponId',vendorAuth,vendorController.submitEdi
 router.post('/vendor/removeCoupon',vendorAuth,vendorController.deleteCoupon)
 
 router.get('/vendor/orderList',vendorAuth,vendorController.getOrderList);
+router.post('/vendor/orderStatus/:orderId/:productId',vendorAuth,vendorController.updateStatus)
 
 // vendor Logout
 router.get('/vendor/logout',vendorController.vendorLogout);

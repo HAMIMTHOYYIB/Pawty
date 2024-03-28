@@ -218,7 +218,7 @@
                             <tr>
                               <th>Order</th>
                               <th>Date</th>
-                              <th>Payment-way</th>
+                              <th>Product Name</th>
                               <th>Status</th>
                               <th>Total</th>
                               <th>Action</th>
@@ -230,10 +230,15 @@
                             <tr>
                               <td><%= ++count %></td>
                               <td><%= order.orderDate.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></td>
-                              <td><%= order.paymentMethod %></td>
-                              <td><%= order.status %></td>
-                              <td>$<%= order.total %></td>
-                              <td><a href="/userOrder/<%= order._id %>" class="check-btn sqr-btn ">View</a></td>
+                              <td><%= order.products.productName %></td>
+
+                              <td class="<%= order.products.status === 'Pending'?text-success:'d-none' %>"><%= order.products.status %></td>
+                              <td class="<%= order.products.status === 'Out Of Delivery'?'text-warning':'d-none' %>"><%= order.products.status %></td>
+                              <td class="<%= order.products.status === 'Cancelled'?'text-danger':'d-none' %>"><%= order.products.status %></td>
+                              <td class="<%= order.products.status === 'Delivered'?'text-success':'d-none' %>"><%= order.products.status %></td>
+                              
+                              <td>$<%= order.products.price %></td>
+                              <td><a href="/userOrder/<%= order._id %>" class="check-btn sqr-btn">View</a></td>
                             </tr>
                             <% }) %>
                             <!-- <tr>
