@@ -3,7 +3,7 @@ const session = require('express-session');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
-require('dotenv').config()
+require('dotenv').config();
 
 mongoose.connect('mongodb://localhost:27017/Pawty', {
 }).then(() => {
@@ -11,6 +11,7 @@ mongoose.connect('mongodb://localhost:27017/Pawty', {
 }).catch((err) => {
     console.error('Error connecting to MongoDB', err);
 });
+
 
 const adminRoutes = require('./routes/adminRoutes');
 const vendorRoutes =require('./routes/vendorRoutes');

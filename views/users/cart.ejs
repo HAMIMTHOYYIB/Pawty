@@ -150,7 +150,9 @@
                     </tr>
                   </thead>
                   <tbody>
+                    <% let total = 0; %>
                     <% userCart.products.forEach(product => { %>
+                      <% total += product.price*product.quantity; %>
                     <tr class="tbody-item">
                       <td class="product-remove">
                         <button type="button" id="remove-<%= product._id %>" class="remove border-0">x</button>
@@ -166,7 +168,7 @@
                         <a class="title" href="/product/<%= product._id %>"><%= product.productName %></a>
                       </td>
                       <td class="product-price">
-                        <span class="price">$<%= product.price %></span>
+                        $<span id="price-<%= product._id %>" class="price"><%= product.price %></span>
                       </td>
                       <td class="product-quantity">
                         <div class="">
@@ -201,11 +203,11 @@
                   <tr class="cart-subtotal">
                     <th>Subtotal</th>
                     <td>
-                      <span id="Amount" class="amount">₹ <span id="amount"><%= userCart.total %></span> /-</span>
+                      <span id="Amount" class="amount">₹ <span id="amount"><%= total %></span> /-</span>
                     </td>
                   </tr>
                   <tr class="cart-subtotal">
-                    <th>Discount</th>
+                    <th>Shipping Charge</th>
                     <td>
                       <span id="discount" class="amount">₹ <span id="discountVal">0</span> /-</span>
                     </td>
@@ -213,7 +215,7 @@
                   <tr class="cart-subtotal">
                     <th class="">grandTotal</th>
                     <td>
-                      <span id="grandTotal" class="amount">₹ <span id="totVal"><%= userCart.total %></span> /-</span>
+                      <span id="grandTotal" class="amount">₹ <span id="totVal"><%= total %></span> /-</span>
                     </td>
                   </tr>
                   <tr id="emptyCart" style="display:none;">
@@ -264,9 +266,11 @@
 
             // Access the product ID
             const productId = input.getAttribute('data-productId');
+            const price = document.getElementById(`price-${productId}`).textContent
+            console.log("proce is :",price);
             // const productId = input.dataset.productId;
             console.log("input.dataset.productId :",productId);
-            updateCart(productId, currentValue - 1);
+            updateCart(productId, currentValue - 1,price);
           }
         });
       });
@@ -280,9 +284,11 @@
 
           // Access the product ID
             const productId = input.getAttribute('data-productId');
+            const price = document.getElementById(`price-${productId}`).textContent
+            console.log("proce is :",price);
             // const productId = input.dataset.productId;
             console.log("input.dataset.productId :",productId);
-          updateCart(productId, currentValue + 1);
+          updateCart(productId, currentValue + 1,price);
         });
       });
 
@@ -291,7 +297,8 @@
     removeButtons.forEach(button => {
     button.addEventListener('click', () => {
       const productId = button.id.split('-')[1]; // Extract the product ID from the button ID
-      axios.post('/removeFromCart', { productId })
+      const price = document.getElementById(`price-${productId}`).textContent
+      axios.post('/removeFromCart', { productId , price })
         .then(response => {
           // Handle the response as needed
           console.log('Product removed from cart:', response.data);
@@ -306,7 +313,7 @@
     });
   });
 
-    function updateCart(productId, quantity) {
+    function updateCart(productId, quantity,price) {
       const totVal = document.getElementById('totVal');
       const Amount = document.getElementById('amount');
       const InputCoup = document.getElementById('coupon-code');
@@ -315,24 +322,20 @@
       const couponMessage = document.getElementById('coupon-message');
       discountVal.textContent = 0;
       
-      axios.post('/updateCart', { productId, quantity })
+      axios.post('/updateCart', { productId, quantity , price })
         .then(response => {
+          console.log("then working")
           let subTotal = 0;
           response.data.user.cart.products.forEach(prod => {
-            subTotal += prod.price * prod.quantity;
-            document.getElementById(`total-${prod._id}`).textContent = `${prod.price * prod.quantity} /-`;
+            subTotal += response.data.price * prod.quantity;
+            document.getElementById(`total-${prod._id}`).textContent = `${response.data.price * prod.quantity} /-`;
           });
           document.getElementById('amount').textContent = `${subTotal.toFixed(2)}`;
           totVal.textContent = Amount.textContent - discountVal.textContent;
-          InputCoup.value = '';
-          tickmark.style.display = 'none';
-          crossmark.style.display = 'none';
-          couponMessage.textContent = ''
           console.log('Cart quantity updated successfully:', response.data);
         })
         .catch(error => {
           console.error('Error updating cart quantity:', error.response);
-          // Handle errors gracefully (e.g., display an error message to the user)
       });
     }
 

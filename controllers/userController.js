@@ -2,9 +2,11 @@ const bcrypt = require('bcrypt');
 const User = require('../models/User');
 const Vendor = require('../models/Vendor');
 const Admin = require('../models/admin');
-const Order = require('../models/order')
+const Order = require('../models/order');
+let helper = require('../helpers/user')
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
+const razorpayInstance = require('../config/razorpay')
 require('dotenv').config()
 
 
@@ -19,8 +21,8 @@ let account = async (req,res) => {
   if(!user){
     return res.status(400).send('User Not found');
   }
-  let orders = await Order.find({userId});
-  console.log("orders : ",orders.length)
+  let orders= await helper.accountOrders(userId)
+  // console.log("orders : ",orders.length)
   const { tab } = req.query;
   res.render('users/account', { initialTab:'dashboard',user,orders});
   // res.render('users/account',{user,addError});
@@ -36,6 +38,7 @@ let editProfile = async (req,res) => {
   res.json({ message: "Profile Updated."});
   
 }
+
 let changePass = async (req, res) => {
   const { currentPass, newPass, confirmPass } = req.body;
   let userId = req.user.id;
@@ -66,10 +69,10 @@ let accountAddress = async(req,res) => {
   if(!user){
     return res.status(400).send('User Not found');
   }
-  let orders = await Order.find({userId});
-  console.log("orders : ",orders.length)
+  let orders= await helper.accountOrders(userId)
+  // console.log("orders : ",orders.length)
   const { tab } = req.query;
-  res.render('users/account', { initialTab:'dashboard',user,orders});
+  res.render('users/account', { initialTab:'address-edit',user,orders});
 }
 let accountChangePass = async(req,res) => {
   let userId = req.user.id;
@@ -77,11 +80,28 @@ let accountChangePass = async(req,res) => {
   if(!user){
     return res.status(400).send('User Not found');
   }
-  let orders = await Order.find({userId});
-  console.log("orders : ",orders.length)
+  let orders= await helper.accountOrders(userId)
+  // console.log("orders : ",orders)
   const { tab } = req.query;
   res.render('users/account', { initialTab: tab || 'changePass',user,orders});
 }
+let userOrder = async (req,res) => {
+  let userId = req.user.id;
+  try {
+    let user = await User.findOne({_id:userId});
+    if(!user){
+      return res.status(400).send('User Not found');
+    }
+    let orders= await helper.accountOrders(userId)
+    // console.log("orders :",orders)
+    res.render('users/account', { initialTab:'orders',user,orders});
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({message:"Error on getting User Orders"})
+  }
+}
+
+
 let addAddress = async (req,res) => {
   let {name,locality,street,city,state,phone,pincode} =req.body;
   let userId = req.user.id;
@@ -152,51 +172,6 @@ let deleteAddress = async (req,res) => {
   res.redirect('/accountAddress');
 }
 
-let userOrder = async (req,res) => {
-  let userId = req.user.id;
-  try {
-    let user = await User.findOne({_id:userId});
-    if(!user){
-      return res.status(400).send('User Not found');
-    }
-    let orders= await Order.aggregate([
-      {$unwind:'$products'},
-      {$match:{'userId':req.user.id}}
-    ]);
-    for (let order of orders) {
-      const vendor = await Vendor.findOne({ 'products._id': order.products._id });
-      if (vendor) {
-        const product = vendor.products.find(p => p._id.equals(order.products._id));
-        order.products = {
-          _id: product._id,
-          productName: product.productName,
-          description: product.description,
-          price: product.price,
-          brand: product.brand,
-          category: product.category,
-          subCategory: product.subCategory,
-          stockQuantity: product.stockQuantity,
-          addedOn: product.addedOn,
-          images: product.images,
-          status:order.products.status,
-          quantity:order.products.quantity          
-        };
-      }
-      let user = await User.findById(order.userId);
-      // console.log("userr :",user);
-      if (user) {
-        order.userName = user.username;
-        order.userEmail = user.email;
-      }
-    }
-    console.log("orders :",orders)
-    res.render('users/account', { initialTab:'orders',user,orders});
-  } catch (error) {
-    console.log(error);
-    res.status(500).json({message:"Error on getting User Orders"})
-  }
-}
-
 // Get ProductPage
 let shop = async (req,res) => {
   let admin = await Admin.findOne();
@@ -249,15 +224,31 @@ let product = async (req,res) => {
 let getcart = async (req, res) => {
   try {
     let user = await User.findOne({ _id: req.user.id });
-    let cart = user.cart;
-    let coupons = await Vendor.find().select("coupons")
-    console.log("coupons :",coupons);
-    res.render('users/cart', { userCart:cart,user,coupons });
+    // let products = user.cart.products;
+    let Products =  await Vendor.find().select("products");
+    // let Products =  await Vendor.find();
+    console.log("produts: ",Products)
+    user.cart.products.forEach(product => {
+      Products.forEach(vend => {
+        vend.products.forEach(p => {
+          if(p._id.toString() === product._id.toString()){
+            product.images = p.images;
+            product.price = p.price;
+            product.productName = p.productName;
+            product.stockQuantity = p.stockQuantity;
+            // product.quantity = product.quantity
+            console.log("product:",product.quantity)
+          }
+        })
+      })
+    });
+    console.log("products :",user.cart.products);
+    res.render('users/cart', {user,userCart:user.cart });
   } catch (error) {
     console.error(error);
     res.status(500).send('Internal Server Error');
   }
-}
+};
 let addtocart = async (req, res) => {
   const { productId } = req.body;
   const userId = req.user.id;
@@ -283,9 +274,7 @@ let addtocart = async (req, res) => {
       user.cart.products.push({
         _id: productId,
         quantity: 1,
-        productName: product.productName,
-        price: product.price,
-        images: product.images,
+        price : product.price
       });
     };
     user.cart.total += parseFloat(product.price);
@@ -298,31 +287,33 @@ let addtocart = async (req, res) => {
 }
 let removefromcart = async (req,res) => {
   try {
-    let  { productId } = req.body;
+    let  { productId , price } = req.body;
     let user = await User.findOne({_id:req.user.id});
     let product  = user.cart.products.filter(prod => prod._id.toString() === productId);
     user.cart.products = user.cart.products.filter(prod => prod._id.toString() !== productId);
-    user.cart.total = user.cart.total - (product[0].price * product[0].quantity);
+    let total = user.cart.total - (price * product[0].quantity);
+    user.cart.total = total;
     console.log("user cart total :",user.cart.total);
     console.log("product removed from cart");
     await user.save();
-    res.json({message:"product removed",user,product})
+    res.json({message:"product removed",user,product,total})
   } catch (error) {
     res.status(500).send("Internal Server Error on product removal in cart")
   }
   // res.redirect('/cart');
 }
 let changeQuantity = async (req, res) => {
-  const { productId,quantity } = req.body;
+  const { productId,quantity,price } = req.body;
   try {
     const user = await User.findById(req.user.id);
 
     const productIndex = user.cart.products.findIndex(product => product._id.toString() === productId);
     if (productIndex !== -1) {
       user.cart.products[productIndex].quantity = quantity;
-      user.cart.total = user.cart.products.reduce((total, product) => total + (product.price * product.quantity), 0);
+      // let price = user.cart.products[productIndex].price;
+      // user.cart.total = user.cart.products.reduce((total, product) => total + (product.price * product.quantity), 0);
       await user.save();
-      res.status(200).json({ message: 'Quantity updated successfully',user,quantity});
+      res.status(200).json({ message: 'Quantity updated successfully',user,quantity,price});
     } else {
       res.status(404).json({ message: 'Product not found in cart' });
     }
@@ -505,8 +496,6 @@ let submitCheckout = async (req, res) => {
     res.status(500).json({ message: 'Failed to place order' });
   }
 };
-
-
 
 // Get UserLoginPage
 let loginPage = (req,res) => {

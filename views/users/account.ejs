@@ -226,20 +226,79 @@
                           </thead>
                           <tbody>
                             <% let count = 0 ; %>
-                            <% orders.forEach(order => { %>
+                            <% orders.forEach((order,index) => { %>
                             <tr>
                               <td><%= ++count %></td>
                               <td><%= order.orderDate.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></td>
                               <td><%= order.products.productName %></td>
 
-                              <td class="<%= order.products.status === 'Pending'?text-success:'d-none' %>"><%= order.products.status %></td>
+                              <td class="<%= order.products.status === 'Pending'?'text-secondary':'d-none' %>"><%= order.products.status %></td>
                               <td class="<%= order.products.status === 'Out Of Delivery'?'text-warning':'d-none' %>"><%= order.products.status %></td>
                               <td class="<%= order.products.status === 'Cancelled'?'text-danger':'d-none' %>"><%= order.products.status %></td>
                               <td class="<%= order.products.status === 'Delivered'?'text-success':'d-none' %>"><%= order.products.status %></td>
-                              
+
                               <td>$<%= order.products.price %></td>
-                              <td><a href="/userOrder/<%= order._id %>" class="check-btn sqr-btn">View</a></td>
+                            <td><a href="#" data-bs-toggle="modal" data-bs-target="#orderModal-<%= index %>">View</a></td>
+                              <!-- <td><a href="/userOrder/<%= order._id %>" class="check-btn sqr-btn">View</a></td> -->
                             </tr>
+                              <!-- Modal -->
+                              <div class="modal fade" id="orderModal-<%= index %>" tabindex="-1" aria-labelledby="orderModalLabel-<%= index %>" aria-hidden="true">
+                                <div class="modal-dialog modal-xl">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="orderModalLabel-<%= index %>">Order Details</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                          <div class="col-12 row">
+                                            <div class="col-4 justify-content-between">
+                                              <img src="<%= order.products.images[0] %>" class="img-fluid" alt="order-image">
+                                            </div>
+                                        
+                                            <div class="col-8">
+                                              <div class="my-4 d-flex flex-wrap">
+                                                <div class="col-md-6 order-details">
+                                                  <h3>Order Details:</h3>  
+                                                  <p><b>OrderID: #<%= order.products._id %></b></p>
+                                                  <p><b>Product Name:</b> <%= order.products.productName %></p>
+                                                  <p><b>Price:</b> <%= order.products.price %></p>
+                                                  <p><b>Brand:</b> <%= order.products.brand %></p>
+                                                  <p><b>Quantity:</b> <%= order.products.quantity %></p>
+                                                  <p><b>Order Status:</b> <%= order.products.status %></p>
+                                                </div>
+                                                <div class="col-md-6 address-details">
+                                                  <h3>Delivery Address:</h3>
+                                                  <p><b>Customer Name:</b> <span class="text-uppercase"><%= order.shippingAddress.name %></span></p>
+                                                  <p class="text-uppercase">
+                                                    <%= order.shippingAddress.locality %> , <%= order.shippingAddress.street %> <br>
+                                                    <%= order.shippingAddress.city %> , <%= order.shippingAddress.state %>
+                                                  </p>
+                                                  <p><b>Pin:</b> <span class="text-uppercase"><%= order.shippingAddress.pincode %></span></p>
+                                                  <p><b>Phone No:</b> <span class="text-uppercase"><%= order.shippingAddress.phone %></span></p>
+                                                  <p><b>Payment Method:</b> <span><%= order.paymentMethod %></span></p>
+                                                </div>
+                                              </div>
+                                              <div class="col-12 d-flex justify-content-center"> 
+                                              <% if(order.products.status === 'Pending' || order.products.status ==='Out Of Delivery' ){ %>
+                                                <button class="w-75 h5" onclick="requestCancellation('<%= order._id %>','<%= order.products._id %>')" style="background-color:rgb(183, 53, 53);color: white;border-radius:10px;border: none;text-decoration:none;">Cancel Order</button>
+                                              <% } %>
+                                              <% if(order.products.status === 'Cancelled'){ %>
+                                                <h5 class="text-danger"> Order was Cancelled!</h5>
+                                              <% } %>
+                                              <% if(order.products.status === 'Delivered'){ %>
+                                                <h5 class="text-success"> Order Delivered successfully!</h5>
+                                              <% } %>
+                                              <% if(order.products.status === 'Requested for Cancellation'){ %>
+                                                <h5 class="text-success"> Order Delivered successfully!</h5>
+                                              <% } %>
+                                              </div>
+                                            </div>
+                                          </div>
+                                        </div>
+                                        
+                                    </div>
+                                </div>
+                            </div>
                             <% }) %>
                             <!-- <tr>
                               <td><%= ++count %></td>

@@ -14,16 +14,13 @@ const cartSchema = new mongoose.Schema({
     products: [{
         _id: { type: mongoose.Schema.Types.ObjectId, ref: 'Vendor' },
         quantity: { type: Number },
-        productName: { type: String },
-        price: { type: Number },
-        images: { type: Array },
-        stockQuantity: {type:Number }
+        price : { type : Number }
     }],
     discount : {
         type: Number,
         default : 0
     },
-    total: { type: Number }
+    total: { type: Number,required:true}
 });
 
 const wishlistSchema = new mongoose.Schema({
