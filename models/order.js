@@ -55,11 +55,6 @@ const orderSchema = new mongoose.Schema({
     enum: ['Cash On Delivery', 'Razorpay'],
     required: true
   },
-  status: {
-    type: String,
-    enum: ['Pending', 'Delivered', 'Cancelled', 'Out Of Delivery'],
-    default: 'Pending'
-  },
   orderDate: {
     type: Date,
     default: Date.now

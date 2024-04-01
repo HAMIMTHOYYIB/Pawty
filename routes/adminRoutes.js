@@ -33,6 +33,8 @@ router.get('/editSubCategory/:id',adminAuthMiddleware,adminController.editSubCat
 router.post('/editSubCategory/:id',adminController.submitEditSubCategory);
 router.post('/deleteSubCategory/:id',adminController.deleteSubCategory);
 router.get('/admin-ProductView',adminAuthMiddleware,adminController.productList);
+router.get('/admin-Orderview',adminAuthMiddleware,adminController.orderList);
+
 // admin logout
 router.get('/admin/logout',adminController.adminLogout);
 

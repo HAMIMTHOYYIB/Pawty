@@ -111,35 +111,17 @@
   
   <main class="main-content">
     <!--== Start Page Header Area Wrapper ==-->
-    <div class="page-header-area" data-bg-img="/assets/img/photos/header-bg.jpg">
-      <div class="container pt--0 pb--0">
-        <div class="row">
-          <div class="col-12">
-            <div class="page-header-content">
-              <h2 class="title">Cart</h2>
-              <nav class="breadcrumb-area">
-                <ul class="breadcrumb">
-                  <li><a href="index.html">Home</a></li>
-                  <li class="breadcrumb-sep">//</li>
-                  <li>Cart</li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
     <!--== End Page Header Area Wrapper ==-->
 
     <!--== Start Blog Area Wrapper ==-->
-    <section class="shopping-cart-area">
+    <section class="shopping-cart-area" id="cart-area">
       <div class="container">
         <div class="row">
           <div class="col-md-12">
             <div class="shopping-cart-form table-responsive">
               <form action="#" method="post">
                 <table class="table text-center">
-                  <thead>
+                  <thead id="cart-table">
                     <tr>
                       <th class="product-remove">&nbsp;</th>
                       <th class="product-thumbnail">&nbsp;product View</th>
@@ -195,7 +177,7 @@
         </div>
         <div class="row col-12 g-0 d-flex">
 
-          <div class="col-12 g-0 col-lg-12">
+          <div class="col-12 g-0 col-lg-12" id="cart-total">
             <div class="cart-totals-wrap">
               <h4 class="title mt-2">Cart total</h4>
               <table>
@@ -215,11 +197,8 @@
                   <tr class="cart-subtotal">
                     <th class="">grandTotal</th>
                     <td>
-                      <span id="grandTotal" class="amount">₹ <span id="totVal"><%= total %></span> /-</span>
+                      <span id="grandTotal" class="amount">₹ <span id="totVal"><%= userCart.total %></span> /-</span>
                     </td>
-                  </tr>
-                  <tr id="emptyCart" style="display:none;">
-                    <td><b><small class="text-danger">Your Cart is Empty !</small></b></td>
                   </tr>
                 </tbody>
               </table>
@@ -233,17 +212,26 @@
         </div>
       </div>
     </section>
+    <section id="emptyCart" style="height:250px;display:none;" class="my-5 mt-5">
+      <h2 class="text-secondary w-100 my-5 d-flex justify-content-center">Your Cart is Empty !</h2>
+    </section>
     <!--== End Blog Area Wrapper ==-->
   </main>
 
   <div id="userData" data-user='<%= JSON.stringify(user) %>'></div>
   <script>
     const user = JSON.parse(document.getElementById('userData').dataset.user);
+    if(user.cart.products.length === 0){
+        document.getElementById('cart-area').style.display = ('none')
+        document.getElementById('emptyCart').style.display = ('flex')
+      }
+
     function toCheckout() {
       if(user.cart.products.length === 0){
-        document.getElementById('emptyCart').style.display = ('flex')
+        document.getElementById('cart-area').style.display = ('none');
+        document.getElementById('emptyCart').style.display = ('flex');
       }else{
-        window.location.href = '/checkout'
+        window.location.href = '/checkout';
       }
     }
 
@@ -267,10 +255,10 @@
             // Access the product ID
             const productId = input.getAttribute('data-productId');
             const price = document.getElementById(`price-${productId}`).textContent
-            console.log("proce is :",price);
+            console.log("price is :",price);
             // const productId = input.dataset.productId;
             console.log("input.dataset.productId :",productId);
-            updateCart(productId, currentValue - 1,price);
+            updateCart(productId, currentValue - 1,price,false);
           }
         });
       });
@@ -285,94 +273,65 @@
           // Access the product ID
             const productId = input.getAttribute('data-productId');
             const price = document.getElementById(`price-${productId}`).textContent
-            console.log("proce is :",price);
+            console.log("price is :",price);
             // const productId = input.dataset.productId;
             console.log("input.dataset.productId :",productId);
-          updateCart(productId, currentValue + 1,price);
+          updateCart(productId, currentValue + 1,price,true);
         });
       });
 
 
 // Remove product from cart
     removeButtons.forEach(button => {
-    button.addEventListener('click', () => {
-      const productId = button.id.split('-')[1]; // Extract the product ID from the button ID
-      const price = document.getElementById(`price-${productId}`).textContent
-      axios.post('/removeFromCart', { productId , price })
-        .then(response => {
-          // Handle the response as needed
-          console.log('Product removed from cart:', response.data);
-          button.closest('.tbody-item').remove(); //remove the specific row  
-          document.getElementById('amount').textContent = `${response.data.user.cart.total.toFixed(2)}`;
-        })
-        .catch(error => {
-          console.error('Error removing product from cart:', error.response);
-          // Handle errors gracefully (e.g., display an error message to the user)
-        });
+      button.addEventListener('click', () => {
+        const productId = button.id.split('-')[1]; // Extract the product ID from the button ID
+        const price = document.getElementById(`price-${productId}`).textContent;
+        axios.post('/removeFromCart', { productId, price })
+          .then(response => {
+            // Handle the response as needed
+            console.log('Product removed from cart:', response.data);
+            button.closest('.tbody-item').remove(); //remove the specific row
+            document.getElementById('amount').textContent = `${response.data.total.toFixed(2)}`;
+            document.getElementById('totVal').textContent = `${response.data.total.toFixed(2)}`;
+          })
+          .catch(error => {
+            console.error('Error removing product from cart:', error.response);
+            // Handle errors gracefully (e.g., display an error message to the user)
+          });
       });
     });
   });
 
-    function updateCart(productId, quantity,price) {
-      const totVal = document.getElementById('totVal');
-      const Amount = document.getElementById('amount');
-      const InputCoup = document.getElementById('coupon-code');
-      const tickmark = document.getElementById('checktrue');
-      const crossmark = document.getElementById('checkfalse');
-      const couponMessage = document.getElementById('coupon-message');
-      discountVal.textContent = 0;
-      
-      axios.post('/updateCart', { productId, quantity , price })
-        .then(response => {
-          console.log("then working")
-          let subTotal = 0;
-          response.data.user.cart.products.forEach(prod => {
-            subTotal += response.data.price * prod.quantity;
-            document.getElementById(`total-${prod._id}`).textContent = `${response.data.price * prod.quantity} /-`;
-          });
-          document.getElementById('amount').textContent = `${subTotal.toFixed(2)}`;
-          totVal.textContent = Amount.textContent - discountVal.textContent;
-          console.log('Cart quantity updated successfully:', response.data);
-        })
-        .catch(error => {
-          console.error('Error updating cart quantity:', error.response);
-      });
-    }
+  function updateCart(productId, quantity, price ,change) {
+    const totVal = document.getElementById('totVal');
+    const Amount = document.getElementById('amount');
+    const InputCoup = document.getElementById('coupon-code');
+    const tickmark = document.getElementById('checktrue');
+    const crossmark = document.getElementById('checkfalse');
+    const couponMessage = document.getElementById('coupon-message');
+    discountVal.textContent = 0;
 
-      const applyCouponBtn = document.getElementById('apply-coupon-btn');
-      const couponCodeInput = document.getElementById('coupon-code');
-      const couponMessage = document.getElementById('coupon-message');
-      const tickmark = document.getElementById('checktrue');
-      const crossmark = document.getElementById('checkfalse');
-      const discountVal = document.getElementById('discountVal');
-      const totVal = document.getElementById('totVal');
-      const Amount = document.getElementById('amount');
-
-      applyCouponBtn.addEventListener('click', async () => {
-        const couponCode = couponCodeInput.value;
-        try {
-          const response = await axios.post('/check-coupon', { couponCode });
-          if (response.data.valid) {
-            couponMessage.textContent = 'Coupon applied successfully.';
-            couponMessage.style.color = 'green';
-            tickmark.style.display = 'flex';
-            crossmark.style.display = 'none';
-            discountVal.textContent = response.data.value;
-            let tot = parseFloat(Amount.textContent) - parseFloat(discountVal.textContent);
-            console.log("tot :",tot);
-            totVal.textContent = tot ;
-          } else {
-            couponMessage.textContent = response.data.message || 'Invalid coupon code.';
-            couponMessage.style.color = 'red';
-            crossmark.style.display = 'flex';
-            tickmark.style.display = 'none';
-            discountVal.textContent = 0;
-            totVal.textContent = Amount.textContent - 0;
-          }
-        } catch (error) {
-          console.error('Failed to apply coupon:', error);
+    axios.post('/updateCart', { productId, quantity, price , change })
+    .then(response => {
+      console.log("then working");
+      let subTotal = 0;
+      response.data.user.cart.products.forEach(prod => {
+        if (prod._id === productId) {
+          subTotal += price * quantity;
+        } else {
+          subTotal += prod.price * prod.quantity;
         }
+        document.getElementById(`total-${prod._id}`).textContent = `${prod.price * prod.quantity} /-`;
       });
+      Amount.textContent = `${subTotal.toFixed(2)}`;
+      totVal.textContent = `${subTotal.toFixed(2)}`;
+      console.log('Cart quantity updated successfully:', response.data);
+    })
+    .catch(error => {
+      console.error('Error updating cart quantity:', error.response);
+    });
+  }
+
   </script>
   
   

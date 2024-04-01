@@ -2,6 +2,7 @@
 const Admin = require('../models/admin');
 const User = require('../models/User');
 const Vendor = require('../models/Vendor');
+const Order = require("../models/order")
 const jwt = require('jsonwebtoken')
 
 let dashboard = (req,res) => {
@@ -274,7 +275,47 @@ let productList = async (req,res) => {
     let products =  await Vendor.find().select("products");
     console.log("products :",products);
     res.render('users/shop-org',{products})
-  }
+};
+
+let orderList = async (req,res) => {
+    try {
+    
+        // Aggregate orders to unwind products array
+        let orders= await Order.aggregate([
+          {$unwind:'$products'}
+        ]);
+        for (let order of orders) {
+          const vendor = await Vendor.findOne({ 'products._id': order.products._id });
+          if (vendor) {
+            const product = vendor.products.find(p => p._id.equals(order.products._id));
+            order.products = {
+              _id: product._id,
+              productName: product.productName,
+              description: product.description,
+              price: product.price,
+              brand: product.brand,
+              category: product.category,
+              subCategory: product.subCategory,
+              stockQuantity: product.stockQuantity,
+              addedOn: product.addedOn,
+              images: product.images,
+              status:order.products.status,
+              quantity:order.products.quantity          
+            };
+          }
+          let user = await User.findById(order.userId);
+          if (user) {
+            order.userName = user.username;
+            order.userEmail = user.email;
+          }
+        }
+        console.log("orders :",orders)
+        res.render('admin/orderView', { orders: orders.reverse()});
+      } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Failed to get orders' });
+      }
+}
 
 
 module.exports = {
@@ -302,5 +343,6 @@ module.exports = {
     vendorList,
     vendorVerify,
     productList,
+    orderList,
     adminLogout
 }

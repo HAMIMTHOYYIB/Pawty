@@ -285,25 +285,31 @@ let addtocart = async (req, res) => {
     res.status(500).json({ error: "Unable to add product to cart" });
   }
 }
-let removefromcart = async (req,res) => {
+let removefromcart = async (req, res) => {
   try {
-    let  { productId , price } = req.body;
-    let user = await User.findOne({_id:req.user.id});
-    let product  = user.cart.products.filter(prod => prod._id.toString() === productId);
+    let { productId, price } = req.body;
+    let user = await User.findOne({ _id: req.user.id });
+    let product = user.cart.products.find(prod => prod._id.toString() === productId);
+    if (!product) {
+      return res.status(404).json({ message: 'Product not found in cart' });
+    }
+
     user.cart.products = user.cart.products.filter(prod => prod._id.toString() !== productId);
-    let total = user.cart.total - (price * product[0].quantity);
+    console.log("user.cart.total before : ",user.cart.total)
+    // Calculate the new total
+    let subtotal = parseInt(price) * product.quantity;
+    let total = parseInt(user.cart.total) - subtotal;
+    
     user.cart.total = total;
-    console.log("user cart total :",user.cart.total);
-    console.log("product removed from cart");
+    console.log("user.cart.total after : ",user.cart.total)
     await user.save();
-    res.json({message:"product removed",user,product,total})
+    res.json({ message: "product removed", user, product, total });
   } catch (error) {
-    res.status(500).send("Internal Server Error on product removal in cart")
+    res.status(500).send("Internal Server Error on product removal in cart");
   }
-  // res.redirect('/cart');
-}
+};
 let changeQuantity = async (req, res) => {
-  const { productId,quantity,price } = req.body;
+  const { productId,quantity,price , change } = req.body;
   try {
     const user = await User.findById(req.user.id);
 
@@ -311,8 +317,14 @@ let changeQuantity = async (req, res) => {
     if (productIndex !== -1) {
       user.cart.products[productIndex].quantity = quantity;
       // let price = user.cart.products[productIndex].price;
-      // user.cart.total = user.cart.products.reduce((total, product) => total + (product.price * product.quantity), 0);
+      if(change === true){
+        user.cart.total += parseFloat(price);
+      }
+      if(change === false){
+        user.cart.total -= parseFloat(price);
+      }
       await user.save();
+      console.log("user cart total :",user.cart.total)
       res.status(200).json({ message: 'Quantity updated successfully',user,quantity,price});
     } else {
       res.status(404).json({ message: 'Product not found in cart' });
@@ -322,6 +334,8 @@ let changeQuantity = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
+
+
 let checkCoupon = async (req, res) => {
   let user = await User.findById(req.user.id)
   const { couponCode } = req.body;
@@ -443,7 +457,6 @@ let getCheckout = async (req,res) => {
   }
   res.render('users/checkout',{user,coupon:false})
 }
-
 let submitCheckout = async (req, res) => {
   const { addressId, paymentMethod } = req.body;
   console.log("req.body : ", req.body);
@@ -452,10 +465,10 @@ let submitCheckout = async (req, res) => {
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
-    let vendors = await Vendor.find()
-    let address = user.address.filter(add => add._id.toString() === addressId)
-    console.log("address : ",address[0]);
-    
+    let vendors = await Vendor.find();
+    let address = user.address.filter(add => add._id.toString() === addressId);
+    console.log("address : ", address[0]);
+
     let products = [];
     for (const prod of user.cart.products) {
       let vendorId = null;
@@ -463,6 +476,9 @@ let submitCheckout = async (req, res) => {
       for (const vendor of vendors) {
         for (const product of vendor.products) {
           if (product._id.toString() === prod._id.toString()) {
+            console.log("prodcut inside the vendor :", product);
+            let stock = parseInt(product.stockQuantity) - prod.quantity;
+            product.stockQuantity = stock.toString();
             vendorId = vendor._id.toString();
             break;
           }
@@ -478,7 +494,12 @@ let submitCheckout = async (req, res) => {
       });
     }
 
-    let shippingAddress = address[0]
+    // Save the updated products in each vendor
+    for (const vendor of vendors) {
+      await vendor.save();
+    }
+
+    let shippingAddress = address[0];
     let newOrder = new Order({
       products: products,
       total: user.cart.total,
@@ -490,12 +511,13 @@ let submitCheckout = async (req, res) => {
     await newOrder.save();
     user.cart = { products: [], total: 0, discount: 0 };
     await user.save();
-    res.status(201).json({ message: 'Order placed successfully', order: newOrder , shippingAddress });
+    res.status(201).json({ message: 'Order placed successfully', order: newOrder, shippingAddress });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Failed to place order' });
   }
 };
+
 
 // Get UserLoginPage
 let loginPage = (req,res) => {

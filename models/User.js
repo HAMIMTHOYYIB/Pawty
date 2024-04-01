@@ -20,7 +20,7 @@ const cartSchema = new mongoose.Schema({
         type: Number,
         default : 0
     },
-    total: { type: Number,required:true}
+    total: { type: Number,required:true,default:0}
 });
 
 const wishlistSchema = new mongoose.Schema({
