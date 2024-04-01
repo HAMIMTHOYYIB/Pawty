@@ -15,6 +15,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com/">
     <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,300;1,400;1,600&amp;display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
     <!--== Bootstrap CSS ==-->
     <link href="assets/css/bootstrap.min.css" rel="stylesheet" />
@@ -144,7 +145,7 @@
                     <button class="nav-link <%= initialTab === 'dashboard' ? 'active' : '' %>" id="dashboad-tab" data-bs-toggle="tab" data-bs-target="#dashboad" type="button" role="tab" aria-controls="dashboad" aria-selected="<%= initialTab === 'dashboard' %>">Dashboard</button>
                     <button class="nav-link <%= initialTab === 'orders' ? 'active' : '' %>" id="orders-tab" data-bs-toggle="tab" data-bs-target="#orders" type="button" role="tab" aria-controls="orders" aria-selected="<%= initialTab === 'orders' %>"> Orders</button>
                     <!-- <button class="nav-link" id="download-tab" data-bs-toggle="tab" data-bs-target="#download" type="button" role="tab" aria-controls="download" aria-selected="false">Download</button> -->
-                    <button class="nav-link" id="payment-method-tab" data-bs-toggle="tab" data-bs-target="#payment-method" type="button" role="tab" aria-controls="payment-method" aria-selected="false">Payment Method</button>
+                    <!-- <button class="nav-link" id="payment-method-tab" data-bs-toggle="tab" data-bs-target="#payment-method" type="button" role="tab" aria-controls="payment-method" aria-selected="false">Payment Method</button> -->
                     <button class="nav-link nav-link <%= initialTab === 'address-edit' ? 'active' : '' %>" id="address-edit-tab" data-bs-toggle="tab" data-bs-target="#address-edit" type="button" role="tab" aria-controls="address-edit" aria-selected="<%= initialTab === 'address-edit' %>">address</button>
                     <button class="nav-link <%= initialTab === 'changePass' ? 'active' : '' %>" id="change-password-tab" data-bs-toggle="tab" data-bs-target="#password-info" type="button" role="tab" aria-controls="changePass" aria-selected="<%= initialTab === 'changePass' %>">ChangeYour Password</button>
                     <button class="nav-link" onclick="window.location.href = '/logout'" type="button">Logout</button>
@@ -182,7 +183,7 @@
                               <h5 class="modal-title" id="editProfileModalLabel">Edit Profile</h5>
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <form id="editProfileForm" action="/editprofile" method="post">
+                            <form id="editProfileFormm" action="/editprofile" method="post">
                               <div class="modal-body">
                                   <div class="form-group">
                                       <label for="editUsername">Username</label>
@@ -236,6 +237,7 @@
                               <td class="<%= order.products.status === 'Out Of Delivery'?'text-warning':'d-none' %>"><%= order.products.status %></td>
                               <td class="<%= order.products.status === 'Cancelled'?'text-danger':'d-none' %>"><%= order.products.status %></td>
                               <td class="<%= order.products.status === 'Delivered'?'text-success':'d-none' %>"><%= order.products.status %></td>
+                              <td class="<%= order.products.status === 'Requested for Cancellation'?'text-warning':'d-none' %>"><%= order.products.status %></td>
 
                               <td>$<%= order.products.price %></td>
                             <td><a href="#" data-bs-toggle="modal" data-bs-target="#orderModal-<%= index %>">View</a></td>
@@ -280,8 +282,8 @@
                                               </div>
                                               <div class="col-12 d-flex justify-content-center"> 
                                               <% if(order.products.status === 'Pending' || order.products.status ==='Out Of Delivery' ){ %>
-                                                <button class="w-75 h5" onclick="requestCancellation('<%= order._id %>','<%= order.products._id %>')" style="background-color:rgb(183, 53, 53);color: white;border-radius:10px;border: none;text-decoration:none;">Cancel Order</button>
-                                              <% } %>
+                                                <button class="w-75 h5" onclick="requestCancellation('<%= order._id %>','<%= order.products._id %>','<%= index %>')" style="background-color:rgb(183, 53, 53);color: white;border-radius:10px;border: none;text-decoration:none;">Cancel Order</button>
+                                                <% } %>
                                               <% if(order.products.status === 'Cancelled'){ %>
                                                 <h5 class="text-danger"> Order was Cancelled!</h5>
                                               <% } %>
@@ -289,7 +291,7 @@
                                                 <h5 class="text-success"> Order Delivered successfully!</h5>
                                               <% } %>
                                               <% if(order.products.status === 'Requested for Cancellation'){ %>
-                                                <h5 class="text-success"> Order Delivered successfully!</h5>
+                                                <h5 class="text-danger"> Order Cancellation Request Sent!</h5>
                                               <% } %>
                                               </div>
                                             </div>
@@ -320,12 +322,12 @@
                     </div>
                   </div>
 
-                  <div class="tab-pane fade" id="payment-method" role="tabpanel" aria-labelledby="payment-method-tab">
+                  <!-- <div class="tab-pane fade" id="payment-method" role="tabpanel" aria-labelledby="payment-method-tab">
                     <div class="myaccount-content">
                       <h3>Payment Method</h3>
                       <p class="saved-message">You Can't Saved Your Payment Method yet.</p>
                     </div>
-                  </div>
+                  </div> -->
 
                   <div class="tab-pane fade <%= initialTab === 'address-edit' ? 'show active' : '' %>" id="address-edit" role="tabpanel" aria-labelledby="address-edit-tab">
                     <div class="myaccount-content">
@@ -444,7 +446,7 @@
                                   </div>
                                 </form>
                                 <script>
-                                  const editProfileForm = document.getElementById('editProfileForm');
+                                  const editProfileForm = document.getElementById('editProfileFormm');
               
                                   editProfileForm.addEventListener('submit', (event) => {
                                       event.preventDefault();
@@ -668,54 +670,56 @@
                     <div class="myaccount-content">
                       <!-- <h3>Account Details</h3> -->
                       <div class="account-details-form">
-                        <form action="/changePassword" method="post" >
+                        <form action="/changePassword" method="post" id="change-password-form">
                           <fieldset>
                             <legend><h3>Change Password</h3></legend>
-                              <div class="single-input-item">
-                                <label for="current-pwd" class="required">Current Password</label>
-                                <div class="input-group">
-                                  <input type="password" name="currentPass" checked value="" id="current-pwd" />
-                                  <div class="input-group-append">
-                                    <button class="btn bg-transparent text-dark" type="button" id="toggle-current-pwd">
-                                      <i class="fa fa-eye" aria-hidden="true"></i>
-                                    </button>
-                                  </div>
+                            <div class="single-input-item">
+                              <label for="current-pwd" class="required">Current Password</label>
+                              <div class="input-group">
+                                <input type="password" name="currentPass" checked value="" id="current-pwd" />
+                                <div class="input-group-append">
+                                  <button class="btn bg-transparent text-dark" type="button" id="toggle-current-pwd">
+                                    <i class="fa fa-eye" aria-hidden="true"></i>
+                                  </button>
                                 </div>
                               </div>
-                              <div class="row">
-                                <div class="col-lg-6">
-                                  <div class="single-input-item">
-                                    <label for="new-pwd" class="required">New Password</label>
-                                    <div class="input-group">
-                                      <input type="password" name="newPass" id="new-pwd" />
-                                      <div class="input-group-append">
-                                        <button class="btn bg-transparent text-dark" type="button" id="toggle-new-pwd">
-                                          <i class="fa fa-eye" aria-hidden="true"></i>
-                                        </button>
-                                      </div>
+                              <div id="current-password-error" class="error-message  text-danger"></div>
+                            </div>
+                            <div class="row">
+                              <div class="col-lg-6">
+                                <div class="single-input-item">
+                                  <label for="new-pwd" class="required">New Password</label>
+                                  <div class="input-group">
+                                    <input type="password" name="newPass" id="new-pwd" />
+                                    <div class="input-group-append">
+                                      <button class="btn bg-transparent text-dark" type="button" id="toggle-new-pwd">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                      </button>
                                     </div>
                                   </div>
-                                </div>
-                                <div class="col-lg-6">
-                                  <div class="single-input-item">
-                                    <label for="confirm-pwd" class="required">Confirm Password</label>
-                                    <div class="input-group">
-                                      <input type="password" name="confirmPass" id="confirm-pwd" />
-                                      <div class="input-group-append">
-                                        <button class="btn bg-transparent text-dark" type="button" id="toggle-confirm-pwd">
-                                          <i class="fa fa-eye" aria-hidden="true"></i>
-                                        </button>
-                                      </div>
-                                    </div>
-                                  </div>
+                                  <div id="new-password-error" class="error-message  text-danger"></div>
                                 </div>
                               </div>
+                              <div class="col-lg-6">
+                                <div class="single-input-item">
+                                  <label for="confirm-pwd" class="required">Confirm Password</label>
+                                  <div class="input-group">
+                                    <input type="password" name="confirmPass" id="confirm-pwd" />
+                                    <div class="input-group-append">
+                                      <button class="btn bg-transparent text-dark" type="button" id="toggle-confirm-pwd">
+                                        <i class="fa fa-eye" aria-hidden="true"></i>
+                                      </button>
+                                    </div>
+                                  </div>
+                                  <div id="confirm-password-error" class="error-message text-danger"></div>
+                                </div>
+                              </div>
+                            </div>
                           </fieldset>
                           <div class="single-input-item d-flex justify-content-between">
-                            <button type="submit" class="check-btn sqr-btn">Save Changes</button>
+                            <button type="button" class="check-btn sqr-btn" id="submit-btn">Save Changes</button>
                             <button type="reset" class="">Reset</button>
                           </div>
-                          
                         </form>
                       </div>
                     </div>
@@ -802,6 +806,7 @@
       });
     </script>
 
+      <!-- Script of the password show eye -->
     <script>
       document.getElementById('toggle-current-pwd').addEventListener('click', function() {
         var pwdInput = document.getElementById('current-pwd');
@@ -818,6 +823,121 @@
         pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
       });
     </script>
+
+    <!--  Change Password validation and submition -->
+    <script>
+      document.getElementById('submit-btn').addEventListener('click', function () {
+      var currentPassword = document.getElementById('current-pwd').value;
+      var newPassword = document.getElementById('new-pwd').value;
+      var confirmPassword = document.getElementById('confirm-pwd').value;
+      var currentPasswordError = document.getElementById('current-password-error');
+      var newPasswordError = document.getElementById('new-password-error');
+      var confirmPasswordError = document.getElementById('confirm-password-error');
+      var isValid = true;
+
+      // Reset error messages
+      currentPasswordError.innerHTML = '';
+      newPasswordError.innerHTML = '';
+      confirmPasswordError.innerHTML = '';
+
+      // Validate current password
+      if (currentPassword.length === 0) {
+        currentPasswordError.innerHTML = 'Please enter your current password.';
+        isValid = false;
+      }
+
+      // Validate new password
+      if (newPassword.length < 6) {
+        newPasswordError.innerHTML = 'New password must be at least 6 characters long.';
+        isValid = false;
+      }
+
+      // Check if new password and confirm password match
+      if (newPassword !== confirmPassword) {
+        confirmPasswordError.innerHTML = 'Passwords do not match.';
+        isValid = false;
+      }
+
+      // If no errors, submit form
+      if (isValid) {
+        axios.post('/changePassword', {
+          currentPass: currentPassword,
+          newPass: newPassword
+        })
+        .then(function (response) {
+          // Handle successful response
+          console.log(response);
+          // Clear input fields
+          document.getElementById('current-pwd').value = '';
+          document.getElementById('new-pwd').value = '';
+          document.getElementById('confirm-pwd').value = '';
+          // // Show toast message
+          Toastify({
+              text: "Password updated",
+              duration: 2000, // 3 seconds
+              gravity: "bottom", // Display at the top
+              position: 'center', // Display on the right side
+              backgroundColor: "black", // Background color
+              stopOnFocus: true, // Stop the timer when the toast is focused
+          }).showToast();
+      })
+            .catch(function (error) {
+              console.log("working catch block")
+            // Handle error
+            console.error(error);
+            if (error.response.status === 400) {
+                // Assuming you have a div with id "current-password-error" to show current password error
+                document.getElementById('current-password-error').innerHTML = error.response.data.error;
+            } else {
+                // Handle other errors
+                console.log("error on changing Password");
+            }
+        });
+      }
+    });
+  </script>
+
+
+<!--  Request for Order Cancellation  -->
+    <script>
+      function requestCancellation(orderId, productId , index) {
+        axios.post('/cancelOrder', {
+            orderId: orderId,
+            productId: productId
+        })
+        .then(function (response) {
+            // Handle successful cancellation
+            console.log("order Cancellation request send",index,response);
+            $(`orderModalLabel-${index}`).modal('hide');           
+             Toastify({
+                text: "Order cancellation requested sent",
+                duration: 2000, // 3 seconds
+                close: true,
+                gravity: "top", // Display at the top
+                position: 'center', // Display on the right side
+                backgroundColor: "red", // Background color
+                stopOnFocus: true, // Stop the timer when the toast is focused
+            }).showToast();
+        })
+        .catch(function (error) {
+            // Handle cancellation error
+            console.error(error);
+            // Show error message
+            Toastify({
+                text: "Error requesting cancellation",
+                duration: 3000, // 3 seconds
+                close: true,
+                gravity: "top", // Display at the top
+                position: 'right', // Display on the right side
+                backgroundColor: "red", // Background color
+                stopOnFocus: true, // Stop the timer when the toast is focused
+            }).showToast();
+        })
+      }
+    </script>
+
+
+
     <!--== End My Account Wrapper ==-->
 
     <!--== Start Feature Area Wrapper ==-->
@@ -1290,6 +1410,7 @@
 
 <!--=== jQuery Custom Js ===-->
 <script src="assets/js/custom.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 </body>
 </html>

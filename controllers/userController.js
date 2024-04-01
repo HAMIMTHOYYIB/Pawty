@@ -38,29 +38,24 @@ let editProfile = async (req,res) => {
   res.json({ message: "Profile Updated."});
   
 }
-
 let changePass = async (req, res) => {
-  const { currentPass, newPass, confirmPass } = req.body;
+  const { currentPass, newPass } = req.body;
   let userId = req.user.id;
   let user = await User.findOne({ _id: userId });
-  console.log("find user :",user);
   bcrypt.compare(currentPass, user.password, async (err, result) => {
     if (err) {
-      return res.status(500).send('Internal Server Error');
+      return res.status(500).json({ error: 'Internal Server Error' });
     }
     if (!result) {
-      return res.render('users/account', { initialTab:'dashboard',user, passErr: 'Wrong Password' });
+      return res.status(400).json({ error: 'Wrong Password' });
     }
-    if (!newPass || !confirmPass) {
-      return res.status(400).send('Password empty');
-    }
-    if (newPass !== newPass) {
-      return res.status(400).send('Passwords do not match');
+    if (!newPass) {
+      return res.status(400).json({ error: 'New password cannot be empty' });
     }
     const hashedPassword = await bcrypt.hash(newPass, 10);
     user.password = hashedPassword;
     await user.save();
-    res.redirect('/accountChangePass');
+    return res.json({ message: 'Password changed successfully' });
   });
 };
 let accountAddress = async(req,res) => {
@@ -517,6 +512,27 @@ let submitCheckout = async (req, res) => {
     res.status(500).json({ message: 'Failed to place order' });
   }
 };
+let requestCancellation = async (req,res) => {
+  console.log("Requested for Cancellation");
+  try{
+    let { orderId,productId } = req.body;
+    if(!orderId&&productId){
+      res.status(500).send("internal Server Error")
+    }
+  
+    let order = await Order.findOne({_id:orderId})
+    if(!order){
+      res.status(404).send('Cannot find the order')
+    }
+    product = order.products.find((prod) => prod._id.toString() === productId.toString());
+    product.status = 'Requested for Cancellation';
+    await order.save();
+    return res.json({message:'request cancellation sent'});
+  }catch (error) {
+    console.log(error);
+    res.status(500).send('Internal Server Error')
+  }
+}
 
 
 // Get UserLoginPage
@@ -781,6 +797,7 @@ module.exports={
     getCheckout,
     removeCoupon,
     submitCheckout,
+    requestCancellation,
 
     loginPage,
     submitlogin,

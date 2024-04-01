@@ -323,6 +323,7 @@
                                                             <option value="Delivered" <%= order.products.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
                                                             <option value="Cancelled" <%= order.products.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
                                                             <option value="Out Of Delivery" <%= order.products.status === 'Out Of Delivery' ? 'selected' : '' %>>Out Of Delivery</option>
+                                                            <option value="Requested for Cancellation" <%= order.products.status === 'Requested for Cancellation' ? 'selected' : '' %>>Requested for Cancellation</option>
                                                         </select>
                                                     </form>
                                                 </td>

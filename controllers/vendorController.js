@@ -330,7 +330,7 @@ let getOrderList = async (req, res) => {
       }
     }
     console.log("orders :",orders)
-    res.render('vendor/orderList', { orders: orders});
+    res.render('vendor/orderList', { orders: orders.reverse()});
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Failed to get orders' });

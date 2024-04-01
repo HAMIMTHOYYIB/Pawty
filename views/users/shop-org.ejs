@@ -33,32 +33,13 @@
     <link href="assets/css/fancybox.min.css" rel="stylesheet" />
     <!--== Range Slider Min CSS ==-->
     <link href="assets/css/ion.rangeSlider.min.css" rel="stylesheet" />
-
+    <!-- Include Toastify CSS -->
+<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 
     <!-- bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     <!--== Main Style CSS ==-->
     <link href="assets/css/style.css" rel="stylesheet" />
-
-    <style>
-      .toast {
-        position: fixed;
-        bottom: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1000;
-        max-width: 300px;
-        background-color: #203e5a;
-        color:#fff;
-        border-radius: 10px;
-        padding: 10px;
-        opacity: 0;
-        transition: opacity 0.5s ease-in-out;
-        }
-        .toast.show {
-        opacity: 1;
-        }
-    </style>
 </head>
 <body>
 
@@ -224,11 +205,6 @@
 
                        <% }) %>
                       <% }) %>
-                      <div id="cartNotification" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="500">
-                        <div class="toast-body">
-                          Product added to cart !
-                        </div>
-                      </div>
 
                       <div class="col-12">
                         <div class="pagination-items pagination-items-style1">
@@ -668,9 +644,17 @@ document.addEventListener('DOMContentLoaded', function() {
       .then(function(response) {
         console.log(response.data);
 
-        // Show the toast when product is added
-        const toast = document.getElementById('cartNotification');
-        toast.classList.add('show');
+        Toastify({
+              text: "Product Added to cart",
+              duration: 900, 
+              gravity: "top", 
+              position: 'center',
+              backgroundColor: "#203e5a",
+              stopOnFocus: true, // Stop the timer when the toast is focused
+          }).showToast();
+        // // Show the toast when product is added
+        // const toast = document.getElementById('cartNotification');
+        // toast.classList.add('show');
 
         // Hide the toast after 0.5 seconds
         setTimeout(function() {
@@ -742,6 +726,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <!--=== jQuery Custom Js ===-->
 <script src="assets/js/custom.js"></script>
+
+<!-- Include Toastify JS -->
+<script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 
 </body>
 
