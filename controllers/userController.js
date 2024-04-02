@@ -6,13 +6,22 @@ const Order = require('../models/order');
 let helper = require('../helpers/user')
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
-const razorpayInstance = require('../config/razorpay')
+const razorpayInstance = require('../config/razorpay');
+// const { validationResult } = require('express-validator');
 require('dotenv').config()
 
 
 // Get Homepage
-let homePage = (req,res) => {
-    res.render('users/index-two')
+let homePage = async (req,res) => {
+
+  let admin = await Admin.findOne();
+  let category = admin.category;
+  let subCategory = admin.subCategory;
+
+  let vendors = await Vendor.find().select("products")
+  let products = vendors.map((vendor) => vendor.products).flat()
+  console.log("vendors :",products)
+  res.render('users/index-two',{category,subCategory,products})
 }
 // Get UserAccount
 let account = async (req,res) => {
@@ -411,7 +420,7 @@ let addtowishlist  = async (req, res) => {
     if (existingProductIndex !== -1) { //if exist remove from wishlist
       existInWishlist = false;
       user.wishlist.products = user.wishlist.products.filter((prod) => prod._id.toString() !== productId )
-    } else {
+    } else { 
       existInWishlist = true;
       user.wishlist.products.push({
         _id: productId,
@@ -456,6 +465,7 @@ let submitCheckout = async (req, res) => {
   const { addressId, paymentMethod } = req.body;
   console.log("req.body : ", req.body);
   try {
+
     let user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -533,7 +543,37 @@ let requestCancellation = async (req,res) => {
     res.status(500).send('Internal Server Error')
   }
 }
+let razorpayOrder = async (req,res) => {
+  console.log("razorpay interface workingg");
+  const { paymentMethod } = req.body;
+  try {
+    if (paymentMethod !== 'Razorpay') {
+      return res.status(400).json({ message: 'Invalid payment method' });
+    }
+    let user = await User.findById(req.user.id)
+    if(!user){
+      res.status(404).json({message:'User Not Found'})
+    }
 
+    // Create order on Razorpay
+    const order = await razorpayInstance.orders.create({
+      amount: user.cart.total * 100,
+      currency: 'INR',
+      payment_capture: 1,
+    });
+    console.log("order ,",order)
+    res.status(200).json({
+      orderId: order.id,
+      razorpayOrderId: order.id,
+      razorpayApiKey: process.env.key_id,
+      total : user.cart.total * 100,
+      user:user
+    }); 
+  } catch (error) {
+    console.error('Error creating Razorpay order:', error);
+    res.status(500).json({ message: 'Failed to create Razorpay order' });
+  }
+};
 
 // Get UserLoginPage
 let loginPage = (req,res) => {
@@ -798,6 +838,7 @@ module.exports={
     removeCoupon,
     submitCheckout,
     requestCancellation,
+    razorpayOrder,
 
     loginPage,
     submitlogin,

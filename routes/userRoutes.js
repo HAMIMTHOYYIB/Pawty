@@ -48,7 +48,8 @@ router.post('/removeFromWishlist',userAuth,userController.removefromwishlist);
 
 router.get('/checkout',userAuth,userController.getCheckout);
 router.post('/checkout',userAuth,userController.submitCheckout);
-router.post("/cancelOrder",userAuth,userController.requestCancellation)
+router.post("/cancelOrder",userAuth,userController.requestCancellation);
+router.post('/razorpay/order',userAuth,userController.razorpayOrder);
 // Logout
 router.get('/logout',userController.userLogout);
 

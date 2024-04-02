@@ -218,7 +218,6 @@
                       </div>
                       <% }) %>
                     </div>
-                    <!-- <button type="submit" class="btn btn-primary">Submit</button> -->
                 </div>
               </div>
               <!--== End Billing Accordion ==-->
@@ -293,7 +292,7 @@
                         <small id="errMsg" class="text-danger"></small>
                       </div>
                     </div>
-                    <button class="w-100 btn-place-order" type="button">Place Order</button>
+                    <button class="w-100 btn-place-order" id="btn-place-order" type="button">Place Order</button>
                     <!-- <a href="/placeOrder" class="btn-place-order">Place order</a> -->
                   </div>
                 </div>
@@ -308,46 +307,100 @@
   </main>
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
   <script>
-      document.addEventListener('DOMContentLoaded', () => {
-      const placeOrderBtn = document.querySelector('.btn-place-order');
-      const agreeCheckbox = document.getElementById('privacy');
-      const errMsg = document.getElementById('errMsg');
+    document.addEventListener('DOMContentLoaded', () => {
+    const placeOrderBtn = document.getElementById('btn-place-order');
+    const agreeCheckbox = document.getElementById('privacy');
+    const errMsg = document.getElementById('errMsg');
 
-      placeOrderBtn.addEventListener('click', async () => {
-        const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked').value;
-        const selectedAddress = document.querySelector('input[name="addressId"]:checked').value;
-
-        if (!selectedPayment) {
-          errMsg.innerText = 'Please select a payment method.';
-          return;
-        }
-
-        if (!selectedAddress) {
-          errMsg.innerText = 'Please select a billing address.';
-          return;
-        }
-
-        if (!agreeCheckbox.checked) {
-          errMsg.innerText = 'Please agree to the terms and conditions.';
-          return;
-        }
-        errMsg.innerText = '';
-        try {
+    document.getElementById('btn-place-order').addEventListener('click', async () => {
+      const selectedPayment = document.querySelector('input[name="paymentMethod"]:checked').value;
+      const selectedAddress = document.querySelector('input[name="addressId"]:checked').value;
+      if (!selectedPayment) {
+        errMsg.innerText = 'Please select a payment method.';
+        return;
+      }
+      if (!selectedAddress) {
+        errMsg.innerText = 'Please select a billing address.';
+        return;
+      }
+      if (!agreeCheckbox.checked) {
+        errMsg.innerText = 'Please agree to the terms and conditions.';
+        return;
+      }
+      errMsg.innerText = '';
+      try {
+        console.log("payment methoddd :",selectedPayment)
+        if (selectedPayment == 'Razorpay') {
           const orderData = {
             paymentMethod: selectedPayment,
             addressId: selectedAddress,
           };
+          const response = await axios.post('/razorpay/order', orderData);
+          if (response.status === 200) {
+            const { orderId, razorpayOrderId, razorpayApiKey , total } = response.data;
+            const options = {
+              key:razorpayApiKey,
+              amount: total, 
+              currency: 'INR',
+              order_id: razorpayOrderId,
+              name: 'Pawty',
+              description: 'Order payment',
+              handler: function (response) {
+                console.log(response);
+                // You can then submit the order
+                submitOrder(selectedPayment, selectedAddress);
+              },
+              prefill: {
+                name: user.username,
+                email: user.email,
+                contact:user.phone,
+              },
+              notes: {
+                address: selectedAddress,
+              },
+              theme: {
+                color: '#203e5a',
+              },
+            };
+            const rzp = new Razorpay(options);
+            rzp.open();
+          } else {
+            Swal.fire({
+              title: 'Error!',
+              text: 'Failed to create Razorpay order',
+              icon: 'error',
+            });
+          }
+        } else {
+          submitOrder(selectedPayment, selectedAddress);
+        }
+      } catch (error) {
+        console.error('Error placing order:', error.response.data);
+        Swal.fire({
+          title: 'Error!',
+          text: 'Failed to place order',
+          icon: 'error',
+        });
+      }
+    });
+
+      async function submitOrder(paymentMethod, addressId) {
+        try {
+          const orderData = {
+            paymentMethod,
+            addressId,
+          };
           const response = await axios.post('/checkout', orderData);
-          if (response.status === 201) { // Check for successful order creation (201 Created)
-            const orderDetails = response.data.order; // Assuming order details are in response.data.order
+          if (response.status === 201) {
+            const orderDetails = response.data.order;
             Swal.fire({
               title: 'Order Placed!',
-              text: `Your order has been placed successfully!`,
+              text: 'Your order has been placed successfully!',
               icon: 'success',
               html: `
                 <p><b>Payment Method:</b> ${orderDetails.paymentMethod}</p>
-                <small class="text-uppercase" ><b>Billing Address : </b>${orderDetails.shippingAddress.name}<br>${orderDetails.shippingAddress.street} , ${orderDetails.shippingAddress.locality} , ${orderDetails.shippingAddress.city} , ${orderDetails.shippingAddress.state}.<br>${orderDetails.shippingAddress.pincode}</small><br>
-                <small><b>OrderId : </b>${orderDetails._id}</small>
+                <small class="text-uppercase"><b>Billing Address: </b>${orderDetails.shippingAddress.name}<br>${orderDetails.shippingAddress.street}, ${orderDetails.shippingAddress.locality}, ${orderDetails.shippingAddress.city}, ${orderDetails.shippingAddress.state}.<br>${orderDetails.shippingAddress.pincode}</small><br>
+                <small><b>OrderId:</b> ${orderDetails._id}</small>
               `,
               confirmButtonText: 'View Orders',
             }).then(() => {
@@ -356,7 +409,7 @@
           } else {
             Swal.fire({
               title: 'Error!',
-              text: message,
+              text: 'Failed to place order',
               icon: 'error',
             });
           }
@@ -364,13 +417,12 @@
           console.error('Error placing order:', error.response.data);
           Swal.fire({
             title: 'Error!',
-            text: message,
+            text: 'Failed to place order',
             icon: 'error',
           });
         }
-      });
+      }
     });
-
   </script>
   
 
@@ -854,6 +906,9 @@
 
 <!--=== jQuery Custom Js ===-->
 <script src="/assets/js/custom.js"></script>
+
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
 
 </body>
 

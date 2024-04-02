@@ -139,7 +139,7 @@
         <div class="col-lg-12">
           <div class="myaccount-page-wrapper">
             <div class="row">
-              <div class="col-lg-3 col-md-4">
+              <div class="col-lg-3 col-md-4" style="position: sticky; top: 0;">
                 <nav>
                   <div class="myaccount-tab-menu nav nav-tabs" id="nav-tab" role="tablist">
                     <button class="nav-link <%= initialTab === 'dashboard' ? 'active' : '' %>" id="dashboad-tab" data-bs-toggle="tab" data-bs-target="#dashboad" type="button" role="tab" aria-controls="dashboad" aria-selected="<%= initialTab === 'dashboard' %>">Dashboard</button>
@@ -233,18 +233,17 @@
                               <td><%= order.orderDate.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></td>
                               <td><%= order.products.productName %></td>
 
-                              <td class="<%= order.products.status === 'Pending'?'text-secondary':'d-none' %>"><%= order.products.status %></td>
-                              <td class="<%= order.products.status === 'Out Of Delivery'?'text-warning':'d-none' %>"><%= order.products.status %></td>
-                              <td class="<%= order.products.status === 'Cancelled'?'text-danger':'d-none' %>"><%= order.products.status %></td>
-                              <td class="<%= order.products.status === 'Delivered'?'text-success':'d-none' %>"><%= order.products.status %></td>
-                              <td class="<%= order.products.status === 'Requested for Cancellation'?'text-warning':'d-none' %>"><%= order.products.status %></td>
-
+                              <td style = "<%= order.products.status === 'Pending'?'color:grey;' : 'display: none;' %>" id="<%= index %>" ><%= order.products.status %></td>
+                              <td style = "<%= order.products.status === 'Out Of Delivery'?'color:orange;' : 'display: none;' %>" id="ind<%= index %>"><%= order.products.status %></td>
+                              <td class = "<%= order.products.status === 'Cancelled'?'text-danger':'d-none' %>"><%= order.products.status %></td>
+                              <td class = "<%= order.products.status === 'Delivered'?'text-success':'d-none' %>"><%= order.products.status %></td>
+                              <td class = "<%= order.products.status === 'Requested for Cancellation'?'text-danger':'d-none' %>"><%= order.products.status %></td>
                               <td>$<%= order.products.price %></td>
-                            <td><a href="#" data-bs-toggle="modal" data-bs-target="#orderModal-<%= index %>">View</a></td>
+                              <td><a href="#" data-bs-toggle="modal" data-bs-target="#orderModal-<%= index %>">View</a></td>
                               <!-- <td><a href="/userOrder/<%= order._id %>" class="check-btn sqr-btn">View</a></td> -->
                             </tr>
                               <!-- Modal -->
-                              <div class="modal fade" id="orderModal-<%= index %>" tabindex="-1" aria-labelledby="orderModalLabel-<%= index %>" aria-hidden="true">
+                              <div class="modal fade" id="orderModal-<%= index %>" tabindex="-1" aria-labelledby="orderModalLabel-<%= index %>" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="true">
                                 <div class="modal-dialog modal-xl">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -280,9 +279,9 @@
                                                   <p><b>Payment Method:</b> <span><%= order.paymentMethod %></span></p>
                                                 </div>
                                               </div>
-                                              <div class="col-12 d-flex justify-content-center"> 
+                                              <div class="col-12 d-flex justify-content-center">
                                               <% if(order.products.status === 'Pending' || order.products.status ==='Out Of Delivery' ){ %>
-                                                <button class="w-75 h5" onclick="requestCancellation('<%= order._id %>','<%= order.products._id %>','<%= index %>')" style="background-color:rgb(183, 53, 53);color: white;border-radius:10px;border: none;text-decoration:none;">Cancel Order</button>
+                                                <h5 class="w-100 text-danger" id="textCancelOrder-<%= index %>"><button class="w-75 h5" onclick="requestCancellation('<%= order._id %>','<%= order.products._id %>','<%= index %>')" style="background-color:rgb(183, 53, 53);color: white;border-radius:10px;border: none;text-decoration:none;">Cancel Order</button></h5>
                                                 <% } %>
                                               <% if(order.products.status === 'Cancelled'){ %>
                                                 <h5 class="text-danger"> Order was Cancelled!</h5>
@@ -297,7 +296,6 @@
                                             </div>
                                           </div>
                                         </div>
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -875,9 +873,9 @@
           Toastify({
               text: "Password updated",
               duration: 2000, // 3 seconds
-              gravity: "bottom", // Display at the top
+              gravity: "top", // Display at the top
               position: 'center', // Display on the right side
-              backgroundColor: "black", // Background color
+              backgroundColor: "#203e5a", // Background color
               stopOnFocus: true, // Stop the timer when the toast is focused
           }).showToast();
       })
@@ -908,14 +906,20 @@
         .then(function (response) {
             // Handle successful cancellation
             console.log("order Cancellation request send",index,response);
-            $(`orderModalLabel-${index}`).modal('hide');           
+            document.getElementById('textCancelOrder-' + index).textContent = 'Requested for Order Cancellation';
+            document.getElementById(index).textContent = 'Requested for Cancellation';
+            document.getElementById("ind"+index).textContent = 'Requested for Cancellation';
+            document.getElementById("ind"+index).style.color = 'red';
+            document.getElementById(index).style.color = 'red';
+              $('#orderModal-' + index).modal('hide');
+              // $('body').removeClass('modal-open');
+              $('.modal-backdrop').remove();
              Toastify({
-                text: "Order cancellation requested sent",
+                text: "Order cancellation request sent",
                 duration: 2000, // 3 seconds
-                close: true,
                 gravity: "top", // Display at the top
-                position: 'center', // Display on the right side
-                backgroundColor: "red", // Background color
+                position: 'right', // Display on the right side
+                backgroundColor: "green", // Background color
                 stopOnFocus: true, // Stop the timer when the toast is focused
             }).showToast();
         })
