@@ -141,115 +141,137 @@ $(function() {
 
     //online and off line
     $(document).ready(function() {
-        var options = {
-            series: [{
-                name: "Online Shopping",
-                data: [15, 19, 11, 17, 21, 18, 20],
-            },{
-                name: 'Offline Shopping',
-                data: [12, 15, 14, 16, 18, 13, 17],
-            }],
-
-            chart: {
-                height: 270,
-                type: 'line', // line , bar
-                
-                toolbar: {
-                    show: false
+        axios.get('/orders/total-orders')
+        .then(function(response) {
+            var totalOrders = response.data.map(function(item) {
+                return item.total;
+            });
+    
+            var options = {
+                series: [{
+                    name: "Online Shopping",
+                    data: totalOrders,
+                }],
+    
+                chart: {
+                    height: 250,
+                    type: 'line', // line , bar
+                    
+                    toolbar: {
+                        show: false
+                    },
+                    zoom: {
+                        enabled: false
+                    }
                 },
-                zoom: {
+                dataLabels: {
                     enabled: false
+                },
+                legend: {
+                    position: 'top', // top, bottom
+                    horizontalAlign: 'right', // left, right
+                },
+                stroke: {
+                    width: 2,
+                    curve: 'smooth' // straight, smooth
+                },
+                yaxis: {
+                    show: false,
+                },
+                xaxis: {
+                    categories: response.data.map(function(item) {
+                        return item._id;
+                    }),
                 }
-            },
-            dataLabels: {
-                enabled: false
-            },
-            legend: {
-                position: 'top', // top, bottom
-                horizontalAlign: 'right', // left, right
-            },
-            stroke: {
-                width: 2,
-                curve: 'smooth' // straight, smooth
-            },
-            yaxis: {
-                show: false,
-            },
-            xaxis: {
-                categories: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-            }
-        };
-
-        var chart = new ApexCharts(document.querySelector("#apex-shoppingstatus"), options);
-        chart.render();
+            };
+    
+            var chart = new ApexCharts(document.querySelector("#apex-shoppingstatus"), options);
+            chart.render();
+        })
+        .catch(function(error) {
+            console.error(error);
+        });
     });
+    
+    
 
     $(document).ready(function() {
-        var options = {
-            series: [{
-                name: 'Costs',
-                data: [1131, 1180, 1114, 1109, 1112, 1016, 1317, 1213, 1014, 1199, 1251]
-            }],
-            chart: {
-                height: 315,
-                type: 'bar',
-                toolbar: {
-                    show: false,
-                },
-            },
-            colors: ['var(--chart-color2)'],
-            plotOptions: {
-                bar: {
-                    dataLabels: {
-                        position: 'top', // top, center, bottom
+        axios.get('/orders/total-price')
+        .then(function(response) {
+            var totalPrices = response.data.map(function(item) {
+                return item.total;
+            });
+    
+            var options = {
+                series: [{
+                    name: 'Total Order price',
+                    data: totalPrices
+                }],
+                chart: {
+                    height: 315,
+                    type: 'bar',
+                    toolbar: {
+                        show: false,
                     },
-                }
-            },
-            dataLabels: {
-                enabled: true,
-                formatter: function (val) {
-                    return val + "$";
                 },
-                offsetY: -20,
-                style: {
-                    fontSize: '12px',
-                    colors: ['var(--color-500)'],
-                }
-            },
-            
-            xaxis: {
-                categories: ["Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                position: 'bottom',
-                axisBorder: {
-                    show: false
+                colors: ['var(--chart-color2)'],
+                plotOptions: {
+                    bar: {
+                        dataLabels: {
+                            position: 'top', // top, center, bottom
+                        },
+                    }
                 },
-                axisTicks: {
-                    show: false
-                },
-                tooltip: {
+                dataLabels: {
                     enabled: true,
-                }
-            },
-            yaxis: {
-                axisBorder: {
-                    show: false
-                },
-                axisTicks: {
-                    show: false,
-                },
-                labels: {
-                    show: false,
                     formatter: function (val) {
-                        return val + "$";
+                        return "₹" + val;
+                    },
+                    offsetY: -20,
+                    style: {
+                        fontSize: '12px',
+                        colors: ['var(--color-500)'],
+                    }
+                },
+                
+                xaxis: {
+                    categories: response.data.map(function(item) {
+                        return item._id;
+                    }),
+                    position: 'bottom',
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false
+                    },
+                    tooltip: {
+                        enabled: true,
+                    }
+                },
+                yaxis: {
+                    axisBorder: {
+                        show: false
+                    },
+                    axisTicks: {
+                        show: false,
+                    },
+                    labels: {
+                        show: false,
+                        formatter: function (val) {
+                            return "₹" + val;
+                        }
                     }
                 }
-            }
-        };
-
-        var chart = new ApexCharts(document.querySelector("#apex-expense"), options);
-        chart.render();
-    });
-
+            };
+    
+            var chart = new ApexCharts(document.querySelector("#apex-expense"), options);
+            chart.render();
+        })
+        .catch(function(error) {
+            console.error(error);
+        });
+    });    
 });
 
 function myMap() {
@@ -355,6 +377,5 @@ function myMap() {
           map: map,
         });
       }
- 
 
 }

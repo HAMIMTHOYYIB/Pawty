@@ -348,7 +348,8 @@
               handler: function (response) {
                 console.log(response);
                 // You can then submit the order
-                submitOrder(selectedPayment, selectedAddress);
+                let raz = razorpayOrderId;
+                submitOrder(selectedPayment, selectedAddress,raz);
               },
               prefill: {
                 name: user.username,
@@ -372,7 +373,8 @@
             });
           }
         } else {
-          submitOrder(selectedPayment, selectedAddress);
+          let raz = false;
+          submitOrder(selectedPayment, selectedAddress,raz);
         }
       } catch (error) {
         console.error('Error placing order:', error.response.data);
@@ -384,11 +386,12 @@
       }
     });
 
-      async function submitOrder(paymentMethod, addressId) {
+      async function submitOrder(paymentMethod, addressId , razor) {
         try {
           const orderData = {
             paymentMethod,
             addressId,
+            razor
           };
           const response = await axios.post('/checkout', orderData);
           if (response.status === 201) {

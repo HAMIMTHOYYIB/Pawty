@@ -116,7 +116,7 @@
                         <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
                             <div class="dropdown user-profile ml-2 ml-sm-3 d-flex align-items-center zindex-popover">
                                 <div class="u-info me-2">
-                                    <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold">vendor name</span></p>
+                                    <p class="mb-0 text-end line-height-sm "><span class="font-weight-bold"><%= vendor.vendorName %></span></p>
                                     <small>Vendor Profile</small>
                                 </div>
                                 <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
@@ -128,7 +128,7 @@
                                             <div class="d-flex py-1">
                                                 <img class="avatar rounded-circle" src="assets/images/profile_av.svg" alt="profile">
                                                 <div class="flex-fill ms-3">
-                                                    <p class="mb-0" for="name"><span class="font-weight-bold"><span class="font-weight-bold">vendorname</span></span></p>
+                                                    <p class="mb-0" for="name"><span class="font-weight-bold"><span class="font-weight-bold"><%= vendor.vendorName %></span></span></p>
                                                 </div>
                                             </div>
                                             
@@ -175,7 +175,7 @@
                                     <div class="avatar rounded no-thumbnail bg-success text-light"><i class="fa fa-dollar fa-lg"></i></div>
                                     <div class="flex-fill ms-3 text-truncate">
                                         <div class="h6 mb-0">Total Orders</div>
-                                        <span class="small">1125</span>
+                                        <span class="small"><%= orders.length %></span>
                                     </div>
                                 </div>
                             </div>
@@ -186,7 +186,7 @@
                                     <div class="avatar rounded no-thumbnail bg-danger text-light"><i class="fa fa-credit-card fa-lg"></i></div>
                                     <div class="flex-fill ms-3 text-truncate">
                                         <div class="h6 mb-0">Products</div>
-                                        <span class="small">150</span>
+                                        <span class="small"><%= vendor.products.length %></span>
                                     </div>
                                 </div>
                             </div>
@@ -197,7 +197,7 @@
                                     <div class="avatar rounded no-thumbnail bg-warning text-light"><i class="fa fa-smile-o fa-lg"></i></div>
                                     <div class="flex-fill ms-3 text-truncate">
                                         <div class="h6 mb-0">Clients</div>
-                                        <span class="small">437</span>
+                                        <span class="small"><%= userOrders.length %>
                                     </div>
                                 </div>
                             </div>

@@ -35,6 +35,9 @@ router.post('/deleteSubCategory/:id',adminController.deleteSubCategory);
 router.get('/admin-ProductView',adminAuthMiddleware,adminController.productList);
 router.get('/admin-Orderview',adminAuthMiddleware,adminController.orderList);
 
+router.get('/orders/total-price', adminAuthMiddleware , adminController.getGraphData);
+router.get('/orders/total-orders', adminAuthMiddleware , adminController.getDayOrders);
+
 // admin logout
 router.get('/admin/logout',adminController.adminLogout);
 

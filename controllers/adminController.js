@@ -5,8 +5,46 @@ const Vendor = require('../models/Vendor');
 const Order = require("../models/order")
 const jwt = require('jsonwebtoken')
 
-let dashboard = (req,res) => {
-    res.render('admin/index');
+let dashboard = async (req,res) => {
+    let admin = await Admin.findOne();
+    // let category = admin.category;
+    // let subCategory = admin.subCategory;
+    let users = await User.find();
+    let orders = await Order.find();
+    let vendors = await Vendor.find().select("products")
+    let products = vendors.map((vendor) => vendor.products).flat()
+    let productOrders = await Order.aggregate([
+        {$unwind:'$products'}
+      ]);
+      for (let order of productOrders) {
+        const vendor = await Vendor.findOne({ 'products._id': order.products._id });
+        if (vendor) {
+          const product = vendor.products.find(p => p._id.equals(order.products._id));
+          order.products = {
+            _id: product._id,
+            productName: product.productName,
+            description: product.description,
+            price: product.price,
+            brand: product.brand,
+            category: product.category,
+            subCategory: product.subCategory,
+            stockQuantity: product.stockQuantity,
+            addedOn: product.addedOn,
+            images: product.images,
+            status:order.products.status,
+            quantity:order.products.quantity,
+            vendor : vendor.vendorName       
+          };
+        }
+        let user = await User.findById(order.userId);
+        if (user) {
+          order.userName = user.username;
+          order.userEmail = user.email;
+        }
+      }
+      productOrders.reverse();
+      productOrders.length = 5;
+    res.render('admin/index',{admin,vendors,products,orders,users,productOrders});
 }
 
 let adminLogin = (req, res) => {
@@ -317,6 +355,65 @@ let orderList = async (req,res) => {
       }
 }
 
+let getGraphData = async (req, res) => {
+    try {
+        const tenDaysAgo = new Date();
+        tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
+
+        const totalPrices = await Order.aggregate([
+        {
+            $match: {
+            orderDate: { $gte: tenDaysAgo }
+            }
+        },
+        {
+            $group: {
+            _id: { $dateToString: { format: "%Y-%m-%d", date: "$orderDate" } },
+            total: { $sum: "$total" }
+            }
+        },
+        {
+            $sort: { _id: 1 }
+        }
+        ]);
+
+        res.json(totalPrices);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Internal Server Error" });
+    }
+};
+let getDayOrders = async (req, res) => {
+    try {
+      const sevenDaysAgo = new Date();
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  
+      const totalOrders = await Order.aggregate([
+        {
+          $match: {
+            orderDate: { $gte: sevenDaysAgo }
+          }
+        },
+        {
+          $group: {
+            _id: { $dateToString: { format: "%Y-%m-%d", date: "$orderDate" } },
+            total: { $sum: 1 }
+          }
+        },
+        {
+          $sort: { _id: 1 }
+        }
+      ]);
+  
+      res.json(totalOrders);
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  };
+  
+  
+
 
 module.exports = {
     dashboard,
@@ -344,5 +441,7 @@ module.exports = {
     vendorVerify,
     productList,
     orderList,
-    adminLogout
+    adminLogout, 
+    getGraphData,
+    getDayOrders
 }

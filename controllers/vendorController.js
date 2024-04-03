@@ -2,6 +2,7 @@ const Vendor = require('../models/Vendor');
 const Admin = require('../models/admin');
 const Order = require('../models/order');
 const User = require('../models/User')
+let helper = require('../helpers/vendordash')
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
@@ -10,8 +11,12 @@ const cloudinary = require('../config/cloudinary')
 // const upload = require('../config/multer.js');
 require('dotenv').config()
 
-let vendorDashboard = (req,res) => {
-    res.render('vendor/vendorDashboard')
+let vendorDashboard = async (req,res) => {
+  let vendor = await Vendor.findById(req.user.id);
+  let userOrders= await helper.getclients(req.user.id);
+  console.log("userorder :",userOrders)
+  let orders= await helper.orderOfVendor(req.user.id);
+  res.render('vendor/vendorDashboard',{orders,vendor,userOrders})
 }
 
 
@@ -298,37 +303,7 @@ let getOrderList = async (req, res) => {
       return res.status(404).json({ message: 'Vendor not found' });
     }
 
-    // Aggregate orders to unwind products array
-    let orders= await Order.aggregate([
-      {$unwind:'$products'},
-      {$match:{'products.vendorId':req.user.id}}
-    ]);
-    for (let order of orders) {
-      const vendor = await Vendor.findOne({ 'products._id': order.products._id });
-      if (vendor) {
-        const product = vendor.products.find(p => p._id.equals(order.products._id));
-        order.products = {
-          _id: product._id,
-          productName: product.productName,
-          description: product.description,
-          price: product.price,
-          brand: product.brand,
-          category: product.category,
-          subCategory: product.subCategory,
-          stockQuantity: product.stockQuantity,
-          addedOn: product.addedOn,
-          images: product.images,
-          status:order.products.status,
-          quantity:order.products.quantity          
-        };
-      }
-      let user = await User.findById(order.userId);
-      // console.log("userr :",user);
-      if (user) {
-        order.userName = user.username;
-        order.userEmail = user.email;
-      }
-    }
+  let orders= await helper.orderOfVendor(req.user.id);
     console.log("orders :",orders)
     res.render('vendor/orderList', { orders: orders.reverse()});
   } catch (err) {
@@ -340,6 +315,7 @@ let updateStatus = async (req, res) => {
   console.log("update status Workingg")
   try {
     let {  productId, orderId } = req.params;
+    console.log("body :",req.body)
     let { status } = req.body;
     let order = await Order.findById(orderId);
     let product = order.products.find(prod => prod._id.toString() === productId.toString());

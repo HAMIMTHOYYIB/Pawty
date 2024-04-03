@@ -24,7 +24,7 @@ const orderSchema = new mongoose.Schema({
       },
       status: {
         type: String,
-        enum: ['Pending', 'Delivered', 'Cancelled', 'Out Of Delivery' , 'Requested for Cancellation'],
+        enum: ['Pending', 'Delivered', 'Cancelled', 'Out Of Delivery' , 'Shipped' , 'Requested for Cancellation'],
         default:'Pending',
         required : true
       },
@@ -58,6 +58,9 @@ const orderSchema = new mongoose.Schema({
   orderDate: {
     type: Date,
     default: Date.now
+  },
+  razorpayId:{
+    type:String,
   }
 });
 

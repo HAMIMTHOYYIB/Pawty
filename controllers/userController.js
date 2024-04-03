@@ -20,7 +20,7 @@ let homePage = async (req,res) => {
 
   let vendors = await Vendor.find().select("products")
   let products = vendors.map((vendor) => vendor.products).flat()
-  console.log("vendors :",products)
+  console.log("vendors :",products);
   res.render('users/index-two',{category,subCategory,products})
 }
 // Get UserAccount
@@ -195,8 +195,6 @@ let shop = async (req,res) => {
     return res.render('users/shop-org',{products,admin,user:undefined});
   }
 }
-
-
 // single product
 let product = async (req,res) => {
   let productId = req.params.id;
@@ -462,10 +460,10 @@ let getCheckout = async (req,res) => {
   res.render('users/checkout',{user,coupon:false})
 }
 let submitCheckout = async (req, res) => {
-  const { addressId, paymentMethod } = req.body;
+  const { addressId, paymentMethod , razor } = req.body;
   console.log("req.body : ", req.body);
   try {
-
+    console.log("razorValue",razor);
     let user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -492,11 +490,20 @@ let submitCheckout = async (req, res) => {
           break;
         }
       }
-      products.push({
-        _id: prod._id,
-        quantity: prod.quantity,
-        vendorId: vendorId
-      });
+      if(razor!== false){
+        products.push({
+          _id: prod._id,
+          quantity: prod.quantity,
+          vendorId: vendorId,
+          razorpayId:razor
+        });
+      }else{
+          products.push({
+          _id: prod._id,
+          quantity: prod.quantity,
+          vendorId: vendorId,
+        });
+      }
     }
 
     // Save the updated products in each vendor
@@ -584,19 +591,18 @@ let loginPage = (req,res) => {
   res.render('users/account-login',{passError :'',addError})
 }
 let submitlogin = async (req, res) => { 
-    console.log("req.body : ", req.body);
     const {email, password} = req.body;
     if(email && password){
         try {
             const loginUser = await User.findOne({email: email});
             if (!loginUser) {
-                return res.status(404).render('users/account-login', { passError: 'User Not Found' });             //send('User Not Found');
+                return res.status(404).render('users/account-login', { passError: 'User Not Found' });//send('User Not Found');
             }
             console.log("loginUser : ", loginUser);
             bcrypt.compare(password, loginUser.password, (err, result) => {
                 if (err) {
                     // console.error("problem : ", err);
-                    return res.status(500).send('Internal Server Error');
+                    return res.status(500).send('Internal Serverr Error');
                 }
                 if (!result) {
                     return res.status(401).render('users/account-login',{passError : 'Wrong Password'});
@@ -622,7 +628,7 @@ let submitlogin = async (req, res) => {
             });
         } catch (error) {
             console.log("Error on Login Submit",error);
-            res.status(500).send("Internal Server Error");
+            res.status(500).send("Internal Server Errorr");
         }  
     }else{
         res.render('users/account-login',{passError:'Please Complete the fields :'})
@@ -703,14 +709,14 @@ const failureGooglelogin = (req,res) =>{
     res.send('Error')
 }
 
-// FORGOT PASSWORD 
+// FORGOT PASSWORD
 let forgotGetPage = async (req, res) => {
     try {
       res.render("users/forgetPass",{passError:""});
     } catch (error) {
       res.status(404).send("page not found");
     }
-}; 
+};
 const transporter = nodemailer.createTransport({
   service: "gmail",
   host: 'smtp.gmail.com',

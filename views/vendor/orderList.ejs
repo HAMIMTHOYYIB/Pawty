@@ -288,14 +288,14 @@
                         </div>
                     </div> <!-- Row end  -->
                     <div class="row g-3 mb-3"> 
-                        <div class="col-md-12">
+                        <div class="col-md-12 col-lg-12">
                             <div class="card"> 
                                 <div class="card-body"> 
                                     <table id="myDataTable" class="table table-hover align-middle mb-0" style="width: 100%;">  
                                         <thead>
                                             <tr>
                                                 <th> </th>
-                                                <th>Item</th>
+                                                <th class="">Item</th>
                                                 <th>Customer Name</th>
                                                 <th>Payment Info</th>
                                                 <th>Price</th>
@@ -307,7 +307,7 @@
                                             <% orders.forEach((order, index) => { %>
                                             <tr>
                                                 <td><a href="/orderView/<%= order._id %>"><strong><%= ++count %></strong></a></td>
-                                                <td>
+                                                <td class="">
                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal-<%= index %>">
                                                         <img src="<%= order.products.images[0] %>" class="avatar lg rounded me-2" alt="profile-image">
                                                         <span><%= order.products.productName %></span>
@@ -315,15 +315,16 @@
                                                 </td>
                                                 <td><%= order.userName %></td>
                                                 <td><%= order.paymentMethod %></td>
-                                                <td><%= order.products.price %></td>
+                                                <td><%= order.products.price * order.products.quantity %></td>
                                                 <td>
                                                     <form id="statusForm-<%= order._id %>-<%= index %>">
-                                                        <select name="status" id="status" onchange="updateOrderStatus(event, '<%= order._id %>', '<%= order.products._id %>', '<%= index %>')">
+                                                        <select name="status" onchange="updateOrderStatus(event, '<%= order._id %>', '<%= order.products._id %>', '<%= index %>')">
                                                             <option value="Pending" <%= order.products.status === 'Pending' ? 'selected' : '' %>>Pending</option>
                                                             <option value="Delivered" <%= order.products.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
                                                             <option value="Cancelled" <%= order.products.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
                                                             <option value="Out Of Delivery" <%= order.products.status === 'Out Of Delivery' ? 'selected' : '' %>>Out Of Delivery</option>
                                                             <option value="Requested for Cancellation" <%= order.products.status === 'Requested for Cancellation' ? 'selected' : '' %>>Requested for Cancellation</option>
+                                                            <option value="Shipped" <%= order.products.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
                                                         </select>
                                                     </form>
                                                 </td>
@@ -379,9 +380,9 @@
             <script>
                 function updateOrderStatus(event, orderId, productId, index) {
                     event.preventDefault(); // Prevent default form submission
-                    console.log(orderId, productId);
                     const form = document.querySelector(`#statusForm-${orderId}-${index}`);
                     const status = form.querySelector('select[name="status"]').value;
+                    console.log("status: ", status);
                     axios.post(`/vendor/orderStatus/${orderId}/${productId}`, { status })
                         .then(response => {
                             // Handle success response, if needed
@@ -392,6 +393,7 @@
                             console.error(error);
                         });
                 }
+
             </script>                   
 
             <!-- <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
