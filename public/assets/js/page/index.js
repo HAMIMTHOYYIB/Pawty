@@ -194,9 +194,9 @@ $(function() {
     });
     
     
-
+// vendor
     $(document).ready(function() {
-        axios.get('/orders/total-price')
+        axios.get('/vendor/totalweekprice')
         .then(function(response) {
             var totalPrices = response.data.map(function(item) {
                 return item.total;
@@ -265,7 +265,7 @@ $(function() {
                 }
             };
     
-            var chart = new ApexCharts(document.querySelector("#apex-expense"), options);
+            var chart = new ApexCharts(document.querySelector("#vendorsalebar"), options);
             chart.render();
         })
         .catch(function(error) {
@@ -273,6 +273,86 @@ $(function() {
         });
     });    
 });
+
+
+// vendorside
+$(document).ready(function() {
+    axios.get('/orders/total-price')
+    .then(function(response) {
+        var totalPrices = response.data.map(function(item) {
+            return item.total;
+        });
+
+        var options = {
+            series: [{
+                name: 'Total Order price',
+                data: totalPrices
+            }],
+            chart: {
+                height: 315,
+                type: 'bar',
+                toolbar: {
+                    show: false,
+                },
+            },
+            colors: ['var(--chart-color2)'],
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        position: 'top', // top, center, bottom
+                    },
+                }
+            },
+            dataLabels: {
+                enabled: true,
+                formatter: function (val) {
+                    return "₹" + val;
+                },
+                offsetY: -20,
+                style: {
+                    fontSize: '12px',
+                    colors: ['var(--color-500)'],
+                }
+            },
+            
+            xaxis: {
+                categories: response.data.map(function(item) {
+                    return item._id;
+                }),
+                position: 'bottom',
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false
+                },
+                tooltip: {
+                    enabled: true,
+                }
+            },
+            yaxis: {
+                axisBorder: {
+                    show: false
+                },
+                axisTicks: {
+                    show: false,
+                },
+                labels: {
+                    show: false,
+                    formatter: function (val) {
+                        return "₹" + val;
+                    }
+                }
+            }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#apex-expense"), options);
+        chart.render();
+    })
+    .catch(function(error) {
+        console.error(error);
+    });
+});    
 
 function myMap() {
 

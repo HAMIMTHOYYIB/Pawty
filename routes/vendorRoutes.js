@@ -35,6 +35,8 @@ router.post('/vendor/removeCoupon',vendorAuth,vendorController.deleteCoupon)
 router.get('/vendor/orderList',vendorAuth,vendorController.getOrderList);
 router.post('/vendor/orderStatus/:orderId/:productId',vendorAuth,vendorController.updateStatus)
 
+router.get('/vendor/totalweekorders', vendorAuth , vendorController.vendorweekOrders);
+
 // vendor Logout
 router.get('/vendor/logout',vendorController.vendorLogout);
 

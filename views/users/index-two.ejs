@@ -399,8 +399,8 @@
             </div>
             <div class="isotope-filter isotope-filter-style2">
               <button class="active" data-filter="*">New Arrival</button>
-              <% subCategory.forEach(sub =>{ %>
-              <button data-filter=".<%=sub.subCategoryName%>"><%= sub.subCategoryName%></button>
+              <% subCategory.forEach((sub,ind) =>{ %>
+                  <button class="" data-filter=".<%=sub.subCategoryName%> "><%= sub.subCategoryName%></button>
               <% }) %>
             </div>
           </div>
@@ -411,7 +411,7 @@
             <!--== Start Product Item ==-->
             <div class="product-item">
               <div class="product-thumb">
-                <a href="single-product.html">
+                <a href="/product/<%= prod._id %>">
                   <img src="<%= prod.images[0] %>" width="270" height="320" alt="Image-HasTech">
                 </a>
               </div>

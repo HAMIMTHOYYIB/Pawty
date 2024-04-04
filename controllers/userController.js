@@ -450,13 +450,24 @@ let removefromwishlist = async (req,res) => {
   }
 }
 
-
 // checkout
 let getCheckout = async (req,res) => {
+  let vendors = await Vendor.find();
   let user = await User.findById(req.user.id);
+  for(let Cproduct of user.cart.products){
+    for(let vendor of vendors){
+      for(Vproduct of vendor.products){
+        if(Vproduct._id.toString() === Cproduct._id.toString()){
+          Cproduct.productName = Vproduct.productName;
+          Cproduct.price = Vproduct.price;
+        }
+      }
+    }
+  }
   if(user.cart.products.length === 0){
     return res.redirect('/cart');
   }
+  console.log("Updated user cart :",user.cart.products[0].productName);
   res.render('users/checkout',{user,coupon:false})
 }
 let submitCheckout = async (req, res) => {

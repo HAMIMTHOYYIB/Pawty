@@ -217,7 +217,7 @@
                         <table class="table table-bordered">
                           <thead class="thead-light">
                             <tr>
-                              <th>Order</th>
+                              <!-- <th>Order</th> -->
                               <th>Date</th>
                               <th>Product Name</th>
                               <th>Payment Method </th>
@@ -227,10 +227,10 @@
                             </tr>
                           </thead>
                           <tbody>
-                            <% let count = 0 ; %>
+                            <!-- <% let count = 0 ; %> -->
                             <% orders.forEach((order,index) => { %>
                             <tr>
-                              <td><%= ++count %></td>
+                              <!-- <td><%= ++count %></td> -->
                               <td><%= order.orderDate.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></td>
                               <td><%= order.products.productName %></td>
                               <td class = "text-bold <%= order.paymentMethod === 'Cash On Delivery'?'text-success':'d-none' %>"><%= order.paymentMethod %></td>
@@ -242,7 +242,7 @@
                               <td class = "text-bold <%= order.products.status === 'Cancelled'?'text-danger':'d-none' %>"><%= order.products.status %></td>
                               <td class = "text-bold <%= order.products.status === 'Delivered'?'text-success':'d-none' %>"><%= order.products.status %></td>
                               <td class = "text-bold <%= order.products.status === 'Requested for Cancellation'?'text-danger':'d-none' %>"><%= order.products.status %></td>
-                              <td>$<%= order.products.price %></td>
+                              <td>₹<%= order.products.price %></td>
                               <td><a href="#" data-bs-toggle="modal" data-bs-target="#orderModal-<%= index %>">View</a></td>
                               <!-- <td><a href="/userOrder/<%= order._id %>" class="check-btn sqr-btn">View</a></td> -->
                             </tr>
@@ -903,7 +903,24 @@
 <!--  Request for Order Cancellation  -->
     <script>
       function requestCancellation(orderId, productId , index) {
-        axios.post('/cancelOrder', {
+        const swalWithBootstrapButtons = Swal.mixin({
+          customClass: {
+            confirmButton: "btn btn-success",
+            cancelButton: "btn btn-danger"
+          },
+          buttonsStyling: false
+        });
+        swalWithBootstrapButtons.fire({
+          title: "Cancellation Request",
+          text: "Are you sure you want to cancel this order?",
+          icon: "warning",
+          showCancelButton: true,
+          confirmButtonText: "Yes,Cancel Order!",
+          cancelButtonText: "No, Go Back!",
+          reverseButtons: true
+        }).then((result) => {
+          if (result.isConfirmed) {
+            axios.post('/cancelOrder', {
             orderId: orderId,
             productId: productId
         })
@@ -943,6 +960,16 @@
                 stopOnFocus: true, // Stop the timer when the toast is focused
             }).showToast();
         })
+          // } else if (
+          //   result.dismiss === Swal.DismissReason.cancel
+          // ) {
+          //   swalWithBootstrapButtons.fire({
+          //     title: "Cancelled",
+          //     text: "Your imaginary file is safe :)",
+          //     icon: "error"
+          //   });
+          // }
+        });
       }
     </script>
 
@@ -961,7 +988,7 @@
               </div>
               <div class="content">
                 <h5 class="title">Free Shipping</h5>
-                <p>Capped at $39 per order</p>
+                <p>Capped at ₹39 per order</p>
               </div>
             </div>
           </div>
@@ -1191,7 +1218,7 @@
                   <div class="product-single-info">
                     <h3 class="main-title">Joust Duffle Bag</h3>
                     <div class="prices">
-                      <span class="price">$20.19</span>
+                      <span class="price">₹20.19</span>
                     </div>
                     <div class="rating-box-wrap">
                       <div class="rating-box">

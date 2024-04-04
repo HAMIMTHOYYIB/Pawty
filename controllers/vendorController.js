@@ -11,14 +11,17 @@ const cloudinary = require('../config/cloudinary')
 // const upload = require('../config/multer.js');
 require('dotenv').config()
 
+
+
+
 let vendorDashboard = async (req,res) => {
   let vendor = await Vendor.findById(req.user.id);
   let userOrders= await helper.getclients(req.user.id);
-  console.log("userorder :",userOrders)
+  let topCategories = await helper.orderCountByCategory(req.user.id);
+  console.log("catogry orders :",topCategories)
   let orders= await helper.orderOfVendor(req.user.id);
-  res.render('vendor/vendorDashboard',{orders,vendor,userOrders})
+  res.render('vendor/vendorDashboard',{orders,vendor,userOrders,topCategories})
 }
-
 
 let vendorLogin = (req,res) => {
   if(req.cookies.vendor_jwt){
@@ -302,8 +305,7 @@ let getOrderList = async (req, res) => {
     if (!vendor) {
       return res.status(404).json({ message: 'Vendor not found' });
     }
-
-  let orders= await helper.orderOfVendor(req.user.id);
+    let orders= await helper.orderOfVendor(req.user.id);
     console.log("orders :",orders)
     res.render('vendor/orderList', { orders: orders.reverse()});
   } catch (err) {
@@ -329,6 +331,43 @@ let updateStatus = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Error on updating status' });
+  }
+};
+
+let vendorweekOrders = async (req, res) => {
+  try {
+    const sevenDaysAgo = new Date();
+    sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+
+    const totalOrders = await Order.aggregate([
+      {
+        $match: {
+          orderDate: { $gte: sevenDaysAgo }
+        }
+      },
+      {
+        $unwind: "$products"
+      },
+      {
+        $match: {
+          "products.vendorId":req.user.id
+        }
+      },
+      {
+        $group: {
+          _id: { $dateToString: { format: "%Y-%m-%d", date: "$orderDate" } },
+          total: { $sum: 1 }
+        }
+      },
+      {
+        $sort: { _id: 1 }
+      }
+    ]);
+    console.log("orderssss :",totalOrders)
+    res.json(totalOrders);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -468,6 +507,8 @@ module.exports = {
 
     getOrderList,
     updateStatus,
+
+    vendorweekOrders,
 
     vendorForgotPass,
     resetVendorPass,

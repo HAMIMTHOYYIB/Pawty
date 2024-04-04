@@ -355,6 +355,12 @@
                                                 <% if(order.products.status === 'Cancelled'){ %>
                                                 <td><span class="badge bg-danger  font-opensans text-uppercase"><%= order.products.status %></span></td>
                                                 <% }  %>
+                                                <% if(order.products.status === 'Shipped'){ %>
+                                                    <td><span class="badge bg-primary font-opensans text-uppercase"><%= order.products.status %></span></td>
+                                                <% }  %>
+                                                <% if(order.products.status === 'Requested for Cancellation'){ %>
+                                                    <td><span class="badge bg-warning text-dark  font-opensans text-uppercase"><%= order.products.status %></span></td>
+                                                <% }  %>
                                             </tr>
                                             <% }) %>
                                         </tbody>

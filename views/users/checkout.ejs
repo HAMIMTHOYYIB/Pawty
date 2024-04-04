@@ -237,7 +237,7 @@
                     <tbody class="table-body">
                       <% user.cart.products.forEach(prod => { %>
                       <tr class="cart-item">
-                        <td class="product-name text-dark"><%= prod.productName  %> <span class="product-quantity">× <%= prod.quantity%></span></td>
+                        <td class="product-name text-dark"><%= prod.productName  %> <span class="product-quantity"> × <%= prod.quantity%></span></td>
                         <td class="product-total text-success">£ <%= prod.price*prod.quantity %></td>
                       </tr>
                       <% }) %>
@@ -388,7 +388,7 @@
 
       async function submitOrder(paymentMethod, addressId , razor) {
         try {
-          const orderData = {
+          const orderData = { 
             paymentMethod,
             addressId,
             razor
