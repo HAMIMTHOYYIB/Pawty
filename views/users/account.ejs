@@ -903,20 +903,13 @@
 <!--  Request for Order Cancellation  -->
     <script>
       function requestCancellation(orderId, productId , index) {
-        const swalWithBootstrapButtons = Swal.mixin({
-          customClass: {
-            confirmButton: "btn btn-success",
-            cancelButton: "btn btn-danger"
-          },
-          buttonsStyling: false
-        });
-        swalWithBootstrapButtons.fire({
+         Swal.fire({
           title: "Cancellation Request",
           text: "Are you sure you want to cancel this order?",
-          icon: "warning",
+          icon: "question",
+          confirmButtonText: "Cancel Order",
           showCancelButton: true,
-          confirmButtonText: "Yes,Cancel Order!",
-          cancelButtonText: "No, Go Back!",
+          cancelButtonText: "Go Back",
           reverseButtons: true
         }).then((result) => {
           if (result.isConfirmed) {
@@ -968,9 +961,9 @@
           //     text: "Your imaginary file is safe :)",
           //     icon: "error"
           //   });
-          // }
-        });
-      }
+          }
+      });
+      };
     </script>
 
 
@@ -1444,6 +1437,8 @@
 <script src="assets/js/isotope.pkgd.min.js"></script>
 <!--=== jQuery Range Slider Min Js ===-->
 <script src="assets/js/ion.rangeSlider.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!--=== jQuery Custom Js ===-->
 <script src="assets/js/custom.js"></script>

@@ -37,8 +37,6 @@
     <!--== Main Style CSS ==-->
     <link href="/assets/css/style.css" rel="stylesheet" />
 
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <style>
       .address-card {
           border: 1px solid #ccc;
@@ -405,7 +403,7 @@
                 <small class="text-uppercase"><b>Billing Address: </b>${orderDetails.shippingAddress.name}<br>${orderDetails.shippingAddress.street}, ${orderDetails.shippingAddress.locality}, ${orderDetails.shippingAddress.city}, ${orderDetails.shippingAddress.state}.<br>${orderDetails.shippingAddress.pincode}</small><br>
                 <small><b>OrderId:</b> ${orderDetails._id}</small>
               `,
-              confirmButtonText: 'View Orders',
+              confirmButtonText: 'View Orders',              
             }).then(() => {
               window.location.href = '/orders';
             });
@@ -909,6 +907,8 @@
 
 <!--=== jQuery Custom Js ===-->
 <script src="/assets/js/custom.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
