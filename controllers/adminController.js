@@ -411,8 +411,6 @@ let getDayOrders = async (req, res) => {
       res.status(500).json({ message: "Internal Server Error" });
     }
 };
-  
-
 
 module.exports = {
     dashboard,
@@ -440,7 +438,8 @@ module.exports = {
     vendorVerify,
     productList,
     orderList,
-    adminLogout, 
+    adminLogout,
+    
     getGraphData,
     getDayOrders
 }

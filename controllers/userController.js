@@ -3,7 +3,9 @@ const User = require('../models/User');
 const Vendor = require('../models/Vendor');
 const Admin = require('../models/admin');
 const Order = require('../models/order');
-let helper = require('../helpers/user')
+let helper = require('../helpers/user');
+let productHelper = require('../helpers/getProductDetails');
+let { sendOtpEmail } = require('../helpers/sentEmail');
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const razorpayInstance = require('../config/razorpay');
@@ -540,27 +542,51 @@ let submitCheckout = async (req, res) => {
     res.status(500).json({ message: 'Failed to place order' });
   }
 };
-let requestCancellation = async (req,res) => {
+
+let requestCancellation = async (req, res) => {
   console.log("Requested for Cancellation");
-  try{
-    let { orderId,productId } = req.body;
-    if(!orderId&&productId){
-      res.status(500).send("internal Server Error")
+  try {
+    let { orderId, productId } = req.body;
+    if (!orderId || !productId) {
+      return res.status(500).send("Internal Server Error");
     }
   
-    let order = await Order.findOne({_id:orderId})
-    if(!order){
-      res.status(404).send('Cannot find the order')
+    let order = await Order.findOne({ _id: orderId });
+    if (!order) {
+      return res.status(404).send('Cannot find the order');
     }
-    product = order.products.find((prod) => prod._id.toString() === productId.toString());
+    let product = order.products.find((prod) => prod._id.toString() === productId.toString());
+    if (!product) {
+      return res.status(404).send('Cannot find the product in the order');
+    }
     product.status = 'Requested for Cancellation';
     await order.save();
-    return res.json({message:'request cancellation sent'});
-  }catch (error) {
+    let userEmail = req.user.email; // Assuming user email is stored in order or user profile
+    let productDetails = await productHelper.getProductDetails(product._id)
+    
+    let subject = "Order Cancellation Request";
+    let message = `
+    <div style="display:flex;">
+      <div style="background-color: #f9f9f9; padding: 20px;">
+        <h2 style="color: red;">Order Cancellation Request</h2>
+        <p style="color: #555;">Your request to cancel the following order has been received:</p>
+        <p style="color: #666;"><strong>Order ID:</strong> ${orderId}</p>
+        <p style="color: #555;"><strong>Product Name:</strong> ${productDetails.productName}</p>
+        <p style="color: #555;"><strong>Price:</strong> ${productDetails.price} /-</p>
+        <p style="color: #777;">We will process your request as soon as possible.</p>
+      </div>
+      <img src="${productDetails.images[0]}" alt="Product Image" style="max-width:25%;max-height:10%;">
+    </div>
+    `;
+    sendOtpEmail(userEmail ,subject , message );
+
+    return res.json({ message: 'Request for cancellation sent' });
+  } catch (error) {
     console.log(error);
-    res.status(500).send('Internal Server Error')
+    res.status(500).send('Internal Server Error');
   }
-}
+};
+
 let razorpayOrder = async (req,res) => {
   console.log("razorpay interface workingg");
   const { paymentMethod } = req.body;
@@ -728,46 +754,27 @@ let forgotGetPage = async (req, res) => {
       res.status(404).send("page not found");
     }
 };
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  host: 'smtp.gmail.com',
-    port: 465,
-  auth: {
-    user: process.env.EMAIL,
-    pass: process.env.PASS,
-  },
-});
-const sendOtpEmail = async (email, otp) => {
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: "Reset Your Password",
-    text: `Your OTP to reset your password is: ${otp}`,
-  };
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log("Email sent");
-  } catch (error) {
-    console.error("Error sending email:", error);
-  }
-};
 // FORGOT EMAIL POST + OTP GENERATION AND MAIL SEND
 let forgotPassPost = async (req, res) => {
   const { email } = req.body;
-
   try {
     const user = await User.findOne({ email });
-
     if (!user) {
       return res.status(404).render('users/forgetPass',{passError: "User not found with this email" });
     }
-
     const otp = Math.floor(100000 + Math.random() * 900000).toString();
     user.otp = otp;
     user.otpExpiration = Date.now() + 10 * 60 * 1000; // OTP expires in 10 minutes
     await user.save();
-
-    await sendOtpEmail(email, otp);
+    let subject = "Reset Your Password";
+    let message = `
+    <div style="background-color: #f9f9f9; padding: 20px;">
+      <h2 style="color: #333;">Reset Your Password</h2>
+      <p style="color: #555;">Your OTP to reset your password is: <strong>${otp}</strong></p>
+      <p style="color: #777;">Please use this OTP to reset your password.</p>
+    </div>
+  `
+    await sendOtpEmail(email,subject, message);
 
     res.render("users/otpVerification",{email})
   } catch (error) {
