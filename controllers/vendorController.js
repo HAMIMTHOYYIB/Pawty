@@ -327,24 +327,69 @@ let updateStatus = async (req, res) => {
       product.status = status;
       await order.save();
       let user = await User.findById(order.userId)
-      let productDetails = await productHelper.getProductDetails(product._id)
+      let productDetails = await productHelper.getProductDetails(product._id);
+      const deliveryDate = new Date().toLocaleDateString(undefined, {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+      });
+
+      // Delivery Mail Notification
       if(status === 'Delivered'){
         let email = user.email;
         let subject = "Order Delivered - Invoice";
         let message = `
         <div style="background-color: #f9f9f9; padding: 20px;">
-        <h2 style="color: #2e702e; text-align: center;">Order Delivered</h2>
+          <h2 style="color: #2e702e; text-align: center;">Order Delivered</h2>
+
+          <div style="border: 1px solid #555; margin: 0 auto; padding: 20px; text-align: center;">
+            <h3 style="color: #555;">${user.username}, Your order has been delivered successfully!</h3>
+          </div>
+
+          <div style="display: flex;">
+            <div style="width:25%">
+              <p style="color: #555;"><strong>Order ID:</strong> ${orderId}</p>
+              <p style="color: #555;"><strong>Product Name:</strong> ${productDetails.productName}</p>
+              <p style="color: #555;"><strong>Price:</strong> ${productDetails.price} /-</p>
+              <p style="color: #555;"><strong>Quantity:</strong> ${product.quantity}</p>
+            </div>
+            <div style="width:50%"></div>
+            <div style="text-align:left;width:25%">
+              <h3 style="color: #555; text-align:left">Delivery Address</h3>
+              <p style="color: #555;"> ${order.shippingAddress.locality}, ${order.shippingAddress.street}</p>
+              <p style="color: #555;">${order.shippingAddress.city}, ${order.shippingAddress.state}</p>
+              <p style="color: #555;"><strong>PINCODE :</strong> ${order.shippingAddress.pincode}</p>
+            </div>
+          </div>
+          <hr style="border: 0.5px solid #ddd; margin: 10px auto;">
+
+          <p style="color: #777; text-align: center;">Thank you for shopping with us.</p>
+
+          <footer style="text-align: center; margin-top: 20px; color: #999; font-size: 12px;">
+            &copy; ${new Date().getFullYear()} Pawty. All Rights Reserved.
+          </footer>
+
+        </div>`;
+        await sendOtpEmail(email,subject,message);
+      }
+      // Shipping Mail Notification
+      if(status === 'Shipped'){
+        let email = user.email;
+        let subject = "Order Shipped";
+        let message = `
+        <div style="background-color: #f9f9f9; padding: 20px;">
+        <h2 style="color: #2e6e70; text-align: center;">Order Shipped</h2>
 
         <div style="border: 1px solid #555; margin: 0 auto; padding: 20px; text-align: center;">
-          <h3 style="color: #555;">${user.username},Your order has been delivered successfully!</h3>
+          <h3 style="color: #555;">Hello  ${user.username},Your order has been shipped on ${deliveryDate}.</h3>
         </div>
 
         <div style="display: flex;">
           <div style="width:25%">
             <p style="color: #555;"><strong>Order ID:</strong> ${orderId}</p>
-            <p style="color: #555;"><strong>Product Name:</strong> ${productDetails.productName}</p>
+            <p style="color: #555;"><strong>Product ID:</strong> ${productDetails._id}</p>
+            <p style="color: #555;"><strong>Product:</strong> ${productDetails.productName} x ${product.quantity}</p>
             <p style="color: #555;"><strong>Price:</strong> ${productDetails.price} /-</p>
-            <p style="color: #555;"><strong>Quantity:</strong> ${product.quantity}</p>
           </div>
           <div style="width:50%"></div>
           <div style="text-align:left;width:25%">
@@ -354,15 +399,66 @@ let updateStatus = async (req, res) => {
             <p style="color: #555;"><strong>PINCODE :</strong> ${order.shippingAddress.pincode}</p>
           </div>
         </div>
+        <p style="color: #555; text-align: center;">Your order is expected to be delivered in 4-7 business days.</p>
 
         <hr style="border: 0.5px solid #ddd; margin: 10px auto;">
 
-        <p style="color: #777; text-align: center;">Thank you for shopping with us.</p>
-      </div>
+        <p style="color: #777; text-align: center;">Thank you in advance, for your patience.</p>
 
-        `;
+        <footer style="text-align: center; margin-top: 20px; color: #999; font-size: 12px;">
+          &copy; ${new Date().getFullYear()} Pawty. All Rights Reserved.
+        </footer>
+        </div>`;
         await sendOtpEmail(email,subject,message);
       }
+      // Order Out of delivery Mail Notification.
+      if(status === 'Out Of Delivery'){
+        const expectedDeliveryDate = new Date();
+        expectedDeliveryDate.setHours(expectedDeliveryDate.getHours() + 48);
+        const formattedExpectedDeliveryDate = expectedDeliveryDate.toLocaleDateString(undefined, {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        });
+        let email = user.email;
+        let subject = "Product Out of Delivery";
+        let message = `
+        <div style="background-color: #f9f9f9; padding: 20px;">
+          <h2 style="color: #ebba34; text-align: center;">Order out of Delivery</h2>
+
+          <div style="border: 1px solid #555; margin: 0 auto; padding: 20px; text-align: center;">
+            <h3 style="color: #555;"> ${user.username}, Your order is Out Of Delivery.</h3>
+          </div>
+
+          <div style="display: flex;">
+            <div style="width:25%">
+              <p style="color: #555;"><strong>Order ID:</strong> ${orderId}</p>
+              <p style="color: #555;"><strong>Product ID:</strong> ${productDetails._id}</p>
+              <p style="color: #555;"><strong>Product:</strong> ${productDetails.productName} x ${product.quantity}</p>
+              <p style="color: #555;"><strong>Price:</strong> ${productDetails.price} /-</p>
+            </div>
+            <div style="width:50%"></div>
+            <div style="text-align:left;width:25%">
+              <h3 style="color: #555; text-align:left">Delivery Address</h3>
+              <p style="color: #555;"> ${order.shippingAddress.locality}, ${order.shippingAddress.street}</p>
+              <p style="color: #555;">${order.shippingAddress.city}, ${order.shippingAddress.state}</p>
+              <p style="color: #555;"><strong>PINCODE :</strong> ${order.shippingAddress.pincode}</p>
+            </div>
+          </div>
+          <p style="color: #555; text-align: center;">Your order is expected to be delivered by ${formattedExpectedDeliveryDate}.</p>
+
+          <hr style="border: 0.5px solid #ddd; margin: 10px auto;">
+
+          <p style="color: #777; text-align: center;">Thank you in advance, for your patience.</p>
+
+          <footer style="text-align: center; margin-top: 20px; color: #999; font-size: 12px;">
+            &copy; ${new Date().getFullYear()} Pawty. All Rights Reserved.
+          </footer>
+        </div>
+      `;
+        await sendOtpEmail(email,subject,message);
+      } 
+
       res.json({ message: "Order Status Updated.", status  });
     } else {
       res.status(404).json({ message: "Product not found in order."});
@@ -370,48 +466,6 @@ let updateStatus = async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Error on updating status' });
-  }
-};
-let sendOrderDeliveredEmail = async (email, orderId, products) => {
-  // Assuming products is an array of { name, price, quantity }
-  const totalPrice = products.reduce((total, product) => total + product.price * product.quantity, 0);
-
-  const mailOptions = {
-    from: process.env.EMAIL,
-    to: email,
-    subject: "Order Delivered - Invoice",
-    html: `
-      <div style="background-color: #f9f9f9; padding: 20px;">
-        <h2 style="color: red;">Order Delivered - Invoice</h2>
-        <p style="color: #555;">Your order with ID ${orderId} has been delivered successfully.</p>
-        <table style="width: 100%; border-collapse: collapse;">
-          <thead>
-            <tr>
-              <th style="border: 1px solid #ddd; padding: 8px;">Product Name</th>
-              <th style="border: 1px solid #ddd; padding: 8px;">Price</th>
-              <th style="border: 1px solid #ddd; padding: 8px;">Quantity</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${products.map(product => `
-              <tr>
-                <td style="border: 1px solid #ddd; padding: 8px;">${product.name}</td>
-                <td style="border: 1px solid #ddd; padding: 8px;">${product.price}</td>
-                <td style="border: 1px solid #ddd; padding: 8px;">${product.quantity}</td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-        <p style="color: #777;">Total Price: ${totalPrice}</p>
-        <p style="color: #777;">Thank you for shopping with us.</p>
-      </div>
-    `,
-  };
-  try {
-    await transporter.sendMail(mailOptions);
-    console.log("Delivery invoice email sent");
-  } catch (error) {
-    console.error("Error sending delivery invoice email:", error);
   }
 };
 
