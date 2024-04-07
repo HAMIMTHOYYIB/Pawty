@@ -340,6 +340,7 @@ let updateStatus = async (req, res) => {
         let subject = "Order Delivered - Invoice";
         let message = `
         <div style="background-color: #f9f9f9; padding: 20px;">
+          <img src="https://res.cloudinary.com/dw3wmxotb/image/upload/v1712451407/pawty_sxt7if.png" alt="PAWTY" style="max-width: 80px; display: block;">  
           <h2 style="color: #2e702e; text-align: center;">Order Delivered</h2>
 
           <div style="border: 1px solid #555; margin: 0 auto; padding: 20px; text-align: center;">
@@ -378,6 +379,7 @@ let updateStatus = async (req, res) => {
         let subject = "Order Shipped";
         let message = `
         <div style="background-color: #f9f9f9; padding: 20px;">
+        <img src="https://res.cloudinary.com/dw3wmxotb/image/upload/v1712451407/pawty_sxt7if.png" alt="PAWTY" style="max-width: 80px; display: block;">
         <h2 style="color: #2e6e70; text-align: center;">Order Shipped</h2>
 
         <div style="border: 1px solid #555; margin: 0 auto; padding: 20px; text-align: center;">
@@ -385,14 +387,14 @@ let updateStatus = async (req, res) => {
         </div>
 
         <div style="display: flex;">
-          <div style="width:25%">
+          <div style="width:40%">
             <p style="color: #555;"><strong>Order ID:</strong> ${orderId}</p>
             <p style="color: #555;"><strong>Product ID:</strong> ${productDetails._id}</p>
             <p style="color: #555;"><strong>Product:</strong> ${productDetails.productName} x ${product.quantity}</p>
             <p style="color: #555;"><strong>Price:</strong> ${productDetails.price} /-</p>
           </div>
-          <div style="width:50%"></div>
-          <div style="text-align:left;width:25%">
+          <div style="width:20%"></div>
+          <div style="text-align:left;width:40%">
             <h3 style="color: #555; text-align:left">Delivery Address</h3>
             <p style="color: #555;"> ${order.shippingAddress.locality},${order.shippingAddress.street}</p>
             <p style="color: #555;">${order.shippingAddress.city},${order.shippingAddress.state}</p>
@@ -424,6 +426,7 @@ let updateStatus = async (req, res) => {
         let subject = "Product Out of Delivery";
         let message = `
         <div style="background-color: #f9f9f9; padding: 20px;">
+          <img src="https://res.cloudinary.com/dw3wmxotb/image/upload/v1712451407/pawty_sxt7if.png" alt="PAWTY" style="max-width: 80px; display: block;">
           <h2 style="color: #ebba34; text-align: center;">Order out of Delivery</h2>
 
           <div style="border: 1px solid #555; margin: 0 auto; padding: 20px; text-align: center;">

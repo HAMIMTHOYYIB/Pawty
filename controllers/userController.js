@@ -22,7 +22,6 @@ let homePage = async (req,res) => {
 
   let vendors = await Vendor.find().select("products")
   let products = vendors.map((vendor) => vendor.products).flat()
-  console.log("vendors :",products);
   res.render('users/index-two',{category,subCategory,products})
 }
 // Get UserAccount
@@ -483,7 +482,6 @@ let submitCheckout = async (req, res) => {
     }
     let vendors = await Vendor.find();
     let address = user.address.filter(add => add._id.toString() === addressId);
-    console.log("address : ", address[0]);
 
     let products = [];
     for (const prod of user.cart.products) {
@@ -492,7 +490,6 @@ let submitCheckout = async (req, res) => {
       for (const vendor of vendors) {
         for (const product of vendor.products) {
           if (product._id.toString() === prod._id.toString()) {
-            console.log("prodcut inside the vendor :", product);
             let stock = parseInt(product.stockQuantity) - prod.quantity;
             product.stockQuantity = stock.toString();
             vendorId = vendor._id.toString();
@@ -534,9 +531,74 @@ let submitCheckout = async (req, res) => {
       userId: req.user.id
     });
     await newOrder.save();
+
     user.cart = { products: [], total: 0, discount: 0 };
     await user.save();
+
+   // Mail Notification
+    let arr = [];
+    for (const prod of newOrder.products) {
+      let productDetails = await productHelper.getProductDetails(prod._id);
+      productDetails.quantity = prod.quantity;
+      productDetails.price = productDetails.price*productDetails.quantity;
+      arr.push(productDetails);
+    }
+
+    let email = user.email;
+    let subject = "PAWTY - Order Placed";
+
+    let tableRows = arr.map(productDetails => `
+    <tr>
+      <td style="padding: 10px; border: 1px solid #ddd;">
+        ${productDetails.productName}
+      </td>
+      <td style="padding: 10px; border: 1px solid #ddd;">
+        <img src="${productDetails.images[0]}" alt="${productDetails.productName}" style="max-width: 100px; max-height: 100px;">
+      </td>
+      <td style="padding: 10px; text-align: center; border: 1px solid #ddd;">
+        ${productDetails.quantity}
+      </td>
+      <td style="padding: 10px; text-align: right; border: 1px solid #ddd;">
+        ${productDetails.price} /-
+      </td>
+    </tr>
+  `).join('');
+    let message = `
+    <div style="background-color: #f9f9f9; padding: 20px;">
+      <img src="https://res.cloudinary.com/dw3wmxotb/image/upload/v1712451407/pawty_sxt7if.png" alt="PAWTY" style="max-width: 80px; display: block;">
+      <h2 style="color: #255923; text-align: center;">Order Confirmation</h2>
+      <div style="border: 1px solid #ddd; margin: 0 auto; padding: 20px;">
+        <h3 style="color: #555;">Hi ${user.username}, Thanks for your order!</h3>
+      </div>
+      <table style="width: 100%; border-collapse: collapse; margin: 20px 0;">
+        <thead>
+          <tr style="background-color: #eee; border: 1px solid #ddd; padding: 10px;">
+            <th style="text-align: left;">Product</th>
+            <th style="text-align: left;">Product image</th>
+            <th style="text-align: center;">Quantity</th>
+            <th style="text-align: right;">Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${tableRows}
+        </tbody>
+      </table>
+      <p style="text-align: right;">
+        <strong>Total:</strong> ${newOrder.total} /-
+      </p>
+      <p style="color: #555; text-align: center;">
+        Your order (ID: ${newOrder._id}) has been placed and is being processed. We'll update you on the delivery status soon.
+      </p>
+      <hr style="border: 0.5px solid #ddd; margin: 10px auto;">
+      <p style="color: #777; text-align: center;">We appreciate your business!</p>
+      <footer style="text-align: center; margin-top: 20px; color: #999; font-size: 12px;">
+        &copy; ${new Date().getFullYear()} Pawty. All Rights Reserved.
+      </footer>
+    </div>
+    `;
+    sendOtpEmail(email, subject, message);
     res.status(201).json({ message: 'Order placed successfully', order: newOrder, shippingAddress });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Failed to place order' });
@@ -563,10 +625,10 @@ let requestCancellation = async (req, res) => {
     await order.save();
     let userEmail = req.user.email; // Assuming user email is stored in order or user profile
     let productDetails = await productHelper.getProductDetails(product._id)
-    
     let subject = "Order Cancellation Request";
     let message = `
-    <div style="display:flex;">
+    <div style="">
+    <img src="https://res.cloudinary.com/dw3wmxotb/image/upload/v1712451407/pawty_sxt7if.png" alt="PAWTY" style="max-width: 80px;max-height: 40px; display: block;">
       <div style="background-color: #f9f9f9; padding: 20px;">
         <h2 style="color: red;">Order Cancellation Request</h2>
         <p style="color: #555;">Your request to cancel the following order has been received:</p>
@@ -575,7 +637,6 @@ let requestCancellation = async (req, res) => {
         <p style="color: #555;"><strong>Price:</strong> ${productDetails.price} /-</p>
         <p style="color: #777;">We will process your request as soon as possible.</p>
       </div>
-      <img src="${productDetails.images[0]}" alt="Product Image" style="max-width:25%;max-height:10%;">
     </div>
     `;
     sendOtpEmail(userEmail ,subject , message );
