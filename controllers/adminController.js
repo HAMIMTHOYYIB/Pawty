@@ -4,6 +4,11 @@ const User = require('../models/User');
 const Vendor = require('../models/Vendor');
 const Order = require("../models/order")
 const jwt = require('jsonwebtoken')
+const getProductDetails = require ('../helpers/getProductDetails');
+const htmlToPdf = require('../helpers/htmlToPdf');
+const { createObjectCsvWriter } = require('csv-writer');
+const fs = require('fs');
+
 
 let dashboard = async (req,res) => {
     let admin = await Admin.findOne();
@@ -386,7 +391,7 @@ let getGraphData = async (req, res) => {
 let getDayOrders = async (req, res) => {
     try {
       const sevenDaysAgo = new Date();
-      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 30);
   
       const totalOrders = await Order.aggregate([
         {
@@ -411,6 +416,148 @@ let getDayOrders = async (req, res) => {
       res.status(500).json({ message: "Internal Server Error" });
     }
 };
+let getOrderReport = async (req, res) => {
+    let startDate = req.body.startDate;
+    let endDate = req.body.endDate;
+
+    let orders = await Order.find({
+        orderDate: {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate)
+        }
+    });
+
+    for (let order of orders) {
+      let user = await User.findById(order.userId);
+      order.userName = user.username;
+      order.userMail = user.email;
+      for (let product of order.products) {
+        let productDetails = await getProductDetails.getProductDetails(product._id);
+        product.productName = productDetails.productName;
+      } 
+    }
+    const content = `
+    <html>
+        <head>
+            <style>
+                body {
+                    font-family: Arial, sans-serif;
+                }
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                th, td {
+                    border: 1px solid #dddddd;
+                    text-align: left;
+                    padding: 8px;
+                }
+                th {
+                    background-color: #f2f2f2;
+                }
+                .brand-icon {
+                    width: 50px; /* Adjust as needed */
+                    height: 50px; /* Adjust as needed */
+                }
+                .header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 20px;
+                    margin-top: 5px;
+                }
+                .header h2 {
+                    margin: 0;
+                }
+                .date {
+                    text-align: right;
+                }
+            </style>
+        </head>
+        <body>
+            <div class="header">
+                <h2>Pawty Order Report</h2>
+                <div class="date">From: ${startDate}<br>To: ${endDate}</div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Order ID</th>
+                        <th>Customer Name</th>
+                        <th>Order Total</th>
+                        <th>Products</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${orders.map(order => `
+                        <tr>
+                            <td>${new Date(order.orderDate).toLocaleDateString()}</td>
+                            <td>${order._id}</td>
+                            <td>${order.userName}</td>
+                            <td>${order.total}</td>
+                            <td>
+                                <ul>
+                                    ${order.products.map(product => `
+                                        <li>${product.productName}*${product.quantity}-${product.status}</li>
+                                    `).join('')}
+                                </ul>
+                            </td>
+                        </tr>
+                    `).join('')}
+                </tbody>
+            </table>
+        </body>
+    </html>
+  `;
+    const pdf = await htmlToPdf(content);
+    res.contentType('application/pdf');
+    res.attachment('order-report.pdf');
+    res.send(pdf);
+};
+
+let getOrderCvv = async (req, res) => {
+    let orders = await Order.find();
+    for (let order of orders) {
+        let user = await User.findById(order.userId);
+        order.userName = user.username;
+        order.userMail = user.email;
+        for (let product of order.products) {
+            let productDetails = await getProductDetails.getProductDetails(product._id);
+            product.productName = productDetails.productName;
+        }
+    }
+
+    const csvWriter = createObjectCsvWriter({
+        path: 'orders.csv',
+        header: [
+            { id: 'orderId', title: 'Order ID' },
+            { id: 'userName', title: 'Customer Name' },
+            { id: 'userMail', title: 'Customer Email' },
+            { id: 'total', title: 'Order Total' },
+            { id: 'products', title: 'Products' }
+        ]
+    });
+
+    const csvRecords = orders.map(order => ({
+        orderId: order._id,
+        userName: order.userName,
+        userMail: order.userMail,
+        total: order.total,
+        products: order.products.map(product => `${product.productName}*${product.quantity}`).join(';')
+    }));
+
+    await csvWriter.writeRecords(csvRecords);
+
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename=orders.csv');
+
+    const fileStream = fs.createReadStream('orders.csv');
+    fileStream.pipe(res);
+};
+
+
+  
 
 module.exports = {
     dashboard,
@@ -441,5 +588,7 @@ module.exports = {
     adminLogout,
     
     getGraphData,
-    getDayOrders
+    getDayOrders,
+    getOrderCvv,
+    getOrderReport,
 }
