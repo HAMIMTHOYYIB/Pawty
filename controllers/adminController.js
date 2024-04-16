@@ -286,7 +286,9 @@ let vendorList = async (req,res) => {
     let vendor = await Vendor.find();
     res.render('admin/vendors',{vendor})
 }
-
+let vendorsPage = (req,res) => {
+    res.render('admin/admin-vendorList')
+}
 let vendorVerify = async (req,res) => {
     const vendorId = req.body.vendorId;
     try {
@@ -302,6 +304,8 @@ let vendorVerify = async (req,res) => {
     }
 }
 
+
+
 let adminLogout = (req, res) => {
     try {
         res.clearCookie("admin_jwt");
@@ -314,11 +318,37 @@ let adminLogout = (req, res) => {
     }
 };
 
-let productList = async (req,res) => {
-    let products =  await Vendor.find().select("products");
-    console.log("products :",products);
-    res.render('users/shop-org',{products})
+let productList = async (req,res) =>{
+    let products = await Vendor.find().populate('products').select('vendorName products');
+    res.render('admin/product-grid', {products});
+    console.log("products : ",products);
+}
+
+let productDetails = async (req, res) => {
+    let { productId } = req.params;
+    try {
+        let vendor = await Vendor.findOne({ 'products._id': productId });
+        if (!vendor) {
+            return res.status(404).json({ message: 'Vendor not found' });
+        }
+        let product = vendor.products.find(prod => prod._id == productId);
+        if (!product) {
+            return res.status(404).json({ message: 'Product not found' });
+        }
+        console.log("vendor :", vendor);
+        console.log("product :", product);
+        res.render('admin/productDetails', { product, vendor });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Internal server error' });
+    }
 };
+
+// let productList = async (req,res) => {
+//     let products =  await Vendor.find().select("products");
+//     console.log("products :",products);
+//     res.render('users/shop-org',{products})
+// };
 
 let orderList = async (req,res) => {
     try {
@@ -544,14 +574,14 @@ let getOrderCvv = async (req, res) => {
         userName: order.userName,
         userMail: order.userMail,
         total: order.total,
-        products: order.products.map(product => `${product.productName}*${product.quantity}`).join(';')
+        products: order.products.map(product => `${product.productName} x ${product.quantity}`).join(';')
     }));
 
     await csvWriter.writeRecords(csvRecords);
 
+    // Set headers and stream CSV file as response
     res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', 'attachment; filename=orders.csv');
-
+    res.setHeader('Content-Disposition', 'attachment; filename=Orders.csv');
     const fileStream = fs.createReadStream('orders.csv');
     fileStream.pipe(res);
 };
@@ -584,6 +614,7 @@ module.exports = {
     vendorList,
     vendorVerify,
     productList,
+    productDetails,
     orderList,
     adminLogout,
     
@@ -591,4 +622,5 @@ module.exports = {
     getDayOrders,
     getOrderCvv,
     getOrderReport,
+    vendorsPage,
 }

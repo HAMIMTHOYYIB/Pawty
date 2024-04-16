@@ -581,15 +581,16 @@
                             </div>
                         </div>
                     </div><!-- Row end  -->
-
+                    
                     <div class="col-lg-6 card"> 
                         <h6 class="ms-2 mt-2 fw-bold">Order Report</h6>
-                        <form action="/orderReport" method="post">
+                        <form id="orderReportForm" action="/orderReport" method="post">
                             <div class="card-body">
                                 <div class="row g-3 align-items-center">
                                     <div class="col-md-12">
                                         <label class="form-label">From</label>
                                         <input id="startDate" name="startDate" type="date" class="form-control w-100">
+                                        <small id="startDateError" class="text-danger d-none"><b>Please enter a valid start date.</b></small>
                                     </div>
                                     <div class="col-md-12">
                                         <label class="form-label">To</label>
@@ -598,12 +599,12 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="w-100">
-                                <button class="btn btn-primary mx-auto w-100" type="submit">Get Orders Report</button>
+                            <div class="w-100 col-12 row d-flex justify-content-between m-2">
+                                <button id="getReportBtn" class="btn btn-primary mx-auto col-4" type="button">Get Report</button>
+                                <button id="downloadPdfBtn" class="btn btn-primary mx-auto col-4" type="button">Download as Pdf</button>
                             </div>
                         </form>
                     </div>
-                    
                 </div>
             </div>
         
@@ -750,13 +751,60 @@
         </div>
     
     </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+          const getReportBtn = document.getElementById("getReportBtn");
+          const downloadPdfBtn = document.getElementById("downloadPdfBtn");
+          const startDateInput = document.getElementById("startDate");
+          const endDateInput = document.getElementById("endDate");
+          const startDateError = document.getElementById("startDateError");
+          const endDateError = document.getElementById("endDateError");
+      
+          getReportBtn.addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent default form submission
+      
+            if (validateForm()) {
+              document.getElementById("orderReportForm").action = "/orderReport";
+              document.getElementById("orderReportForm").submit();
+            }
+          });
+      
+          downloadPdfBtn.addEventListener("click", function(event) {
+            event.preventDefault(); // Prevent default form submission
+      
+            if (validateForm()) {
+              document.getElementById("orderReportForm").action = "/downloadOrders";
+              document.getElementById("orderReportForm").submit();
+            }
+          });
+      
+          function validateForm() {
+            let isValid = true;
+            startDateError.classList.add("d-none");
+            endDateError.classList.add("d-none");
+      
+            if (startDateInput.value === "") {
+              startDateError.classList.remove("d-none");
+              isValid = false;
+            }
+      
+            if (endDateInput.value === "") {
+              endDateError.classList.remove("d-none");
+              isValid = false;
+            }
+      
+            return isValid;
+          }
+        });
+      </script>
+      
 
     <!-- Jquery Core Js -->
     <script src="assets/bundles/libscripts.bundle.js"></script>
 
     <!-- Plugin Js -->
     <script src="assets/bundles/apexcharts.bundle.js"></script>
-    <script src="assets/bundles/dataTables.bundle.js"></script>  
+    <script src="assets/bundles/dataTables.bundle.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

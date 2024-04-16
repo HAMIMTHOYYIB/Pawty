@@ -9,6 +9,8 @@ router.get('/Dashboard',adminAuthMiddleware,adminController.dashboard);
 router.get('/admin',adminController.adminLogin);
 router.post('/admin',adminController.submitAdminLogin);
 
+router.get('/admin/vendorsPage',adminController.vendorsPage);
+
 // User Management
 router.get('/admin/Customers',adminAuthMiddleware,adminController.userList);
 router.post('/userblock',adminController.userBlock);
@@ -32,12 +34,16 @@ router.post('/addSubCategory',adminController.submitAddSubCategory);
 router.get('/editSubCategory/:id',adminAuthMiddleware,adminController.editSubCategory);
 router.post('/editSubCategory/:id',adminController.submitEditSubCategory);
 router.post('/deleteSubCategory/:id',adminController.deleteSubCategory);
+
+
 router.get('/admin-ProductView',adminAuthMiddleware,adminController.productList);
+router.get('/admin-productDetails/:productId',adminAuthMiddleware,adminController.productDetails);
 router.get('/admin-Orderview',adminAuthMiddleware,adminController.orderList);
 
 router.get('/orders/total-price', adminAuthMiddleware , adminController.getGraphData);
 router.get('/orders/total-orders', adminAuthMiddleware , adminController.getDayOrders);
 router.post('/orderReport',adminAuthMiddleware,adminController.getOrderCvv);
+router.post('/downloadOrders',adminAuthMiddleware,adminController.getOrderReport);
 
 // admin logout
 router.get('/admin/logout',adminController.adminLogout);

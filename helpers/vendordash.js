@@ -141,9 +141,6 @@ const orderCountByCategory = (vendorId) => {
     });
 };
 
-
-
-
 module.exports = {
     getclients,
     orderOfVendor,

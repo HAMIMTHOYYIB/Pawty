@@ -42,7 +42,6 @@ let accountOrders = (userId) => {
         }
     })
 }
-
 module.exports = {
     accountOrders
 }
