@@ -20,10 +20,12 @@ let homePage = async (req,res) => {
   let admin = await Admin.findOne();
   let category = admin.category;
   let subCategory = admin.subCategory;
+  let banner = admin.banner;
+  console.log("banner : ",banner)
 
   let vendors = await Vendor.find().select("products")
   let products = vendors.map((vendor) => vendor.products).flat()
-  res.render('users/index-two',{category,subCategory,products})
+  res.render('users/index-two',{category,subCategory,products,banner})
 }
 // Get UserAccount
 let account = async (req,res) => {

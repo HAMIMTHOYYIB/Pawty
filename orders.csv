@@ -1,23 +1,17 @@
-Order ID,Customer Name,Customer Email,Order Total,Products
-660548ebc02db097702f1dc0,HAMIM THOYYIB,hamimthoyyib@gmail.com,2800,Hair-Skin Care x 1;Siamese x 1
-660cc80331c69b0139f945a9,HAMIM THOYYIB,hamimthoyyib@gmail.com,400,Anti-Hairball x 2
-660cf937cae87d9c24fada0e,HAMIM THOYYIB,hamimthoyyib@gmail.com,2000,Siamese x 1;Baby food x 1;Blue Dog-Collar x 1
-660cfaf4cae87d9c24fadec9,Midlaj,midlaj@gmail.com,1900,Cat - Comber x 1;Cat Nail-Cutter x 1;Orange Dog-Collar x 1;Siamese x 1
-660cfc02cae87d9c24fae2a2,Midlaj,midlaj@gmail.com,2100,Dog - Nail Cutter x 2;Double-Side comb x 2;Black Dog - Collar x 1;Tin Gravy  (mini) x 2
-660d034acf275c761801dd61,abhinav,abhinav@gmail.com,3200,Double-Side comb x 1;Cat - Comber x 1;Cat Nail-Cutter x 1;Hair-Skin Care x 2
-660d4d06f3289fe885ce50e6,abhinav,abhinav@gmail.com,120,Royal Beauty x 1
-660d4d8492816211348bec81,abhinav,abhinav@gmail.com,120,Royal Beauty x 1
-660d62a6f9bd4ed40637d25b,Kamil Abdulla,kamilabdulla000@gmail.com,400,Red Dog-Collar x 1
-660e2549f2a10793071ba1bd,Kamil Abdulla,kamilabdulla000@gmail.com,800,Orange Dog-Collar x 2
-660e2716f2a10793071ba7bf,HAMIM THOYYIB,hamimthoyyib@gmail.com,1400,Anti-Hairball x 1;Baby food x 2
-660e6757f629ac9f555f4b29,HAMIM THOYYIB,hamimthoyyib@gmail.com,620,Indoor x 1
-6610d5e87d2d3ab0bd3cf4e3,HAMIM THOYYIB,hamimthoyyib@gmail.com,500,Indoor x 1
-66119e9d94cd77ff115093b0,Kamil Abdulla,kamilabdulla000@gmail.com,1400,Dog - Nail Cutter x 2;Sterillised-Food x 1
-6611e4722e61c8a0c520b667,HAMIM THOYYIB,hamimthoyyib@gmail.com,500,Cat Nail-Cutter x 1;Cat - Comber x 1
-66137e662476966758a35413,HAMIM THOYYIB,hamimthoyyib@gmail.com,600,Royal Beauty x 5
-66137eff2476966758a35b24,Kamil Abdulla,kamilabdulla000@gmail.com,1000,Tin Gravy  (mini) x 4
-6614baf27d2e2806dea99a0d,Sahal,sahalvv9656@gmail.com,1860,Indoor x 1;Siamese x 1;Royal Beauty x 3
-6614d049e2546fb704214b16,Sahal,sahalvv9656@gmail.com,1000,Siamese x 1
-661506b1e2546fb704215f45,Sahal,sahalvv9656@gmail.com,1200,Royal-Labroder x 1
-661be6bde365fe4df8246c3c,Haya,hayathabishts@gmail.com,3900,Blue Cage x 1;Sterillised-Food x 1;Baby food x 1
-661cc162d4e79473a1b692c4,Haya,hayathabishts@gmail.com,1200,Royal Pug x 1
+Order ID,Order Date,Customer Name,Customer Email,Order Total,Products
+660cc80331c69b0139f945a9,1/4/2024,HAMIM THOYYIB,hamimthoyyib@gmail.com,400,Anti-Hairball x 2
+660cf937cae87d9c24fada0e,3/4/2024,HAMIM THOYYIB,hamimthoyyib@gmail.com,2000,Siamese x 1;Baby food x 1;Blue Dog-Collar x 1
+660cfaf4cae87d9c24fadec9,2/4/2024,Midlaj,midlaj@gmail.com,1900,Cat - Comber x 1;Cat Nail-Cutter x 1;Orange Dog-Collar x 1;Siamese x 1
+660d4d06f3289fe885ce50e6,1/4/2024,abhinav,abhinav@gmail.com,120,Royal Beauty x 1
+660d4d8492816211348bec81,1/4/2024,abhinav,abhinav@gmail.com,120,Royal Beauty x 1
+660e2549f2a10793071ba1bd,4/4/2024,Kamil Abdulla,kamilabdulla000@gmail.com,800,Orange Dog-Collar x 2
+660e2716f2a10793071ba7bf,4/4/2024,HAMIM THOYYIB,hamimthoyyib@gmail.com,1400,Anti-Hairball x 1;Baby food x 2
+660e6757f629ac9f555f4b29,4/4/2024,HAMIM THOYYIB,hamimthoyyib@gmail.com,620,Indoor x 1
+6610d5e87d2d3ab0bd3cf4e3,6/4/2024,HAMIM THOYYIB,hamimthoyyib@gmail.com,500,Indoor x 1
+66119e9d94cd77ff115093b0,7/4/2024,Kamil Abdulla,kamilabdulla000@gmail.com,1400,Dog - Nail Cutter x 2;Sterillised-Food x 1
+6611e4722e61c8a0c520b667,7/4/2024,HAMIM THOYYIB,hamimthoyyib@gmail.com,500,Cat Nail-Cutter x 1;Cat - Comber x 1
+66137e662476966758a35413,8/4/2024,HAMIM THOYYIB,hamimthoyyib@gmail.com,600,Royal Beauty x 5
+66137eff2476966758a35b24,7/4/2024,Kamil Abdulla,kamilabdulla000@gmail.com,1000,Tin Gravy  (mini) x 4
+6614baf27d2e2806dea99a0d,9/4/2024,Sahal,sahalvv9656@gmail.com,1860,Indoor x 1;Siamese x 1;Royal Beauty x 3
+6614d049e2546fb704214b16,9/4/2024,Sahal,sahalvv9656@gmail.com,1000,Siamese x 1
+661506b1e2546fb704215f45,9/4/2024,Sahal,sahalvv9656@gmail.com,1200,Royal-Labroder x 1

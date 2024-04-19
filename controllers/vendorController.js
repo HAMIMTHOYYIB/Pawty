@@ -8,9 +8,7 @@ let productHelper = require('../helpers/getProductDetails');
 const nodemailer = require('nodemailer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken')
-// const multer =  require('multer')
 const cloudinary = require('../config/cloudinary')
-// const upload = require('../config/multer.js');
 require('dotenv').config()
 
 

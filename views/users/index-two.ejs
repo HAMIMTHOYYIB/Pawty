@@ -173,6 +173,37 @@
     <section class="home-slider-area">
       <div class="swiper home-slider-container default-slider-container">
         <div class="swiper-wrapper home-slider-wrapper slider-default">
+          <% banner.mainBanner.forEach(image  => { %>
+            <div class="swiper-slide">
+              <div class="slider-content-two-area" data-bg-img="<%= image %>">
+                <div class="container">
+                  <div class="slider-container">
+                    <div class="row justify-content-sm-end justify-content-center align-items-center">
+                      <div class="col-sm-8 col-md-6">
+                        <div class="slider-content">
+                          <div class="content">
+                            <div class="sub-title-box">
+                              <h5 class="sub-title">100% Quality Products</h5>
+                            </div>
+                            <div class="title-box">
+                              <h2 class="title">More than just food,it's love in every bowl.</h2>
+                            </div>
+                            <div class="desc-box">
+                              <p class="desc">They may not ask for much, but their wagging tails and purrs speak volumes. Show them your love with every bowlful of wholesome nutrition.</p>
+                            </div>
+                            <div class="btn-box">
+                              <a class="btn-theme text-dark" href="shop.html">Shop Now</a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="home-overlay"></div>
+              </div>
+            </div>  
+          <% }) %>
           <div class="swiper-slide">
             <div class="slider-content-two-area" data-bg-img="assets/img/slider/slider-cat-01.webp">
               <div class="container">
@@ -202,39 +233,6 @@
               <div class="home-overlay"></div>
             </div>
           </div>
-
-
-          <!-- <div class="swiper-slide">
-            <div class="slider-content-two-area" data-bg-img="assets/img/slider/slider-01.png">
-              <div class="container">
-                <div class="slider-container">
-                  <div class="row justify-content-sm-end justify-content-center align-items-center">
-                    <div class="col-sm-8 col-md-6">
-                      <div class="slider-content">
-                        <div class="content">
-                          <div class="sub-title-box">
-                            <h5 class="sub-title">100% Quality Products</h5>
-                          </div>
-                          <div class="title-box">
-                            <h2 class="title">More than just food,it's love in every bowl.</h2>
-                          </div>
-                          <div class="desc-box">
-                            <p class="desc">They may not ask for much, but their wagging tails and purrs speak volumes. Show them your love with every bowlful of wholesome nutrition.</p>
-                          </div>
-                          <div class="btn-box">
-                            <a class="btn-theme text-dark" href="shop.html">Shop Now</a>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="home-overlay"></div>
-            </div>
-          </div>
-
-           -->
 
           <div class="swiper-slide">
             <div class="slider-content-area" data-bg-img="assets/img/slider/slider-01.png">

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const upload = require('../config/multer');
 const adminController = require('../controllers/adminController'); 
 const adminAuthMiddleware = require("../middleware/jwt_admin");
 
@@ -44,6 +45,13 @@ router.get('/orders/total-price', adminAuthMiddleware , adminController.getGraph
 router.get('/orders/total-orders', adminAuthMiddleware , adminController.getDayOrders);
 router.post('/orderReport',adminAuthMiddleware,adminController.getOrderCvv);
 router.post('/downloadOrders',adminAuthMiddleware,adminController.getOrderReport);
+
+router.post('/downloadProduct/:productId',adminAuthMiddleware,adminController.productWiseOrder);
+router.post('/ProductReport/:productId',adminAuthMiddleware,adminController.productWiseReport);
+
+router.get('/bannerView',adminAuthMiddleware,adminController.updateBanners);
+router.post('/changeMainBanner', upload.array('image',4), adminAuthMiddleware, adminController.changeMainBanner);
+
 
 // admin logout
 router.get('/admin/logout',adminController.adminLogout);
