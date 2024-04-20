@@ -424,6 +424,36 @@ let changeMainBanner = async(req,res) => {
         res.status(500).send('Error on Changing Banners')
     }
 }
+let changeOfferBanner = async (req, res) => {
+    let count = req.params.count;
+    console.log("count :",count)
+    let imageData = req.file;
+    let offerValue = req.body.offerVal;
+    let title = req.body.title;
+
+    try {
+        if (imageData && offerValue && title) {
+            const result = await cloudinary.uploader.upload(imageData.path);
+            const imageUrl = result.secure_url;
+            console.log("image : ",imageUrl);
+
+            const admin = await Admin.findOne();
+            admin.banner.offerBanner[count-1].image = imageUrl;
+            admin.banner.offerBanner[count-1].offerValue = offerValue;
+            admin.banner.offerBanner[count-1].title = title;
+            await admin.save();
+
+            console.log("Offer banner changed successfully.");
+        } else {
+            console.log("Missing image data, offer value, or title.");
+        }
+        res.redirect('/bannerView');
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error on Changing Offer Banner');
+    }
+}
+
 
 let getGraphData = async (req, res) => {
     try {
@@ -823,6 +853,7 @@ module.exports = {
 
     updateBanners,
     changeMainBanner,
+    changeOfferBanner,
 
     adminLogout,
     

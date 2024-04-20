@@ -32,6 +32,26 @@
 
     <!--== Main Style CSS ==-->
     <link href="assets/css/style.css" rel="stylesheet" />
+
+    <style>
+      .banner-product-single-style3-item .thumb {
+        position: relative;
+        width: 250px; /* Set your desired width */
+        height: 250px; /* Set the height equal to the width */
+        overflow: hidden;
+      }
+
+      .banner-product-single-style3-item .thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: fill; /* Ensure the image covers the entire container */
+      }
+
+      .square-image {
+        display: block;
+      }
+
+    </style>
 </head>
 
 <body>
@@ -80,7 +100,7 @@
                           <li><a href="shop-three-columns.html"><span>Shop 3 Column</span></a></li>
                           <li><a href="shop-four-columns.html"><span>Shop 4 Column</span></a></li>
                           <li><a href="shop-left-sidebar.html"><span>Shop Left Sidebar</span></a></li>
-                          <li><a href="shop.html"><span>Shop Right Sidebar</span></a></li>
+                          <li><a href="/shop"><span>Shop Right Sidebar</span></a></li>
                         </ul>
                       </li>
                       <li class="mega-menu-item"><a href="#/" class="mega-title"><span>Single Product</span></a>
@@ -183,16 +203,16 @@
                         <div class="slider-content">
                           <div class="content">
                             <div class="sub-title-box">
-                              <h5 class="sub-title">100% Quality Products</h5>
+                              <!-- <h5 class="sub-title">100% Quality Products</h5> -->
                             </div>
                             <div class="title-box">
-                              <h2 class="title">More than just food,it's love in every bowl.</h2>
+                              <!-- <h2 class="title">More than just food,it's love in every bowl.</h2> -->
                             </div>
                             <div class="desc-box">
-                              <p class="desc">They may not ask for much, but their wagging tails and purrs speak volumes. Show them your love with every bowlful of wholesome nutrition.</p>
+                              <!-- <p class="desc">They may not ask for much, but their wagging tails and purrs speak volumes. Show them your love with every bowlful of wholesome nutrition.</p> -->
                             </div>
                             <div class="btn-box">
-                              <a class="btn-theme text-dark" href="shop.html">Shop Now</a>
+                              <!-- <a class="btn-theme text-dark" href="/shop">Shop Now</a> -->
                             </div>
                           </div>
                         </div>
@@ -204,7 +224,7 @@
               </div>
             </div>  
           <% }) %>
-          <div class="swiper-slide">
+          <!-- <div class="swiper-slide">
             <div class="slider-content-two-area" data-bg-img="assets/img/slider/slider-cat-01.webp">
               <div class="container">
                 <div class="slider-container">
@@ -222,7 +242,7 @@
                             <p class="desc">They may not ask for much, but their wagging tails and purrs speak volumes. Show them your love with every bowlful of wholesome nutrition.</p>
                           </div>
                           <div class="btn-box">
-                            <a class="btn-theme text-dark" href="shop.html">Shop Now</a>
+                            <a class="btn-theme text-dark" href="/shop">Shop Now</a>
                           </div>
                         </div>
                       </div>
@@ -232,9 +252,9 @@
               </div>
               <div class="home-overlay"></div>
             </div>
-          </div>
+          </div> -->
 
-          <div class="swiper-slide">
+          <!-- <div class="swiper-slide">
             <div class="slider-content-area" data-bg-img="assets/img/slider/slider-01.png">
               <div class="container">
                 <div class="slider-container">
@@ -249,24 +269,16 @@
                             <h2 class="title">A Greate Meal With Your Pet</h2>
                           </div>
                           <div class="btn-box">
-                            <a class="btn-theme text-dark" href="shop.html">Shop Now</a>
+                            <a class="btn-theme text-dark" href="/shop">Shop Now</a>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <!-- <div class="col-sm-6 col-md-6">
-                      <div class="slider-thumb mousemove">
-                        <div class="thumb">
-                          <img src="assets/img/slider/slider-01.png" width="585" height="579" alt="Image-HasTech">
-                          <div class="shape-one"></div>
-                        </div>
-                      </div>
-                    </div> -->
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
 
         <!--== Add Swiper Arrows ==-->
@@ -342,45 +354,45 @@
           <div class="col-md-6 col-lg-4">
             <div class="banner-product-single-style3-item">
               <div class="thumb">
-                <a href="shop.html">
-                  <img src="assets/img/shop/banner/4.jpg" width="370" height="247" alt="Image-HasTech">
+                <a href="/shop" class="banner-box">
+                  <img src="<%= banner.offerBanner[0].image%>" width="150" height="150" alt="Image-HasTech">
                 </a>
               </div>
               <div class="content">
-                <h5 class="sub-title">-25%  Off </h5>
-                <h5 class="title">Dog Dry Food & Medicine</h5>
-                <a class="btn-theme-link" href="shop.html">Shop Now</a>
+                <h5 class="sub-title"><%= banner.offerBanner[0].offerValue %>  Off </h5>
+                <h5 class="title"><%= banner.offerBanner[0].title %></h5>
+                <a class="btn-theme-link" href="/shop">Shop Now</a>
               </div>
             </div>
           </div>
           <div class="col-md-6 col-lg-4">
             <div class="banner-product-single-style3-item">
               <div class="thumb">
-                <a href="shop.html">
-                  <img src="assets/img/shop/banner/5.jpg" width="370" height="247" alt="Image-HasTech">
+                <a href="/shop" class="banner-box">
+                  <img  src="<%= banner.offerBanner[1].image%>" width="150" height="150" alt="Image-HasTech">
                 </a>
               </div>
               <div class="content">
-                <h5 class="sub-title">-25%  Off </h5>
-                <h5 class="title">Cat Dry Food & Medicine</h5>
-                <a class="btn-theme-link" href="shop.html">Shop Now</a>
+                <h5 class="sub-title"><%= banner.offerBanner[1].offerValue %> Off </h5>
+                <h5 class="title"><%= banner.offerBanner[1].title %></h5>
+                <a class="btn-theme-link" href="/shop">Shop Now</a>
               </div>
             </div>
           </div>
           <div class="col-md-6 col-lg-4">
             <div class="banner-product-single-style3-item">
               <div class="thumb">
-                <a href="shop.html">
-                  <img src="assets/img/shop/banner/6.jpg" width="370" height="247" alt="Image-HasTech">
+                <a href="/shop" class="banner-box">
+                  <img src="<%= banner.offerBanner[2].image %>" alt="Image-HasTech" class="square-image">
                 </a>
               </div>
               <div class="content">
-                <h5 class="sub-title">-25%  Off </h5>
-                <h5 class="title">Rabbit’s Food & Medicine</h5>
-                <a class="btn-theme-link" href="shop.html">Shop Now</a>
+                <h5 class="sub-title"><%= banner.offerBanner[2].offerValue %> Off </h5>
+                <h5 class="title"><%= banner.offerBanner[2].title %></h5>
+                <a class="btn-theme-link" href="/shop">Shop Now</a>
               </div>
             </div>
-          </div>
+          </div>          
         </div>
       </div>
     </section>
@@ -441,7 +453,7 @@
                 </div>
                 <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incidid ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate</p>
                 <p>Velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidata non proident, sunt in culpa qui officia deserun mollit anim id est laborum. Sed ut perspiciatis unde omnis iste natus error.</p>
-                <a class="btn-theme" href="shop.html">Shop Now</a>
+                <a class="btn-theme" href="/shop">Shop Now</a>
               </div>
             </div>
             <div class="col-lg-6 order-1 order-lg-2">
@@ -469,7 +481,7 @@
               <h5 class="sub-title">Save 50% Off</h5>
               <h2 class="title">Best Deal Offer</h2>
               <p class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore etlop.</p>
-              <a class="btn-theme text-dark" href="shop.html">Shop Now</a>
+              <a class="btn-theme text-dark" href="/shop">Shop Now</a>
             </div>
           </div>
         </div>
@@ -718,9 +730,9 @@
                   <div class="widget-menu-wrap">
                     <ul class="nav-menu">
                       <li><a href="account-login.html">Gallery</a></li>
-                      <li><a href="shop.html">Brands</a></li>
+                      <li><a href="/shop">Brands</a></li>
                       <li><a href="account-login.html">Gift Certificates</a></li>
-                      <li><a href="shop.html">Specials</a></li>
+                      <li><a href="/shop">Specials</a></li>
                       <li><a href="account.html">My Account Us</a></li>
                       <li><a href="about-us.html">About Us</a></li>
                     </ul>
@@ -877,11 +889,11 @@
                       <ul>
                         <li><span>SKU:</span> Ch-256xl</li>
                         <li><span>Categories:</span> 
-                          <a href="shop.html">Pet Food. eCommerce</a>
+                          <a href="/shop">Pet Food. eCommerce</a>
                         </li>
                         <li><span>Tags:</span> 
-                          <a href="shop.html">Petfood. Pet</a>,
-                          <a href="shop.html">Animal.</a>
+                          <a href="/shop">Petfood. Pet</a>,
+                          <a href="/shop">Animal.</a>
                         </li>
                       </ul>
                     </div>
@@ -999,7 +1011,7 @@
                   <li><a href="shop-three-columns.html"><span>Shop 3 Column</span></a></li>
                   <li><a href="shop-four-columns.html"><span>Shop 4 Column</span></a></li>
                   <li><a href="shop-left-sidebar.html"><span>Shop Left Sidebar</span></a></li>
-                  <li><a href="shop.html"><span>Shop Right Sidebar</span></a></li>
+                  <li><a href="/shop"><span>Shop Right Sidebar</span></a></li>
                 </ul>
               </li>
               <li>

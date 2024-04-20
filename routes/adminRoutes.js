@@ -51,6 +51,7 @@ router.post('/ProductReport/:productId',adminAuthMiddleware,adminController.prod
 
 router.get('/bannerView',adminAuthMiddleware,adminController.updateBanners);
 router.post('/changeMainBanner', upload.array('image',4), adminAuthMiddleware, adminController.changeMainBanner);
+router.post('/offerbanner/:count',adminAuthMiddleware, upload.single('image') , adminController.changeOfferBanner);
 
 
 // admin logout

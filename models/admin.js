@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const adminSchema = new mongoose.Schema({
     adminname: {
         type: String,
@@ -38,10 +37,44 @@ const adminSchema = new mongoose.Schema({
             type: Array,
             required: true
         },
-        offerBanner: {
-            type: Array,
-            required: true
-        },
+        offerBanner: [{
+            image: {
+                type: String,
+                required: true
+            },
+            offerValue: {
+                type: String,
+            },
+            title: {
+                type: String,
+            }
+        }, {
+            image: {
+                type: String,
+                required: true
+            },
+            offerValue: {
+                type: Number,
+                required: true
+            },
+            title: {
+                type: String,
+                required: true
+            }
+        }, {
+            image: {
+                type: String,
+                required: true
+            },
+            offerValue: {
+                type: Number,
+                required: true
+            },
+            title: {
+                type: String,
+                required: true
+            }
+        }],
         multiplePageBanner: {
             type: Array,
             required: true
