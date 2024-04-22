@@ -104,7 +104,7 @@
     </div>
   </header>
   <!--== End Header Wrapper ==-->
-  
+
   <main class="main-content">
     <!--== Start Page Header Area Wrapper ==-->
     <div class="page-header-area" data-bg-img="assets/img/photos/header-bg.jpg">
@@ -134,7 +134,7 @@
           <div class="col-12">
             <div class="shop-top-bar">
               <div class="shop-top-left">
-                <p class="pagination-line"><a href="/shop">16</a> Product Found of <a href="/shop">30</a></p>
+                <p class="pagination-line">Search from <a href="/shop"><%= prod %></a>&nbsp;products</p>
               </div>
               <div class="shop-top-center">
                 <nav class="product-nav">
@@ -148,14 +148,18 @@
               <div class="shop-top-right">
                 <div class="shop-sort">
                   <span>Sort By :</span>
-                  <select class="form-select" aria-label="Sort select example">
-                    <option class="" selected>Default</option>
-                    <option class="" value="1">Popularity</option>
-                    <option class="" value="2">Average Rating</option>
-                    <option class="" value="3">Newsness</option>
-                    <option class="" value="4">Price Low to High</option>
+                  <select class="form-select" id="sortSelect" aria-label="Sort select example">
+                    <option class="" value="default" selected>Default</option>
+                    <!-- <option class="" value="popularity">Popularity</option> -->
+                    <!-- <option class="" value="rating">Average Rating</option> -->
+                    <option class="" value="oldest">Oldest</option>
+                    <option class="" value="newness">Latest</option>
+                    <option class="" value="priceLowToHigh">Price Low to High</option>
+                    <option class="" value="priceHighToLow">Price High to Low</option>
+                    <option class="" value="alphabeticalAZ">A to Z</option>
+                    <option class="" value="alphabeticalZA">Z to A</option>
                   </select>
-                </div>
+                </div>                
               </div>
             </div>
           </div>
@@ -165,46 +169,97 @@
                 <div class="tab-content" id="nav-tabContent">
                   <div class="tab-pane fade show active" id="nav-grid" role="tabpanel" aria-labelledby="nav-grid-tab">
                     <div class="row">
-
-                      <% products.forEach(vendor => {  %>
-                        <% vendor.products.forEach(product => {  %>
-                      <div class="col-sm-6 col-xl-3">
-                        <!--== Start Product Item ==-->
-                        <div class="product-item">
-                          <div class="product-thumb" style="height:250px;width:250px;position: relative; overflow: hidden;">
-                            <a href="/product/<%= product._id %>" class="ms-3" style="max-height:250px;max-width:250px;" >
-                              <img class="h-100 w-100" style="object-fit:cover;position: absolute;"  src="<%= product.images[0] %>"alt="Image-HasTech">
-                            </a>
-                          </div>
-                          <div class="product-info">
-                            <h4 class="title"><a href="/product/<%= product._id %>"><%= product.productName %></a></h4>
-                            <div class="prices">
-                              <span class="price"><%= product.price %></span>
+                      <div class="col-xl-3 g-0">
+                        <div class="shop-sidebar  border">
+                          <div class="shop-sidebar-search">
+                            <div class="sidebar-search-form">
+                              <form id="">
+                                <input type="search" placeholder="Search Here">
+                                <button type="submit"><i class="fa fa-search"></i></button>
+                              </form>
                             </div>
                           </div>
-                          <div class="product-action">
-                            <button type="button" id="addToWishlist-<%= product._id %>" class="addToWishlist btn-product-wishlist bg-transparent" data-product-id="<%= product._id %>">
-                              <% if(user !== undefined && user.wishlist.products.some( wProduct => wProduct._id.toString() === product._id.toString() )) { %>
-                                <i class="bi bi-heart-fill text-danger fs-5"></i>
-                              <% }else{ %>
-                              <i class="pe-7s-like"></i>
-                              <% } %>
-                            </button>
-                            <div class="product-action-links">
-                              <button type="button" class="addToCart btn-product-cart bg-transparent" data-product-id="<%= product._id %>">
-                                <i class="bi bi-bag fs-5"></i>
-                              </button>
-                              <!-- <button type="button" class="btn-product-quick-view" data-bs-toggle="modal" data-bs-target="#action-QuickViewModal">
-                                <i class="pe-7s-look"></i>
-                              </button> -->
+                          <form action="" id="filterForm" class="filterProducts">
+                            <div class="shop-widget shop-sidebar-tags">
+                              <h4 class="sidebar-title">Tags</h4>
+                              <div class="sidebar-tags">
+                                <ul class="tags-list mb--0">
+                                  <% admin.subCategory.forEach(tag => { %>
+                                  <li>
+                                    <label>
+                                      <input type="checkbox" name="tags" value="<%= tag.subCategoryName %>">
+                                      <%= tag.subCategoryName %>
+                                    </label>
+                                  </li>
+                                  <% }) %>
+                                </ul>
+                              </div>
                             </div>
-                          </div>
+                            <div class="shop-widget shop-sidebar-category">
+                              <h4 class="sidebar-title">Categories</h4>
+                              <div class="sidebar-category">
+                                <ul class="category-list mb--0">
+                                  <% admin.category.forEach(category => { %>
+                                  <li>
+                                    <label>
+                                      <input type="checkbox" name="categories" value="<%= category.categoryName %>">
+                                      <%= category.categoryName %>
+                                    </label>
+                                  </li>
+                                  <% }) %>
+                                </ul>
+                              </div>
+                            </div>
+                            <div class="d-flex">
+                              <button type="submit" class="btn-filter">Filter</button>
+                              <button type="reset" class="btn-reset">Reset</button>
+                            </div>
+                          </form>
                         </div>
-                        <!--== End prPduct Item ==-->
                       </div>
-
-                       <% }) %>
-                      <% }) %>
+                      <div class="col-xl-9 g-0">
+                        <div class="row">
+                          <% products.forEach(vendor => {  %>
+                            <% vendor.products.forEach(product => {  %>
+                          <div class="col-xl-4 g-0">
+                            <!--== Start Product Item ==-->
+                            <div class="product-item">
+                              <div class="product-thumb" style="height:250px;width:250px;position: relative; overflow: hidden;">
+                                <a href="/product/<%= product._id %>" class="ms-3" style="max-height:250px;max-width:250px;" >
+                                  <img class="h-100 w-100" style="object-fit:cover;position: absolute;"  src="<%= product.images[0] %>"alt="Image-HasTech">
+                                </a>
+                              </div>
+                              <div class="product-info">
+                                <h4 class="title"><a href="/product/<%= product._id %>"><%= product.productName %></a></h4>
+                                <div class="prices">
+                                  <span class="price"><%= product.price %></span>
+                                </div>
+                              </div>
+                              <div class="product-action">
+                                <button type="button" id="addToWishlist-<%= product._id %>" class="addToWishlist btn-product-wishlist bg-transparent" data-product-id="<%= product._id %>">
+                                  <% if(user !== undefined && user.wishlist.products.some( wProduct => wProduct._id.toString() === product._id.toString() )) { %>
+                                    <i class="bi bi-heart-fill text-danger fs-5"></i>
+                                  <% }else{ %>
+                                  <i class="pe-7s-like"></i>
+                                  <% } %>
+                                </button>
+                                <div class="product-action-links">
+                                  <button type="button" class="addToCart btn-product-cart bg-transparent" data-product-id="<%= product._id %>">
+                                    <i class="bi bi-bag fs-5"></i>
+                                  </button>
+                                  <!-- <button type="button" class="btn-product-quick-view" data-bs-toggle="modal" data-bs-target="#action-QuickViewModal">
+                                    <i class="pe-7s-look"></i>
+                                  </button> -->
+                                </div>
+                              </div>
+                            </div>
+                            <!--== End prPduct Item ==-->
+                          </div>
+    
+                           <% }) %>
+                          <% }) %>
+                        </div>
+                      </div>
 
                       <div class="col-12">
                         <div class="pagination-items pagination-items-style1">
@@ -225,6 +280,176 @@
         </div>
       </div>
     </section>
+    <input type="hidden" id="userData" value="<%= JSON.stringify(user) %>">
+
+    <script>
+      // sorting
+
+      document.getElementById('sortSelect').addEventListener('change', function() {
+      filterProducts(); // Call filterProducts() when the select option changes
+      });
+
+
+      // filtering
+      // Retrieve the user object from the hidden input field
+      const userDataElement = document.getElementById('userData');
+      const userData = userDataElement ? JSON.parse(userDataElement.value) : null;
+  
+      // Add event listener to the filter form
+      const filterForm = document.getElementById('filterForm');
+      filterForm.addEventListener('submit', (event) => {
+          event.preventDefault();
+          filterProducts();
+      });
+  
+      // Function to gather selected categories and tags and send them to the backend
+      // function filterProducts() {
+      //     const selectedCategories = Array.from(document.querySelectorAll('input[name="categories"]:checked')).map(el => el.value);
+      //     const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(el => el.value);        
+      //     fetch('/filter', {
+      //         method: 'POST',
+      //         headers: {
+      //             'Content-Type': 'application/json',
+      //         },
+      //         body: JSON.stringify({
+      //             categories: selectedCategories,
+      //             tags: selectedTags,
+      //         }),
+      //     })
+      //     .then(response => response.json())
+      //     .then(data => {
+      //         // Update the product listing based on the filtered data
+      //         updateProductListing(data);
+      //     console.log(data)
+      //     })
+      //     .catch(error => {
+      //         console.error('Error:', error);
+      //     });
+      // }
+      
+      function filterProducts() {
+        const selectedCategories = Array.from(document.querySelectorAll('input[name="categories"]:checked')).map(el => el.value);
+        const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(el => el.value);
+        const selectedSort = document.getElementById('sortSelect').value; // Get the selected sorting option
+
+        fetch('/filter', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            categories: selectedCategories,
+            tags: selectedTags,
+            sort: selectedSort, // Include the selected sorting option in the request body
+          }),
+        })
+        .then(response => response.json())
+        .then(data => {
+          // Update the product listing based on the filtered and sorted data
+          updateProductListing(data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+      }
+    function updateProductListing(products) {
+      const productContainer = document.querySelector('.row .col-xl-9 .row');
+      productContainer.innerHTML = '';
+
+      if (products.length === 0) {
+          // Show a message when no products are found
+          productContainer.innerHTML = '<div class="col-xl-12 text-center mt-5"><h1 class="prod-msg">No products found</h1></div>';
+      } else {
+          products.forEach(product => {
+              const productItem = `
+                  <div class="col-xl-4 g-0">
+                      <div class="product-item">
+                          <div class="product-thumb" style="height:250px;width:250px;position: relative; overflow: hidden;">
+                              <a href="/product/${product._id}" class="ms-3" style="max-height:250px;max-width:250px;" >
+                                  <img class="h-100 w-100" style="object-fit:cover;position: absolute;"  src="${product.images[0]}" alt="Image-HasTech">
+                              </a>
+                          </div>
+                          <div class="product-info">
+                              <h4 class="title"><a href="/product/${product._id}">${product.productName}</a></h4>
+                              <div class="prices">
+                                  <span class="price">${product.price}</span>
+                              </div>
+                          </div>
+                          <div class="product-action">
+                              <button type="button" onclick="addToWishlistf('${product._id}', this)" id="addToWishlist-${product._id}" class="addToWishlist btn-product-wishlist bg-transparent" data-product-id="${product._id}">
+                                  ${userData !== null && userData.wishlist.products.some(wProduct => wProduct._id.toString() === product._id.toString()) ? '<i class="bi bi-heart-fill text-danger fs-5"></i>' : '<i class="pe-7s-like"></i>'}
+                              </button>
+                              <div class="product-action-links">
+                                <button type="button" onclick="addToCart('${product._id}')" class="addToCart btn-product-cart bg-transparent" data-product-id="${product._id}">
+                                    <i class="bi bi-bag fs-5"></i>
+                                </button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              `;
+              productContainer.insertAdjacentHTML('beforeend', productItem);
+          });
+      }
+    }
+    
+    function addToCart(productId) {
+    axios.post('/addToCart', {
+      productId: productId
+    })
+    .then(function(response) {
+      console.log(response.data);
+  
+      Toastify({
+        text: "Product Added to cart",
+        duration: 900, 
+        gravity: "top", 
+        position: 'right',
+        backgroundColor: "#203e5a",
+        stopOnFocus: true, // Stop the timer when the toast is focused
+      }).showToast();
+  
+      setTimeout(function() {
+        document.getElementById('cartNotification').classList.remove('show');
+      }, 2000);
+    })
+    .catch(function(error) {
+      console.error('Error adding product to cart:', error);
+      // Optionally, show an error message to the user
+    });
+  }
+
+  function addToWishlistf(productId, button) {
+    console.log("add to wishlist function triggered :", productId)
+    axios.post('/addToWishlist', { productId })
+      .then(function(response) {
+        console.log(response.data);
+        if (response.data.existInWishlist) {
+          button.innerHTML = '<i class="bi bi-heart-fill text-danger fs-5"></i>'
+        } else {
+          button.innerHTML = '<i class="pe-7s-like"></i>';
+        }
+      })
+      .catch(function(error) {
+        console.error('Error adding product to wishlist:', error);
+        // Optionally, show an error message to the user
+      });
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    const addToWishlistButtons = document.getElementsByClassName('addToWishlist');
+
+    Array.from(addToWishlistButtons).forEach(function(button) {
+      button.addEventListener('click', function(event) {
+        event.preventDefault();
+        const productId = this.getAttribute('data-product-id');
+        addToWishlistf(productId, this); // Pass the productId and button
+      });
+    });
+  });
+
+</script>
+  
     <!--== End Product Area Wrapper ==-->
   </main>
 
@@ -668,39 +893,6 @@ document.addEventListener('DOMContentLoaded', function() {
   }
 });
 
-</script>
-<!-- Add To Wishlist -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    const addToWishlistButtons = document.getElementsByClassName('addToWishlist');
-  
-    Array.from(addToWishlistButtons).forEach(function(button) {
-      button.addEventListener('click', function(event) {
-        event.preventDefault();
-        const productId = this.getAttribute('data-product-id');
-        addToWishlistf(productId,this);  //In this the button is passed
-      });
-    });
-  
-    function addToWishlistf(productId,button) {
-      console.log("add to wishlist function triggered :", productId)
-      axios.post('/addToWishlist', { productId })
-        .then(function(response) {
-          console.log(response.data);
-          if (response.data.existInWishlist) {
-            button.innerHTML = '<i class="bi bi-heart-fill text-danger fs-5"></i>'
-          }
-          else{
-            button.innerHTML = '<i class="pe-7s-like"></i>';
-          }
-        })
-        .catch(function(error) {
-          console.error('Error adding product to wishlist:', error);
-          // Optionally, show an error message to the user
-        });
-    }
-  });
-  
 </script>
 
 <!--=== jQuery Modernizr Min Js ===-->

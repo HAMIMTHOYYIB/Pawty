@@ -182,19 +182,23 @@ let deleteAddress = async (req,res) => {
 let shop = async (req,res) => {
   let admin = await Admin.findOne();
   let products =  await Vendor.find().select("products");
+  let vendors = await Vendor.find();
+  let prod =  vendors.reduce((acc, vendor) => {
+    return acc + vendor.products.length;
+  }, 0);
 
   if (req.cookies.user_jwt) {
     jwt.verify(req.cookies.user_jwt, process.env.JWT_SECRET, async (err, decodedToken)=>{
       if(err){
-        return res.render('users/shop-org',{products,admin,user:undefined});
+        return res.render('users/shop-org',{products,admin,user:undefined,prod});
       }else{
         req.user = decodedToken;
         let user = await User.findOne({_id:req.user.id});
-        return res.render('users/shop-org',{products,admin,user:user});
+        return res.render('users/shop-org',{products,admin,user:user,prod});
       }
     });
   }else{
-    return res.render('users/shop-org',{products,admin,user:undefined});
+    return res.render('users/shop-org',{products,admin,user:undefined,prod});
   }
 }
 // single product
@@ -223,6 +227,85 @@ let product = async (req,res) => {
     return res.render('users/single-product',{product,user:undefined});
   }
 }
+// let filterProduct = async (req, res) => {
+//   const { categories, tags } = req.body;
+//   try {
+//     // Get all vendors
+//     const vendors = await Vendor.find().populate('products');
+
+//     // Filter products based on selected categories and tags
+//     const filteredProducts = vendors.reduce((acc, vendor) => {
+//       const vendorProducts = vendor.products.filter(product => {
+//         if (categories.length > 0 && tags.length > 0) {
+//           return categories.includes(product.category) &&
+//                  tags.includes(product.subCategory);
+//         } else if (categories.length > 0) {
+//           return categories.includes(product.category);
+//         } else if (tags.length > 0) {
+//           return tags.includes(product.subCategory);
+//         } else {
+//           // Return true if no categories or tags are selected
+//           return true;
+//         }
+//       });
+//       return [...acc, ...vendorProducts];
+//     }, []);
+
+//     res.json(filteredProducts);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).json({ message: 'Internal server error' });
+//   }
+// }
+
+let filterProduct = async (req, res) => {
+  const { categories, tags, sort } = req.body;
+  try {
+    const vendors = await Vendor.find().populate('products');
+    const filteredProducts = vendors.reduce((acc, vendor) => {
+      const vendorProducts = vendor.products.filter(product => {
+        if (categories.length > 0 && tags.length > 0) {
+          return categories.includes(product.category) &&
+                  tags.includes(product.subCategory);
+        } else if (categories.length > 0) {
+          return categories.includes(product.category);
+        } else if (tags.length > 0) {
+          return tags.includes(product.subCategory);
+        } else {
+          // Return true if no categories or tags are selected
+          return true;
+        }
+      });
+      return [...acc, ...vendorProducts];
+    }, []);
+    // Sorting
+    switch (sort) {
+      case 'latest':
+        filteredProducts.sort((a, b) => new Date(b.addedOn) - new Date(a.addedOn));
+        break;
+      case 'priceLowToHigh':
+        filteredProducts.sort((a, b) => a.price - b.price);
+        break;
+      case 'priceHighToLow':
+        filteredProducts.sort((a, b) => b.price - a.price);
+        break;
+      case 'alphabeticalAZ':
+        filteredProducts.sort((a, b) => a.productName.localeCompare(b.productName));
+        break;
+      case 'alphabeticalZA':
+        filteredProducts.sort((a, b) => b.productName.localeCompare(a.productName));
+        break;
+      default:
+    }
+    res.json(filteredProducts);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+}
+
+
+
 
 // cart
 let getcart = async (req, res) => {
@@ -430,7 +513,6 @@ let addtowishlist  = async (req, res) => {
         stockQuantity: parseFloat(product.stockQuantity)
       });
     };
-    console.log("userwishlist :", user.wishlist);
     await user.save();
     res.json({ message: "Product added to wishlist successfully", user, productId, existInWishlist});
   }catch (error) {
@@ -909,6 +991,7 @@ module.exports={
 
     shop,
     product,
+    filterProduct,
 
     getcart,
     addtocart,

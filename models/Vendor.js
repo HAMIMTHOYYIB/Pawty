@@ -9,7 +9,7 @@ const productSchema = new mongoose.Schema({
     subCategory:{type:String},
     stockQuantity:{type:String},
     addedOn:{type:Date,default:Date.now},
-    images:{type:Array}
+    images:{type:Array},
 });
 
 const couponSchema = new mongoose.Schema({

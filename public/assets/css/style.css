@@ -4600,6 +4600,32 @@ table p {
   text-transform: uppercase;
   font-weight: 600;
 }
+
+.btn-filter{
+  display: block;
+  text-align: center;
+  border-radius:10px;
+  padding: 5px 20px 2px;
+  margin:5px 8px;
+  font-size: 16px;
+  background-color: #314d70;
+  border-color: #314d70;
+  color: #fff;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.btn-reset{
+  display: block;
+  text-align: center;
+  border-radius:10px;
+  padding: 5px 20px 2px;
+  margin:5px 8px;
+  font-size: 18px;
+  background-color: #e9d166;
+  border-color: #e9d166;
+  color: #000000;
+}
 .shopping-checkout-wrap .checkout-order-details-wrap .order-details-table-wrap .shop-payment-method .btn-place-order:hover {
   background-color: #000;
   border-color: #000;
@@ -6222,8 +6248,8 @@ table p {
   border-radius: 10px;
 }
 .shop-sidebar .shop-sidebar-category {
-  margin-top: 40px;
-  padding: 34px 30px 41px;
+  margin-top:10px;
+  padding: 14px 30px 41px;
 }
 .shop-sidebar .category-list li {
   line-height: 1.8125;
@@ -6266,6 +6292,16 @@ table p {
   position: relative;
   height: 41px;
   width: 41px;
+}
+.prod-msg{
+  width:100%; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius:15px;
+  height:540px;
+  color: #314d70;
+  background-color: #ffd868;
 }
 .shop-sidebar .color-list div:before {
   border: 1px solid #d5d5d5;

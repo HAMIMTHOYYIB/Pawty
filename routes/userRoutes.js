@@ -33,6 +33,9 @@ router.get('/addressDelete/:addressId', userAuth, userController.deleteAddress);
 
 router.get('/shop',userController.shop);
 router.get('/product/:id',userController.product);
+router.post('/filter',userController.filterProduct)
+// Assuming you have a route to handle the filter request
+
 
 router.get('/cart',userAuth,userController.getcart);
 router.post('/addToCart',userAuth,userController.addtocart);
