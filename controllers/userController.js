@@ -234,83 +234,64 @@ let product = async (req,res) => {
     return res.render('users/single-product',{product,user:undefined});
   }
 }
-// let filterProduct = async (req, res) => {
-//   const { categories, tags } = req.body;
-//   try {
-//     // Get all vendors
-//     const vendors = await Vendor.find().populate('products');
-
-//     // Filter products based on selected categories and tags
-//     const filteredProducts = vendors.reduce((acc, vendor) => {
-//       const vendorProducts = vendor.products.filter(product => {
-//         if (categories.length > 0 && tags.length > 0) {
-//           return categories.includes(product.category) &&
-//                  tags.includes(product.subCategory);
-//         } else if (categories.length > 0) {
-//           return categories.includes(product.category);
-//         } else if (tags.length > 0) {
-//           return tags.includes(product.subCategory);
-//         } else {
-//           // Return true if no categories or tags are selected
-//           return true;
-//         }
-//       });
-//       return [...acc, ...vendorProducts];
-//     }, []);
-
-//     res.json(filteredProducts);
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).json({ message: 'Internal server error' });
-//   }
-// }
-
 let filterProduct = async (req, res) => {
-  const { categories, tags, sort } = req.body;
+  const { categories, tags, sort, searchTerm } = req.body;
   try {
     const vendors = await Vendor.find().populate('products');
     const filteredProducts = vendors.reduce((acc, vendor) => {
       const vendorProducts = vendor.products.filter(product => {
         if (categories.length > 0 && tags.length > 0) {
           return categories.includes(product.category) &&
-                  tags.includes(product.subCategory);
+            tags.includes(product.subCategory);
         } else if (categories.length > 0) {
           return categories.includes(product.category);
         } else if (tags.length > 0) {
           return tags.includes(product.subCategory);
         } else {
-          // Return true if no categories or tags are selected
           return true;
         }
       });
       return [...acc, ...vendorProducts];
     }, []);
-    // Sorting
+
+    // Apply search term filtering
+    const searchTermFilteredProducts = filteredProducts.filter(product => {
+      const searchWords = searchTerm.trim().toLowerCase().split(' '); // Split the search term into words
+      return searchWords.every(word =>
+        product.brand.toLowerCase().includes(word) ||
+        product.productName.toLowerCase().includes(word) ||
+        product.category.toLowerCase().includes(word) ||
+        product.price.toString().toLowerCase().includes(word) ||
+        product.description.toLowerCase().includes(word) ||
+        product.subCategory.toLowerCase().includes(word)
+      );
+    });
+    
+    // Apply sorting
     switch (sort) {
       case 'latest':
-        filteredProducts.sort((a, b) => new Date(b.addedOn) - new Date(a.addedOn));
+        searchTermFilteredProducts.sort((a, b) => new Date(b.addedOn) - new Date(a.addedOn));
         break;
       case 'priceLowToHigh':
-        filteredProducts.sort((a, b) => a.price - b.price);
+        searchTermFilteredProducts.sort((a, b) => a.price - b.price);
         break;
       case 'priceHighToLow':
-        filteredProducts.sort((a, b) => b.price - a.price);
+        searchTermFilteredProducts.sort((a, b) => b.price - a.price);
         break;
       case 'alphabeticalAZ':
-        filteredProducts.sort((a, b) => a.productName.localeCompare(b.productName));
+        searchTermFilteredProducts.sort((a, b) => a.productName.localeCompare(b.productName));
         break;
       case 'alphabeticalZA':
-        filteredProducts.sort((a, b) => b.productName.localeCompare(a.productName));
+        searchTermFilteredProducts.sort((a, b) => b.productName.localeCompare(a.productName));
         break;
       default:
     }
-    res.json(filteredProducts);
+    res.json(searchTermFilteredProducts);
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Internal server error' });
   }
 }
-
 
 
 

@@ -107,7 +107,7 @@
 
   <main class="main-content">
     <!--== Start Page Header Area Wrapper ==-->
-    <div class="page-header-area" data-bg-img="assets/img/photos/header-bg.jpg">
+    <div class="page-header-area" data-bg-img="<%= admin.banner.multiplePageBanner[0] %>">
       <div class="container pt--0 pb--0">
         <div class="row">
           <div class="col-12">
@@ -136,7 +136,7 @@
               <div class="shop-top-left">
                 <p class="pagination-line">Search from <a href="/shop"><%= prod %></a>&nbsp;products</p>
               </div>
-              <div class="shop-top-center">
+              <!-- <div class="shop-top-center">
                 <nav class="product-nav">
                   <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
                     <button class="nav-link active" id="nav-grid-tab" data-bs-toggle="tab" data-bs-target="#nav-grid" type="button" role="tab" aria-controls="nav-grid" aria-selected="true"><i class="fa fa-th"></i></button>
@@ -144,7 +144,7 @@
                     <button class="nav-link" id="nav-grid2-tab" data-bs-toggle="tab" data-bs-target="#nav-grid2" type="button" role="tab" aria-controls="nav-grid2" aria-selected="false"><i class="fa fa-th-large"></i></button>
                   </div>
                 </nav>
-              </div>
+              </div> -->
               <div class="shop-top-right">
                 <div class="shop-sort">
                   <span>Sort By :</span>
@@ -173,10 +173,10 @@
                         <div class="shop-sidebar  border">
                           <div class="shop-sidebar-search">
                             <div class="sidebar-search-form">
-                              <form id="">
-                                <input type="search" placeholder="Search Here">
+                              <form id="searchProducts">
+                                <input type="search" id="searchInput" placeholder="Search Here">
                                 <button type="submit"><i class="fa fa-search"></i></button>
-                              </form>
+                              </form>                              
                             </div>
                           </div>
                           <form action="" id="filterForm" class="filterProducts">
@@ -212,7 +212,7 @@
                             </div>
                             <div class="d-flex">
                               <button type="submit" class="btn-filter">Filter</button>
-                              <button type="reset" class="btn-reset">Reset</button>
+                              <a href="/shop" class="btn-reset">Reset</a>
                             </div>
                           </form>
                         </div>
@@ -286,9 +286,12 @@
       // sorting
 
       document.getElementById('sortSelect').addEventListener('change', function() {
-      filterProducts(); // Call filterProducts() when the select option changes
+      filterProducts(); 
       });
-
+      document.getElementById('searchProducts').addEventListener('submit',function(event){
+        event.preventDefault();
+        filterProducts();
+      })
 
       // filtering
       // Retrieve the user object from the hidden input field
@@ -301,57 +304,35 @@
           event.preventDefault();
           filterProducts();
       });
-  
-      // Function to gather selected categories and tags and send them to the backend
-      // function filterProducts() {
-      //     const selectedCategories = Array.from(document.querySelectorAll('input[name="categories"]:checked')).map(el => el.value);
-      //     const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(el => el.value);        
-      //     fetch('/filter', {
-      //         method: 'POST',
-      //         headers: {
-      //             'Content-Type': 'application/json',
-      //         },
-      //         body: JSON.stringify({
-      //             categories: selectedCategories,
-      //             tags: selectedTags,
-      //         }),
-      //     })
-      //     .then(response => response.json())
-      //     .then(data => {
-      //         // Update the product listing based on the filtered data
-      //         updateProductListing(data);
-      //     console.log(data)
-      //     })
-      //     .catch(error => {
-      //         console.error('Error:', error);
-      //     });
-      // }
-      
-      function filterProducts() {
-        const selectedCategories = Array.from(document.querySelectorAll('input[name="categories"]:checked')).map(el => el.value);
-        const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(el => el.value);
-        const selectedSort = document.getElementById('sortSelect').value; // Get the selected sorting option
 
-        fetch('/filter', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            categories: selectedCategories,
-            tags: selectedTags,
-            sort: selectedSort, // Include the selected sorting option in the request body
-          }),
-        })
-        .then(response => response.json())
-        .then(data => {
-          // Update the product listing based on the filtered and sorted data
-          updateProductListing(data);
-        })
-        .catch(error => {
-          console.error('Error:', error);
-        });
-      }
+    function filterProducts() {
+      const selectedCategories = Array.from(document.querySelectorAll('input[name="categories"]:checked')).map(el => el.value);
+      const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked')).map(el => el.value);
+      const selectedSort = document.getElementById('sortSelect').value; // Get the selected sorting option
+      const searchTerm = document.getElementById('searchInput').value; // Get the search term from the input field
+
+      fetch('/filter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          categories: selectedCategories,
+          tags: selectedTags,
+          sort: selectedSort,
+          searchTerm: searchTerm, // Include the search term in the request body
+        }),
+      })
+      .then(response => response.json())
+      .then(data => {
+        // Update the product listing based on the filtered and sorted data
+        updateProductListing(data);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+
     function updateProductListing(products) {
       const productContainer = document.querySelector('.row .col-xl-9 .row');
       productContainer.innerHTML = '';

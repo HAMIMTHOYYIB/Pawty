@@ -432,6 +432,7 @@ let changeOfferBanner = async (req, res) => {
     let title = req.body.title;
 
     try {
+        console.log("image passed to cloudinary upload.")
         if (imageData && offerValue && title) {
             const result = await cloudinary.uploader.upload(imageData.path);
             const imageUrl = result.secure_url;
@@ -451,6 +452,29 @@ let changeOfferBanner = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).send('Error on Changing Offer Banner');
+    }
+}
+let changeSingleBanner = async (req,res) => {
+    let imageData = req.file;
+    console.log("image : ",req.file)
+    const imageUrl = [];
+    try {
+        if(imageData){
+            const result = await cloudinary.uploader.upload(imageData.path);
+            imageUrl.push(result.secure_url);
+            console.log(imageUrl);
+
+            const admin = await Admin.findOne();
+            admin.banner.multiplePageBanner = imageUrl;
+            await admin.save();
+
+        }else{
+            console.log("No Image data found");
+        }
+        res.redirect('/bannerView');
+    } catch (error) {
+        console.log(error);
+        res.status(500).send('Error on Changing Banners')
     }
 }
 
@@ -854,6 +878,7 @@ module.exports = {
     updateBanners,
     changeMainBanner,
     changeOfferBanner,
+    changeSingleBanner,
 
     adminLogout,
     

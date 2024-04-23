@@ -239,7 +239,7 @@
     <!--== End Hero Area Wrapper ==-->
 
     <!--== Start Feature Area Wrapper ==-->
-    <div class="feature-area feature-style2-area">
+    <div class="feature-area feature-style2-area mb-5">
       <div class="container">
         <div class="row">
           <div class="col-12 col-sm-6 col-lg-3">
@@ -292,51 +292,48 @@
     <!--== End Feature Area Wrapper ==-->
 
     <!--== Start Product Banner Area Wrapper ==-->
-    <section class="product-area product-banner-area">
-      <div class="container pt--0">
-        <div class="row">
-          <div class="col-md-6 col-lg-4">
+    <section class="product-area product-banner-area mt-5" style="max-height:300px;" >
+      <div class="container pt--0 g-0" style="margin:0 auto;width:100%;">
+        <div class="row g-0 d-flex justify-content-between" style="padding:0 80px;">
+          <div class="col-md-6 col-lg-4 g-0">
             <div class="banner-product-single-style3-item">
               <div class="thumb">
                 <a href="/shop" class="banner-box">
-                  <img src="<%= banner.offerBanner[0].image%>" width="150" height="150" alt="Image-HasTech">
-                </a>
+                  <img src="<%= banner.offerBanner[0].image%>" width="200" height="200" alt="Image-HasTech">
+                </a><br>
               </div>
-              <div class="content">
-                <h5 class="sub-title"><%= banner.offerBanner[0].offerValue %>  Off </h5>
-                <h5 class="title"><%= banner.offerBanner[0].title %></h5>
-                <a class="btn-theme-link" href="/shop">Shop Now</a>
-              </div>
+              <h5 class="d-flex justify-content-center row mt-3 sub-title col-lg-12">
+                <%= banner.offerBanner[0].offerValue %> Off On <%= banner.offerBanner[0].title %>
+              </h5>
+              <a class="btn-filter d-flex justify-content-center me-5" href="/shop">Shop Now</a>
             </div>
           </div>
-          <div class="col-md-6 col-lg-4">
+          <div class="col-md-6 col-lg-4 g-0">
             <div class="banner-product-single-style3-item">
               <div class="thumb">
                 <a href="/shop" class="banner-box">
-                  <img  src="<%= banner.offerBanner[1].image%>" width="150" height="150" alt="Image-HasTech">
-                </a>
+                  <img src="<%= banner.offerBanner[1].image%>" width="200" height="200" alt="Image-HasTech">
+                </a><br>
               </div>
-              <div class="content">
-                <h5 class="sub-title"><%= banner.offerBanner[1].offerValue %> Off </h5>
-                <h5 class="title"><%= banner.offerBanner[1].title %></h5>
-                <a class="btn-theme-link" href="/shop">Shop Now</a>
-              </div>
+              <h5 class="d-flex justify-content-center row mt-3 sub-title col-lg-12">
+                <%= banner.offerBanner[1].offerValue %> Off On <%= banner.offerBanner[1].title %>
+              </h5>
+              <a class="btn-filter d-flex justify-content-center me-5" href="/shop">Shop Now</a>
             </div>
           </div>
-          <div class="col-md-6 col-lg-4">
+          <div class="col-md-6 col-lg-4 g-0">
             <div class="banner-product-single-style3-item">
               <div class="thumb">
                 <a href="/shop" class="banner-box">
-                  <img src="<%= banner.offerBanner[2].image %>" alt="Image-HasTech" class="square-image">
-                </a>
+                  <img src="<%= banner.offerBanner[2].image%>" width="200" height="200" alt="Image-HasTech">
+                </a><br>
               </div>
-              <div class="content">
-                <h5 class="sub-title"><%= banner.offerBanner[2].offerValue %> Off </h5>
-                <h5 class="title"><%= banner.offerBanner[2].title %></h5>
-                <a class="btn-theme-link" href="/shop">Shop Now</a>
-              </div>
+              <h5 class="d-flex justify-content-center row mt-3 sub-title col-lg-12">
+                <%= banner.offerBanner[2].offerValue %> Off On <%= banner.offerBanner[2].title %>
+              </h5>
+              <a class="btn-filter d-flex justify-content-center me-5" href="/shop">Shop Now</a>
             </div>
-          </div>          
+          </div>
         </div>
       </div>
     </section>
