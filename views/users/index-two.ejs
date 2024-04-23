@@ -50,7 +50,6 @@
       .square-image {
         display: block;
       }
-
     </style>
 </head>
 
@@ -352,42 +351,89 @@
               <h5 class="sub-title">Best Quality PRODUCTs</h5>
               <h2 class="title">New Collection</h2>
             </div>
-            <div class="isotope-filter isotope-filter-style2">
-              <button class="active" data-filter="*">New Arrival</button>
-              <% subCategory.forEach((sub,ind) =>{ %>
-                  <button class="" data-filter=".<%=sub.subCategoryName%> "><%= sub.subCategoryName%></button>
+            <div id="subcategory-buttons" class="isotope-filter isotope-filter-style2">
+              <% subCategory.forEach((sub, ind) => { %>
+              <button id="subcategory-button-<%= ind %>" class="subcategory-button <%= ind === 0 ? 'active' : '' %>" data-filter=".<%= sub.subCategoryName %>"><%= sub.subCategoryName %></button>
               <% }) %>
             </div>
           </div>
         </div>
-        <div class="row isotope-grid">
-        <% products.forEach(prod => { %>
-          <div class="col-sm-6 col-lg-3 isotope-item filter_best_sellers <%= prod.subCategory %>">
-            <!--== Start Product Item ==-->
-            <div class="product-item">
-              <div class="product-thumb">
-                <a href="/product/<%= prod._id %>">
-                  <img src="<%= prod.images[0] %>" width="270" height="320" alt="Image-HasTech">
-                </a>
-              </div>
-              <div class="product-info">
-                <h4 class="title"><a href="single-product.html"><%= prod.productName %></a></h4>
-                <div class="prices">
-                  <span class="price">$<%= prod.price %></span>
+        <div style="">
+          <div id="products-container" style="min-height:320px; white-space: nowrap;overflow-y: auto;" class="row isotope-grid">
+            <% let count = 0; %>
+            <% products.forEach(prod => { %>
+            <% if (prod.subCategory === subCategory[0].subCategoryName && count < 8) { %>
+            <div class="col-sm-6 col-lg-3 isotope-item filter_best_sellers <%= prod.subCategory %>">
+              <!--== Start Product Item ==-->
+              <div class="product-item">
+                <div class="product-thumb">
+                  <a href="/product/<%= prod._id %>">
+                    <img src="<%= prod.images[0] %>" width="270" height="320" alt="Image-HasTech">
+                  </a>
+                </div>
+                <div class="product-info">
+                  <h4 class="title"><a href="single-product.html"><%= prod.productName %></a></h4>
+                  <div class="prices">
+                    <span class="price">$<%= prod.price %></span>
+                  </div>
                 </div>
               </div>
+              <!--== End Product Item ==-->
             </div>
-            <!--== End prPduct Item ==-->
+            <% } %>
+            <% count++; %>
+            <% }) %>
           </div>
-        <% }) %>
-          </div>
+        </div>
+        
       </div>
     </section>
-
-
-    <!--== End Product Area Wrapper ==-->
     
-    <!--== Start About Area Wrapper ==-->
+    <input type="hidden" id="products-data" value="<%= JSON.stringify(products) %>">
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const subcategoryButtons = document.querySelectorAll(".subcategory-button");
+        const productsContainer = document.getElementById("products-container");
+        const productsData = JSON.parse(document.getElementById("products-data").value);
+    
+        subcategoryButtons.forEach((button, index) => {
+          button.addEventListener("click", function () {
+            // Remove active class from all buttons
+            subcategoryButtons.forEach(btn => btn.classList.remove("active"));
+    
+            // Add active class to the clicked button
+            button.classList.add("active");
+    
+            // Filter products based on the clicked subcategory
+            const selectedSubcategory = button.getAttribute("data-filter").replace(".", "");
+            const filteredProducts = productsData.filter(prod => prod.subCategory === selectedSubcategory).slice(0, 8);
+    
+            // Update the products listing
+            productsContainer.innerHTML = "";
+            filteredProducts.forEach(prod => {
+              productsContainer.innerHTML += `
+                <div class="col-sm-6 col-lg-3 isotope-item filter_best_sellers ${prod.subCategory}">
+                  <div class="product-item">
+                    <div class="product-thumb">
+                      <a href="/product/${prod._id}">
+                        <img src="${prod.images[0]}" width="270" height="320" alt="Image-HasTech">
+                      </a>
+                    </div>
+                    <div class="product-info">
+                      <h4 class="title"><a href="single-product.html">${prod.productName}</a></h4>
+                      <div class="prices">
+                        <span class="price">$${prod.price}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              `;
+            });
+          });
+        });
+      });
+    </script>
+    
     <section class="about-area">
       <div class="container">
         <div class="about-item position-relative">
@@ -412,6 +458,7 @@
         </div>
       </div>
     </section>
+    
     <!--== End About Area Wrapper ==-->
 
     <!--== Start Divider Area Wrapper ==-->
@@ -661,7 +708,7 @@
                       <li><a href="account-login.html">Privacy Policy</a></li>
                       <li><a href="account-login.html">Terms & Conditions</a></li>
                       <li><a href="contact.html">Contact Us</a></li>
-                      <li><a href="account-login.html">Loag In Info</a></li>
+                      <li><a href="account-login.html">Log-In Info</a></li>
                     </ul>
                   </div>
                 </div>

@@ -4,16 +4,19 @@ require("dotenv").config();
 const transporter = nodemailer.createTransport({
   service: "gmail",
   host: 'smtp.gmail.com',
-    port:process.env.EmailPort,
+  port: process.env.EmailPort,
   auth: {
     user: process.env.EMAIL,
     pass: process.env.PASS,
   },
+  tls: {
+    rejectUnauthorized: false
+  }
 });
 
-const sendOtpEmail = async (email,subject , message) => {
+const sendOtpEmail = async (email, subject, message) => {
   const mailOptions = {
-    from: process.env.Email,
+    from: process.env.EMAIL,
     to: email,
     subject: subject,
     html: message,
@@ -24,6 +27,7 @@ const sendOtpEmail = async (email,subject , message) => {
     console.log("Email sent");
   } catch (error) {
     console.error("Error sending email:", error);
+    console.log("Sorry, there was an error sending the email");
   }
 };
 
