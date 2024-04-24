@@ -52,7 +52,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="m-link " href="/bannerViews">
+                        <a class="m-link " href="/bannerView">
                             <i class="icofont-image fs-5"></i> <span>Banners</span>
                         </a>
                     </li>
@@ -294,7 +294,7 @@
                                                 <td><img src="<%= order.products.images[0] %>" class="avatar lg rounded me-2" alt="profile-image"><span> Oculus VR </span></td>
                                                 <td><%= order.userName %></td>
                                                 <td><%= order.paymentMethod %></td>
-                                                <td><%= order.products.price %></td>
+                                                <td>₹ <%= order.products.price %></td>
                                                 <% if(order.products.status === 'Pending'){ %>
                                                 <td><span class="badge bg-warning font-opensans text-uppercase"><%= order.products.status %></span></td>
                                                 <% }  %>

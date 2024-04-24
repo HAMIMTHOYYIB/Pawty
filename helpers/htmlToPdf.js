@@ -13,7 +13,6 @@ const htmlToPdf = async (html, options = defaultOptions) => {
     const pdfBuffer = await page.pdf(options);
 
     await browser.close();
-
     return pdfBuffer;
 };
 

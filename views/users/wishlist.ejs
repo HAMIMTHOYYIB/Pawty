@@ -113,10 +113,10 @@
                   </a>
                 </div>
                 <div class="shopping-cart">
-                  <button class="shopping-cart-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasCart" aria-controls="AsideOffcanvasCart">
+                  <a class="shopping-cart-btn" href="/cart">
                     <i class="pe-7s-shopbag icon"></i>
                     <sup class="shop-count"><%= user.cart.products.length %></sup>
-                  </button>
+                  </a>
                 </div>
                 <button class="btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasMenu" aria-controls="AsideOffcanvasMenu">
                   <i class="pe-7s-menu"></i>
@@ -187,7 +187,7 @@
                         <a class="title" href="/product/<%= product._id %>"><%= product.productName %></a>
                       </td>
                       <td class="product-price">
-                        <span class="price">$<%= product.price %></span>
+                        <span class="price">₹ <%= product.price %></span>
                       </td>
                       <% if(product.stockQuantity > 0){ %>
                       <td class="product-stock-status">

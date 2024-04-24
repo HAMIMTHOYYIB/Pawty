@@ -92,10 +92,10 @@
                   </a>
                 </div>
                 <div class="shopping-cart">
-                  <button class="shopping-cart-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasCart" aria-controls="AsideOffcanvasCart">
+                  <a class="shopping-cart-btn" href="/cart">
                     <i class="pe-7s-shopbag icon"></i>
                     <sup class="shop-count"><%= user.cart.products.length %></sup>
-                  </button>
+                  </a>
                 </div>
                 <button class="btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasMenu" aria-controls="AsideOffcanvasMenu">
                   <i class="pe-7s-menu"></i>
@@ -150,7 +150,7 @@
                         <a class="title" href="/product/<%= product._id %>"><%= product.productName %></a>
                       </td>
                       <td class="product-price">
-                        $<span id="price-<%= product._id %>" class="price"><%= product.price %></span>
+                        ₹ <span id="price-<%= product._id %>" class="price"><%= product.price %></span>
                       </td>
                       <td class="product-quantity">
                         <div class="">
@@ -160,7 +160,7 @@
                         </div>
                       </td>                      
                       <td class="product-subtotal">
-                        <span id="total-<%= product._id %>" class="price">$<%= product.price * product.quantity %> /-</span>
+                        <span id="total-<%= product._id %>" class="price">₹ <%= product.price * product.quantity %> /-</span>
                       </td>
                     </tr>
                     <% }) %>
@@ -185,19 +185,19 @@
                   <tr class="cart-subtotal">
                     <th>Subtotal</th>
                     <td>
-                      <span id="Amount" class="amount">₹ <span id="amount"><%= total %></span> /-</span>
+                      <span id="Amount" class="amount">₹  <span id="amount"><%= total %></span> /-</span>
                     </td>
                   </tr>
                   <tr class="cart-subtotal">
                     <th>Shipping Charge</th>
                     <td>
-                      <span id="discount" class="amount">₹ <span id="discountVal">0</span> /-</span>
+                      <span id="discount" class="amount">₹  <span id="discountVal">0</span> /-</span>
                     </td>
                   </tr>
                   <tr class="cart-subtotal">
                     <th class="">grandTotal</th>
                     <td>
-                      <span id="grandTotal" class="amount">₹ <span id="totVal"><%= userCart.total %></span> /-</span>
+                      <span id="grandTotal" class="amount">₹  <span id="totVal"><%= userCart.total %></span> /-</span>
                     </td>
                   </tr>
                 </tbody>
@@ -523,7 +523,7 @@
                   <div class="product-single-info">
                     <h3 class="main-title">Joust Duffle Bag</h3>
                     <div class="prices">
-                      <span class="price">$20.19</span>
+                      <span class="price">₹  20.19</span>
                     </div>
                     <div class="rating-box-wrap">
                       <div class="rating-box">

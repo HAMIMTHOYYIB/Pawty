@@ -59,13 +59,13 @@
 <!--wrapper start-->
 <div class="wrapper">
 
-  <!--== Start Preloader Content ==-->
+  <!-- == Start Preloader Content ==
   <div class="preloader-wrap">
     <div class="preloader">
       <div class="dog-head"></div>
       <div class="dog-body"></div>
     </div>
-  </div>
+  </div> -->
   <!--== End Preloader Content ==-->
 
   <!--== Start Header Wrapper ==-->
@@ -107,11 +107,11 @@
                     <i class="pe-7s-like icon"></i>
                   </a>
                 </div>
-                <div class="shopping-cart Active">
-                  <button class="shopping-cart-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasCart" aria-controls="AsideOffcanvasCart">
+                <div class="shopping-cart">
+                  <a class="shopping-cart-btn" href="/cart">
                     <i class="pe-7s-shopbag icon"></i>
                     <sup class="shop-count"><%= user.cart.products.length %></sup>
-                  </button>
+                  </a>
                 </div>
                 <button class="btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasMenu" aria-controls="AsideOffcanvasMenu">
                   <i class="pe-7s-menu"></i>
@@ -236,26 +236,26 @@
                       <% user.cart.products.forEach(prod => { %>
                       <tr class="cart-item">
                         <td class="product-name text-dark"><%= prod.productName  %> <span class="product-quantity"> × <%= prod.quantity%></span></td>
-                        <td class="product-total text-success">£ <%= prod.price*prod.quantity %></td>
+                        <td class="product-total text-success">₹ <%= prod.price*prod.quantity %></td>
                       </tr>
                       <% }) %>
                     </tbody>
                     <tfoot class="table-foot">
                       <tr class="cart-subtotal">
                         <th>Subtotal</th>
-                        <td class=" text-success">£<span id="amount" class=" text-success"><%= user.cart.total %></span></td>
+                        <td class=" text-success">₹ <span id="amount" class=" text-success"><%= user.cart.total %></span></td>
                       </tr>
                       <tr class="cart-discount">
                         <th>Discount</th>
-                        <td class=" text-success">£<span id="discountVal" class=" text-success"><%= user.cart.discount %></span></td>
+                        <td class=" text-success">₹ <span id="discountVal" class=" text-success"><%= user.cart.discount %></span></td>
                       </tr>
                       <tr class="shipping">
                         <th>Shipping Charge</th>
-                        <td class="text-success">£ 0.00</td>
+                        <td class="text-success">₹  0.00</td>
                       </tr>
                       <tr class="order-total">
                         <th>Total </th>
-                        <td class=" text-success">£<span id="totVal" class=" text-success"><%= user.cart.total - user.cart.discount %></span></td>
+                        <td class=" text-success">₹ <span id="totVal" class=" text-success"><%= user.cart.total - user.cart.discount %></span></td>
                       </tr>
                     </tfoot>
                   </table>
@@ -353,6 +353,7 @@
                 name: user.username,
                 email: user.email,
                 contact:user.phone,
+                logo: 'https://res.cloudinary.com/dw3wmxotb/image/upload/v1712451407/pawty_sxt7if.png'
               },
               notes: {
                 address: selectedAddress,
@@ -746,7 +747,7 @@
             <img src="/assets/img/shop/product-mini/1.jpg" width="90" height="110" alt="Image-HasTech">
             <span class="product-title">Leather Mens Slipper</span>
           </a>
-          <span class="product-price">1 × £69.99</span>
+          <span class="product-price">1 × ₹ 69.99</span>
         </li>
         <li class="aside-product-list-item">
           <a href="#/" class="remove">×</a>
@@ -754,10 +755,10 @@
             <img src="/assets/img/shop/product-mini/2.jpg" width="90" height="110" alt="Image-HasTech">
             <span class="product-title">Quickiin Mens shoes</span>
           </a>
-          <span class="product-price">1 × £20.00</span>
+          <span class="product-price">1 × ₹ 20.00</span>
         </li>
       </ul>
-      <p class="cart-total"><span>Subtotal:</span><span class="amount">£89.99</span></p>
+      <p class="cart-total"><span>Subtotal:</span><span class="amount">₹ 89.99</span></p>
       <a class="btn-total" href="shop-cart.html">View cart</a>
       <a class="btn-total" href="shop-checkout.html">Checkout</a>
       <a class="d-block text-end lh-1" href="shop-checkout.html"><img src="/assets/img/photos/paypal.webp" width="133" height="26" alt="Has-image"></a>

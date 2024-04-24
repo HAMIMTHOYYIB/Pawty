@@ -19,6 +19,10 @@
 
     <!-- Project css file  -->
     <link rel="stylesheet" href="/assets/css/ebazar.style.min.css">
+
+    <!-- Include Cropper.js CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css" rel="stylesheet">
+
 </head>
 <body>
     <div id="ebazar-layout" class="theme-blue">
@@ -129,816 +133,132 @@
                             </div>
                         </div>
                     </div> <!-- Row end  -->  
-                <form id="addProduct" action="/vendor/add-product" method="post" enctype="multipart/form-data" onsubmit="return validateForm()"> 
-                     <!-- enctype="multipart/form-data" -->
-                    <div class="row g-3 mb-3">
-                        <div class="col-xl-8 col-lg-8">
-                            <div class="sticky-lg-top card mb-3">
-                                <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                    <h6 class="mb-0 fw-bold ">Product information</h6>
-                                </div>
-                                <div class="card-header py-0 d-flex justify-content-between bg-transparent border-bottom-0">
-                                    <b><span class="text-danger text-uppercase" id="Errormessage"></span></b>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row g-3 align-items-center">
-                                        <div class="col-md-6">
-                                            <label for="ProductName"  class="form-label">ProductName</label>
-                                            <input type="text" id="productName" name="ProductName" placeholder="Product Name" class="form-control">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="Price"  class="form-label">Price</label>
-                                            <input name="Price" type="number" id="price" placeholder="Price" class="form-control">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="Brand" class="form-label">Brand</label>
-                                            <input type="text" name="Brand" id="brand" placeholder="Brand Name" class="form-control">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="Stock" class="form-label">Stock Quantity</label>
-                                            <input type="number" name="Stock" id="stockQuantity" placeholder="Total Stocks" class="form-control">
-                                        </div>
-                                        <div class="col-md-12">
-                                            <label for="Description" class="form-label col-12">Product Description</label>
-                                            <input name="Description" class="col-12 pb-3 form-control" type="text" placeholder="Add Discription Here">
-                                        </div>
+                    <form id="addProduct" action="/vendor/add-product" method="post" enctype="multipart/form-data" onsubmit="return validateForm()"> 
+                        <!-- enctype="multipart/form-data" -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-xl-8 col-lg-8">
+                                <div class="sticky-lg-top card mb-3">
+                                    <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                        <h6 class="mb-0 fw-bold ">Product information</h6>
                                     </div>
-                                    <div class="card my-3">
-                                        <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                            <h6 class="mb-0 fw-bold ">Images</h6>
-                                        </div>
-                                        <div class="card-body">
-                                            <div class="row col-12 g-1 align-items-center">
-                                                <label class="form-label col-3" for="image1">Product Image-1 :</label>
-                                                <input class="col-9" type="file" name="image">
-                                            
-                                                <label class="form-label col-3" for="image2">Product Image-2 :</label>
-                                                <input class="col-9" type="file" name="image">
-                                                <br><br>
-                                                <label class="form-label col-3" for="image3">Product Image-3 :</label>
-                                                <input class="col-9" type="file" name="image">
-                                                
-                                                <label class="form-label col-3" for="image4">Product Image-4 :</label>
-                                                <input class="col-9" type="file" name="image">
-                                                
+                                    <div class="card-header py-0 d-flex justify-content-between bg-transparent border-bottom-0">
+                                        <b><span class="text-danger text-uppercase" id="Errormessage"></span></b>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row g-3 align-items-center">
+                                            <div class="col-md-6">
+                                                <label for="ProductName"  class="form-label">ProductName</label>
+                                                <input type="text" id="productName" name="ProductName" placeholder="Product Name" class="form-control">
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-4 col-lg-4">
-                            <div class="sticky-lg-top mb-4">
-                                <div class="card mb-3">
-                                    <div class="card-header pt-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                                        <h6 class="m-0 fw-bold">Category</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <label for="Category" class="form-label">Select Product Category</label>
-                                        <select name="Category" class="form-select" size="3" aria-label="size 3 select example">
-                                            <% admin.category.forEach(cat =>{ %>
-                                            <option value="<%= cat.categoryName %>"><%= cat.categoryName %></option>
-                                            <% }) %>
-                                            <!-- <option value="2">Clothes</option>
-                                            <option value="3">Toy</option>
-                                            <option value="4">Cosmetic</option>
-                                            <option value="5">Laptop</option>
-                                            <option value="6">Mobile</option>
-                                            <option value="7">Gaming accessories</option> -->
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="card mb-3">
-                                    <div class="card-header pt-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                                        <h6 class="m-0 fw-bold">SubCategory</h6>
-                                    </div>
-                                    <div class="card-body">
-                                        <label for="SubCategory" class="form-label">Select Product SubCategory</label>
-                                        <select name="SubCategory" class="form-select" size="2" aria-label="size 3 select example">
-                                            <% admin.subCategory.forEach( sub => { %>
-                                            <option value="<%= sub.subCategoryName %>"><%= sub.subCategoryName %></option>
-                                            <% }) %>
-                                            <!-- <option value="2">Clothes</option>
-                                            <option value="3">Toy</option>
-                                            <option value="4">Cosmetic</option>
-                                            <option value="5">Laptop</option>
-                                            <option value="6">Mobile</option>
-                                            <option value="7">Gaming accessories</option> -->
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="submit">
-                                    <button type="submit" class="btn btn-primary btn-set-task w-100 py-2 px-5 text-uppercase">Add Product</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-                <script>
-                    function validateForm() {
-                        let productName = document.getElementById('productName').value.trim();
-                        let price = document.getElementById('price').value.trim();
-                        let brand = document.getElementById('brand').value.trim();
-                        let stockQuantity = document.getElementById('stockQuantity').value.trim();
-                
-                        if (productName === '' || price === '' || brand === '' || stockQuantity === '') {
-                            document.getElementById('Errormessage').textContent = 'Please fill all Input-fields';
-                            return false;
-                        } else {
-                            document.getElementById('Errormessage').textContent = '';
-                            return true;
-                        }
-                    }
-                </script>
-                
-                            <!-- <div class="card mb-3">
-                                <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                    <h6 class="mb-0 fw-bold ">Shipping Country</h6>
-                                </div>
-                                <div class="card-body">
-                                    <select id="optgroup" class="ms w-100" multiple="multiple">
-                                        <optgroup label="Alaskan/Hawaiian Time Zone">
-                                            <option value="AK">Alaska</option>
-                                            <option value="HI">Hawaii</option>
-                                        </optgroup>
-                                        <optgroup label="Pacific Time Zone">
-                                            <option value="CA">California</option>
-                                            <option value="NV">Nevada</option>
-                                            <option value="OR">Oregon</option>
-                                            <option value="WA">Washington</option>
-                                        </optgroup>
-                                        <optgroup label="Mountain Time Zone">
-                                            <option value="AZ">Arizona</option>
-                                            <option value="CO">Colorado</option>
-                                            <option value="ID">Idaho</option>
-                                            <option value="MT">Montana</option>
-                                            <option value="NE">Nebraska</option>
-                                            <option value="NM">New Mexico</option>
-                                            <option value="ND">North Dakota</option>
-                                            <option value="UT">Utah</option>
-                                            <option value="WY">Wyoming</option>
-                                        </optgroup>
-                                        <optgroup label="Central Time Zone">
-                                            <option value="AL">Alabama</option>
-                                            <option value="AR">Arkansas</option>
-                                            <option value="IL">Illinois</option>
-                                            <option value="IA">Iowa</option>
-                                            <option value="KS">Kansas</option>
-                                            <option value="KY">Kentucky</option>
-                                            <option value="LA">Louisiana</option>
-                                            <option value="MN">Minnesota</option>
-                                            <option value="MS">Mississippi</option>
-                                            <option value="MO">Missouri</option>
-                                            <option value="OK">Oklahoma</option>
-                                            <option value="SD">South Dakota</option>
-                                            <option value="TX">Texas</option>
-                                            <option value="TN">Tennessee</option>
-                                            <option value="WI">Wisconsin</option>
-                                        </optgroup>
-                                        <optgroup label="Eastern Time Zone">
-                                            <option value="CT">Connecticut</option>
-                                            <option value="DE">Delaware</option>
-                                            <option value="FL">Florida</option>
-                                            <option value="GA">Georgia</option>
-                                            <option value="IN">Indiana</option>
-                                            <option value="ME">Maine</option>
-                                            <option value="MD">Maryland</option>
-                                            <option value="MA">Massachusetts</option>
-                                            <option value="MI">Michigan</option>
-                                            <option value="NH">New Hampshire</option>
-                                            <option value="NJ">New Jersey</option>
-                                            <option value="NY">New York</option>
-                                            <option value="NC">North Carolina</option>
-                                            <option value="OH">Ohio</option>
-                                            <option value="PA">Pennsylvania</option>
-                                            <option value="RI">Rhode Island</option>
-                                            <option value="SC">South Carolina</option>
-                                            <option value="VT">Vermont</option>
-                                            <option value="VA">Virginia</option>
-                                            <option value="WV">West Virginia</option>
-                                        </optgroup>
-                                    </select>
-                                </div>
-                            </div> -->
-                            <!-- <div class="card mb-3">
-                                <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
-                                    <h6 class="mb-0 fw-bold ">Images</h6>
-                                </div>
-                                <div class="card-body">
-                                    <form>
-                                        <div class="row g-3 align-items-center"> -->
-                                            <!-- <div class="col-md-12">
-                                                <label class="form-label">Product Images Upload</label>
-                                                <small class="d-block text-muted mb-2">Only portrait or square images, 2M max and 2000px max-height.</small>
-                                                <input type="file" id="input-file-to-destroy" class="dropify" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
+                                            <div class="col-md-6">
+                                                <label for="Price"  class="form-label">Price</label>
+                                                <input name="Price" type="number" id="price" placeholder="Price" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="Brand" class="form-label">Brand</label>
+                                                <input type="text" name="Brand" id="brand" placeholder="Brand Name" class="form-control">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="Stock" class="form-label">Stock Quantity</label>
+                                                <input type="number" name="Stock" id="stockQuantity" placeholder="Total Stocks" class="form-control">
                                             </div>
                                             <div class="col-md-12">
-                                                <label  class="form-label w-100">Select Product Color</label>
-                                                <input type="color" id="color">
-                                            </div> -->
-                                            <!-- <div class="col-md-12">
-                                                <div class="product-cart"> -->
-                                                <!-- <input type="file" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
-                                                
-                                                <input type="file" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
-                                                <br><br>
-                                                <input type="file" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
-                                                
-                                                <input type="file" id="input-file-to-destroy" class="" data-allowed-formats="portrait square" data-max-file-size="2M" data-max-height="2000">
-                                                     -->
-                                                    <!-- <div class="checkout-table table-responsive"> -->
-                                                        <!-- <table id="myCartTable" class="table display dataTable table-hover align-middle" style="width:100%">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th class="product">Product</th>
-                                                                    <th class="product">Product Tag Name</th>
-                                                                    <th class="quantity">Color</th>
-                                                                    <th class="quantity">Quantity</th>
-                                                                    <th class="quantity">Action</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="product-cart d-flex align-items-center">
-                                                                            <div class="product-thumb">
-                                                                                <img src="/assets/images/product/upload.png" class="img-fluid avatar xl" alt="Product">
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="text"  class="form-control" placeholder="Product tag name">
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="color" class="form-control">
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="product-quantity d-inline-flex">
-                                                                            <input type="number">
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                                            <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="product-cart d-flex align-items-center">
-                                                                            <div class="product-thumb">
-                                                                                <img src="/assets/images/product/upload.png" class="img-fluid avatar xl" alt="Product">
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="text"  class="form-control" placeholder="Product tag name">
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="color" class="form-control">
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="product-quantity d-inline-flex">
-                                                                            <input type="number">
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                                            <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="product-cart d-flex align-items-center">
-                                                                            <div class="product-thumb">
-                                                                                <img src="/assets/images/product/upload.png" class="img-fluid avatar xl" alt="Product">
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="text"  class="form-control" placeholder="Product tag name">
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="color" class="form-control">
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="product-quantity d-inline-flex">
-                                                                            <input type="number">
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                                            <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                                <tr>
-                                                                    <td>
-                                                                        <div class="product-cart d-flex align-items-center">
-                                                                            <div class="product-thumb">
-                                                                                <img src="/assets/images/product/upload.png" class="img-fluid avatar xl" alt="Product">
-                                                                            </div>
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="text"  class="form-control" placeholder="Product tag name">
-                                                                    </td>
-                                                                    <td>
-                                                                        <input type="color" class="form-control">
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="product-quantity d-inline-flex">
-                                                                            <input type="number">
-                                                                        </div>
-                                                                    </td>
-                                                                    <td>
-                                                                        <div class="btn-group" role="group" aria-label="Basic outlined example">
-                                                                            <button type="button" class="btn btn-outline-secondary deleterow"><i class="icofont-ui-delete text-danger"></i></button>
-                                                                        </div>
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table> -->
-                                                    <!-- </div> -->
-                                                <!-- </div>
+                                                <label for="Description" class="form-label col-12">Product Description</label>
+                                                <input name="Description" class="col-12 pb-3 form-control" type="text" placeholder="Add Discription Here">
                                             </div>
                                         </div>
-                                    </form>
-                                </div>
-                            </div> -->
-                            <!-- <div class="card">
-                                <div class="card-header py-3 bg-transparent border-bottom-0">
-                                    <h6 class="m-0 fw-bold">Cropped Images</h6>
-                                    <small>If You Cropped Images Please Upload and croppd easily.</small>
-                                </div>
-                                <div class="card-body">
-                                    <div class="row g-3 mb-3">
-                                        <div class="col-xxl-12 col-xl-12 col-lg-12">
-                                            <div class="img-container">
-                                                <img id="image" src="/assets/images/product/cropimg-upload.jpg" class="img-responsive" alt="Picture">
+                                        <div class="card my-3">
+                                            <div class="card-header py-3 d-flex justify-content-between bg-transparent border-bottom-0">
+                                                <h6 class="mb-0 fw-bold ">Images</h6>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="row col-12 g-1 align-items-center">
+                                                    <label class="form-label col-3" for="image1">Product Image-1 :</label>
+                                                    <input class="col-9" type="file" id="imageInput" name="image" accept="image/*">
+                                                    <div id="imagePreview"></div>
+                                                
+                                                    <label class="form-label col-3" for="image2">Product Image-2 :</label>
+                                                    <input class="col-9" type="file" name="image">
+                                                    <br><br>
+                                                    <label class="form-label col-3" for="image3">Product Image-3 :</label>
+                                                    <input class="col-9" type="file" name="image">
+                                                    
+                                                    <label class="form-label col-3" for="image4">Product Image-4 :</label>
+                                                    <input class="col-9" type="file" name="image">
+                                                    
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-xxl-12 col-xl-12 col-lg-12">
-                                            <div class="docs-preview clearfix">
-                                                <div class="img-preview preview-lg"></div>
-                                                <div class="img-preview preview-md"></div>
-                                                <div class="img-preview preview-sm"></div>
-                                                <div class="img-preview preview-xs"></div>
-                                            </div>                                
-                                            <div class="docs-data">
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">X</span>
-                                                    </div>
-                                                    <input type="text" class="form-control" id="dataX" placeholder="x">
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">PX</span>
-                                                    </div>
-                                                </div>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">Y</span>
-                                                    </div>
-                                                    <input type="text" class="form-control" id="dataY" placeholder="y">
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">PX</span>
-                                                    </div>
-                                                </div>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">Width</span>
-                                                    </div>
-                                                    <input type="text" class="form-control" id="dataWidth" placeholder="width">
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">PX</span>
-                                                    </div>
-                                                </div>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">Height</span>
-                                                    </div>
-                                                    <input type="text" class="form-control" id="dataHeight" placeholder="height">
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">PX</span>
-                                                    </div>
-                                                </div>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">Rotate</span>
-                                                    </div>
-                                                    <input type="text" class="form-control" id="dataRotate" placeholder="rotate">
-                                                    <div class="input-group-append">
-                                                        <span class="input-group-text">Deg</span>
-                                                    </div>
-                                                </div>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">ScaleX</span>
-                                                    </div>
-                                                    <input type="text" class="form-control" id="dataScaleX" placeholder="scaleX">
-                                                </div>
-                                                <div class="input-group">
-                                                    <div class="input-group-prepend">
-                                                        <span class="input-group-text">ScaleY</span>
-                                                    </div>
-                                                    <input type="text" class="form-control" id="dataScaleY" placeholder="scaleY">
-                                                </div> -->
-                                                <!-- /.pixels of image -->
-                                            <!-- </div>
-                                        </div> -->
-                                    <!-- </div>Row end   -->
-                                    <!-- <div class="row g-3">
-                                        <div class="col-lg-7 col-md-12 docs-buttons"> -->
-                                            <!-- .btn groups -->
-                                            <!-- <button type="button" class="btn btn-sm btn-info" data-method="setDragMode" data-option="move" title="Move"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setDragMode&quot;, &quot;move&quot;)"> <i class="icofont-drag1"></i> </span></button>
-                                            <button type="button" class="btn btn-sm btn-info" data-method="setDragMode" data-option="crop" title="Crop"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setDragMode&quot;, &quot;crop&quot;)"> <i class="icofont-crop"></i> </span></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-4 col-lg-4">
+                                <div class="sticky-lg-top mb-4">
+                                    <div class="card mb-3">
+                                        <div class="card-header pt-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                                            <h6 class="m-0 fw-bold">Category</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <label for="Category" class="form-label">Select Product Category</label>
+                                            <select name="Category" class="form-select" size="3" aria-label="size 3 select example">
+                                                <% admin.category.forEach(cat =>{ %>
+                                                <option value="<%= cat.categoryName %>"><%= cat.categoryName %></option>
+                                                <% }) %>
+                                                <!-- <option value="2">Clothes</option>
+                                                <option value="3">Toy</option>
+                                                <option value="4">Cosmetic</option>
+                                                <option value="5">Laptop</option>
+                                                <option value="6">Mobile</option>
+                                                <option value="7">Gaming accessories</option> -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="card mb-3">
+                                        <div class="card-header pt-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
+                                            <h6 class="m-0 fw-bold">SubCategory</h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <label for="SubCategory" class="form-label">Select Product SubCategory</label>
+                                            <select name="SubCategory" class="form-select" size="2" aria-label="size 3 select example">
+                                                <% admin.subCategory.forEach( sub => { %>
+                                                <option value="<%= sub.subCategoryName %>"><%= sub.subCategoryName %></option>
+                                                <% }) %>
+                                                <!-- <option value="2">Clothes</option>
+                                                <option value="3">Toy</option>
+                                                <option value="4">Cosmetic</option>
+                                                <option value="5">Laptop</option>
+                                                <option value="6">Mobile</option>
+                                                <option value="7">Gaming accessories</option> -->
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="submit">
+                                        <button type="submit" class="btn btn-primary btn-set-task w-100 py-2 px-5 text-uppercase">Add Product</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <script>
+                        function validateForm() {
+                            let productName = document.getElementById('productName').value.trim();
+                            let price = document.getElementById('price').value.trim();
+                            let brand = document.getElementById('brand').value.trim();
+                            let stockQuantity = document.getElementById('stockQuantity').value.trim();
                     
-                                            <button type="button" class="btn btn-sm btn-success" data-method="zoom" data-option="0.1" title="Zoom In"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;zoom&quot;, 0.1)"> <i class="icofont-ui-zoom-in"></i> </span></button>
-                                            <button type="button" class="btn btn-sm btn-success" data-method="zoom" data-option="-0.1" title="Zoom Out"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;zoom&quot;, -0.1)"> <i class="icofont-ui-zoom-out"></i> </span></button>
-                                            
-                                            <button type="button" class="btn btn-sm btn-secondary" data-method="move" data-option="-10" data-second-option="0" title="Move Left"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;move&quot;, -10, 0)"> <i class="icofont-circled-left"></i></span></button>
-                                            <button type="button" class="btn btn-sm btn-secondary" data-method="move" data-option="10" data-second-option="0" title="Move Right"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;move&quot;, 10, 0)"> <i class="icofont-circled-right"></i> </span></button>
-                                            <button type="button" class="btn btn-sm btn-secondary" data-method="move" data-option="0" data-second-option="-10" title="Move Up"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;move&quot;, 0, -10)"> <i class="icofont-circled-up"></i> </span></button>
-                                            <button type="button" class="btn btn-sm btn-secondary" data-method="move" data-option="0" data-second-option="10" title="Move Down"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;move&quot;, 0, 10)"> <i class="icofont-circled-down"></i></span></button>                                
-                                            
-                                            <button type="button" class="btn btn-sm btn-secondary" data-method="rotate" data-option="-45" title="Rotate Left"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;rotate&quot;, -45)"> <i class="icofont-rotation"></i> </span></button>
-                                            <button type="button" class="btn btn-sm btn-secondary" data-method="rotate" data-option="45" title="Rotate Right"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;rotate&quot;, 45)"> <i class="icofont-rotation"></i> </span></button>
-                                                                            
-                                            <button type="button" class="btn btn-sm btn-secondary" data-method="scaleX" data-option="-1" title="Flip Horizontal"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;scaleX&quot;, -1)"> <i class="icofont-exchange"></i> </span></button>
-                                            <button type="button" class="btn btn-sm btn-secondary" data-method="scaleY" data-option="-1" title="Flip Vertical"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;scaleY&quot;, -1)"> <i class="icofont-expand-alt"></i> </span></button>
-                                            
-                                            <button type="button" class="btn btn-sm btn-secondary" data-method="crop" title="Crop"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;crop&quot;)"> <i class="icofont-checked"></i> </span></button>
-                                            <button type="button" class="btn btn-sm btn-secondary" data-method="clear" title="Clear"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;clear&quot;)"> <i class="icofont-ui-delete"></i> </span></button>
-                                            
-                                            <button type="button" class="btn btn-sm btn-secondary" data-method="disable" title="Disable"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;disable&quot;)"> <i class="icofont-lock"></i> </span></button>
-                                            <button type="button" class="btn btn-sm btn-secondary" data-method="enable" title="Enable"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;enable&quot;)"> <i class="icofont-unlock"></i> </span></button>
-                                            
-                                            <button type="button" class="btn btn-sm btn-secondary" data-method="reset" title="Reset"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;reset&quot;)"> <i class="icofont-refresh"></i> </span></button>
-                                                <label class="btn btn-sm btn-secondary btn-upload" for="inputImage" title="Upload image file">
-                                                    <input type="file" class="sr-only" id="inputImage" name="file" accept="image/*">
-                                                    <span class="docs-tooltip" data-toggle="tooltip" title="Import image with Blob URLs"> <i class="icofont-upload"></i> </span>
-                                                </label>
-                                            <button type="button" class="btn btn-sm  btn-secondary" data-method="destroy" title="Destroy"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;destroy&quot;)"> <i class="icofont-power"></i> </span></button>
-                                            
-                                            <button type="button" class="btn btn-sm btn-danger" data-method="getCroppedCanvas" data-bs-toggle="modal" data-bs-target="#getCroppedCanvasModal"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;getCroppedCanvas&quot;)"> Get Cropped Canvas </span> </button>
-                                            <button type="button" class="btn btn-sm btn-danger" data-method="getCroppedCanvas" data-bs-toggle="modal" data-bs-target="#getCroppedCanvasModal" data-option="{ &quot;width&quot;: 160, &quot;height&quot;: 90 }"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;getCroppedCanvas&quot;, { width: 160, height: 90 })"> 160&times;90 </span> </button>
-                                            <button type="button" class="btn btn-sm btn-danger" data-method="getCroppedCanvas" data-bs-toggle="modal" data-bs-target="#getCroppedCanvasModal" data-option="{ &quot;width&quot;: 320, &quot;height&quot;: 180 }"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;getCroppedCanvas&quot;, { width: 320, height: 180 })"> 320&times;180 </span> </button>
-                                            
-                                            <button type="button" class="btn btn-secondary" data-method="getData" data-option data-target="#putData"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;getData&quot;)"> Get Data </span> </button>
-                                            <button type="button" class="btn btn-secondary" data-method="setData" data-target="#putData"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setData&quot;, data)"> Set Data </span> </button>
-                                            <button type="button" class="btn btn-secondary" data-method="getContainerData" data-option data-target="#putData"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;getContainerData&quot;)"> Get Container Data </span> </button>
-                                            <button type="button" class="btn btn-secondary" data-method="getImageData" data-option data-target="#putData"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;getImageData&quot;)"> Get Image Data </span> </button>
-                                            <button type="button" class="btn btn-secondary" data-method="getCanvasData" data-option data-target="#putData"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;getCanvasData&quot;)"> Get Canvas Data </span> </button>
-                                            <button type="button" class="btn btn-secondary" data-method="setCanvasData" data-target="#putData"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setCanvasData&quot;, data)"> Set Canvas Data </span> </button>
-                                            <button type="button" class="btn btn-secondary" data-method="getCropBoxData" data-option data-target="#putData"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;getCropBoxData&quot;)"> Get Crop Box Data </span> </button>
-                                            <button type="button" class="btn btn-secondary" data-method="setCropBoxData" data-target="#putData"> <span class="docs-tooltip" data-toggle="tooltip" title="$().cropper(&quot;setCropBoxData&quot;, data)"> Set Crop Box Data </span> </button>
-                                            <button type="button" class="btn btn-secondary" data-method="moveTo" data-option="0"> <span class="docs-tooltip" data-toggle="tooltip" title="cropper.moveTo(0)"> 0,0 </span> </button>
-                                            <button type="button" class="btn btn-secondary" data-method="zoomTo" data-option="1"> <span class="docs-tooltip" data-toggle="tooltip" title="cropper.zoomTo(1)"> 100% </span> </button>
-                                            <button type="button" class="btn btn-secondary" data-method="rotateTo" data-option="180"> <span class="docs-tooltip" data-toggle="tooltip" title="cropper.rotateTo(180)"> 180° </span> </button>
-                                            <input type="text" class="form-control" id="putData" placeholder="Get data to here or set data with this value">
-                                        </div>
-                                        <div class="col-lg-5 col-md-12 docs-toggles"> -->
-                                            <!-- .btn groups -->
-                                            <!-- <div class="btn-group btn-group-justified" data-toggle="buttons">
-                                                <label class="btn btn-secondary active">
-                                                    <input type="radio" class="sr-only" id="aspectRatio0" name="aspectRatio" value="1.7777777777777777">
-                                                    <span class="docs-tooltip" data-toggle="tooltip" title="aspectRatio: 16 / 9"> 16:9 </span> </label>
-                                                <label class="btn btn-secondary">
-                                                    <input type="radio" class="sr-only" id="aspectRatio1" name="aspectRatio" value="1.3333333333333333">
-                                                    <span class="docs-tooltip" data-toggle="tooltip" title="aspectRatio: 4 / 3"> 4:3 </span> </label>
-                                                <label class="btn btn-secondary">
-                                                    <input type="radio" class="sr-only" id="aspectRatio2" name="aspectRatio" value="1">
-                                                    <span class="docs-tooltip" data-toggle="tooltip" title="aspectRatio: 1 / 1"> 1:1 </span> </label>
-                                                <label class="btn btn-secondary">
-                                                    <input type="radio" class="sr-only" id="aspectRatio3" name="aspectRatio" value="0.6666666666666666">
-                                                    <span class="docs-tooltip" data-toggle="tooltip" title="aspectRatio: 2 / 3"> 2:3 </span> </label>
-                                                <label class="btn btn-secondary">
-                                                    <input type="radio" class="sr-only" id="aspectRatio4" name="aspectRatio" value="NaN">
-                                                    <span class="docs-tooltip" data-toggle="tooltip" title="aspectRatio: NaN"> Free </span> </label>
-                                            </div>
-                                            <div class="btn-group btn-group-justified" data-toggle="buttons">
-                                                <label class="btn btn-secondary active">
-                                                    <input type="radio" class="sr-only" id="viewMode0" name="viewMode" value="0" checked>
-                                                    <span class="docs-tooltip" data-toggle="tooltip" title="View Mode 0"> VM0 </span> </label>
-                                                <label class="btn btn-secondary">
-                                                    <input type="radio" class="sr-only" id="viewMode1" name="viewMode" value="1">
-                                                    <span class="docs-tooltip" data-toggle="tooltip" title="View Mode 1"> VM1 </span> </label>
-                                                <label class="btn btn-secondary">
-                                                    <input type="radio" class="sr-only" id="viewMode2" name="viewMode" value="2">
-                                                    <span class="docs-tooltip" data-toggle="tooltip" title="View Mode 2"> VM2 </span> </label>
-                                                <label class="btn btn-secondary">
-                                                    <input type="radio" class="sr-only" id="viewMode3" name="viewMode" value="3">
-                                                    <span class="docs-tooltip" data-toggle="tooltip" title="View Mode 3"> VM3 </span> </label>
-                                            </div>
-                                            <div class="dropdown dropup docs-options">
-                                                <button type="button" class="btn btn-success btn-block dropdown-toggle" id="toggleOptions" data-bs-toggle="dropdown" aria-expanded="true"> Toggle Options <span class="caret"></span> </button>
-                                                
-                                                <ul class="dropdown-menu" aria-labelledby="toggleOptions" role="menu">
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="responsive" checked> responsive </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="restore" checked> restore </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="checkCrossOrigin" checked> checkCrossOrigin </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="checkOrientation" checked> checkOrientation </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="modal" checked> modal </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="guides" checked> guides </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="center" checked> center </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="highlight" checked> highlight </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="background" checked> background </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="autoCrop" checked> autoCrop </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="movable" checked> movable </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="rotatable" checked> rotatable </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="scalable" checked> scalable </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="zoomable" checked> zoomable </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="zoomOnTouch" checked> zoomOnTouch </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="zoomOnWheel" checked> zoomOnWheel </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="cropBoxMovable" checked> cropBoxMovable </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="cropBoxResizable" checked> cropBoxResizable </label>
-                                                    </li>
-                                                    <li role="presentation">
-                                                        <label class="checkbox-inline">
-                                                            <input type="checkbox" name="toggleDragModeOnDblclick" checked> toggleDragModeOnDblclick </label>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div> -->
-                                    <!-- </div>Row end   -->
-                                <!-- </div>
-                            </div>
-                        </div>
-                    </div> -->
-                    <!-- Row end  --> 
-                    
-                <!-- </div>
-            </div>     -->
-        
-            <!-- Modal Custom Settings-->
-            <div class="modal fade right" id="Settingmodal" tabindex="-1"  aria-hidden="true">
-                <div class="modal-dialog  modal-sm">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Custom Settings</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body custom_setting">
-                            <!-- Settings: Color -->
-                            <div class="setting-theme pb-3">
-                                <h6 class="card-title mb-2 fs-6 d-flex align-items-center"><i class="icofont-color-bucket fs-4 me-2 text-primary"></i>Template Color Settings</h6>
-                                <ul class="list-unstyled row row-cols-3 g-2 choose-skin mb-2 mt-2">
-                                    <li data-theme="indigo"><div class="indigo"></div></li>
-                                    <li data-theme="tradewind"><div class="tradewind"></div></li>
-                                    <li data-theme="monalisa"><div class="monalisa"></div></li>
-                                    <li data-theme="blue" class="active"><div class="blue"></div></li>
-                                    <li data-theme="cyan"><div class="cyan"></div></li>
-                                    <li data-theme="green"><div class="green"></div></li>
-                                    <li data-theme="orange"><div class="orange"></div></li>
-                                    <li data-theme="blush"><div class="blush"></div></li>
-                                    <li data-theme="red"><div class="red"></div></li>
-                                </ul>
-                            </div>
-                            <div class="sidebar-gradient py-3">
-                                <h6 class="card-title mb-2 fs-6 d-flex align-items-center"><i class="icofont-paint fs-4 me-2 text-primary"></i>Sidebar Gradient</h6>
-                                <div class="form-check form-switch gradient-switch pt-2 mb-2">
-                                    <input class="form-check-input" type="checkbox" id="CheckGradient">
-                                    <label class="form-check-label" for="CheckGradient">Enable Gradient! ( Sidebar )</label>
-                                </div>
-                            </div>
-                            <!-- Settings: Template dynamics -->
-                            <div class="dynamic-block py-3">
-                                <ul class="list-unstyled choose-skin mb-2 mt-1">
-                                    <li data-theme="dynamic"><div class="dynamic"><i class="icofont-paint me-2"></i> Click to Dyanmic Setting</div></li>
-                                </ul>
-                                <div class="dt-setting">
-                                    <ul class="list-group list-unstyled mt-1">
-                                        <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
-                                            <label>Primary Color</label>
-                                            <button id="primaryColorPicker" class="btn bg-primary avatar xs border-0 rounded-0"></button>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
-                                            <label>Secondary Color</label>
-                                            <button id="secondaryColorPicker" class="btn bg-secondary avatar xs border-0 rounded-0"></button>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
-                                            <label class="text-muted">Chart Color 1</label>
-                                            <button id="chartColorPicker1" class="btn chart-color1 avatar xs border-0 rounded-0"></button>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
-                                            <label class="text-muted">Chart Color 2</label>
-                                            <button id="chartColorPicker2" class="btn chart-color2 avatar xs border-0 rounded-0"></button>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
-                                            <label class="text-muted">Chart Color 3</label>
-                                            <button id="chartColorPicker3" class="btn chart-color3 avatar xs border-0 rounded-0"></button>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
-                                            <label class="text-muted">Chart Color 4</label>
-                                            <button id="chartColorPicker4" class="btn chart-color4 avatar xs border-0 rounded-0"></button>
-                                        </li>
-                                        <li class="list-group-item d-flex justify-content-between align-items-center py-1 px-2">
-                                            <label class="text-muted">Chart Color 5</label>
-                                            <button id="chartColorPicker5" class="btn chart-color5 avatar xs border-0 rounded-0"></button>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <!-- Settings: Font -->
-                            <div class="setting-font py-3">
-                                <h6 class="card-title mb-2 fs-6 d-flex align-items-center"><i class="icofont-font fs-4 me-2 text-primary"></i> Font Settings</h6>
-                                <ul class="list-group font_setting mt-1">
-                                    <li class="list-group-item py-1 px-2">
-                                        <div class="form-check mb-0">
-                                            <input class="form-check-input" type="radio" name="font" id="font-poppins" value="font-poppins">
-                                            <label class="form-check-label" for="font-poppins">
-                                                Poppins Google Font
-                                            </label>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item py-1 px-2">
-                                        <div class="form-check mb-0">
-                                            <input class="form-check-input" type="radio" name="font" id="font-opensans" value="font-opensans" checked="">
-                                            <label class="form-check-label" for="font-opensans">
-                                                Open Sans Google Font
-                                            </label>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item py-1 px-2">
-                                        <div class="form-check mb-0">
-                                            <input class="form-check-input" type="radio" name="font" id="font-montserrat" value="font-montserrat">
-                                            <label class="form-check-label" for="font-montserrat">
-                                                Montserrat Google Font
-                                            </label>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item py-1 px-2">
-                                        <div class="form-check mb-0">
-                                            <input class="form-check-input" type="radio" name="font" id="font-mukta" value="font-mukta">
-                                            <label class="form-check-label" for="font-mukta">
-                                                Mukta Google Font
-                                            </label>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <!-- Settings: Light/dark -->
-                            <div class="setting-mode py-3">
-                                <h6 class="card-title mb-2 fs-6 d-flex align-items-center"><i class="icofont-layout fs-4 me-2 text-primary"></i>Contrast Layout</h6>
-                                <ul class="list-group list-unstyled mb-0 mt-1">
-                                    <li class="list-group-item d-flex align-items-center py-1 px-2">
-                                        <div class="form-check form-switch theme-switch mb-0">
-                                            <input class="form-check-input" type="checkbox" id="theme-switch">
-                                            <label class="form-check-label" for="theme-switch">Enable Dark Mode!</label>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item d-flex align-items-center py-1 px-2">
-                                        <div class="form-check form-switch theme-high-contrast mb-0">
-                                            <input class="form-check-input" type="checkbox" id="theme-high-contrast">
-                                            <label class="form-check-label" for="theme-high-contrast">Enable High Contrast</label>
-                                        </div>
-                                    </li>
-                                    <li class="list-group-item d-flex align-items-center py-1 px-2">
-                                        <div class="form-check form-switch theme-rtl mb-0">
-                                            <input class="form-check-input" type="checkbox" id="theme-rtl">
-                                            <label class="form-check-label" for="theme-rtl">Enable RTL Mode!</label>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="modal-footer justify-content-start">
-                            <button type="button" class="btn btn-white border lift" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary lift">Save Changes</button>
-                        </div>
-                    </div>
+                            if (productName === '' || price === '' || brand === '' || stockQuantity === '') {
+                                document.getElementById('Errormessage').textContent = 'Please fill all Input-fields';
+                                return false;
+                            } else {
+                                document.getElementById('Errormessage').textContent = '';
+                                return true;
+                            }
+                        }
+                    </script>
                 </div>
-            </div> 
-
-            <!-- Modal Cropper-->
-            <div class="modal docs-cropped" id="getCroppedCanvasModal" tabindex="-1"  aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Cropped</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body"></div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-white border lift" data-bs-dismiss="modal">Close</button>
-                            <a class="btn btn-primary" id="download" href="javascript:void(0);" download="cropped.html">Download</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>      
-        <!-- <div class="col-xl-4 col-lg-4">
-            <div class="sticky-lg-top mb-4">
-                <div class="card mb-3">
-                    <div class="card-header pt-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                        <h6 class="m-0 fw-bold">Category</h6>
-                    </div>
-                    <div class="card-body">
-                        <label  class="form-label">Select Product Category</label>
-                        <select class="form-select" size="4" aria-label="size 3 select example">
-                            <option value="1">Watch</option>
-                            <option value="2">Clothes</option>
-                            <option value="3">Toy</option>
-                            <option value="4">Cosmetic</option>
-                            <option value="5">Laptop</option>
-                            <option value="6">Mobile</option>
-                            <option value="7">Gaming accessories</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="card mb-3">
-                    <div class="card-header pt-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                        <h6 class="m-0 fw-bold">SubCategory</h6>
-                    </div>
-                    <div class="card-body">
-                        <label  class="form-label">Select Product SubCategory</label>
-                        <select class="form-select" size="3" aria-label="size 3 select example">
-                            <option value="1">Watch</option>
-                            <option value="2">Clothes</option>
-                            <option value="3">Toy</option>
-                            <option value="4">Cosmetic</option>
-                            <option value="5">Laptop</option>
-                            <option value="6">Mobile</option>
-                            <option value="7">Gaming accessories</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                        <h6 class="m-0 fw-bold">Inventory Info</h6>
-                    </div>
-                    <div class="card-body">
-                        <div class="row g-3 align-items-center">
-                            <div class="col-md-12">
-                                <label  class="form-label">SKU</label>
-                                <input type="text" class="form-control">
-                            </div>
-                            <div class="col-md-12">
-                                <label  class="form-label">Total Stock Quantity</label>
-                                <input type="text" class="form-control">
-                            </div>
-                        </div>
-                    </div>
-                </div> -->
-            <!-- </div>
-        </div> -->
-    </div>
 
+    </div>
     <!-- Jquery Core Js -->      
     <script src="/assets/bundles/libscripts.bundle.js"></script>
 

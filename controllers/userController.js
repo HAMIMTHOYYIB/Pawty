@@ -186,28 +186,61 @@ let deleteAddress = async (req,res) => {
 }
 
 // Get ProductPage
-let shop = async (req,res) => {
-  let admin = await Admin.findOne();
-  let products =  await Vendor.find().select("products");
-  let vendors = await Vendor.find();
-  let prod =  vendors.reduce((acc, vendor) => {
-    return acc + vendor.products.length;
-  }, 0);
+// let shop = async (req,res) => {
+//   let admin = await Admin.findOne();
+//   let products =  await Vendor.find().select("products");
+//   let vendors = await Vendor.find();
+//   let prod =  vendors.reduce((acc, vendor) => {
+//     return acc + vendor.products.length;
+//   }, 0);
 
-  if (req.cookies.user_jwt) {
-    jwt.verify(req.cookies.user_jwt, process.env.JWT_SECRET, async (err, decodedToken)=>{
-      if(err){
-        return res.render('users/shop-org',{products,admin,user:undefined,prod});
-      }else{
-        req.user = decodedToken;
-        let user = await User.findOne({_id:req.user.id});
-        return res.render('users/shop-org',{products,admin,user:user,prod});
-      }
-    });
-  }else{
-    return res.render('users/shop-org',{products,admin,user:undefined,prod});
+//   if (req.cookies.user_jwt) {
+//     jwt.verify(req.cookies.user_jwt, process.env.JWT_SECRET, async (err, decodedToken)=>{
+//       if(err){
+//         return res.render('users/shop-org',{products,admin,user:undefined,prod});
+//       }else{
+//         req.user = decodedToken;
+//         let user = await User.findOne({_id:req.user.id});
+//         return res.render('users/shop-org',{products,admin,user:user,prod});
+//       }
+//     });
+//   }else{
+//     return res.render('users/shop-org',{products,admin,user:undefined,prod});
+//   }
+// }
+
+
+let shop = async (req, res) => {
+  const perPage = 6;
+  let admin = await Admin.findOne();
+  let vendors = await Vendor.find().select("products");
+  let products = vendors.reduce((acc, vendor) => {
+    return acc.concat(vendor.products);
+  }, []);
+  let prod = products.length;
+  let page = parseInt(req.query.page) || 1;
+  try {
+    const totalProducts = prod;
+    const totalPages = Math.ceil(totalProducts / perPage);
+    products = products.slice((page - 1) * perPage, page * perPage);
+    if (req.cookies.user_jwt) {
+      jwt.verify(req.cookies.user_jwt, process.env.JWT_SECRET, async (err, decodedToken) => {
+        if (err) {
+          return res.render('users/shop-org', { products, admin, user: undefined, prod, totalPages, currentPage: page });
+        } else {
+          req.user = decodedToken;
+          let user = await User.findOne({ _id: req.user.id });
+          return res.render('users/shop-org', { products, admin, user: user, prod, totalPages, currentPage: page });
+        }
+      });
+    } else {
+      return res.render('users/shop-org', { products, admin, user: undefined, prod, totalPages, currentPage: page });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send('Internal Server Error');
   }
-}
+};
 // single product
 let product = async (req,res) => {
   let productId = req.params.id;
@@ -292,8 +325,6 @@ let filterProduct = async (req, res) => {
     res.status(500).json({ message: 'Internal server error' });
   }
 }
-
-
 
 // cart
 let getcart = async (req, res) => {

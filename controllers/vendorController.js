@@ -338,37 +338,40 @@ let updateStatus = async (req, res) => {
         let subject = "Order Delivered - Invoice";
         let message = `
         <div style="background-color: #f9f9f9; padding: 20px;">
-          <img src="https://res.cloudinary.com/dw3wmxotb/image/upload/v1712451407/pawty_sxt7if.png" alt="PAWTY" style="max-width: 80px; display: block;">  
+          <img src="https://res.cloudinary.com/dw3wmxotb/image/upload/v1712451407/pawty_sxt7if.png" alt="PAWTY" style="max-width: 80px; display: block;">
           <h2 style="color: #2e702e; text-align: center;">Order Delivered</h2>
 
-          <div style="border: 1px solid #555; margin: 0 auto; padding: 20px; text-align: center;">
-            <h3 style="color: #555;">${user.username}, Your order has been delivered successfully!</h3>
+          <div style="">
+            <div style="border: 1px solid #555; margin: 0 auto; padding: 20px; text-align: center;">
+              <h3 style="color: #555;">${user.username}, Your order has been delivered successfully!</h3>
+            </div>
           </div>
 
-          <div style="display: flex;">
-            <div style="width:25%">
+          <div style="display: flex; justify-content:space-between;">
+            <div style="width:50%; border-right: 1px solid #ddd;">
               <p style="color: #555;"><strong>Order ID:</strong> ${orderId}</p>
               <p style="color: #555;"><strong>Product Name:</strong> ${productDetails.productName}</p>
               <p style="color: #555;"><strong>Price:</strong> ${productDetails.price} /-</p>
               <p style="color: #555;"><strong>Quantity:</strong> ${product.quantity}</p>
             </div>
+            <div style="width: 48%;margin-left:2%;">
+              <h3 style="color: #555; text-align: left">Invoice Details</h3>
+              <p style="color: #555;"><strong>Invoice ID:</strong> ${orderId}</p>
+              <p style="color: #555;"><strong>Invoice Date:</strong> ${new Date().toLocaleDateString()}</p>
+            </div>
+          </div>
+          <div>
             <div style="width:50%"></div>
             <div style="text-align:left;width:25%">
               <h3 style="color: #555; text-align:left">Delivery Address</h3>
-              <p style="color: #555;"> ${order.shippingAddress.locality}, ${order.shippingAddress.street}</p>
-              <p style="color: #555;">${order.shippingAddress.city}, ${order.shippingAddress.state}</p>
+              <p style="color: #555;"> ${order.shippingAddress.locality}, <span class="math-inline">\{order\.shippingAddress\.street\}</p\>
+              <p style\="color\: \#555;"\></span>{order.shippingAddress.city}, ${order.shippingAddress.state}</p>
               <p style="color: #555;"><strong>PINCODE :</strong> ${order.shippingAddress.pincode}</p>
             </div>
           </div>
           <hr style="border: 0.5px solid #ddd; margin: 10px auto;">
-
           <p style="color: #777; text-align: center;">Thank you for shopping with us.</p>
-
-          <footer style="text-align: center; margin-top: 20px; color: #999; font-size: 12px;">
-            &copy; ${new Date().getFullYear()} Pawty. All Rights Reserved.
-          </footer>
-
-        </div>`;
+        `;
         await sendOtpEmail(email,subject,message);
       }
       // Shipping Mail Notification

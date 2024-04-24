@@ -54,7 +54,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="m-link " href="/bannerViews">
+                        <a class="m-link " href="/bannerView">
                             <i class="icofont-image fs-5"></i> <span>Banners</span>
                         </a>
                     </li>
@@ -534,26 +534,30 @@
                         </div>
                     </div><!-- Row end  -->
                     
-                    <div class="col-lg-6 card"> 
+                    <div class="col-lg-12 card"> 
                         <h6 class="ms-2 mt-2 fw-bold">Order Report</h6>
                         <form id="orderReportForm" action="/orderReport" method="post">
                             <div class="card-body">
-                                <div class="row g-3 align-items-center">
-                                    <div class="col-md-12">
+                                <div class="row g-3 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-6">
                                         <label class="form-label">From</label>
                                         <input id="startDate" name="startDate" type="date" class="form-control w-100">
                                         <small id="startDateError" class="text-danger d-none"><b>Please enter a valid start date.</b></small>
                                     </div>
-                                    <div class="col-md-12">
+                                    <div class="col-md-6">
                                         <label class="form-label">To</label>
                                         <input id="endDate" type="date" name="endDate" class="form-control w-100">
                                         <small id="endDateError" class="text-danger d-none"><b>Please enter a valid end date.</b></small>
                                     </div>
                                 </div>
                             </div>
-                            <div class="w-100 col-12 row d-flex justify-content-between m-2">
-                                <button id="getReportBtn" class="btn btn-primary mx-auto col-4" type="button">Get Report</button>
-                                <button id="downloadPdfBtn" class="btn btn-primary mx-auto col-4" type="button">Download as Pdf</button>
+                            <div class="row col-lg-12 d-flex">
+                                <div class="col-md-6 g-0 row d-flex justify-content-center">
+                                    <button id="getReportBtn" class="btn btn-primary mx-auto my-2 col-md-6" type="button">Get Report</button>
+                                </div>
+                                <div class="col-md-6 g-0 row d-flex justify-content-centera">
+                                    <button id="downloadPdfBtn" class="btn btn-primary mx-auto my-2 col-md-6" type="button">Download as Pdf</button>
+                                </div>
                             </div>
                         </form>
                     </div>
