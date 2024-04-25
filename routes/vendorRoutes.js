@@ -34,6 +34,7 @@ router.post('/vendor/removeCoupon',vendorAuth,vendorController.deleteCoupon)
 
 // Order Managment
 router.get('/vendor/orderList',vendorAuth,vendorController.getOrderList);
+router.get('/vendor/orderDetails/:orderId/:productId',vendorAuth,vendorController.getOrderDetails);
 router.post('/vendor/orderStatus/:orderId/:productId',vendorAuth,vendorController.updateStatus);
 
 router.get('/vendor/totalweekorders', vendorAuth , vendorController.vendorweekOrders);

@@ -32,6 +32,28 @@ const orderSchema = new mongoose.Schema({
         type:String,
         required:true
       },
+      statusHistory: [
+        {
+          status: {
+            type: String,
+            enum: ['Pending', 'Delivered', 'Cancelled', 'Out Of Delivery', 'Shipped', 'Requested for Cancellation'],
+            required: true
+          },
+          isActive: {
+            type: Boolean,
+            required: true
+          },
+          timestamp: {
+            type: Date,
+            default: Date.now,
+            required: true
+          },
+          vendorChanged: {
+            type: Boolean,
+            required: true
+          }
+        }
+      ]
     }
   ],
   total: {
@@ -67,3 +89,5 @@ const orderSchema = new mongoose.Schema({
 const Order = mongoose.model('Order', orderSchema);
 
 module.exports = Order;
+
+

@@ -313,6 +313,18 @@ let getOrderList = async (req, res) => {
     res.status(500).json({ message: 'Failed to get orders' });
   }
 };
+let getOrderDetails = async(req,res) => {
+  let {  productId, orderId } = req.params;
+  try {
+    let order = await Order.findById(orderId);
+    let product = await productHelper.getProductDetails(productId)
+    console.log("product :",product)
+    console.log("order :",order)
+    res.render('vendor/orderDetails',{order,product}) 
+  } catch (error) {
+    res.status(500).send("Can't get Order Details")
+  }
+}
 let updateStatus = async (req, res) => {
   try {
     let {  productId, orderId } = req.params;
@@ -957,6 +969,7 @@ module.exports = {
     deleteCoupon,
 
     getOrderList,
+    getOrderDetails,
     updateStatus,
 
     getOrderPdf,

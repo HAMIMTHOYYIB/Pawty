@@ -248,24 +248,24 @@
                                                 <th class="">Item</th>
                                                 <th>Customer Name</th>
                                                 <th>Payment Info</th>
-                                                <th>Price</th>
-                                                <th>Status</th>
+                                                <th>Action</th>
+                                                <th>Order Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <% let count = 0; %>
                                             <% orders.forEach((order, index) => { %>
                                             <tr>
-                                                <td><a href="/orderView/<%= order._id %>"><strong><%= ++count %></strong></a></td>
+                                                <td><a href="/vendor/orderDetails/<%= order._id %>/<%= order.products._id%>"><strong><%= ++count %></strong></a></td>
                                                 <td class="">
                                                     <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal-<%= index %>">
-                                                        <img src="<%= order.products.images[0] %>" class="avatar lg rounded me-2" alt="profile-image">
+                                                        <img src="<%= order.products.images[0] %>" class="avatar lg rounded me-2" alt="profile-im age">
                                                         <span><%= order.products.productName %></span>
                                                     </a>
                                                 </td>
                                                 <td><%= order.userName %></td>
                                                 <td><%= order.paymentMethod %></td>
-                                                <td><%= order.products.price * order.products.quantity %></td>
+                                                <td><a href="/vendor/orderDetails/<%= order._id %>/<%= order.products._id%>" class="bg-dark text-light px-3 py-2" style="border-radius:8px;" >view</a></td>
                                                 <td>
                                                     <form id="statusForm-<%= order._id %>-<%= index %>">
                                                         <select name="status" onchange="updateOrderStatus(event, '<%= order._id %>', '<%= order.products._id %>', '<%= index %>')">
