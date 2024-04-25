@@ -717,8 +717,7 @@
           const endDateError = document.getElementById("endDateError");
       
           getReportBtn.addEventListener("click", function(event) {
-            event.preventDefault(); // Prevent default form submission
-      
+            event.preventDefault();
             if (validateForm()) {
               document.getElementById("orderReportForm").action = "/orderReport";
               document.getElementById("orderReportForm").submit();
@@ -726,7 +725,7 @@
           });
       
           downloadPdfBtn.addEventListener("click", function(event) {
-            event.preventDefault(); // Prevent default form submission
+            event.preventDefault();
       
             if (validateForm()) {
               document.getElementById("orderReportForm").action = "/downloadOrders";

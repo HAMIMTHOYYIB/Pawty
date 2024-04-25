@@ -32,10 +32,20 @@ router.get('/vendor/editCoupon/:couponId',vendorAuth,vendorController.editCoupon
 router.post('/vendor/editCoupon/:couponId',vendorAuth,vendorController.submitEditCoupon)
 router.post('/vendor/removeCoupon',vendorAuth,vendorController.deleteCoupon)
 
+// Order Managment
 router.get('/vendor/orderList',vendorAuth,vendorController.getOrderList);
-router.post('/vendor/orderStatus/:orderId/:productId',vendorAuth,vendorController.updateStatus)
+router.post('/vendor/orderStatus/:orderId/:productId',vendorAuth,vendorController.updateStatus);
 
 router.get('/vendor/totalweekorders', vendorAuth , vendorController.vendorweekOrders);
+
+//Order Report
+router.post('/vendor/orderReport',vendorAuth,vendorController.getOrderCvv);
+router.post('/vendor/downloadOrders',vendorAuth,vendorController.getOrderPdf);
+// product wise report
+router.post('/vendor/downloadProduct/:productId',vendorAuth,vendorController.productWiseOrder);
+router.post('/vendor/ProductReport/:productId',vendorAuth,vendorController.productWiseReport);
+
+
 
 // vendor Logout
 router.get('/vendor/logout',vendorController.vendorLogout);

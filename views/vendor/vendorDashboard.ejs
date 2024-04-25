@@ -157,7 +157,7 @@
                         <div class="col-xl-6">
                             <div class="card">
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                                    <h6 class="m-0 fw-bold">Category Orders</h6>
+                                    <h6 class="m-0 fw-bold">categorywise Orders</h6>
                                 </div>
                                 <!-- <div class="card-body">
                                     <canvas id="apex-GenderOverview"></canvas>
@@ -168,9 +168,9 @@
                             </div>
                         </div>
                         <div class="col-xl-6">
-                            <div class="card mb-3">
+                            <div class="card py-4 pb-4">
                                 <div class="card-header py-3 d-flex justify-content-between align-items-center bg-transparent border-bottom-0">
-                                    <h6 class="m-0 fw-bold">Shopping Status</h6>
+                                    <h6 class="m-0 fw-bold">Weekly Shopping Status</h6>
                                 </div>
                                 <div class="card-body">
                                     <div class="ac-line-transparent" id="vendorsalebar"></div>
@@ -190,7 +190,7 @@
                     
                                 var options = {
                                     series: [{
-                                        name: 'Total Order price',
+                                        name: 'No Of Orders',
                                         data: totalPrices
                                     }],
                                     chart: {
@@ -261,6 +261,82 @@
                     
                         window.addEventListener('DOMContentLoaded', renderChart);
                     </script>
+
+                    <!-- Order Report -->
+
+                    <div class="col-lg-12 card my-3 mb-2"> 
+                        <h6 class="ms-2 mt-2 fw-bold">Order Report</h6>
+                        <form id="orderReportForm" action="#" method="post">
+                            <div class="card-body">
+                                <div class="row g-3 d-flex justify-content-center align-items-center">
+                                    <div class="col-md-6">
+                                        <label class="form-label">From</label>
+                                        <input id="startDate" name="startDate" type="date" class="form-control w-100">
+                                        <small id="startDateError" class="text-danger d-none"><b>Please enter a valid start date.</b></small>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label">To</label>
+                                        <input id="endDate" type="date" name="endDate" class="form-control w-100">
+                                        <small id="endDateError" class="text-danger d-none"><b>Please enter a valid end date.</b></small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row col-lg-12 d-flex">
+                                <div class="col-md-6 g-0 row d-flex justify-content-center">
+                                    <button id="getReportBtn" class="btn btn-primary mx-auto my-2 col-md-6" type="button">Get Report</button>
+                                </div>
+                                <div class="col-md-6 g-0 row d-flex justify-content-centera">
+                                    <button id="downloadPdfBtn" class="btn btn-primary mx-auto my-2 col-md-6" type="button">Download as Pdf</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <script>
+                        document.addEventListener("DOMContentLoaded", function() {
+                          const getReportBtn = document.getElementById("getReportBtn");
+                          const downloadPdfBtn = document.getElementById("downloadPdfBtn");
+                          const startDateInput = document.getElementById("startDate");
+                          const endDateInput = document.getElementById("endDate");
+                          const startDateError = document.getElementById("startDateError");
+                          const endDateError = document.getElementById("endDateError");
+                      
+                          getReportBtn.addEventListener("click", function(event) {
+                            event.preventDefault();
+                            if (validateForm()) {
+                              document.getElementById("orderReportForm").action = "/vendor/orderReport";
+                              document.getElementById("orderReportForm").submit();
+                            }
+                          });
+                      
+                          downloadPdfBtn.addEventListener("click", function(event) {
+                            event.preventDefault();
+                      
+                            if (validateForm()) {
+                              document.getElementById("orderReportForm").action = "/vendor/downloadOrders";
+                              document.getElementById("orderReportForm").submit();
+                            }
+                          });
+                      
+                          function validateForm() {
+                            let isValid = true;
+                            startDateError.classList.add("d-none");
+                            endDateError.classList.add("d-none");
+                      
+                            if (startDateInput.value === "") {
+                              startDateError.classList.remove("d-none");
+                              isValid = false;
+                            }
+                      
+                            if (endDateInput.value === "") {
+                              endDateError.classList.remove("d-none");
+                              isValid = false;
+                            }
+                      
+                            return isValid;
+                          }
+                        });
+                      </script>
+
                     <div class="row g-3 mb-3"> 
                         <div class="col-md-12">
                             <div class="card"> 
