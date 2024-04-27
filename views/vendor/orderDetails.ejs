@@ -240,100 +240,100 @@
                     </div> <!-- Row end  -->
                     <div class="row g-3 mb-3"> 
                         <div class="col-md-12 col-lg-12">
-                            <div class="d-flex col-12">
-                                <div class="card col-lg-8">
+                            <div class="col-lg-12 d-md-flex">
+                                <div class="card col-lg-8 me-2 mb-2">
                                     <h4 class="fw-bold m-3">Product Details</h4>
                                     <div class="card-body"> 
-                                        <div class="d-flex col-12 row">
+                                        <div class="d-md-flex col-lg-12 row">
                                             <div class="col-lg-5">
-                                                <img src="<%= product.images[0] %>" alt="Product Image" style="width:100%; height:100%;">
+                                                <img src="<%= product.images[0] %>" alt="Product Image" style="width:100%; height:80%;">
+                                                <p class="form-control-static fw-bold w-100 d-flex justify-content-center"><%= product.productName %></p>
                                             </div>
                                             <div class="col-lg-7">
                                                 <div class="row">
-                                                    <div class="col-lg-7 mt-3" style="border-right:1px solid grey;">
-                                                        <div class="mb-1 d-flex">
+                                                    <!-- <div class="col-lg-7 mt-3" style="border-right:1px solid grey;"> -->
+                                                        <!-- <div class="mb-1 d-flex">
                                                             <label class="form-label text-primary fw-bold">Product Name : </label>
                                                             <p class="form-control-static fw-bold"><%= product.productName %></p>
-                                                        </div>
-                                                        <div class="mb-1">
-                                                            <label class="form-label text-primary fw-bold">Description : </label>
-                                                            <p class="form-control-static fw-bold"><%= product.description %></p>
-                                                        </div>
-                                                        <div class="mb-1 d-flex">
-                                                            <label class="form-label text-primary fw-bold">Subcategory : </label>
-                                                            <p class="form-control-static fw-bold"><%= product.subCategory %></p>
-                                                        </div>
-                                                        <div class="mb-1 d-flex">
-                                                            <label class="form-label text-primary fw-bold">Category : </label>
-                                                            <p class="form-control-static fw-bold"><%= product.category %></p>
-                                                        </div>
-                                                        <div class="mb-1 d-flex">
-                                                            <label class="form-label text-primary fw-bold">Added On : </label>
-                                                            <p class="form-control-static fw-bold"><%= new Date(product.addedOn).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></p>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-4 mt-3 ms-2">
-                                                        <div class="mb-1 d-flex">
+                                                        </div> -->
+                                                        <div class=" d-flex">
                                                             <label class="form-label text-primary fw-bold">Price : </label>
                                                             <p class="form-control-static fw-bold"><%= product.price %></p>
                                                         </div>
-                                                        <div class="mb-1 d-flex">
+                                                        <div class=" d-flex">
                                                             <label class="form-label text-primary fw-bold">Brand : </label>
                                                             <p class="form-control-static fw-bold"><%= product.brand %></p>
                                                         </div>
-                                                        <div class="mb-1 d-flex">
+                                                        <div class=" d-flex">
+                                                            <label class="form-label text-primary fw-bold">Subcategory : </label>
+                                                            <p class="form-control-static fw-bold"><%= product.subCategory %></p>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <label class="form-label text-primary fw-bold">Category : </label>
+                                                            <p class="form-control-static fw-bold"><%= product.category %></p>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <label class="form-label text-primary fw-bold">Added On : </label>
+                                                            <p class="form-control-static fw-bold"><%= new Date(product.addedOn).toLocaleDateString('en-US', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) %></p>
+                                                        </div>
+                                                    <!-- </div> -->
+                                                    <!-- <div class="col-lg-4 mt-3 ms-2"> -->
+                                                        <div class="d-flex">
                                                             <label class="form-label text-primary fw-bold">Stock Quantity : </label>
                                                             <p class="form-control-static fw-bold"><%= product.stockQuantity %></p>
                                                         </div>
-                                                    </div>
+                                                        <div class="">
+                                                            <label class="form-label text-primary fw-bold">Description : </label>
+                                                            <p class="form-control-static fw-bold"><%= product.description %></p>
+                                                        </div>
+                                                    <!-- </div> -->
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card col-lg-4">
-                                    <h4 class="fw-bold m-3 d-flex justify-content-center">Delivery Address</h4>
+                                <div class="card col-lg-4 mb-2">
+                                    <h4 class="fw-bold m-2 d-flex justify-content-center">Delivery Address</h4>
                                     <div class="card-body"> 
-                                        <div class="d-flex col-12 row ">
+                                        <div class="d-flex col-12 row">
                                             <!-- <div class="col-lg-6"> -->
-                                                <div class="mb-1 d-flex">
+                                                <div class="d-flex">
                                                     <label class="form-label text-primary fw-bold">Name : </label>
                                                     <p class="form-control-static fw-bold"><%= order.shippingAddress.name %></p>
                                                 </div>
-                                                <div class="mb-1 d-flex">
+                                                <div class="d-flex">
                                                     <label class="form-label text-primary fw-bold">Phone : </label>
                                                     <p class="form-control-static fw-bold"><%= order.shippingAddress.phone %></p>
                                                 </div>
-                                                <div class="mb-1 d-flex">
+                                                <div class="d-flex">
                                                     <label class="form-label text-primary fw-bold">Pincode : </label>
                                                     <p class="form-control-static fw-bold"><%= order.shippingAddress.pincode %></p>
                                                 </div>
                                             <!-- </div>
                                             <div class="col-lg-6"> -->
                                                 <!-- <div class="col-lg-12 d-flex"> -->
-                                                <div class="mb-1 d-flex">
+                                                <div class="d-flex">
                                                     <label class="form-label text-primary fw-bold">Locality : </label>
                                                     <p class="form-control-static fw-bold"><%= order.shippingAddress.locality %></p>
                                                 </div>
-                                                <div class="mb-1 d-flex">
+                                                <div class="d-flex">
                                                     <label class="form-label text-primary fw-bold">Street : </label>
                                                     <p class="form-control-static fw-bold"><%= order.shippingAddress.street %></p>
                                                 </div>
                                                 <!-- </div>
                                                 <div class="col-lg-12 d-flex"> -->
-                                                <div class="mb-1 d-flex">
+                                                <div class="d-flex">
                                                     <label class="form-label text-primary fw-bold">City : </label>
                                                     <p class="form-control-static fw-bold"><%= order.shippingAddress.city %></p>
                                                 </div>
-                                                <div class="mb-1 d-flex">
+                                                <div class="d-flex">
                                                     <label class="form-label text-primary fw-bold">State : </label>
                                                     <p class="form-control-static fw-bold"><%= order.shippingAddress.state %></p>
                                                 </div>
                                                 <!-- </div> -->
                                             <!-- </div> -->
                                         </div>
-                                    </div>
-                                                                                                                                   
+                                    </div>                                                                                           
                                 </div>
                             </div>
                             <div class="card">
@@ -341,43 +341,51 @@
                                 <div class="card-body"> 
                                     <div class="d-flex col-12 row">
                                         <div class="col-lg-12">
+                                            <% const options = { hour: 'numeric', minute: '2-digit', month: 'long', day: 'numeric' }; %>
+
                                             <ul class="list-group">
-                                                <li class="col-lg-12 list-group-item d-flex justify-content-between align-items-center">
-                                                    <span class="status col">Order Placed</span>
-                                                    <span class="timestamp col">12:00 PM, April 1</span>
-                                                    <span class="additional-info col">Order ID: 12345</span>
-                                                </li>
-                                                <li class="col-lg-12 list-group-item d-flex justify-content-between align-items-center">
-                                                    <span class="status col">Order Confirmed</span>
-                                                    <span class="timestamp col">12:30 PM, April 1</span>
-                                                    <span class="additional-info col">Payment Method: Credit Card</span>
-                                                </li>
-                                                <li class="col-lg-12 list-group-item d-flex col-lg-12justify-content-between align-items-center">
-                                                    <span class="status col">Out for Delivery</span>
-                                                    <span class="timestamp col">1:00 PM, April 2</span>
-                                                    <span class="additional-info col">Vendor Name: Hamim</span>
-                                                </li>
-                                                <li class="col-lg-12 list-group-item d-flex justify-content-between align-items-center">
-                                                    <span class="status col">Shipped</span>
-                                                    <span class="timestamp col">9:00 AM, April 3</span>
-                                                    <span class="additional-info col">Estimated Delivery Date: April 5</span>
-                                                </li>
-                                                <li class="col-lg-12 list-group-item d-flex justify-content-between align-items-center">
-                                                    <span class="status col" style="color: green;">Delivered</span>
-                                                    <span class="timestamp col">10:00 AM, April 4</span>
-                                                    <span class="additional-info col">Recipient: John Doe</span>
-                                                </li>
-                                                <li class="col-lg-12 list-group-item d-flex justify-content-between align-items-center">
-                                                    <span class="status col" style="color: red;">Cancelled</span>
-                                                    <span class="timestamp col">11:00 AM, April 5</span>
-                                                    <span class="additional-info col">Reason: Customer Request</span>
-                                                </li>
-                                            </ul>
+                                                <% const filteredStatuses = orderProduct[0].statusHistory.filter(status => status.vendorChanged); %>
+                                              
+                                                <% if (filteredStatuses.length > 0) { %>
+                                                  <% const sortedStatuses = filteredStatuses.sort((statusA, statusB) => {
+                                                    const order = ['Pending', 'Shipped', 'Out Of Delivery', 'Delivered', 'Requested for Cancellation', 'Cancelled'];
+                                                    return order.indexOf(statusA.status) - order.indexOf(statusB.status);
+                                                  }); %>
+                                              
+                                                  <% sortedStatuses.forEach(status => { %>
+                                                    <li class="col-lg-12 list-group-item d-flex justify-content-between align-items-center">
+                                                      <% if (status.status === 'Pending') { %>
+                                                        <span class="status col fw-bold text-primary">Order Placed</span>
+                                                      <% } else if (status.status === 'Shipped') { %>
+                                                        <span class="status col fw-bold text-warning">Order Confirmed</span>
+                                                      <% } else if (status.status === 'Out Of Delivery') { %>
+                                                        <span class="status col fw-bold text-muted">Out for Delivery</span>
+                                                      <% } else if (status.status === 'Delivered') { %>
+                                                        <span class="status col fw-bold text-success">Delivered</span>
+                                                      <% } else if (status.status === 'Requested for Cancellation') { %>
+                                                        <span class="status col fw-bold" style="color: chocolate;">Requested for Cancellation</span>
+                                                      <% } else if (status.status === 'Cancelled') { %>
+                                                        <span class="status col fw-bold text-danger">Cancelled</span>
+                                                      <% } %>
+                                                      <span class="timestamp col  fw-bold"><%= new Date(status.timestamp).toLocaleString('en-US', options) %></span>
+                                                      <% if (status.status === 'Pending') { %>
+                                                        <span class="additional-info col fw-bold">OrderId :#<%= order._id %></span>
+                                                      <% }else if (status.status === 'Shipped') { %>
+                                                        <span class="additional-info col fw-bold">Payment Method: Credit Card</span>
+                                                      <% } else if (status.status === 'Out Of Delivery') { %>
+                                                        <span class="additional-info col fw-bold">Vendor Name: Hamim</span>
+                                                      <% } else if (status.status === 'Delivered') { %>
+                                                        <span class="additional-info col fw-bold">Recipient: John Doe</span>
+                                                      <% } else if ((status.status === 'Requested for Cancellation') || (status.status === 'Cancelled')) { %>
+                                                        <span class="additional-info col fw-bold">Recipient: John Doe</span>
+                                                      <% } %>
+                                                    </li>
+                                                  <% }); %>
+                                                <% } %>
+                                              </ul>
                                         </div>
                                     </div>
                                 </div>
-                                
-                                
                             </div>
                         </div>
                     </div> <!-- Row end  -->

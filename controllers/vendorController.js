@@ -306,7 +306,6 @@ let getOrderList = async (req, res) => {
       return res.status(404).json({ message: 'Vendor not found' });
     }
     let orders= await helper.orderOfVendor(req.user.id);
-    console.log("orders :",orders)
     res.render('vendor/orderList', { orders: orders.reverse()});
   } catch (err) {
     console.error(err);
@@ -317,10 +316,12 @@ let getOrderDetails = async(req,res) => {
   let {  productId, orderId } = req.params;
   try {
     let order = await Order.findById(orderId);
-    let product = await productHelper.getProductDetails(productId)
-    console.log("product :",product)
-    console.log("order :",order)
-    res.render('vendor/orderDetails',{order,product}) 
+    let orderProduct = order.products.filter(product => product._id.toString() === productId);
+    console.log("orderProduct : ",orderProduct);
+    console.log("statusHistory : ",orderProduct[0].statusHistory);
+    let product = await productHelper.getProductDetails(productId);
+    res.render('vendor/orderDetails',{order,product,orderProduct}) ;
+
   } catch (error) {
     res.status(500).send("Can't get Order Details")
   }
@@ -334,6 +335,26 @@ let updateStatus = async (req, res) => {
     let product = order.products.find(prod => prod._id.toString() === productId.toString());
     if (product) {
       product.status = status;
+      let existingHistory = product.statusHistory.find(history => history.status === status);
+      if (!existingHistory) {
+        let newHistory = {
+          status,
+          isActive : true,
+          timestamp : Date.now(),
+          vendorChanged : true,
+        };
+        product.statusHistory.push(newHistory);
+      }
+      product.statusHistory.forEach(history => {
+        if (history.status === status) {
+          history.isActive = true;
+          history.timestamp = Date.now();
+          history.vendorChanged = true;
+        } else {
+          history.isActive = false;
+        }
+      });
+      console.log("product in orderr",product)
       await order.save();
       let user = await User.findById(order.userId)
       let productDetails = await productHelper.getProductDetails(product._id);

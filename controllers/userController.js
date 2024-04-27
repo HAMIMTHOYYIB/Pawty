@@ -602,11 +602,20 @@ let submitCheckout = async (req, res) => {
           break;
         }
       }
+      let statusHistory = [
+        { status: 'Pending', isActive: true, timestamp: Date.now(), vendorChanged: true },
+        { status: 'Shipped', isActive: false, timestamp: Date.now(), vendorChanged: false },
+        { status: 'Out Of Delivery', isActive: false, timestamp: Date.now(), vendorChanged: false },
+        { status: 'Delivered', isActive: false, timestamp: Date.now(), vendorChanged: false },
+        { status: 'Requested for Cancellation', isActive: false, timestamp: Date.now(), vendorChanged: false },
+        { status: 'Cancelled', isActive: false, timestamp: Date.now(), vendorChanged: false }
+      ];
       if(razor!== false){
         products.push({
           _id: prod._id,
           quantity: prod.quantity,
           vendorId: vendorId,
+          statusHistory: statusHistory,
           razorpayId:razor
         });
       }else{
@@ -614,10 +623,10 @@ let submitCheckout = async (req, res) => {
           _id: prod._id,
           quantity: prod.quantity,
           vendorId: vendorId,
+          statusHistory: statusHistory
         });
       }
     }
-
     // Save the updated products in each vendor
     for (const vendor of vendors) {
       await vendor.save();

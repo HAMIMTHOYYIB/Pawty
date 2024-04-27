@@ -15,6 +15,25 @@
 
     <!-- project css file  -->
     <link rel="stylesheet" href="/assets/css/ebazar.style.min.css">
+    <style>
+        .roundButton{
+            padding:8px 10px;
+            border-radius:10px;
+            border:0;
+            width:120px;
+            font-weight: bolder;
+        }
+        .btn-prim {
+            background-color:#326f97;
+            border-color:#132b3c;
+        }
+
+        .btn-secc {
+            background-color:#f0b81f;;
+            border-color:#c3a34a;;
+        }
+
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 </head>
@@ -246,10 +265,12 @@
                                             <tr>
                                                 <th> </th>
                                                 <th class="">Item</th>
-                                                <th>Customer Name</th>
+                                                <!-- <th>Customer Name</th> -->
                                                 <th>Payment Info</th>
                                                 <th>Action</th>
                                                 <th>Order Status</th>
+                                                <th>Update Status</th>
+                                                <!-- <th>Cancel</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -263,20 +284,53 @@
                                                         <span><%= order.products.productName %></span>
                                                     </a>
                                                 </td>
-                                                <td><%= order.userName %></td>
+                                                <!-- <td><%= order.userName %></td> -->
                                                 <td><%= order.paymentMethod %></td>
                                                 <td><a href="/vendor/orderDetails/<%= order._id %>/<%= order.products._id%>" class="bg-dark text-light px-3 py-2" style="border-radius:8px;" >view</a></td>
                                                 <td>
-                                                    <form id="statusForm-<%= order._id %>-<%= index %>">
-                                                        <select name="status" onchange="updateOrderStatus(event, '<%= order._id %>', '<%= order.products._id %>', '<%= index %>')">
-                                                            <option value="Pending" <%= order.products.status === 'Pending' ? 'selected' : '' %>>Pending</option>
-                                                            <option value="Delivered" <%= order.products.status === 'Delivered' ? 'selected' : '' %>>Delivered</option>
-                                                            <option value="Cancelled" <%= order.products.status === 'Cancelled' ? 'selected' : '' %>>Cancelled</option>
-                                                            <option value="Out Of Delivery" <%= order.products.status === 'Out Of Delivery' ? 'selected' : '' %>>Out Of Delivery</option>
-                                                            <option value="Requested for Cancellation" <%= order.products.status === 'Requested for Cancellation' ? 'selected' : '' %>>Requested for Cancellation</option>
-                                                            <option value="Shipped" <%= order.products.status === 'Shipped' ? 'selected' : '' %>>Shipped</option>
-                                                        </select>
-                                                    </form>
+                                                    <p class="<%= order.products.status === 'Pending' ? '' : 'd-none' %> fw-bold text-primary">Order Placed</p>
+                                                    <p class="<%= order.products.status === 'Shipped' ? '' : 'd-none' %> fw-bold text-warning">Order Confirmed</p>
+                                                    <p class="<%= order.products.status === 'Out Of Delivery' ? '' : 'd-none' %> fw-bold text-warning">Shipped</p>
+                                                    <p class="<%= order.products.status === 'Delivered' ? '' : 'd-none' %> fw-bold text-success">Delivered</p>
+                                                    <p class="<%= order.products.status === 'Cancelled' ? '' : 'd-none' %> fw-bold text-danger">Cancelled</p>
+                                                    <p class="<%= order.products.status === 'Requested for Cancellation' ? '' : 'd-none' %> fw-bold text-muted">Requested Cancellation</p>
+                                                </td>
+                                                <td>
+                                                    <button class="btn-secc roundButton confirmButton <%= order.products.status !== 'Pending' ? 'd-none' : '' %>"
+                                                        data-status="Shipped"
+                                                        data-order-id="<%= order._id %>"
+                                                        data-product-id="<%= order.products._id %>"
+                                                        data-index="<%= index %>">
+                                                        Confirm Order
+                                                    </button>
+                                                    <button class="btn-secc sentOrderButton roundButton <%= order.products.status !== 'Shipped' ? 'd-none' : '' %>"
+                                                        data-status="Out Of Delivery"
+                                                        data-order-id="<%= order._id %>"
+                                                        data-product-id="<%= order.products._id %>"
+                                                        data-index="<%= index %>">
+                                                        Sent Order
+                                                    </button>
+                                                    <button class="btn-secc roundButton deliverButton <%= order.products.status !== 'Out Of Delivery' ? 'd-none' : '' %>"
+                                                        data-status="Delivered"
+                                                        data-order-id="<%= order._id %>"
+                                                        data-product-id="<%= order.products._id %>"
+                                                        data-index="<%= index %>">
+                                                        Deliver Order
+                                                    </button>
+                                                    <button class="btn-secc roundButton cancelButton <%= order.products.status !== 'Requested for Cancellation' ? 'd-none' : '' %>"
+                                                        data-status="Cancelled"
+                                                        data-order-id="<%= order._id %>"
+                                                        data-product-id="<%= order.products._id %>"
+                                                        data-index="<%= index %>">
+                                                        Cancel Order
+                                                    </button>                                                    
+                                                    <% if(order.products.status === 'Delivered'){%>
+                                                        <p class="fw-bold text-muted">Delivered</p>
+                                                    <%}%>
+                                                    <% if(order.products.status === 'Cancelled'){%>
+                                                        <p class="fw-bold text-muted">Cancelled</p>
+                                                    <%}%>
+                                                    <!-- ✕ ✓ -->
                                                 </td>
                                             </tr>
 
@@ -326,17 +380,64 @@
                     </div> <!-- Row end  -->
                 </div>
             </div>
-
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
             <script>
-                function updateOrderStatus(event, orderId, productId, index) {
-                    event.preventDefault(); // Prevent default form submission
-                    const form = document.querySelector(`#statusForm-${orderId}-${index}`);
-                    const status = form.querySelector('select[name="status"]').value;
+                const confirmButtons = document.querySelectorAll('.confirmButton');
+                const sentOrderButtons = document.querySelectorAll('.sentOrderButton');
+                const deliverButtons = document.querySelectorAll('.deliverButton');
+                const cancelButtons = document.querySelectorAll('.cancelButton');
+
+                confirmButtons.forEach(button => {
+                    button.addEventListener('click', handleClick);
+                });
+
+                sentOrderButtons.forEach(button => {
+                    button.addEventListener('click', handleClick);
+                });
+
+                deliverButtons.forEach(button => {
+                    button.addEventListener('click', handleClick);
+                });
+
+                cancelButtons.forEach(button => {
+                    button.addEventListener('click', handleClick);
+                });
+
+
+                function handleClick(event) {
+                    const status = this.dataset.status;
+                    const orderId = this.dataset.orderId;
+                    const productId = this.dataset.productId;
+                    const index = this.dataset.index;
+
+                    const buttonText = this.innerText.trim(); // Get the text of the button
+                    const actionText = buttonText.substring(0, buttonText.indexOf(' '));
+
+                    Swal.fire({
+                        title: `Are you sure you want to ${actionText.toLowerCase()} this order?`,
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                        cancelButtonText: 'No',
+                        customClass: {
+                            confirmButton: 'btn btn-prim',
+                            cancelButton: 'btn btn-secc'
+                        }
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            updateOrderStatus(event, orderId, productId, index, status);
+                        }
+                    });
+                }
+
+                function updateOrderStatus(event, orderId, productId, index, status) {
+                    event.preventDefault();
                     console.log("status: ", status);
                     axios.post(`/vendor/orderStatus/${orderId}/${productId}`, { status })
                         .then(response => {
                             // Handle success response, if needed
                             console.log(response.data);
+                            window.location.href('')
                         })
                         .catch(error => {
                             // Handle error response, if needed
