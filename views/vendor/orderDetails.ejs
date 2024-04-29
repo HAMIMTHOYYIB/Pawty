@@ -16,6 +16,7 @@
     <!-- project css file  -->
     <link rel="stylesheet" href="/assets/css/ebazar.style.min.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    
 
 </head>
 <body>
@@ -279,8 +280,8 @@
                                                     <!-- </div> -->
                                                     <!-- <div class="col-lg-4 mt-3 ms-2"> -->
                                                         <div class="d-flex">
-                                                            <label class="form-label text-primary fw-bold">Stock Quantity : </label>
-                                                            <p class="form-control-static fw-bold"><%= product.stockQuantity %></p>
+                                                            <label class="form-label text-primary fw-bold"> Quantity : </label>
+                                                            <p class="form-control-static fw-bold"><%= orderProduct[0].quantity %></p>
                                                         </div>
                                                         <div class="">
                                                             <label class="form-label text-primary fw-bold">Description : </label>
@@ -333,9 +334,56 @@
                                                 <!-- </div> -->
                                             <!-- </div> -->
                                         </div>
-                                    </div>                                                                                           
+                                    </div>          
+                                    <button id="cancelButton" style="border-radius:10px; width: fit-content; background-color:rgb(189, 4, 4); margin:10px auto;" class="text-light px-3 py-1 border-0 <%= orderProduct[0].status === 'Cancelled'||'Delivered' ? 'd-none' : '' %>"
+                                        data-order-id="<%= order._id %>"
+                                        data-product-id="<%= order.products._id %>">
+                                        Cancel Order
+                                    </button>
                                 </div>
                             </div>
+                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+                            <script>
+                                const cancelButton = document.querySelector('#cancelButton');
+                                cancelButton.addEventListener('click', handleClick);
+
+                            function handleClick(event) {
+                                const status = "Cancelled";
+                                const orderId = this.dataset.orderId;
+                                const productId = this.dataset.productId;
+                                const index = this.dataset.index;
+
+                                Swal.fire({
+                                    title: `Are you sure you want to cancel this order?`,
+                                    icon: 'question',
+                                    showCancelButton: true,
+                                    confirmButtonText: 'Yes',
+                                    cancelButtonText: 'No',
+                                    customClass: {
+                                        confirmButton: 'btn btn-prim',
+                                        cancelButton: 'btn btn-secc'
+                                    }
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        updateOrderStatus(event, orderId, productId, status);
+                                    }
+                                });
+                            }
+                            function updateOrderStatus(event, orderId, productId, status) {
+                                event.preventDefault();
+                                axios.post(`/vendor/orderStatus/${orderId}/${productId}`, { status })
+                                    .then(response => {
+                                        // Handle success response
+                                        console.log(response.data);
+                                        // document.getElementById('cancelButton').classList.add('d-none');
+                                        window.location.reload();
+                                    })
+                                    .catch(error => {
+                                        // Handle error response
+                                        console.error(error);
+                                    });
+                            }
+                            </script>
                             <div class="card">
                                 <h4 class="fw-bold m-3">Status History</h4>
                                 <div class="card-body"> 
@@ -371,11 +419,11 @@
                                                       <% if (status.status === 'Pending') { %>
                                                         <span class="additional-info col fw-bold">OrderId :#<%= order._id %></span>
                                                       <% }else if (status.status === 'Shipped') { %>
-                                                        <span class="additional-info col fw-bold">Payment Method: Credit Card</span>
+                                                        <span class="additional-info col fw-bold">Payment Method:<%= order.paymentMethod %></span>
                                                       <% } else if (status.status === 'Out Of Delivery') { %>
-                                                        <span class="additional-info col fw-bold">Vendor Name: Hamim</span>
+                                                        <span class="additional-info col fw-bold">VendorId:#<%= orderProduct[0].vendorId %></span>
                                                       <% } else if (status.status === 'Delivered') { %>
-                                                        <span class="additional-info col fw-bold">Recipient: John Doe</span>
+                                                        <span class="additional-info col fw-bold">Recipient Id : <%= order.userId %></span>
                                                       <% } else if ((status.status === 'Requested for Cancellation') || (status.status === 'Cancelled')) { %>
                                                         <span class="additional-info col fw-bold">Recipient: John Doe</span>
                                                       <% } %>

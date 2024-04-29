@@ -4615,6 +4615,23 @@ table p {
   font-weight: 600;
 }
 
+.btn-prim {
+    background-color:#326f97;
+    border-color:#132b3c;
+}
+
+.btn-secc {
+    background-color:#f0b81f;;
+    border-color:#c3a34a;;
+}
+.roundButton{
+  padding:8px 10px;
+  border-radius:10px;
+  border:0;
+  width:120px;
+  font-weight: bolder;
+}
+
 .btn-reset{
   display: block;
   text-align: center;

@@ -36,6 +36,14 @@ router.get('/editSubCategory/:id',adminAuthMiddleware,adminController.editSubCat
 router.post('/editSubCategory/:id',adminController.submitEditSubCategory);
 router.post('/deleteSubCategory/:id',adminController.deleteSubCategory);
 
+// Coupon Management
+router.get('/admin/addCoupon',adminAuthMiddleware,adminController.addCoupon)
+router.get('/admin/couponList',adminAuthMiddleware,adminController.listCoupon)
+router.post('/admin/addCoupon',adminAuthMiddleware,adminController.submitAddCoupon)
+router.get('/admin/editCoupon/:couponId',adminAuthMiddleware,adminController.editCoupon)
+router.post('/admin/editCoupon/:couponId',adminAuthMiddleware,adminController.submitEditCoupon)
+router.post('/admin/removeCoupon',adminAuthMiddleware,adminController.deleteCoupon)
+
 
 router.get('/admin-ProductView',adminAuthMiddleware,adminController.productList);
 router.get('/admin-productDetails/:productId',adminAuthMiddleware,adminController.productDetails);

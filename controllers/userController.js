@@ -446,10 +446,12 @@ let checkCoupon = async (req, res) => {
   let user = await User.findById(req.user.id)
   const { couponCode } = req.body;
   try {
-    const VendorCoupons = await Vendor.find().select("coupons");
-    let coupons = VendorCoupons.map(val => val.coupons)
-    let flatcoupon = coupons.flat(1);
-    let coupon = flatcoupon.filter(val => val.couponCode == couponCode)
+    let admin = await Admin.findOne();
+    const coupons = admin.coupons;
+    // console.log("Admin coupons :",coupons)
+    // let coupons = AdminCoupons.map(val => val.coupons)
+    // let flatcoupon = coupons.flat(1);
+    let coupon = coupons.filter(val => val.couponCode == couponCode)
     if (coupon[0] && coupon[0].status === 'Active') {
       let currentDate = new Date();
       let endDate = new Date(coupon[0].endDate);
@@ -464,7 +466,9 @@ let checkCoupon = async (req, res) => {
           value = coupon[0].value
         }
         user.cart.discount = value
-        await user.save()
+        coupon[0].limit -= 1;
+        await user.save();
+        await admin.save();
         res.json({ valid: true, value });
       } else {
         res.json({ valid: false, message: 'Coupon has expired' });

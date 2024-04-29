@@ -306,6 +306,79 @@ let vendorVerify = async (req,res) => {
     }
 }
 
+// Coupon Management
+let addCoupon = (req,res) => {
+    res.render('admin/coupon-add')
+}
+let listCoupon = async (req,res) => {
+    let admin = await Admin.findOne();
+    if(!admin){
+      return res.status(404).send('Admin Not Found');
+    }
+    res.render('admin/coupons-list',{admin});
+}
+let submitAddCoupon = async (req,res) => {
+    let {status,startDate,endDate,couponCode,category,subCategory,limit,type,value} = req.body;
+    console.log("req.coupon :",req.body);
+    let admin = await Admin.findOne();
+    if(!admin){
+      return res.status(404).send('Admin Not found')
+    }
+    if(!admin.coupons){
+      admin.coupons = [];
+    }
+    if(startDate === ""){
+      startDate = undefined;
+    };
+    let discountProducts = {category,subCategory};
+    let newCoupon = {status,startDate,endDate,couponCode,limit,type,value,discountProducts}
+    admin.coupons.push(newCoupon);
+    await admin.save();
+    console.log("coupon added succesfully");
+    res.redirect('/admin/couponList')
+}
+let editCoupon = async (req,res) => {
+    let admin = await Admin.findOne();
+    if(!admin){
+      return res.status(404).send("admin Not Found")
+    }
+    let coupon = admin.coupons.filter(coup => coup._id.toString() === req.params.couponId)
+    if(!coupon){
+      return res.status(404).send("Coupon Not Found");
+    }
+    res.render('admin/coupon-edit',{coupon:coupon[0]})
+}
+let submitEditCoupon = async (req, res) => {
+    let couponId = req.params.couponId;
+    let admin = await Admin.findOne({_id:req.user.id});
+    if(!admin){
+      return res.status(404).send('Admin Not found');
+    }
+  
+    let {status, startDate, endDate, couponCode, category, subCategory, limit, type, value} = req.body;
+    let updatedCoup = {status, startDate, endDate, couponCode, category, subCategory, limit, type, value};
+  
+    let coupon = admin.coupons.find(val => val._id.toString() === couponId);
+    if (!coupon) {
+      return res.status(404).send('Coupon Not found');
+    }
+  
+    // Update the coupon object with the values from updatedCoup
+    Object.assign(coupon, updatedCoup);
+  
+    // Save the updated admin object
+    await admin.save();
+  
+    console.log("Updated coupon:", coupon);
+    res.redirect('/admin/couponList');
+};
+let deleteCoupon = async (req,res) => {
+    let {couponId} = req.body;
+    let admin = await Admin.findById(req.user.id);
+    admin.coupons = admin.coupons.filter(coup => coup._id.toString() !== couponId)
+    await admin.save();
+    res.json({message:"coupon removed succesfully"})
+}
 
 
 let adminLogout = (req, res) => {
@@ -320,12 +393,12 @@ let adminLogout = (req, res) => {
     }
 };
 
+//admin side listing
 let productList = async (req,res) =>{
     let products = await Vendor.find().populate('products').select('vendorName products');
     res.render('admin/product-grid', {products});
     // console.log("products : ",products);
 }
-
 let productDetails = async (req, res) => {
     let productId = req.params.productId;
     try {
@@ -348,13 +421,6 @@ let productDetails = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
-
-// let productList = async (req,res) => {
-//     let products =  await Vendor.find().select("products");
-//     console.log("products :",products);
-//     res.render('users/shop-org',{products})
-// };
-
 let orderList = async (req,res) => {
     try {
     
@@ -395,6 +461,7 @@ let orderList = async (req,res) => {
       }
 }
 
+// Banner Management
 let updateBanners = async (req,res) => {
     const admin = await Admin.findOne();
     res.render('admin/banners',{admin});
@@ -879,6 +946,13 @@ module.exports = {
     changeMainBanner,
     changeOfferBanner,
     changeSingleBanner,
+
+    addCoupon,
+    listCoupon,
+    submitAddCoupon,
+    editCoupon,
+    submitEditCoupon,
+    deleteCoupon,
 
     adminLogout,
     

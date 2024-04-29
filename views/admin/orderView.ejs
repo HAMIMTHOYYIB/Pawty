@@ -291,7 +291,7 @@
                                             <% orders.forEach(order => { %>
                                             <tr>
                                                 <td><a href="order-details.html"><strong><%= ++count %></strong></a></td>
-                                                <td><img src="<%= order.products.images[0] %>" class="avatar lg rounded me-2" alt="profile-image"><span> Oculus VR </span></td>
+                                                <td><img src="<%= order.products.images[0] %>" class="avatar lg rounded me-2" alt="profile-image"><span><%= order.products.productName %></span></td>
                                                 <td><%= order.userName %></td>
                                                 <td><%= order.paymentMethod %></td>
                                                 <td>₹ <%= order.products.price %></td>

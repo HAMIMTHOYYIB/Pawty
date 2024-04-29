@@ -1,46 +1,24 @@
 <!doctype html>
 <html class="no-js" lang="en" dir="ltr">
 
-<!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/order-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Feb 2024 11:51:11 GMT -->
+<!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/coupons-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Feb 2024 11:51:13 GMT -->
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=Edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Vendor : Orders List</title>
+    <title>::eBazar:: Coupons List </title>
     <link rel="icon" href="favicon.ico" type="image/x-icon"> <!-- Favicon-->
 
     <!-- plugin css file  -->
     <link rel="stylesheet" href="/assets/plugin/datatables/responsive.dataTables.min.css">
     <link rel="stylesheet" href="/assets/plugin/datatables/dataTables.bootstrap5.min.css">
-
+    
     <!-- project css file  -->
     <link rel="stylesheet" href="/assets/css/ebazar.style.min.css">
-
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <style>
-                
-        .btn-prim {
-            background-color:#326f97;
-            border-color:#132b3c;
-        }
-
-        .btn-secc {
-            background-color:#f0b81f;;
-            border-color:#c3a34a;;
-        }
-        .roundButton{
-        padding:8px 10px;
-        border-radius:10px;
-        border:0;
-        width:120px;
-        font-weight: bolder;
-        }
-    </style>
-
 </head>
 <body>
-    <div id="ebazar-layout" class="theme-blue">                          
-        
+    <div id="ebazar-layout" class="theme-blue">
+
         <!-- sidebar -->
         <div class="sidebar px-4 py-4 py-md-4 me-0">
             <div class="d-flex flex-column h-100">
@@ -56,11 +34,11 @@
                     <li><a class="m-link" href="/vendor/product-list"><i class="icofont-calculator-alt-1 fs-5"></i> <span>Products</span></a></li>
                     <li><a class="m-link" href="/vendor/add-product"><i class="icofont-plus-circle fs-5"></i> <span>Add Products</span></a></li>
                     <li class="">
-                        <a class="m-link active" href="/vendor/orderList">
+                        <a class="m-link" href="/vendor/orderList">
                         <i class="icofont-notepad fs-5"></i> <span>Orders</span></a>
                     </li>
                     <li class="">
-                        <a class="m-link" href="/vendor/couponList">
+                        <a class="m-link  active" href="/vendor/couponList">
                         <i class="icofont-sale-discount fs-5"></i> <span>Coupons</span></a>
                     </li>
                     <li class="">
@@ -82,7 +60,7 @@
             <div class="header">
                 <nav class="navbar py-4">
                     <div class="container-xxl">
-        
+
                         <!-- header rightbar icon -->
                         <div class="h-right d-flex align-items-center mr-5 mr-lg-0 order-1">
                             <div class="d-flex">
@@ -228,12 +206,12 @@
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#Settingmodal"><i class="icofont-gear-alt fs-5"></i></a>
                             </div>
                         </div>
-        
+
                         <!-- menu toggler -->
                         <button class="navbar-toggler p-0 border-0 menu-toggle order-3" type="button" data-bs-toggle="collapse" data-bs-target="#mainHeader">
                             <span class="fa fa-bars"></span>
                         </button>
-        
+
                         <!-- main menu Search-->
                         <div class="order-0 col-lg-4 col-md-4 col-sm-12 col-12 mb-3 mb-md-0 ">
                             <div class="input-group flex-nowrap input-group-lg">
@@ -242,260 +220,98 @@
                                 
                             </div>
                         </div>
-        
+
                     </div>
                 </nav>
             </div>
 
-            <!-- Body: Body -->
-            <div class="body d-flex py-3">  
-                <div class="container-xxl"> 
-                    <div class="row align-items-center"> 
-                        <div class="border-0 mb-4"> 
+            <!-- Body: Body -->       
+            <div class="body d-flex py-lg-3 py-md-2">
+                <div class="container-xxl">
+                    <div class="row align-items-center">
+                        <div class="border-0 mb-4">
                             <div class="card-header py-3 no-bg bg-transparent d-flex align-items-center px-0 justify-content-between border-bottom flex-wrap">
-                                <h3 class="fw-bold mb-0">Orders List</h3>
+                                <h3 class="fw-bold mb-0">Coupons</h3>
+                                <div class="col-auto d-flex w-sm-100">
+                                    <a href="/admin/addCoupon" class="btn btn-primary btn-set-task w-sm-100"><i class="icofont-plus-circle me-2 fs-6"></i>Add Coupons</a>
+                                </div>
                             </div>
                         </div>
                     </div> <!-- Row end  -->
-                    <div class="row g-3 mb-3"> 
-                        <div class="col-md-12 col-lg-12">
-                            <div class="card"> 
-                                <div class="card-body"> 
-                                    <table id="myDataTable" class="table table-hover align-middle mb-0" style="width: 100%;">  
+                    <div class="row clearfix g-0">
+                    <div class="col-sm-12">
+                            <div class="card mb-3">
+                                <div class="card-body">
+                                    <table id="myProjectTable" class="table table-hover align-middle mb-0" style="width:100%">
                                         <thead>
                                             <tr>
-                                                <th> </th>
-                                                <th class="">Item</th>
-                                                <!-- <th>Customer Name</th> -->
-                                                <th>Payment Info</th>
-                                                <th>Action</th>
-                                                <th>Order Status</th>
-                                                <th>Update Status</th>
-                                                <!-- <th>Cancel</th> -->
+                                                <th>Coupons Code</th>
+                                                <!-- <th>Type</th>  -->
+                                                <th>Discount</th>
+                                                <th>Start Date</th>
+                                                <th>End Date</th> 
+                                                <th>Status</th> 
+                                                <!-- <th>Discount Country</th>
+                                                <th>Discount Product</th> -->
+                                                <th>Actions</th>  
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <% let count = 0; %>
-                                            <% orders.forEach((order, index) => { %>
-                                            <tr>
-                                                <td><a href="/vendor/orderDetails/<%= order._id %>/<%= order.products._id%>"><strong><%= ++count %></strong></a></td>
-                                                <td class="">
-                                                    <a href="#" data-bs-toggle="modal" data-bs-target="#orderModal-<%= index %>">
-                                                        <img src="<%= order.products.images[0] %>" class="avatar lg rounded me-2" alt="profile-im age">
-                                                        <span><%= order.products.productName %></span>
-                                                    </a>
-                                                </td>
-                                                <!-- <td><%= order.userName %></td> -->
-                                                <td><%= order.paymentMethod %></td>
-                                                <td><a href="/vendor/orderDetails/<%= order._id %>/<%= order.products._id%>" class="bg-dark text-light px-3 py-2" style="border-radius:8px;" >view</a></td>
-                                                <td>
-                                                    <p class="<%= order.products.status === 'Pending' ? '' : 'd-none' %> fw-bold text-primary">Order Placed</p>
-                                                    <p class="<%= order.products.status === 'Shipped' ? '' : 'd-none' %> fw-bold text-warning">Order Confirmed</p>
-                                                    <p class="<%= order.products.status === 'Out Of Delivery' ? '' : 'd-none' %> fw-bold text-warning">Shipped</p>
-                                                    <p class="<%= order.products.status === 'Delivered' ? '' : 'd-none' %> fw-bold text-success">Delivered</p>
-                                                    <p class="<%= order.products.status === 'Cancelled' ? '' : 'd-none' %> fw-bold text-danger">Cancelled</p>
-                                                    <p class="<%= order.products.status === 'Requested for Cancellation' ? '' : 'd-none' %> fw-bold text-muted">Requested Cancellation</p>
-                                                </td>
-                                                <td>
-                                                    <button class="btn-secc roundButton confirmButton <%= order.products.status !== 'Pending' ? 'd-none' : '' %>"
-                                                        data-status="Shipped"
-                                                        data-order-id="<%= order._id %>"
-                                                        data-product-id="<%= order.products._id %>"
-                                                        data-index="<%= index %>">
-                                                        Confirm Order
-                                                    </button>
-                                                    <button class="btn-secc sentOrderButton roundButton <%= order.products.status !== 'Shipped' ? 'd-none' : '' %>"
-                                                        data-status="Out Of Delivery"
-                                                        data-order-id="<%= order._id %>"
-                                                        data-product-id="<%= order.products._id %>"
-                                                        data-index="<%= index %>">
-                                                        ship Order
-                                                    </button>
-                                                    <button class="btn-secc roundButton deliverButton <%= order.products.status !== 'Out Of Delivery' ? 'd-none' : '' %>"
-                                                        data-status="Delivered"
-                                                        data-order-id="<%= order._id %>"
-                                                        data-product-id="<%= order.products._id %>"
-                                                        data-index="<%= index %>">
-                                                        Deliver Order
-                                                    </button>
-                                                    <button class="btn-secc roundButton cancelButton <%= order.products.status !== 'Requested for Cancellation' ? 'd-none' : '' %>"
-                                                        data-status="Cancelled"
-                                                        data-order-id="<%= order._id %>"
-                                                        data-product-id="<%= order.products._id %>"
-                                                        data-index="<%= index %>">
-                                                        Cancel Order
-                                                    </button>                                                    
-                                                    <% if(order.products.status === 'Delivered'){%>
-                                                        <p class="fw-bold text-muted">Delivered</p>
-                                                    <%}%>
-                                                    <% if(order.products.status === 'Cancelled'){%>
-                                                        <p class="fw-bold text-muted">Cancelled</p>
-                                                    <%}%>
-                                                    <!-- ✕ ✓ -->
-                                                </td> 
-                                            </tr>
-
-                                            <!-- Modal -->
-                                            <div class="modal fade" id="orderModal-<%= index %>" tabindex="-1" aria-labelledby="orderModalLabel-<%= index %>" aria-hidden="true">
-                                                <div class="modal-dialog modal-lg">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="orderModalLabel-<%= index %>">Order Details</h5>
-                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="col-12 row">
-                                                                <div class="col-6 justify-content-between">
-                                                                    <img src="<%= order.products.images[0] %>" class="img-fluid" alt="order-image">
-                                                                </div>
-                                                                <div class="col-6 my-auto">
-                                                                    <p><b>#<%= order.products._id %></b></p>
-                                                                    <p><b>Product Name : </b> <%= order.products.productName %></p>
-                                                                    <p><b>Price : </b> <%= order.products.price %></p>
-                                                                    <p><b>Brand : </b> <%= order.products.brand %></p>
-                                                                    <p><b>Quantity : </b> <%= order.products.quantity %></p>
-                                                                    <!-- <p><b>Order Status : </b> <%= order.products.status %></p> -->
-                                                                    <p><b class="w-100">Delivery Address :</b><br>
-                                                                        <b>Customer Name : </b><span class="text-uppercase"><%= order.shippingAddress.name %></span> <br>
-                                                                        <span class="text-uppercase"> 
-                                                                        <%= order.shippingAddress.locality %> , <%= order.shippingAddress.street %>
-                                                                        <%= order.shippingAddress.city %> , <%= order.shippingAddress.state %> <br>
-                                                                       </span>
-                                                                        <b>Pin : </b> <span class="text-uppercase"><%= order.shippingAddress.city %></span><br>
-                                                                        <b>Phone No : </b><span class="text-uppercase"><%= order.shippingAddress.phone %></span>
-                                                                    </p>
-                                                                    <p><b>Payment Method : </b><span><%= order.paymentMethod %></span></p>
-                                                                    <p><b>Ordered on : </b><span><%= order.orderDate.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></span></p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                        <tbody class="">
+                                            <% admin.coupons.forEach(coupon =>{ %>
+                                            <tr class="tbody-item">
+                                            <td><span class="fw-bold ms-1"><%= coupon.couponCode %></span></td>
+                                            <!-- <td><b><%= coupon.type %></b></td> -->
+                                            <% if(coupon.type === "percentage"){ %>
+                                                <td><b><%= coupon.value %>%</b></td>
+                                            <% }else{ %>
+                                                <td><b>₹<%= coupon.value %></b></td>
+                                            <% } %>
+                                            <td><%= coupon.startDate.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></td>
+                                            <td><%= coupon.endDate.toLocaleDateString('en-US', { month: 'short', day: '2-digit', year: 'numeric' }) %></td>
+                                            <% if(coupon.status === "Active"){ %>
+                                            <td><span class="badge bg-success"><%= coupon.status %></span></td>
+                                            <% }else{ %>
+                                            <td><span class="badge bg-warning"><%= coupon.status %></span></td>
+                                            <% } %>
+                                            <!-- <td>South Africa</td>
+                                            <td>Clothes</td> -->
+                                            <td>
+                                                <div class="btn-group" role="group" aria-label="Basic outlined example">
+                                                    <a href="/admin/editCoupon/<%= coupon._id %>" class="btn btn-outline-secondary"><i class="icofont-edit text-success"></i></a>
+                                                    <button type="button" id="removeCoup-<%= coupon._id %>" class="btn btn-outline-secondary deleterrow"><i class="icofont-ui-delete text-danger"></i></button>
                                                 </div>
-                                            </div>
+                                            </td>
+                                            </tr>
                                             <% }) %>
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                    </div> <!-- Row end  -->
+                    </div>
+                    </div><!-- Row End -->
                 </div>
             </div>
-            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+            <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
             <script>
-                const confirmButtons = document.querySelectorAll('.confirmButton');
-                const sentOrderButtons = document.querySelectorAll('.sentOrderButton');
-                const deliverButtons = document.querySelectorAll('.deliverButton');
-                const cancelButtons = document.querySelectorAll('.cancelButton');
-
-                confirmButtons.forEach(button => {
-                    button.addEventListener('click', handleClick);
-                });
-
-                sentOrderButtons.forEach(button => {
-                    button.addEventListener('click', handleClick);
-                });
-
-                deliverButtons.forEach(button => {
-                    button.addEventListener('click', handleClick);
-                });
-
-                cancelButtons.forEach(button => {
-                    button.addEventListener('click', handleClick);
-                });
-
-
-                function handleClick(event) {
-                    const status = this.dataset.status;
-                    const orderId = this.dataset.orderId;
-                    const productId = this.dataset.productId;
-                    const index = this.dataset.index;
-
-                    const buttonText = this.innerText.trim(); // Get the text of the button
-                    const actionText = buttonText.substring(0, buttonText.indexOf(' '));
-
-                    Swal.fire({
-                        title: `Are you sure you want to ${actionText.toLowerCase()} this order?`,
-                        icon: 'question',
-                        showCancelButton: true,
-                        confirmButtonText: 'Yes',
-                        cancelButtonText: 'No',
-                        customClass: {
-                            confirmButton: 'btn btn-prim',
-                            cancelButton: 'btn btn-secc'
-                        }
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            updateOrderStatus(event, orderId, productId, status);
-                        }
-                    });
-                }
-
-                function updateOrderStatus(event, orderId, productId, status) {
-                    event.preventDefault();
-                    axios.post(`/vendor/orderStatus/${orderId}/${productId}`, { status })
+            document.addEventListener('DOMContentLoaded', () => {
+                const removeButtons = document.querySelectorAll('.deleterrow');
+                // Remove product from cart
+                removeButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                    const couponId = button.id.split('-')[1]; // Extract the product ID from the button ID
+                    axios.post('/admin/removeCoupon', { couponId })
                         .then(response => {
-                            // Handle success response
-                            console.log(response.data);
-
-                            // // Update the button text based on the new status
-                            // const buttonElement = document.querySelector(`.roundButton[data-order-id="${orderId}"][data-product-id="${productId}"][data-index="${index}"]`);
-                            // if (buttonElement) {
-                            //     buttonElement.innerText = getStatusButtonLabel(status);
-                            //     buttonElement.classList.replace('btn-secc', 'btn-prim');
-                            //     buttonElement.disabled = false;
-                            // }
-                            window.location.reload();
+                        // Handle the response as needed
+                        console.log('Coupon removed:', response.data);
+                        button.closest('.tbody-item').remove(); 
                         })
                         .catch(error => {
-                            // Handle error response
-                            console.error(error);
+                        console.error('Error removing coupon :', error.response);
                         });
-                }
-
-                // function getStatusButtonLabel(status) {
-                //     switch (status) {
-                //         case 'Pending':
-                //             return 'Confirm Order';
-                //         case 'Shipped':
-                //             return 'Sent Order';
-                //         case 'Out Of Delivery':
-                //             return 'Deliver Order';
-                //         case 'Delivered':
-                //             return 'Delivered';
-                //         case 'Requested for Cancellation':
-                //             return 'Cancel Order';
-                //         default:
-                //             return '';
-                //     }
-                // }
-
-            </script>                   
-
-            <!-- <div class="modal fade" id="orderModal" tabindex="-1" aria-labelledby="orderModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="orderModalLabel">Order Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                    <div class="col-md-4">
-                        <img id="orderImage" src="" class="img-fluid rounded" alt="Order Image">
-                    </div>
-                    <div class="col-md-8">
-                        <h4 id="orderProductName"></h4>
-                        <p><span id="orderUserName"></span> - <span id="orderPaymentMethod"></span></p>
-                        <p id="orderPrice"></p>
-                        <p id="orderStatus"></p>
-                    </div>
-                    </div>
-                </div>
-                </div>
-            </div>
-            </div>                         -->
-        
+                    });
+                });
+            });
+            </script>
             <!-- Modal Custom Settings-->
             <div class="modal fade right" id="Settingmodal" tabindex="-1"  aria-hidden="true">
                 <div class="modal-dialog  modal-sm">
@@ -635,29 +451,39 @@
                     </div>
                 </div>
             </div> 
-        </div>                                 
 
-    </div> 
+        </div>     
+    </div>
     
     <!-- Jquery Core Js -->
     <script src="/assets/bundles/libscripts.bundle.js"></script>
 
-    <!-- Plugin Js -->
-    <script src="/assets/bundles/dataTables.bundle.js"></script>  
+    <!-- Plugin Js-->
+    <script src="/assets/bundles/dataTables.bundle.js"></script>
 
     <!-- Jquery Page Js -->
-    <script src="../js/template.js"></script>
+    <script src="/assets/js/template.js"></script>
     <script>
-        $('#myDataTable')
-        .addClass( 'nowrap')
-        .dataTable( {
-            responsive: true,
-            columnDefs: [
-                { targets: [-1, -3], className: 'dt-body-right' }
-            ]
+        // project data table
+        $(document).ready(function() {
+            $('#myProjectTable')
+            .addClass( 'nowrap' )
+            .dataTable( {
+                responsive: true,
+                columnDefs: [
+                    { targets: [-1, -3], className: 'dt-body-right' }
+                ]
+            });
+            $('.deleterow').on('click',function(){
+            var tablename = $(this).closest('table').DataTable();  
+            tablename
+                    .row( $(this)
+                    .parents('tr') )
+                    .remove()
+                    .draw();
+
+            } );
         });
     </script>
 </body>
-
-<!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/order-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Feb 2024 11:51:11 GMT -->
-</html> 
+</html>

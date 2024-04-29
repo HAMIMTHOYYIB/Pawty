@@ -106,48 +106,57 @@ let addProduct = async (req,res) => {
   }
 };
 let submitAddProduct = async (req, res) => {
-  console.log("req user :",req.user);
-  let vendorId = req.user.id
+  console.log("req user :", req.user);
+  let vendorId = req.user.id;
   console.log("req.body :", req.body);
   console.log("req.file :", req.files);
   let imageData = req.files;
   let productData = req.body;
   let { ProductName, Price, Brand, Stock, Description, Category, SubCategory } = productData;
   const imageUrls = [];
+
   // Upload images to Cloudinary
   try {
-    if(productData){
-      for (const file of imageData) {
-        const result = await cloudinary.uploader.upload(file.path);
-        imageUrls.push(result.secure_url);
+      if (productData) {
+          for (let i = 0; i < imageData.length; i++) {
+              let file = imageData[i];
+              let result;
+              if (i === 0) {
+                if(req.body.croppedImage){
+                  result = await cloudinary.uploader.upload(req.body.croppedImage, { transformation: { width: 300, height: 300, crop: 'fill' } });
+                }
+              } else {
+                  result = await cloudinary.uploader.upload(file.path);
+              }
+              imageUrls.push(result.secure_url);
+          }
+          console.log(imageUrls);
+      } else {
+          console.log("No product data found");
       }
-      console.log(imageUrls);
-    }else{
-      console.log("No product data found");
-    }
-    
-    let newProduct = {
-      productName: ProductName,
-      description: Description,
-      price: Price,
-      brand: Brand,
-      category: Category,
-      subCategory: SubCategory,
-      stockQuantity: Stock,
-      images:imageUrls
-    };
 
-    let vendor = await Vendor.findOne({_id:vendorId});
-    if (!vendor) {
-      res.status(400).send('Vendor Not Found');
-    } else {
-      vendor.products.push(newProduct);
-      await vendor.save();
-      res.redirect('/vendor/product-list');
-    }
+      let newProduct = {
+          productName: ProductName,
+          description: Description,
+          price: Price,
+          brand: Brand,
+          category: Category,
+          subCategory: SubCategory,
+          stockQuantity: Stock,
+          images: imageUrls
+      };
+
+      let vendor = await Vendor.findOne({ _id: vendorId });
+      if (!vendor) {
+          res.status(400).send('Vendor Not Found');
+      } else {
+          vendor.products.push(newProduct);
+          await vendor.save();
+          res.redirect('/vendor/product-list');
+      }
   } catch (error) {
-    console.error("Error uploading images to Cloudinary:", error);
-    return res.status(500).send("Error uploading images to Cloudinary");
+      console.error("Error uploading images to Cloudinary:", error);
+      return res.status(500).send("Error uploading images to Cloudinary");
   }
 };
 let editProduct = async (req,res) => {
@@ -168,16 +177,25 @@ let editProduct = async (req,res) => {
 let submitEditProduct = async (req, res) => {
   let vendorId = req.user.id;
   let productData = req.body;
+  let imageData = req.files;
   let { ProductName, Price, Brand, Stock, Description, Category, SubCategory } = productData;
   const imageUrls = [];
   
   // Upload images to Cloudinary
   try {
     if(req.files){
-      for (const file of req.files) {
-        const result = await cloudinary.uploader.upload(file.path);
+      for (let i = 0; i < imageData.length; i++) {
+        let file = imageData[i];
+        let result;
+        if (i === 0) {
+          if(req.body.croppedImage){
+            result = await cloudinary.uploader.upload(req.body.croppedImage, { transformation: { width: 300, height: 300, crop: 'fill' } });
+          }
+        } else {
+            result = await cloudinary.uploader.upload(file.path);
+        }
         imageUrls.push(result.secure_url);
-      }
+    }
     }
 
     let productId = req.params.id; // Assuming you have the productId in the URL
@@ -534,7 +552,7 @@ let vendorweekOrders = async (req, res) => {
         $sort: { _id: 1 }
       }
     ]);
-    console.log("orderssss :",totalOrders)
+    // console.log("orderssss :",totalOrders)
     res.json(totalOrders);
   } catch (err) {
     console.error(err);

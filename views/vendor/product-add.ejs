@@ -185,7 +185,6 @@
                                                     
                                                     <label class="form-label col-3" for="image4">Product Image-4 :</label>
                                                     <input class="col-9" type="file" name="image">
-                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -204,12 +203,6 @@
                                                 <% admin.category.forEach(cat =>{ %>
                                                 <option value="<%= cat.categoryName %>"><%= cat.categoryName %></option>
                                                 <% }) %>
-                                                <!-- <option value="2">Clothes</option>
-                                                <option value="3">Toy</option>
-                                                <option value="4">Cosmetic</option>
-                                                <option value="5">Laptop</option>
-                                                <option value="6">Mobile</option>
-                                                <option value="7">Gaming accessories</option> -->
                                             </select>
                                         </div>
                                     </div>
@@ -223,15 +216,10 @@
                                                 <% admin.subCategory.forEach( sub => { %>
                                                 <option value="<%= sub.subCategoryName %>"><%= sub.subCategoryName %></option>
                                                 <% }) %>
-                                                <!-- <option value="2">Clothes</option>
-                                                <option value="3">Toy</option>
-                                                <option value="4">Cosmetic</option>
-                                                <option value="5">Laptop</option>
-                                                <option value="6">Mobile</option>
-                                                <option value="7">Gaming accessories</option> -->
                                             </select>
                                         </div>
                                     </div>
+                                    <input type="hidden" id="croppedImage" name="croppedImage">
                                     <div class="submit">
                                         <button type="submit" class="btn btn-primary btn-set-task w-100 py-2 px-5 text-uppercase">Add Product</button>
                                     </div>
@@ -245,7 +233,7 @@
                             let price = document.getElementById('price').value.trim();
                             let brand = document.getElementById('brand').value.trim();
                             let stockQuantity = document.getElementById('stockQuantity').value.trim();
-                    
+
                             if (productName === '' || price === '' || brand === '' || stockQuantity === '') {
                                 document.getElementById('Errormessage').textContent = 'Please fill all Input-fields';
                                 return false;
@@ -255,6 +243,7 @@
                             }
                         }
                     </script>
+
                 </div>
         </div>      
 
@@ -331,25 +320,23 @@
     <!-- Include Cropper.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
     <script>
-        $(document).ready(function() {
+       $(document).ready(function() {
             var image = document.getElementById('imagePreview');
             var cropper;
-    
             $('#imageInput').on('change', function(event) {
                 var files = event.target.files;
-    
                 if (files && files.length > 0) {
                     var file = files[0];
-    
                     var reader = new FileReader();
                     reader.onload = function() {
                         image.innerHTML = '<img src="' + reader.result + '" id="previewImage" style="max-width: 100%;">';
                         cropper = new Cropper(document.getElementById('previewImage'), {
-                            aspectRatio: 1 / 1, // Set aspect ratio as needed
-                            viewMode: 1, // Set view mode as needed
-                            autoCropArea: 1, // Show auto crop area
+                            aspectRatio: 1 / 1,
+                            viewMode: 1,
+                            autoCropArea: 1,
                             crop: function(event) {
-                                // You can access cropped data here: event.detail.x, event.detail.y, event.detail.width, event.detail.height
+                                var canvas = cropper.getCroppedCanvas();
+                                document.getElementById('croppedImage').value = canvas.toDataURL();
                             }
                         });
                     };
