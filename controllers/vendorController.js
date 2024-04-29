@@ -99,10 +99,11 @@ let productList = async (req,res) => {
 };
 let addProduct = async (req,res) => {
   let admin = await Admin.findOne();
+  const vendor = await Vendor.findById(req.user.id)
   if (!admin.category) {
     res.status(400).send('Category Not Found');
   }else{
-    res.render('vendor/product-add',{admin})
+    res.render('vendor/product-add',{admin,vendor})
   }
 };
 let submitAddProduct = async (req, res) => {
@@ -172,7 +173,7 @@ let editProduct = async (req,res) => {
     return res.status(404).send('Product Not Found')
   }
   console.log("prodd :",product);
-  res.render('vendor/product-edit',{product,admin});
+  res.render('vendor/product-edit',{product,admin,vendor});
 }
 let submitEditProduct = async (req, res) => {
   let vendorId = req.user.id;
@@ -243,79 +244,6 @@ let deleteProduct = async (req,res) => {
 }
 
 
-let addCoupon = (req,res) => {
-  res.render('vendor/coupon-add')
-}
-let listCoupon = async (req,res) => {
-  let vendor = await Vendor.findOne({_id:req.user.id});
-  if(!vendor){
-    return res.status(404).send('Vendor Not Found');
-  }
-  res.render('vendor/coupons-list',{vendor});
-}
-let submitAddCoupon = async (req,res) => {
-  let {status,startDate,endDate,couponCode,category,subCategory,limit,type,value} = req.body;
-  console.log("req.user :",req.body);
-  let vendor = await Vendor.findOne({_id:req.user.id});
-  if(!vendor){
-    return res.status(404).send('Vendor Not found')
-  }
-  if(!vendor.coupons){
-    vendor.coupons = [];
-  }
-  if(startDate === ""){
-    startDate = undefined;
-  };
-  let discountProducts = {category,subCategory};
-  let newCoupon = {status,startDate,endDate,couponCode,limit,type,value,discountProducts}
-  vendor.coupons.push(newCoupon);
-  await vendor.save();
-  console.log("coupon added succesfully");
-  res.redirect('/vendor/couponList')
-}
-let editCoupon = async (req,res) => {
-  let vendor = await Vendor.findOne({_id:req.user.id});
-  if(!vendor){
-    return res.status(404).send("vendor Not Found")
-  }
-  let coupon = vendor.coupons.filter(coup => coup._id.toString() === req.params.couponId)
-  if(!coupon){
-    return res.status(404).send("Coupon Not Found");
-  }
-  res.render('vendor/coupon-edit',{coupon:coupon[0]})
-}
-let submitEditCoupon = async (req, res) => {
-  let couponId = req.params.couponId;
-  let vendor = await Vendor.findOne({_id:req.user.id});
-  if(!vendor){
-    return res.status(404).send('Vendor Not found');
-  }
-
-  let {status, startDate, endDate, couponCode, category, subCategory, limit, type, value} = req.body;
-  let updatedCoup = {status, startDate, endDate, couponCode, category, subCategory, limit, type, value};
-
-  let coupon = vendor.coupons.find(val => val._id.toString() === couponId);
-  if (!coupon) {
-    return res.status(404).send('Coupon Not found');
-  }
-
-  // Update the coupon object with the values from updatedCoup
-  Object.assign(coupon, updatedCoup);
-
-  // Save the updated vendor object
-  await vendor.save();
-
-  console.log("Updated coupon:", coupon);
-  res.redirect('/vendor/couponList');
-};
-let deleteCoupon = async (req,res) => {
-  let {couponId} = req.body;
-  let vendor = await Vendor.findById(req.user.id);
-  vendor.coupons = vendor.coupons.filter(coup => coup._id.toString() !== couponId)
-  await vendor.save();
-  res.json({message:"coupon removed succesfully"})
-}
-
 let getOrderList = async (req, res) => {
   try {
     // Find the vendor
@@ -324,7 +252,7 @@ let getOrderList = async (req, res) => {
       return res.status(404).json({ message: 'Vendor not found' });
     }
     let orders= await helper.orderOfVendor(req.user.id);
-    res.render('vendor/orderList', { orders: orders.reverse()});
+    res.render('vendor/orderList', { orders: orders.reverse(),vendor});
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Failed to get orders' });
@@ -332,13 +260,14 @@ let getOrderList = async (req, res) => {
 };
 let getOrderDetails = async(req,res) => {
   let {  productId, orderId } = req.params;
+  const vendor = await Vendor.findById(req.user.id)
   try {
     let order = await Order.findById(orderId);
     let orderProduct = order.products.filter(product => product._id.toString() === productId);
-    console.log("orderProduct : ",orderProduct);
-    console.log("statusHistory : ",orderProduct[0].statusHistory);
+    // console.log("orderProduct : ",orderProduct);
+    // console.log("statusHistory : ",orderProduct[0].statusHistory);
     let product = await productHelper.getProductDetails(productId);
-    res.render('vendor/orderDetails',{order,product,orderProduct}) ;
+    res.render('vendor/orderDetails',{order,product,orderProduct,vendor}) ;
 
   } catch (error) {
     res.status(500).send("Can't get Order Details")
@@ -346,6 +275,7 @@ let getOrderDetails = async(req,res) => {
 }
 let updateStatus = async (req, res) => {
   try {
+    console.log("backend working...")
     let {  productId, orderId } = req.params;
     console.log("body :",req.body)
     let { status } = req.body;
@@ -999,13 +929,6 @@ module.exports = {
     editProduct,
     submitEditProduct,
     deleteProduct,
-
-    addCoupon,
-    listCoupon,
-    submitAddCoupon,
-    editCoupon,
-    submitEditCoupon,
-    deleteCoupon,
 
     getOrderList,
     getOrderDetails,

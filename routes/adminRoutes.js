@@ -10,8 +10,6 @@ router.get('/Dashboard',adminAuthMiddleware,adminController.dashboard);
 router.get('/admin',adminController.adminLogin);
 router.post('/admin',adminController.submitAdminLogin);
 
-router.get('/admin/vendorsPage',adminController.vendorsPage);
-
 // User Management
 router.get('/admin/Customers',adminAuthMiddleware,adminController.userList);
 router.post('/userblock',adminController.userBlock);
