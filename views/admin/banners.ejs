@@ -171,10 +171,7 @@
         
                         <!-- main menu Search-->
                         <div class="order-0 col-lg-4 col-md-4 col-sm-12 col-12 mb-3 mb-md-0 ">
-                            <!-- <div class="input-group flex-nowrap input-group-lg">
-                                <input type="search" class="form-control" placeholder="Search" aria-label="search" aria-describedby="addon-wrapping">
-                                <button type="button" class="input-group-text" id="addon-wrapping"><i class="fa fa-search"></i></button>
-                            </div> -->
+                            
                         </div>
         
                     </div>
@@ -193,7 +190,7 @@
                                     <% admin.banner.mainBanner.forEach(img => { %>
                                         <div class="col"><img width="200" height="100"src="<%= img %>" alt="Image1"></div>
                                     <% }) %>
-                                    </div>
+                                </div>
                             </div>
                             <div class="banner-box d-flex justify-content-center align-items-center" data-bs-toggle="modal" data-bs-target="#homeBannerModal"><h5><b class="">Change Home Banners</b></h5></div>
                         </div>
@@ -254,15 +251,6 @@
                         </div>
                     </div>
                 </div>
-                <script>
-                    document.getElementById('homeBannerForm').addEventListener('submit', function(event) {
-                        var fileInput = document.getElementById('homeBanner');
-                        if (fileInput.files.length === 0) {
-                            event.preventDefault(); // Prevent form submission
-                            document.getElementById('homeFileErrorMsg').classList.remove('d-none'); // Show error message
-                        }
-                    });
-                </script>
  
                 <!-- Modal for Home Page Offers -->
                 <!-- 1 -->
@@ -307,41 +295,6 @@
                     </div>
                 </div>
             </div>
-            <script>
-                document.getElementById('offerBannerForm1').addEventListener('submit', function(event) {
-                    let fileInput = document.getElementById('offerBanner1');
-                    let offerValue = document.getElementById('offerVal');
-                    let title = document.getElementById('title1');
-                    let error = false;
-            
-                    // Validate file input
-                    if (fileInput.files.length !== 1) {
-                        error = true;
-                        document.getElementById('offerFileErrorMsg1').classList.remove('d-none'); // Show error message
-                    }
-            
-                    // Validate offer value
-                    if (offerValue.value.trim() === '') {
-                        error = true;
-                        offerValue.classList.add('is-invalid'); // Add validation class
-                    } else {
-                        offerValue.classList.remove('is-invalid');
-                    }
-            
-                    // Validate title
-                    if (title.value.trim() === '') {
-                        error = true;
-                        title.classList.add('is-invalid'); // Add validation class
-                    } else {
-                        title.classList.remove('is-invalid');
-                    }
-            
-                    // Prevent form submission if there are errors
-                    if (error) {
-                        event.preventDefault();
-                    }
-                });
-            </script>
             <!-- 2 -->
             <div class="modal fade" id="homePageOffersModal2" tabindex="-1" aria-labelledby="homePageOffersModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -383,40 +336,6 @@
                     </div>
                 </div>
             </div> 
-            <script>
-                document.getElementById('offerBannerForm2').addEventListener('submit', function(event) {
-                    let fileInput = document.getElementById('offerBanner2');
-                    let offerValue = document.getElementById('offerVal2');
-                    let title = document.getElementById('title2');
-                    let error = false;
-            
-                    // Validate file input
-                    if (fileInput.files.length !== 1) {
-                        error = true;
-                        document.getElementById('offerFileErrorMsg2').classList.remove('d-none'); 
-                    }
-            
-                    // Validate offer value
-                    if (offerValue.value.trim() === '') {
-                        error = true;
-                        offerValue.classList.add('is-invalid');
-                    } else {
-                        offerValue.classList.remove('is-invalid');
-                    }
-            
-                    // Validate title
-                    if (title.value.trim() === '') {
-                        error = true;
-                        title.classList.add('is-invalid'); 
-                    } else {
-                        title.classList.remove('is-invalid');
-                    }
-            
-                    if (error) {
-                        event.preventDefault();
-                    }
-                });
-            </script>
             <!-- 3 -->
             <div class="modal fade" id="homePageOffersModal3" tabindex="-1" aria-labelledby="homePageOffersModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -458,37 +377,6 @@
                     </div>
                 </div>
             </div>
-            <script>
-                document.getElementById('offerBannerForm3').addEventListener('submit', function(event) {
-                    let fileInput = document.getElementById('offerBanner3');
-                    let offerValue = document.getElementById('offerVal3');
-                    let title = document.getElementById('title3');
-                    let error = false;
-            
-                    if (fileInput.files.length !== 1) {
-                        error = true;
-                        document.getElementById('offerFileErrorMsg3').classList.remove('d-none'); // Show error message
-                    }
-            
-                    if (offerValue.value.trim() === '') {
-                        error = true;
-                        offerValue.classList.add('is-invalid'); // Add validation class
-                    } else {
-                        offerValue.classList.remove('is-invalid');
-                    }
-            
-                    if (title.value.trim() === '') {
-                        error = true;
-                        title.classList.add('is-invalid'); // Add validation class
-                    } else {
-                        title.classList.remove('is-invalid');
-                    }
-            
-                    if (error) {
-                        event.preventDefault();
-                    }
-                });
-            </script>
 
             <!-- multipage banner modal -->
             <div class="modal fade" id="singlePageBannerModal" tabindex="-1" aria-labelledby="singlePageBannerModal" aria-hidden="true">
@@ -510,22 +398,13 @@
                     </div>
                 </div>
             </div>
-            <script>
-                document.getElementById('singleBannerForm').addEventListener('submit', function(event) {
-                    var fileInput = document.getElementById('singleBanner');
-                    if (fileInput.files.length === 0) {
-                        event.preventDefault(); // Prevent form submission
-                        document.getElementById('singleErrMsg').classList.remove('d-none'); // Show error message
-                    }
-                });
-            </script>
-
         </div>
     </div>
 
     <!-- Jquery Core Js -->
     <script src="/assets/bundles/libscripts.bundle.js"></script>
 
+    <script src="/scripts/bannerAdmin.js"></script>
     <!-- Jquery Plugin -->  
     <script src="/assets/plugin/nouislider/nouislider.min.js"></script>
     <!-- Jquery Page Js --> 

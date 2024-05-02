@@ -256,13 +256,13 @@
                                         </div>
                                         <div class="modal-body">
                                           <div class="col-12 row">
-                                            <div class="col-4 justify-content-between">
+                                            <div class="col-lg-4 col-sm-12 justify-content-between">
                                               <img src="<%= order.products.images[0] %>" class="img-fluid" alt="order-image">
                                             </div>
                                         
                                             <div class="col-8">
                                               <div class="my-4 d-flex flex-wrap">
-                                                <div class="col-md-6 order-details">
+                                                <div class="col-md-6 order-details mb-2">
                                                   <h3>Order Details:</h3>  
                                                   <p><b>OrderID: #<%= order.products._id %></b></p>
                                                   <p><b>Product Name:</b> <%= order.products.productName %></p>
@@ -271,8 +271,8 @@
                                                   <p><b>Quantity:</b> <%= order.products.quantity %></p>
                                                   <p><b>Order Status:</b> <%= order.products.status %></p>
                                                 </div>
-                                                <div class="col-md-6 address-details">
-                                                  <h3>Delivery Address:</h3>
+                                                <div class="col-md-6 col-sm-12 address-details mx-auto ">
+                                                  <h3 class="">Delivery Address:</h3>
                                                   <p><b>Customer Name:</b> <span class="text-uppercase"><%= order.shippingAddress.name %></span></p>
                                                   <p class="text-uppercase">
                                                     <%= order.shippingAddress.locality %> , <%= order.shippingAddress.street %> <br>
@@ -393,19 +393,19 @@
                                     <div class="form-group">
                                       <label for="name<%= index %>">Name</label>
                                       <input type="text" class="form-control" value="<%= add.name %>" id="name<%= index %>" name="name">
-                                      <div id="name-error" class="text-danger"></div>
+                                      <div id="name-error<%= index %>" class="text-danger"></div>
                                     </div>
                                     <!-- Locality and street inputs -->
                                     <div class="form-row g-0">
                                       <div class="form-group">
                                         <label for="locality<%= index %>">Locality</label>
                                         <input type="text" class="form-control" id="locality<%= index %>" value="<%= add.locality %>" name="locality">
-                                        <div id="locality-error" class="text-danger"></div>
+                                        <div id="locality-error<%= index %>" class="text-danger"></div>
                                       </div>
                                       <div class="form-group">
                                         <label for="street<%= index %>">Street</label>
                                         <input type="text" class="form-control" id="street<%= index %>" value="<%= add.street %>" name="street">
-                                        <div id="street-error" class="text-danger"></div>
+                                        <div id="street-error<%= index %>" class="text-danger"></div>
                                       </div>
                                     </div>
                                     <!-- City and state inputs -->
@@ -413,7 +413,7 @@
                                       <div class="form-group">
                                         <label for="city<%= index %>">City</label>
                                         <input type="text" class="form-control" id="city<%= index %>" value="<%= add.city %>" name="city">
-                                        <div id="city-error" class="text-danger"></div>
+                                        <div id="city-error<%= index %>" class="text-danger"></div>
                                       </div>
                                       <div class="form-group">
                                         <label for="state<%= index %>">State</label>
@@ -424,20 +424,20 @@
                                           <option value="TamilNadu" <%= add.state === 'TamilNadu' ? 'selected' : '' %>>TamilNadu</option>
                                           <option value="AndraPradesh" <%= add.state === 'AndraPradesh' ? 'selected' : '' %>>AndraPradesh</option>
                                         </select>
-                                        <div id="state-error" class="text-danger"></div>
+                                        <div id="state-error<%= index %>" class="text-danger"></div>
                                       </div>
                                     </div>
                                     <!-- Phone input -->
                                     <div class="form-group">
                                       <label for="phone<%= index %>">Phone</label>
                                       <input type="text" class="form-control" id="phone<%= index %>" value="<%= add.phone %>" name="phone">
-                                      <div id="phone-error" class="text-danger"></div>
+                                      <div id="phone-error<%= index %>" class="text-danger"></div>
                                     </div>
                                     <!-- Pincode input -->
                                     <div class="form-group">
                                       <label for="pincode<%= index %>">Pincode</label>
                                       <input type="text" class="form-control" id="pincode<%= index %>" value="<%= add.pincode %>" name="pincode">
-                                      <div id="pincode-error" class="text-danger"></div>
+                                      <div id="pincode-error<%= index %>" class="text-danger"></div>
                                     </div>
                                     <div id="error-message" class="text-danger"></div>
                                   </div>
@@ -446,160 +446,13 @@
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     <button type="button" class="btn btn-success" onclick="validateAndSubmit('<%=index%>')">Save Changes</button>
                                   </div>
-                                </form>
-                                <script>
-                                  const editProfileForm = document.getElementById('editProfileFormm');
-              
-                                  editProfileForm.addEventListener('submit', (event) => {
-                                      event.preventDefault();
-              
-                                      const emailInput = document.getElementById('editEmail');
-                                      const phoneInput = document.getElementById('editPhone');
-              
-                                      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-                                      const phoneRegex = /^\d{10}$/;
-              
-                                      let isValid = true;
-              
-                                      if (!emailRegex.test(emailInput.value)) {
-                                          document.getElementById('emailError').innerText = 'Please enter a valid email address.';
-                                          isValid = false;
-                                      } else {
-                                          document.getElementById('emailError').innerText = '';
-                                      }
-              
-                                      if (!phoneRegex.test(phoneInput.value)) {
-                                          document.getElementById('phoneError').innerText = 'Please enter a valid phone number (10 digits).';
-                                          isValid = false;
-                                      } else {
-                                          document.getElementById('phoneError').innerText = '';
-                                      }
-              
-                                      if (isValid) {
-                                          axios.post('/editprofile', {
-                                              userName: document.getElementById('editUsername').value,
-                                              email: emailInput.value,
-                                              phone: phoneInput.value
-                                          })
-                                          .then((response) => {
-                                            $('#editProfileModal').modal('hide');
-                                              window.location.href = "/account";                                    })
-                                          .catch((error) => {
-                                              // Handle error
-                                          });
-                                      }
-                                  });
-                                </script>  
-                                <script>
-                                  function validateAndSubmit(index) {
-                                    const name = document.getElementById(`name${index}`).value.trim();
-                                    const locality = document.getElementById(`locality${index}`).value.trim();
-                                    const street = document.getElementById(`street${index}`).value.trim();
-                                    const city = document.getElementById(`city${index}`).value.trim();
-                                    const state = document.getElementById(`state${index}`).value.trim();
-                                    const phone = document.getElementById(`phone${index}`).value.trim();
-                                    const pincode = document.getElementById(`pincode${index}`).value.trim();
-                                
-                                    const nameError = document.getElementById('name-error');
-                                    const localityError = document.getElementById('locality-error');
-                                    const streetError = document.getElementById('street-error');
-                                    const cityError = document.getElementById('city-error');
-                                    const stateError = document.getElementById('state-error');
-                                    const phoneError = document.getElementById('phone-error');
-                                    const pincodeError = document.getElementById('pincode-error');
-                                
-                                    let isValid = true;
-                                
-                                    // Reset errors
-                                    nameError.textContent = '';
-                                    localityError.textContent = '';
-                                    streetError.textContent = '';
-                                    cityError.textContent = '';
-                                    stateError.textContent = '';
-                                    phoneError.textContent = '';
-                                    pincodeError.textContent = '';
-                                
-                                    if (!name) {
-                                      nameError.textContent = 'Name is required';
-                                      isValid = false;
-                                    }
-                                
-                                    if (!locality) {
-                                      localityError.textContent = 'Locality is required';
-                                      isValid = false;
-                                    }
-                                
-                                    if (!street) {
-                                      streetError.textContent = 'Street is required';
-                                      isValid = false;
-                                    }
-                                
-                                    if (!city) {
-                                      cityError.textContent = 'City is required';
-                                      isValid = false;
-                                    }
-                                
-                                    if (!state) {
-                                      stateError.textContent = 'State is required';
-                                      isValid = false;
-                                    }
-                                
-                                    if (!phone) {
-                                      phoneError.textContent = 'Phone is required';
-                                      isValid = false;
-                                    } else if (!/^\d{10}$/.test(phone)) {
-                                      phoneError.textContent = 'Phone number must be 10 digits';
-                                      isValid = false;
-                                    }
-                                
-                                    if (!pincode) {
-                                      pincodeError.textContent = 'Pincode is required';
-                                      isValid = false;
-                                    } else if (!/^\d{6}$/.test(pincode)) {
-                                      pincodeError.textContent = 'Pincode must be 6 digits';
-                                      isValid = false;
-                                    }
-                                
-                                    if (isValid) {
-                                      // Send data to server
-                                      axios.post(`/editAddress/${index}`, {
-                                        name,
-                                        locality,
-                                        street,
-                                        city,
-                                        state,
-                                        phone,
-                                        pincode
-                                      })
-                                      .then(response => {
-                                          console.log(response.data);
-                                          window.location.href = '/accountAddress';
-                                        })
-                                        .catch(error => {
-                                          // Handle error
-                                          console.error(error);
-                                        });
-
-                                    }
-                                  }
-                                </script>                                
+                                </form>                             
                               </div>
                             </div>
                           </div> 
                         <% }) %>      
                       </div>
 
-                      <!-- <address>
-                        <p class="welcome">
-                          <strong>Alex Tuntuni</strong>
-                          <button type="button" class="btn text-success" data-bs-toggle="modal" data-bs-target="#editAddress">
-                            <i class="fa fa-edit"></i>
-                          </button> </p>
-                        <p>1355 Market St, Suite 900 <br>
-                          San Francisco, CA 94103</p>
-                        <p>Mobile: (123) 456-7890</p>
-                      </address>   -->
-                      
                       <!-- Modal -->
                       <div class="modal fade" id="addAddress" tabindex="-1" aria-labelledby="addAddress" aria-hidden="true">
                         <div class="modal-dialog">

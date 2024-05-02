@@ -2,17 +2,17 @@
 document.getElementById('toggle-current-pwd').addEventListener('click', function() {
     var pwdInput = document.getElementById('current-pwd');
     pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
-  });
+});
 
-  document.getElementById('toggle-new-pwd').addEventListener('click', function() {
-    var pwdInput = document.getElementById('new-pwd');
-    pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
-  });
+document.getElementById('toggle-new-pwd').addEventListener('click', function() {
+  var pwdInput = document.getElementById('new-pwd');
+  pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
+});
 
-  document.getElementById('toggle-confirm-pwd').addEventListener('click', function() {
-    var pwdInput = document.getElementById('confirm-pwd');
-    pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
-  });
+document.getElementById('toggle-confirm-pwd').addEventListener('click', function() {
+  var pwdInput = document.getElementById('confirm-pwd');
+  pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
+});
 
 
 // Change Password Validation
@@ -86,7 +86,6 @@ document.getElementById('submit-btn').addEventListener('click', function () {
     }
 });
 
-
 // Add Address validtion.
 function validateForm(event) {
     console.log("Validation function working now...");
@@ -158,7 +157,6 @@ function validateForm(event) {
     }
 }
 
-
 //  function to Request Order Cancellation.
 function requestCancellation(orderId, productId , index) {
     Swal.fire({
@@ -222,3 +220,97 @@ function requestCancellation(orderId, productId , index) {
      }
  });
 };
+
+// Edit Address Validation 
+function validateAndSubmit(index) {
+  console.log("working... the edit ... function")
+  const name = document.getElementById(`name${index}`).value.trim();
+  const locality = document.getElementById(`locality${index}`).value.trim();
+  const street = document.getElementById(`street${index}`).value.trim();
+  const city = document.getElementById(`city${index}`).value.trim();
+  const state = document.getElementById(`state${index}`).value.trim();
+  const phone = document.getElementById(`phone${index}`).value.trim();
+  const pincode = document.getElementById(`pincode${index}`).value.trim();
+
+  const nameError = document.getElementById(`name-error${index}`);
+  const localityError = document.getElementById(`locality-error${index}`);
+  const streetError = document.getElementById(`street-error${index}`);
+  const cityError = document.getElementById(`city-error${index}`);
+  const stateError = document.getElementById(`state-error${index}`);
+  const phoneError = document.getElementById(`phone-error${index}`);
+  const pincodeError = document.getElementById(`pincode-error${index}`);
+
+  let isValid = true;
+
+  // Reset errors
+  nameError.textContent = '';
+  localityError.textContent = '';
+  streetError.textContent = '';
+  cityError.textContent = '';
+  stateError.textContent = '';
+  phoneError.textContent = '';
+  pincodeError.textContent = '';
+
+  if (!name) {
+    nameError.textContent = 'Name is required';
+    isValid = false;
+  }
+
+  if (!locality) {
+    localityError.textContent = 'Locality is required';
+    isValid = false;
+  }
+
+  if (!street) {
+    streetError.textContent = 'Street is required';
+    isValid = false;
+  }
+
+  if (!city) {
+    cityError.textContent = 'City is required';
+    isValid = false;
+  }
+
+  if (!state) {
+    stateError.textContent = 'State is required';
+    isValid = false;
+  }
+
+  if (!phone) {
+    phoneError.textContent = 'Phone is required';
+    isValid = false;
+  } else if (!/^\d{10}$/.test(phone)) {
+    phoneError.textContent = 'Phone number must be 10 digits';
+    isValid = false;
+  }
+
+  if (!pincode) {
+    pincodeError.textContent = 'Pincode is required';
+    isValid = false;
+  } else if (!/^\d{6}$/.test(pincode)) {
+    pincodeError.textContent = 'Pincode must be 6 digits';
+    isValid = false;
+  }
+
+  if (isValid) {
+    // Send data to server
+    axios.post(`/editAddress/${index}`, {
+      name,
+      locality,
+      street,
+      city,
+      state,
+      phone,
+      pincode
+    })
+      .then(response => {
+        console.log(response.data);
+        window.location.href = '/accountAddress';
+      })
+      .catch(error => {
+        // Handle error
+        console.error(error);
+      });
+
+  }
+}
