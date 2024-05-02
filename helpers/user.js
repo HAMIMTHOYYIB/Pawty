@@ -26,7 +26,8 @@ let accountOrders = (userId) => {
                         addedOn: product.addedOn,
                         images: product.images,
                         status: order.products.status,
-                        quantity: order.products.quantity
+                        quantity: order.products.quantity,
+                        statusHistory: order.products.statusHistory,
                     };
                 }
                 let user = await User.findById(order.userId);

@@ -16,7 +16,7 @@ router.post('/userblock',adminController.userBlock);
 
 // Vendor Management
 router.get('/admin/Vendors',adminAuthMiddleware,adminController.vendorList);
-router.post('/vendorVerify',adminController.vendorVerify);
+router.post('/vendorVerify',adminAuthMiddleware ,adminController.vendorVerify);
 
 // Category Management
 router.get('/categories',adminAuthMiddleware,adminController.categoryList);

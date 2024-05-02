@@ -48,7 +48,7 @@ router.get('/wishlist',userAuth,userController.getwishlist);
 router.post('/addToWishlist',userAuth,userController.addtowishlist);
 router.post('/removeFromWishlist',userAuth,userController.removefromwishlist);
 
-
+router.post('/checkCart',userAuth,userController.checkCart)
 router.get('/checkout',userAuth,userController.getCheckout);
 router.post('/checkout',userAuth,userController.submitCheckout);
 router.post("/cancelOrder",userAuth,userController.requestCancellation);

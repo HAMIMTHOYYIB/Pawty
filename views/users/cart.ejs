@@ -34,8 +34,9 @@
     <!--== Main Style CSS ==-->
     <link href="/assets/css/style.css" rel="stylesheet" />
 
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    
 </head>
 
 <body>
@@ -147,7 +148,10 @@
                         </div>
                       </td>
                       <td class="product-name">
-                        <a class="title" href="/product/<%= product._id %>"><%= product.productName %></a>
+                        <a class="title" href="/product/<%= product._id %>"><%= product.productName %></a><br>
+                        <% if(product.stock <= 0 ){%>
+                          <small class="text-danger"><b>Out of Stock</b></small>
+                        <% } %>
                       </td>
                       <td class="product-price">
                         ₹ <span id="price-<%= product._id %>" class="price"><%= product.price %></span>
@@ -157,7 +161,10 @@
                           <button type="button" class="qty-minus">-</button>
                           <input type="text" style="width: 28px; border:2px solid black;" class="quantity" title="Quantity" readonly value="<%= product.quantity %>" min="1" data-productId="<%= product._id %>" onchange="updateCart('<%= product._id %>',this.value)">
                           <button type="button" class="qty-plus">+</button>
-                        </div>
+                        </div><br>
+                        <% if(product.stock > 0 && product.quantity > product.stock){ %>
+                          <small class="text-danger stock">Stock Exceeded</small>
+                        <% } %>
                       </td>                      
                       <td class="product-subtotal">
                         <span id="total-<%= product._id %>" class="price">₹ <%= product.price * product.quantity %> /-</span>
@@ -220,20 +227,40 @@
 
   <div id="userData" data-user='<%= JSON.stringify(user) %>'></div>
   <script>
-    const user = JSON.parse(document.getElementById('userData').dataset.user);
+    let user = JSON.parse(document.getElementById('userData').dataset.user);
     if(user.cart.products.length === 0){
         document.getElementById('cart-area').style.display = ('none')
         document.getElementById('emptyCart').style.display = ('flex')
       }
 
-    function toCheckout() {
-      if(user.cart.products.length === 0){
-        document.getElementById('cart-area').style.display = ('none');
-        document.getElementById('emptyCart').style.display = ('flex');
-      }else{
-        window.location.href = '/checkout';
+      function toCheckout() {
+        console.log("working the tochekout function...");
+        axios.post('/checkCart')
+          .then(response => {
+            if (response.status === 200) {
+              window.location.href = '/checkout';
+            } else if (response.status === 201) {
+              console.log("error on quantity.....");
+              const message = response.data.message;
+              window.location.href = '/cart';
+
+              // Toastify({
+              //   text: message,
+              //   duration: 2000,
+              //   close: true,
+              //   gravity: "top",
+              //   position: 'right',
+              //   backgroundColor:'#314d70',
+              //   stopOnFocus: true,
+              // }).showToast();
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
       }
-    }
+
+
 
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -255,9 +282,7 @@
             // Access the product ID
             const productId = input.getAttribute('data-productId');
             const price = document.getElementById(`price-${productId}`).textContent
-            console.log("price is :",price);
             // const productId = input.dataset.productId;
-            console.log("input.dataset.productId :",productId);
             updateCart(productId, currentValue - 1,price,false);
           }
         });
@@ -273,9 +298,7 @@
           // Access the product ID
             const productId = input.getAttribute('data-productId');
             const price = document.getElementById(`price-${productId}`).textContent
-            console.log("price is :",price);
             // const productId = input.dataset.productId;
-            console.log("input.dataset.productId :",productId);
           updateCart(productId, currentValue + 1,price,true);
         });
       });
@@ -313,7 +336,6 @@
 
     axios.post('/updateCart', { productId, quantity, price , change })
     .then(response => {
-      console.log("then working");
       let subTotal = 0;
       response.data.user.cart.products.forEach(prod => {
         if (prod._id === productId) {
@@ -325,7 +347,10 @@
       });
       Amount.textContent = `${subTotal.toFixed(2)}`;
       totVal.textContent = `${subTotal.toFixed(2)}`;
-      console.log('Cart quantity updated successfully:', response.data);
+      document.querySelectorAll('.stock').forEach(element => {
+        element.style.display = 'none';
+      });
+
     })
     .catch(error => {
       console.error('Error updating cart quantity:', error.response);
@@ -665,6 +690,8 @@
 </div>
 
 <!--=======================Javascript============================-->
+
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 <!--=== jQuery Modernizr Min Js ===-->
 <script src="/assets/js/modernizr.js"></script>

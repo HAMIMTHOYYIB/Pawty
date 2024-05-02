@@ -340,7 +340,7 @@ let editCoupon = async (req,res) => {
     if(!coupon){
       return res.status(404).send("Coupon Not Found");
     }
-    res.render('admin/coupon-edit',{coupon:coupon[0]},admin)
+    res.render('admin/coupon-edit',{coupon:coupon[0],admin})
 }
 let submitEditCoupon = async (req, res) => {
     let couponId = req.params.couponId;

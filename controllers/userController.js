@@ -40,7 +40,6 @@ let account = async (req,res) => {
     return res.status(400).send('User Not found');
   }
   let orders= await helper.accountOrders(userId)
-  // console.log("orders : ",orders.length)
   const { tab } = req.query;
   res.render('users/account', { initialTab:'dashboard',user,orders});
   // res.render('users/account',{user,addError});
@@ -107,6 +106,7 @@ let userOrder = async (req,res) => {
     }
     let orders= await helper.accountOrders(userId)
     // console.log("orders :",orders)
+
     res.render('users/account', { initialTab:'orders',user,orders});
   } catch (error) {
     console.log(error);
@@ -347,10 +347,7 @@ let filterProduct = async (req, res) => {
 let getcart = async (req, res) => {
   try {
     let user = await User.findOne({ _id: req.user.id });
-    // let products = user.cart.products;
     let Products =  await Vendor.find().select("products");
-    // let Products =  await Vendor.find();
-    console.log("produts: ",Products)
     user.cart.products.forEach(product => {
       Products.forEach(vend => {
         vend.products.forEach(p => {
@@ -358,9 +355,7 @@ let getcart = async (req, res) => {
             product.images = p.images;
             product.price = p.price;
             product.productName = p.productName;
-            product.stockQuantity = p.stockQuantity;
-            // product.quantity = product.quantity
-            console.log("product:",product.quantity)
+            product.stock = p.stockQuantity;
           }
         })
       })
@@ -575,6 +570,26 @@ let removefromwishlist = async (req,res) => {
 }
 
 // checkout
+let checkCart = async (req,res) => {
+  let vendors = await Vendor.find();
+  let user = await User.findById(req.user.id);
+  for(let Cproduct of user.cart.products){
+    for(let vendor of vendors){
+      for(Vproduct of vendor.products){
+        if(Vproduct._id.toString() === Cproduct._id.toString()){
+          Cproduct.stock = Vproduct.stockQuantity;
+          Cproduct.productName = Vproduct.productName;
+          Cproduct.price = Vproduct.price;
+          if(Cproduct.stock < Cproduct.quantity){
+            return res.status(201).json({message:"Some products exceeds available stock"});
+          }
+        }
+      }
+    }
+  }
+  return res.status(200).json({ message: "Cart checked successfully." });  
+}
+
 let getCheckout = async (req,res) => {
   let vendors = await Vendor.find();
   let user = await User.findById(req.user.id);
@@ -656,7 +671,7 @@ let submitCheckout = async (req, res) => {
     let shippingAddress = address[0];
     let newOrder = new Order({
       products: products,
-      total: user.cart.total,
+      total: user.cart.total - user.cart.discount,
       discount: user.cart.discount,
       shippingAddress,
       paymentMethod: paymentMethod,
@@ -754,6 +769,8 @@ let requestCancellation = async (req, res) => {
       return res.status(404).send('Cannot find the product in the order');
     }
     product.status = 'Requested for Cancellation';
+    product.statusHistory[4].vendorChanged = true;
+    product.statusHistory[4].timestamp = Date.now();
     await order.save();
     let userEmail = req.user.email; // Assuming user email is stored in order or user profile
     let productDetails = await productHelper.getProductDetails(product._id)
@@ -1052,6 +1069,7 @@ module.exports={
     addtowishlist,
     removefromwishlist,
 
+    checkCart,
     getCheckout,
     removeCoupon,
     submitCheckout,
