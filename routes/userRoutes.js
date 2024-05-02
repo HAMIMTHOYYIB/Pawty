@@ -3,6 +3,7 @@ const router = express.Router();
 const userController = require('../controllers/userController');  
 const passport = require('passport')
 const userAuth = require('../middleware/jwt_user');
+const preventBack = require("../middleware/preventBack");
 
 require('../helpers/passport')
 require('dotenv').config()
@@ -11,7 +12,7 @@ router.use(passport.initialize())
 router.use(passport.session())
 
 // Home page
-router.get('/', userController.homePage);
+router.get('/', preventBack, userController.homePage);
 
 // Signup & Login
 router.get('/login',userController.loginPage);

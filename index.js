@@ -5,20 +5,20 @@ const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
 require('dotenv').config();
 
-mongoose.connect('mongodb://localhost:27017/Pawty', {
-}).then(() => {
-    console.log('Connected to MongoDB');
-}).catch((err) => {
-    console.error('Error connecting to MongoDB', err);
-});
+mongoose
+.connect('mongodb://localhost:27017/Pawty')
+.then(() => {console.log('Connected to MongoDB')})
+.catch((err) => {console.error('Error connecting to MongoDB', err)});
 
 
 const adminRoutes = require('./routes/adminRoutes');
 const vendorRoutes =require('./routes/vendorRoutes');
 const userRoutes = require('./routes/userRoutes');
+const preventBack = require('./middleware/preventBack'); 
+
 
 const app = express();
-
+app.use(preventBack);
 app.use(session({
     resave:false,
     saveUninitialized:true,
