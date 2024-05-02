@@ -60,7 +60,7 @@
           <div class="header-align">
             <div class="header-align-start">
               <div class="header-logo-area">
-                <a href="index.html">
+                <a href="/">
                   <img class="logo-main" src="assets/img/logo-light.png" width="158" height="36" alt="Logo" />
                 </a>
               </div>
@@ -69,9 +69,9 @@
               <div class="header-navigation-area position-relative">
                 <ul class="main-menu nav">
                   <li><a href="/"><span>Home</span></a></li>
-                  <li><a href="about-us.html"><span>About</span></a></li>
+                  <li><a href="/about-us"><span>About</span></a></li>
                   <li><a href="/shop"><span>Shop</span></a></li>
-                  <li><a href="contact.html"><span>Contact</span></a></li>
+                  <li><a href="/contact"><span>Contact</span></a></li>
                 </ul>
               </div>
             </div>
@@ -87,7 +87,7 @@
                   </a>
                 </div>
                 <div class="shopping-wishlist">
-                  <a class="shopping-wishlist-btn" href="/shop">
+                  <a class="shopping-wishlist-btn" href="/wishlist">
                     <i class="pe-7s-like icon"></i>
                   </a>
                 </div>
@@ -608,61 +608,57 @@
                               <h5 class="modal-title" id="editProfileModalLabel">Add Address</h5>
                               <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <form id="addressForm" action="/addAddress" method="post">
+                            <form id="addAddress" action="/addAddress/0" method="post">
                               <div class="modal-body">
                                 <div class="form-group">
-                                  <label for="name">Name</label>
-                                  <input type="text" class="form-control" id="name" name="name">
-                                  <div id="name-error" class="text-danger"></div>
-                                </div>
-                                <div class="form-row g-0">
-                                  <div class="form-group ">
-                                    <label for="locality">Locality</label>
-                                    <input type="text" class="form-control" id="locality" name="locality">
-                                    <div id="locality-error" class="text-danger"></div>
-                                  </div>
-                                  <div class="form-group ">
-                                    <label for="street">Street</label>
-                                    <input type="text" class="form-control" id="street" name="street">
-                                    <div id="street-error" class="text-danger"></div>
-                                  </div>
-                                </div>
-                                <div class="form-row g-0">
-                                  <div class="form-group ">
-                                    <label for="city">City</label>
-                                    <input type="text" class="form-control" id="city" name="city">
-                                    <small id="city-error" class="text-danger"></small>
-                                  </div>
-                                  <div class="form-group">
-                                    <label for="state">State</label>
-                                    <select id="state" class="form-control" name="state">
-                                      <option value="">Select State</option>
-                                      <option value="Karnataka">Karnataka</option>
-                                      <option value="Kerala">Kerala</option>
-                                      <option value="TamilNadu">TamilNadu</option>
-                                      <option value="AndraPradesh">AndraPradesh</option>
-                                      <!-- Add more options for other states -->
-                                    </select>
-                                    <small id="state-error" class="text-danger"></small>
-                                  </div>
+                                  <label for="addName">Name</label><br>
+                                  <div id="addName-error" class="text-danger"></div>
+                                  <input type="text" class="form-control" id="addName" name="name">
                                 </div>
                                 <div class="form-group">
-                                  <label for="phone">Phone</label>
-                                  <input type="number" class="form-control" id="phone" name="phone">
-                                  <small id="phone-error" class="text-danger"></small>
+                                  <label for="addLocality">Locality</label><br>
+                                  <div id="addLocality-error" class="text-danger"></div>
+                                  <input type="text" class="form-control" id="addLocality" name="locality">
                                 </div>
                                 <div class="form-group">
-                                  <label for="pincode">Pincode</label>
-                                  <input type="number" class="form-control" id="pincode" name="pincode">
-                                  <small id="pincode-error" class="text-danger"></small>
+                                  <label for="addStreet">Street</label><br>
+                                  <div id="addStreet-error" class="text-danger"></div>
+                                  <input type="text" class="form-control" id="addStreet" name="street">
                                 </div>
-                                <div id="error-message" class="text-danger">Please fill all input field with valid inputs</div>
+                                <div class="form-group">
+                                  <label for="addCity">City</label><br>
+                                  <small id="addCity-error" class="text-danger"></small>
+                                  <input type="text" class="form-control" id="addCity" name="city">
+                                </div>
+                                <div class="form-group">
+                                  <label for="addState">State</label><br>
+                                  <small id="addState-error" class="text-danger"></small>
+                                  <select id="addState" class="form-control" name="state">
+                                    <option value="">Select State</option>
+                                    <option value="Karnataka">Karnataka</option>
+                                    <option value="Kerala">Kerala</option>
+                                    <option value="TamilNadu">TamilNadu</option>
+                                    <option value="AndraPradesh">AndraPradesh</option>
+                                    <!-- Add more options for other states -->
+                                  </select>
+                                </div>
+                                <div class="form-group">
+                                  <label for="addPhone">Phone</label><br>
+                                  <small id="addPhone-error" class="text-danger"></small>
+                                  <input type="number" class="form-control" id="addPhone" name="phone">
+                                </div>
+                                <div class="form-group">
+                                  <label for="addPincode">Pincode</label><br>
+                                  <small id="addPincode-error" class="text-danger"></small>
+                                  <input type="number" class="form-control" id="addPincode" name="pincode">
+                                </div>
+                                <div id="addError-message" class="text-danger"></div>                                                                
                               </div>
-                              <div class="modal-footer">
-                                <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-                                <button type="submit" class="btn btn-success">Add New Address</button>
-                              </div>
+                              <button type="submit" onclick="validateForm(event)" class="btn btn-success d-flex justify-content-center m-auto">Add New Address</button>
+                              <br>
                             </form>
+                            
+                            
                           </div>
                         </div>
                       </div>
@@ -734,241 +730,8 @@
       </div>
       </div>
     </section>
-    <script>
-      document.getElementById('addressForm').addEventListener('submit', function(event) {
-        console.log('Form submitted'); // Add this line
-      // document.getElementById('addressForm').addEventListener('submit', function(event) {
-        const name = document.getElementById('name').value;
-        const locality = document.getElementById('locality').value;
-        const street = document.getElementById('street').value.trim();
-        const city = document.getElementById('city').value.trim();
-        const state = document.getElementById('state').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const pincode = document.getElementById('pincode').value.trim();
 
-        const nameError = document.getElementById('name-error');
-        const localityError = document.getElementById('locality-error');
-        const streetError = document.getElementById('street-error');
-        const cityError = document.getElementById('city-error');
-        const stateError = document.getElementById('state-error');
-        const phoneError = document.getElementById('phone-error');
-        const pincodeError = document.getElementById('pincode-error');
-        console.log("haaai");
-
-        let isValid = true;
-        // Reset errors
-        nameError.textContent = '';
-        localityError.textContent = '';
-        streetError.textContent = '';
-        cityError.textContent = '';
-        stateError.textContent = '';
-        phoneError.textContent = '';
-        pincodeError.textContent = '';
-
-        if (!name) {
-          nameError.textContent = 'Name is required';
-          console.log("sadfkahksd");
-          isValid = false;
-        }
-
-        if (!locality) {
-          localityError.textContent = 'Locality is required';
-          console.log("jhgj");
-          isValid = false;
-        }
-        if (!street) {
-          streetError.textContent = 'Street is required';
-          isValid = false;
-        }
-        if (!city) {
-          cityError.textContent = 'City is required';
-          isValid = false;
-        }
-        if (!state) {
-          stateError.textContent = 'State is required';
-          isValid = false;
-        }
-        if (!phone) {
-          phoneError.textContent = 'Phone is required';
-          isValid = false;
-        } else if (!/^\d{10}$/.test(phone)) {
-          phoneError.textContent = 'Phone number must be 10 digits';
-          isValid = false;
-        }
-        if (!pincode) {
-          pincodeError.textContent = 'Pincode is required';
-          isValid = false;
-        } else if (!/^\d{6}$/.test(pincode)) {
-          pincodeError.textContent = 'Pincode must be 6 digits';
-          isValid = false;
-        }
-        if (!isValid) {
-          event.preventDefault(); // Prevent form submission if there are errors
-        }
-      });
-    </script>
-
-      <!-- Script of the password show eye -->
-    <script>
-      document.getElementById('toggle-current-pwd').addEventListener('click', function() {
-        var pwdInput = document.getElementById('current-pwd');
-        pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
-      });
-    
-      document.getElementById('toggle-new-pwd').addEventListener('click', function() {
-        var pwdInput = document.getElementById('new-pwd');
-        pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
-      });
-    
-      document.getElementById('toggle-confirm-pwd').addEventListener('click', function() {
-        var pwdInput = document.getElementById('confirm-pwd');
-        pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password';
-      });
-    </script>
-
-    <!--  Change Password validation and submition -->
-    <script>
-      document.getElementById('submit-btn').addEventListener('click', function () {
-      var currentPassword = document.getElementById('current-pwd').value;
-      var newPassword = document.getElementById('new-pwd').value;
-      var confirmPassword = document.getElementById('confirm-pwd').value;
-      var currentPasswordError = document.getElementById('current-password-error');
-      var newPasswordError = document.getElementById('new-password-error');
-      var confirmPasswordError = document.getElementById('confirm-password-error');
-      var isValid = true;
-
-      // Reset error messages
-      currentPasswordError.innerHTML = '';
-      newPasswordError.innerHTML = '';
-      confirmPasswordError.innerHTML = '';
-
-      // Validate current password
-      if (currentPassword.length === 0) {
-        currentPasswordError.innerHTML = 'Please enter your current password.';
-        isValid = false;
-      }
-
-      // Validate new password
-      if (newPassword.length < 6) {
-        newPasswordError.innerHTML = 'New password must be at least 6 characters long.';
-        isValid = false;
-      }
-
-      // Check if new password and confirm password match
-      if (newPassword !== confirmPassword) {
-        confirmPasswordError.innerHTML = 'Passwords do not match.';
-        isValid = false;
-      }
-
-      // If no errors, submit form
-      if (isValid) {
-        axios.post('/changePassword', {
-          currentPass: currentPassword,
-          newPass: newPassword
-        })
-        .then(function (response) {
-          // Handle successful response
-          console.log(response);
-          // Clear input fields
-          document.getElementById('current-pwd').value = '';
-          document.getElementById('new-pwd').value = '';
-          document.getElementById('confirm-pwd').value = '';
-          // // Show toast message
-          Toastify({
-              text: "Password updated",
-              duration: 2000, // 3 seconds
-              gravity: "top", // Display at the top
-              position: 'center', // Display on the right side
-              backgroundColor: "#203e5a", // Background color
-              stopOnFocus: true, // Stop the timer when the toast is focused
-          }).showToast();
-      })
-            .catch(function (error) {
-              console.log("working catch block")
-            // Handle error
-            console.error(error);
-            if (error.response.status === 400) {
-                // Assuming you have a div with id "current-password-error" to show current password error
-                document.getElementById('current-password-error').innerHTML = error.response.data.error;
-            } else {
-                // Handle other errors
-                console.log("error on changing Password");
-            }
-        });
-      }
-    });
-  </script>
-
-
-<!--  Request for Order Cancellation  -->
-    <script>
-      function requestCancellation(orderId, productId , index) {
-         Swal.fire({
-          title: "Cancellation Request",
-          text: "Are you sure you want to cancel this order?",
-          icon: "question",
-          confirmButtonText: "Cancel Order",
-          showCancelButton: true,
-          cancelButtonText: "Go Back",
-          reverseButtons: true
-        }).then((result) => {
-          if (result.isConfirmed) {
-            axios.post('/cancelOrder', {
-            orderId: orderId,
-            productId: productId
-        })
-        .then(function (response) {
-            // Handle successful cancellation
-            console.log("order Cancellation request send",index,response);
-            document.getElementById('textCancelOrder-' + index).textContent = 'Requested for Order Cancellation';
-            document.getElementById(index).textContent = 'Requested for Cancellation';
-            document.getElementById("ind"+index).textContent = 'Requested for Cancellation';
-            document.getElementById("inde"+index).textContent = 'Requested for Cancellation';
-            document.getElementById("ind"+index).style.color = 'red';
-            document.getElementById("inde"+index).style.color = 'red';
-            document.getElementById(index).style.color = 'red';
-              $('#orderModal-' + index).modal('hide');
-              // $('body').removeClass('modal-open');
-              $('.modal-backdrop').remove();
-             Toastify({
-                text: "Order cancellation request sent",
-                duration: 2000, // 3 seconds
-                gravity: "top", // Display at the top
-                position: 'right', // Display on the right side
-                backgroundColor: "orange", // Background color
-                stopOnFocus: true, // Stop the timer when the toast is focused
-            }).showToast();
-        })
-        .catch(function (error) {
-            // Handle cancellation error
-            console.error(error);
-            // Show error message
-            Toastify({
-                text: "Error requesting cancellation",
-                duration: 3000, // 3 seconds
-                close: true,
-                gravity: "top", // Display at the top
-                position: 'right', // Display on the right side
-                backgroundColor: "red", // Background color
-                stopOnFocus: true, // Stop the timer when the toast is focused
-            }).showToast();
-        })
-          // } else if (
-          //   result.dismiss === Swal.DismissReason.cancel
-          // ) {
-          //   swalWithBootstrapButtons.fire({
-          //     title: "Cancelled",
-          //     text: "Your imaginary file is safe :)",
-          //     icon: "error"
-          //   });
-          }
-      });
-      };
-    </script>
-
-
-
-    <!--== End My Account Wrapper ==-->
+     <!--== End My Account Wrapper ==-->
 
     <!--== Start Feature Area Wrapper ==-->
     <div class="feature-area">
@@ -1033,7 +796,7 @@
           <div class="col-md-6 col-lg-3">
             <div class="widget-item widget-about">
               <h4 class="widget-title">About Us</h4>
-              <p class="desc">Lorem ipsum dolor sit amet, consectel adipisicing elit, sed do eiusmod temp incidid ut labore et dolo</p>
+              <p class="desc">Lorem ipsum this is a trial website done by the team pawty for more information contact us on provided informations</p>
               <div class="social-icons">
                 <a href="https://www.facebook.com/" target="_blank" rel="noopener"><i class="fa fa-facebook"></i></a>
                 <a href="https://dribbble.com/" target="_blank" rel="noopener"><i class="fa fa-dribbble"></i></a>
@@ -1050,12 +813,12 @@
                 <div class="collapse-body">
                   <div class="widget-menu-wrap">
                     <ul class="nav-menu">
-                      <li><a href="about-us.html">About Us</a></li>
-                      <li><a href="account-login.html">Delivery Information</a></li>
-                      <li><a href="account-login.html">Privacy Policy</a></li>
-                      <li><a href="account-login.html">Terms & Conditions</a></li>
-                      <li><a href="contact.html">Contact Us</a></li>
-                      <li><a href="account-login.html">Loag In Info</a></li>
+                      <li><a href="/about-us">About Us</a></li>
+                      <li><a href="/account">Delivery Information</a></li>
+                      <li><a href="/account">Privacy Policy</a></li>
+                      <li><a href="/account">Terms & Conditions</a></li>
+                      <li><a href="/contact">Contact Us</a></li>
+                      <li><a href="/account">Log-In Info</a></li>
                     </ul>
                   </div>
                 </div>
@@ -1070,12 +833,12 @@
                 <div class="collapse-body">
                   <div class="widget-menu-wrap">
                     <ul class="nav-menu">
-                      <li><a href="account-login.html">Gallery</a></li>
-                      <li><a href="shop.html">Brands</a></li>
-                      <li><a href="account-login.html">Gift Certificates</a></li>
-                      <li><a href="shop.html">Specials</a></li>
-                      <li><a href="account.html">My Account Us</a></li>
-                      <li><a href="about-us.html">About Us</a></li>
+                      <li><a href="/wishlist">Gallery</a></li>
+                      <li><a href="/shop">Brands</a></li>
+                      <li><a href="/orders">Gift Certificates</a></li>
+                      <li><a href="/shop">Specials</a></li>
+                      <li><a href="/account">My Account</a></li>
+                      <li><a href="/about-us">About Us</a></li>
                     </ul>
                   </div>
                 </div>
@@ -1089,13 +852,13 @@
               <div id="widgetId-3" class="collapse widget-collapse-body">
                 <div class="collapse-body">
                   <div class="widget-contact-info">
-                    <p class="contact-info-desc">If you have any question.please contact us at <a href="mailto://demo@example.com">demo@example.com</a></p>
+                    <p class="contact-info-desc">If you have any question.please contact us at <a href="mailto://pawtyorg@gmail.com">pawtyorg@gmail.com</a></p>
                     <div class="contact-item">
                       <div class="icon">
                         <i class="pe-7s-map-marker"></i>
                       </div>
                       <div class="info">
-                        <p>Your address goes here. <br>123, Address.</p>
+                        <p>Pawty<br>Atholi - Calicut , Kerala</p>
                       </div>
                     </div>
                     <div class="contact-item phone-info">
@@ -1103,7 +866,7 @@
                         <i class="pe-7s-phone"></i>
                       </div>
                       <div class="info">
-                        <p><span>Have any Question</span> <br><a href="tel://0123456789">+0 123 456 789</a></p>
+                        <p><span>Have any Question</span> <br><a href="tel://0123456789">+91 7012264425</a></p>
                       </div>
                     </div>
                   </div>
@@ -1122,9 +885,9 @@
         <div class="row">
           <div class="col-12">
             <div class="footer-bottom-content">
-              <p class="copyright">© 2021 Tuime. Made with <i class="fa fa-heart"></i> by <a target="_blank" href="https://themeforest.net/user/codecarnival">Codecarnival.</a></p>
+              <p class="copyright">© 2024 Pawty by <a target="_blank" href="#">HAMIM THOYYIB</a></p>
               <div class="payment">
-                <a href="account.html"><img src="assets/img/photos/payment.png" width="192" height="21" alt="Payment Logo"></a>
+                <a href="/account"><img src="assets/img/photos/payment.png" width="192" height="21" alt="Payment Logo"></a>
               </div>
             </div>
           </div>
@@ -1334,81 +1097,17 @@
       <nav id="offcanvasNav" class="offcanvas-menu-nav">
         <ul>
           <li class="offcanvas-nav-parent">
-            <a class="offcanvas-nav-item" href="javascript:void(0)">Home</a>
-            <ul>
-              <li><a href="index.html"><span>Home One</span></a></li>
-              <li><a href="index-two.html"><span>Home Two</span></a></li>
-            </ul>
+            <a class="offcanvas-nav-item" href="/">Home</a>
           </li>
-
-          <li class="offcanvas-nav-parent"><a class="offcanvas-nav-item" href="about-us.html">About</a></li>
-
           <li class="offcanvas-nav-parent">
-            <a class="offcanvas-nav-item" href="javascript:void(0)">Shop</a>
-            <ul>
-              <li>
-                <a class="offcanvas-nav-item" href="javascript:void(0)">Shop Layouts</a>
-                <ul>
-                  <li><a href="shop-three-columns.html"><span>Shop 3 Column</span></a></li>
-                  <li><a href="shop-four-columns.html"><span>Shop 4 Column</span></a></li>
-                  <li><a href="shop-left-sidebar.html"><span>Shop Left Sidebar</span></a></li>
-                  <li><a href="shop.html"><span>Shop Right Sidebar</span></a></li>
-                </ul>
-              </li>
-              <li>
-                <a class="offcanvas-nav-item" href="javascript:void(0)">Single Product</a>
-                <ul>
-                  <li><a href="single-normal-product.html"><span>Single Product Normal</span></a></li>
-                  <li><a href="single-product.html"><span>Single Product Variable</span></a></li>
-                  <li><a href="single-group-product.html"><span>Single Product Group</span></a></li>
-                  <li><a href="single-affiliate-product.html"><span>Single Product Affiliate</span></a></li>
-                </ul>
-              </li>
-              <li>
-                <a class="offcanvas-nav-item" href="javascript:void(0)">Others Pages</a>
-                <ul>
-                  <li><a href="/cart"><span>Shopping Cart</span></a></li>
-                  <li><a href="shop-checkout.html"><span>Checkout</span></a></li>
-                  <li><a href="/wishlist"><span>Wishlist</span></a></li>
-                  <li><a href="shop-compare.html"><span>Compare</span></a></li>
-                </ul>
-              </li>
-            </ul>
+            <a class="offcanvas-nav-item" href="/shop">Shop</a>
           </li>
-
           <li class="offcanvas-nav-parent">
-            <a class="offcanvas-nav-item" href="javascript:void(0)">Blog</a>
-            <ul>
-              <li>
-                <a class="offcanvas-nav-item" href="javascript:void(0)">Blog Layout</a>
-                <ul>
-                  <li><a href="blog-grid.html">Blog Grid</a></li>
-                  <li><a href="blog.html">Blog Left Sidebar</a></li>
-                  <li><a href="blog-right-sidebar.html">Blog Right Sidebar</a></li>
-                </ul>
-              </li>
-              <li>
-                <a class="offcanvas-nav-item" href="javascript:void(0)">Single Blog</a>
-                <ul>
-                  <li><a href="blog-details-no-sidebar.html">Blog Details</a></li>
-                  <li><a href="blog-details.html">Blog Details Left Sidebar</a></li>
-                  <li><a href="blog-details-right-sidebar.html">Blog Details Right Sidebar</a></li>
-                </ul>
-              </li>
-            </ul>
+            <a class="offcanvas-nav-item" href="/about">about</a>
           </li>
-
           <li class="offcanvas-nav-parent">
-            <a class="offcanvas-nav-item" href="javascript:void(0)">Pages</a>
-            <ul>
-              <li><a href="account.html"><span>Account</span></a></li>
-              <li><a href="account-login.html"><span>Login</span></a></li>
-              <li><a href="account-register.html"><span>Register</span></a></li>
-              <li><a href="page-not-found.html"><span>Page Not Found</span></a></li>
-            </ul>
+            <a class="offcanvas-nav-item" href="/contact">Contact</a>
           </li>
-
-          <li class="offcanvas-nav-parent"><a class="offcanvas-nav-item" href="contact.html">Contact</a></li>
         </ul>
       </nav>
     </div>
@@ -1417,6 +1116,8 @@
 </div>
 
 <!--=======================Javascript============================-->
+
+<script src="/scripts/addAddressValidation.js"></script>
 <!--=== jQuery Modernizr Min Js ===-->
 <script src="assets/js/modernizr.js"></script>
 <!--=== jQuery Min Js ===-->

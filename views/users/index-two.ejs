@@ -40,16 +40,15 @@
         height: 250px; /* Set the height equal to the width */
         overflow: hidden;
       }
-
       .banner-product-single-style3-item .thumb img {
         width: 100%;
         height: 100%;
         object-fit: fill; /* Ensure the image covers the entire container */
       }
-
       .square-image {
         display: block;
       }
+     
     </style>
 </head>
 
@@ -75,18 +74,19 @@
           <div class="header-align">
             <div class="header-align-start">
               <div class="header-logo-area">
-                <a href="index.html">
-                  <img class="logo-main" src="assets/img/logo-light.png" width="158" height="36" alt="Logo" />
+                <a href="/">
+                  <img class="logo-main img-fluid" src="assets/img/logo-light.png" alt="Logo" style="max-width:25%;" />
+                  <!-- <img class="logo-main" src="assets/img/logo-light.png"alt="Logo" /> -->
                 </a>
               </div>
             </div>
             <div class="header-align-center">
               <div class="header-navigation-area position-relative">
-                <ul class="main-menu nav">
+                <ul class="main-menu nav ">
                   <li><a href="/"><span>Home</span></a></li>
-                  <li><a href="about-us.html"><span>About</span></a></li>
+                  <li><a href="/about-us"><span>About</span></a></li>
                   <li><a href="/shop"><span>Shop</span></a></li>
-                  <li><a href="contact.html"><span>Contact</span></a></li>
+                  <li><a href="/contact"><span>Contact</span></a></li>
                 </ul>
               </div>
             </div>
@@ -176,10 +176,10 @@
     <!--== End Hero Area Wrapper ==-->
 
     <!--== Start Feature Area Wrapper ==-->
-    <div class="feature-area feature-style2-area mb-5">
-      <div class="container">
-        <div class="row">
-          <div class="col-12 col-sm-6 col-lg-3">
+    <div class="feature-area feature-style2-area p-0 features">
+      <div class="containe m-0 p-0">
+        <div class="row my-5 mx-0 p-0">
+          <div class="col-md-6 col-6 col-lg-3 d-flex justify-content-center">
             <div class="feature-icon-box">
               <div class="icon-box">
                 <img class="icon-img" src="assets/img/icons/f1.png" width="46" height="34" alt="Icon-HasTech">
@@ -190,7 +190,7 @@
               </div>
             </div>
           </div>
-          <div class="col-12 col-sm-6 col-lg-3">
+          <div class="col-md-6 col-6  col-lg-3 d-flex justify-content-center">
             <div class="feature-icon-box">
               <div class="icon-box">
                 <img class="icon-img" src="assets/img/icons/f2.png" width="43" height="34" alt="Icon-HasTech">
@@ -201,7 +201,7 @@
               </div>
             </div>
           </div>
-          <div class="col-12 col-sm-6 col-lg-3">
+          <div class="col-md-6 col-6 col-lg-3 d-flex justify-content-center">
             <div class="feature-icon-box">
               <div class="icon-box">
                 <img class="icon-img" src="assets/img/icons/f3.png" width="39" height="39" alt="Icon-HasTech">
@@ -212,8 +212,8 @@
               </div>
             </div>
           </div>
-          <div class="col-12 col-sm-6 col-lg-3">
-            <div class="feature-icon-box">
+          <div class="col-md-6 col-6 col-lg-3 d-flex justify-content-center">
+            <div class="feature-icon-box ">
               <div class="icon-box">
                 <img class="icon-img" src="assets/img/icons/f4.png" width="36" height="39" alt="Icon-HasTech">
               </div>
@@ -229,56 +229,60 @@
     <!--== End Feature Area Wrapper ==-->
 
     <!--== Start Product Banner Area Wrapper ==-->
-    <section class="product-area product-banner-area mt-5 mb--0" style="max-height:300px;" >
-      <div class="container pt--0 g-0" style="margin:0 auto;width:100%;">
-        <div class="row g-0 d-flex justify-content-between" style="margin:0 0 0 8%;min-height:50px;">
-          <div class="col-md-6 col-lg-4 g-0">
-            <div class="banner-product-single-style3-item">
-              <div class="thumb">
-                <a href="/shop" class="banner-box">
-                  <img src="<%= banner.offerBanner[0].image%>" width="200" height="200" alt="Image-HasTech">
-                </a><br>
-              </div>
-              <h5 class="d-flex justify-content-center row mt-3 sub-title col-lg-12">
-                <%= banner.offerBanner[0].offerValue %> Off On <%= banner.offerBanner[0].title %>
-              </h5>
-              <a class="btn-filter d-flex justify-content-center me-5" href="/shop">Shop Now</a>
+    <section class="product-banner-area mb-5" style="background-color:rgb(246, 244, 244)">
+      <div class="container py-5">
+        <div class="row d-flex justify-content-between p-0 m-0">
+          <div class="col-md-6 col-lg-4 m-0">
+            <div class="banner-product-single-style3-item mt-3">
+              <div class="thumb w-100">
+                <a href="/shop">
+                  <img src="<%= banner.offerBanner[0].image%>" width="100%" height="100%" alt="Image-HasTech">
+                </a>
+                
+              </div>    
             </div>
+            <div class="d-flex justify-content-center">
+              <h5 class="sub-title">-<%= banner.offerBanner[0].offerValue %> Off On &nbsp;</h5>
+              <h5 class="title"><%= banner.offerBanner[0].title %></h5>
+            </div>
+            <a class="bannerButton d-flex justify-content-center mb-4" href="/shop">Shop Now</a>
           </div>
-          <div class="col-md-6 col-lg-4 g-0">
-            <div class="banner-product-single-style3-item">
-              <div class="thumb">
-                <a href="/shop" class="banner-box">
-                  <img src="<%= banner.offerBanner[1].image%>" width="200" height="200" alt="Image-HasTech">
-                </a><br>
-              </div>
-              <h5 class="d-flex justify-content-center row mt-3 sub-title col-lg-12">
-                <%= banner.offerBanner[1].offerValue %> Off On <%= banner.offerBanner[1].title %>
-              </h5>
-              <a class="btn-filter d-flex justify-content-center me-5" href="/shop">Shop Now</a>
+          <div class="col-md-6 col-lg-4 m-0">
+            <div class="banner-product-single-style3-item mt-3">
+              <div class="thumb w-100">
+                <a href="/shop">
+                  <img src="<%= banner.offerBanner[1].image%>" width="100%" height="100%" alt="Image-HasTech">
+                </a>
+                
+              </div>    
             </div>
+            <div class="d-flex justify-content-center">
+              <h5 class="sub-title">-<%= banner.offerBanner[1].offerValue %> Off On &nbsp;</h5>
+              <h5 class="title"><%= banner.offerBanner[1].title %></h5>
+            </div>
+            <a class="bannerButton d-flex justify-content-center mb-4" href="/shop">Shop Now</a>
           </div>
-          <div class="col-md-6 col-lg-4 g-0">
-            <div class="banner-product-single-style3-item">
-              <div class="thumb">
-                <a href="/shop" class="banner-box">
-                  <img src="<%= banner.offerBanner[2].image%>" width="200" height="200" alt="Image-HasTech">
-                </a><br>
-              </div>
-              <h5 class="d-flex justify-content-center row mt-3 sub-title col-lg-12">
-                <%= banner.offerBanner[2].offerValue %> Off On <%= banner.offerBanner[2].title %>
-              </h5>
-              <a class="btn-filter d-flex justify-content-center me-5" href="/shop">Shop Now</a>
+          <div class="col-md-6 col-lg-4 m-0">
+            <div class="banner-product-single-style3-item mt-3">
+              <div class="thumb w-100">
+                <a href="/shop">
+                  <img src="<%= banner.offerBanner[2].image%>" width="100%" height="100%" alt="Image-HasTech">
+                </a>
+                
+              </div>    
             </div>
+            <div class="d-flex justify-content-center">
+              <h5 class="sub-title">-<%= banner.offerBanner[2].offerValue %> Off On &nbsp;</h5>
+              <h5 class="title"><%= banner.offerBanner[2].title %></h5>
+            </div>
+            <a class="bannerButton d-flex justify-content-center mb-4" href="/shop">Shop Now</a>
           </div>
         </div>
       </div>
     </section>
-    <!--== End Product Banner Area Wrapper ==-->
-    <!--== Start Product Area Wrapper ==-->
-    <section class="product-area product-default-area mt-3">
-      <div class="container pb-0">
-        <div class="row">
+    <section class="product-area product-default-area">
+      <div class="container p-0">
+        <div class="row m-0">
           <div class="col-12">
             <div class="section-title mb-45 mb-sm-20 shape-center text-center">
               <h5 class="sub-title">Best Quality PRODUCTs</h5>
@@ -295,32 +299,31 @@
           <div id="products-container" style="min-height:320px; white-space: nowrap;overflow-y: auto;" class="row isotope-grid">
             <% let count = 0; %>
             <% products.forEach(prod => { %>
-            <% if (prod.subCategory === subCategory[0].subCategoryName && count < 8) { %>
-            <div class="col-sm-6 col-lg-3 isotope-item filter_best_sellers <%= prod.subCategory %>">
-              <!--== Start Product Item ==-->
-              <div class="product-item">
-                <div class="product-thumb">
-                  <a href="/product/<%= prod._id %>">
-                    <img src="<%= prod.images[0] %>" width="270" height="320" alt="Image-HasTech">
-                  </a>
-                </div>
-                <div class="product-info">
-                  <h4 class="title"><a href="single-product.html"><%= prod.productName %></a></h4>
-                  <div class="prices">
-                    <span class="price">$<%= prod.price %></span>
+              <% if (prod.subCategory === subCategory[0].subCategoryName && count < 8) { %>
+              <div class="col-sm-6 col-lg-3 isotope-item filter_best_sellers <%= prod.subCategory %>">
+                <div class="product-item">
+                  <div class="product-thumb">
+                    <a href="/product/<%= prod._id %>">
+                      <img src="<%= prod.images[0] %>" width="270" height="320" alt="Image-HasTech" class="img-fluid">
+                    </a>
+                  </div>
+                  <div class="product-info">
+                    <h4 class="title"><a href="single-product.html"><%= prod.productName %></a></h4>
+                    <div class="prices">
+                      <span class="price">$<%= prod.price %></span>
+                    </div>
                   </div>
                 </div>
               </div>
-              <!--== End Product Item ==-->
-            </div>
-            <% } %>
-            <% count++; %>
+              <% } %>
+              <% count++; %>
             <% }) %>
           </div>
         </div>
         
       </div>
     </section>
+    
     
     <input type="hidden" id="products-data" value="<%= JSON.stringify(products) %>">
     <script>
@@ -391,223 +394,6 @@
         </div>
       </div>
     </section>
-    
-    <!--== End About Area Wrapper ==-->
-
-    <!--== Start Divider Area Wrapper ==-->
-    <!-- <section class="bg-theme-color bg-img" data-bg-img="assets/img/photos/bg2.webp">
-      <div class="container pt--0 pb--0">
-        <div class="row divider-style2">
-          <div class="col-lg-6">
-            <div class="divider-thumb">
-              <img src="assets/img/photos/divider3.png" width="595" height="523" alt="Image-HasTech">
-            </div>
-          </div>
-          <div class="col-lg-6">
-            <div class="divider-content">
-              <h5 class="sub-title">Save 50% Off</h5>
-              <h2 class="title">Best Deal Offer</h2>
-              <p class="desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore etlop.</p>
-              <a class="btn-theme text-dark" href="/shop">Shop Now</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section> -->
-    <!--== End Divider Area Wrapper ==-->
-
-    <!--== Start Product Area Wrapper ==-->
-    <!-- <section class="product-area daily-product-area daily-product2-area bg-color-f2">
-      <div class="container"> -->
-        <!-- <div class="row">
-          <div class="col-12">
-            <div class="section-title shape-center text-center">
-              <h5 class="sub-title">Trending Productts</h5>
-              <h2 class="title">Deal Of The Day</h2>
-            </div>
-          </div>
-        </div> -->
-        <!-- <div class="row">
-          <div class="col-12 col-sm-6"> -->
-            <!--== Start Product Item ==-->
-            <!-- <div class="product-item daily-product-item">
-              <div class="row">
-                <div class="col-lg-6">
-                  <div class="product-thumb">
-                    <a href="single-product.html">
-                      <img src="assets/img/shop/9.jpg" width="270" height="320" alt="Image-HasTech">
-                    </a>
-                    <div class="product-action">
-                      <button type="button" class="btn-product-wishlist" data-bs-toggle="modal" data-bs-target="#action-WishlistModal">
-                        <i class="pe-7s-like"></i>
-                      </button>
-                      <div class="product-action-links">
-                        <button type="button" class="btn-product-cart" data-bs-toggle="modal" data-bs-target="#action-CartAddModal">
-                          <i class="pe-7s-shopbag"></i>
-                        </button>
-                        <button type="button" class="btn-product-quick-view" data-bs-toggle="modal" data-bs-target="#action-QuickViewModal">
-                          <i class="pe-7s-look"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="product-info">
-                    <div class="ht-countdown-wrap">
-                      <span class="countdown-title">End In:</span>
-                      <div class="ht-countdown ht-countdown-style1" data-date="1/10/2024"></div>
-                    </div>
-                    <h4 class="title"><a href="single-product.html">Joust Duffle Bag</a></h4>
-                    <div class="prices">
-                      <span class="price">$20.19</span>
-                    </div>
-                    <div class="product-feature-list">
-                      <ul>
-                        <li><span>Predecessor :</span> None.</li>
-                        <li><span>Support Type :</span> Neutral.</li>
-                        <li><span>Cushioning :</span> High Energizing.</li>
-                        <li><span>Total Weight :</span> 300gm</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-            <!--== End prPduct Item ==-->
-          </div>
-          <div class="col-12 col-sm-6">
-            <!--== Start Product Item ==-->
-            <!-- <div class="product-item daily-product-item">
-              <div class="row">
-                <div class="col-lg-6">
-                  <div class="product-thumb">
-                    <a href="single-product.html">
-                      <img src="assets/img/shop/10.jpg" width="270" height="320" alt="Image-HasTech">
-                    </a>
-                    <div class="product-action">
-                      <button type="button" class="btn-product-wishlist" data-bs-toggle="modal" data-bs-target="#action-WishlistModal">
-                        <i class="pe-7s-like"></i>
-                      </button>
-                      <div class="product-action-links">
-                        <button type="button" class="btn-product-cart" data-bs-toggle="modal" data-bs-target="#action-CartAddModal">
-                          <i class="pe-7s-shopbag"></i>
-                        </button>
-                        <button type="button" class="btn-product-quick-view" data-bs-toggle="modal" data-bs-target="#action-QuickViewModal">
-                          <i class="pe-7s-look"></i>
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6">
-                  <div class="product-info">
-                    <div class="ht-countdown-wrap">
-                      <span class="countdown-title">End In:</span>
-                      <div class="ht-countdown ht-countdown-style1" data-date="1/10/2024"></div>
-                    </div>
-                    <h4 class="title"><a href="single-product.html">Wayfarer Messenger Bag</a></h4>
-                    <div class="prices">
-                      <span class="price">$40.19</span>
-                    </div>
-                    <div class="product-feature-list">
-                      <ul>
-                        <li><span>Predecessor :</span> None.</li>
-                        <li><span>Support Type :</span> Neutral.</li>
-                        <li><span>Cushioning :</span> High Energizing.</li>
-                        <li><span>Total Weight :</span> 300gm</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div> -->
-            <!--== End prPduct Item ==-->
-          </div>
-        </div>
-      </div>
-    </section>
-    <!--== End Product Area Wrapper ==-->
-
-    <!--== Start Blog Area Wrapper ==-->
-    <!-- <section class="blog-area blog-default-area">
-      <div class="container">
-        <div class="row">
-          <div class="col-12">
-            <div class="section-title shape-center text-center">
-              <h5 class="sub-title">New & Latest</h5>
-              <h2 class="title">Latest Blog</h2>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-md-6 col-lg-4"> -->
-            <!--== Start Blog Item ==-->
-            <!-- <div class="post-item">
-              <div class="thumb">
-                <a href="blog-details.html">
-                  <img src="assets/img/blog/1.jpg" width="350" height="250" alt="Image-HasTech">
-                </a>
-              </div>
-              <div class="content">
-                <div class="meta">
-                  <ul>
-                    <li class="author-info"><span>By:</span> <a href="blog.html">Admin</a></li>
-                    <li class="post-date"><a href="blog.html">Sep 24,2022</a></li>
-                  </ul>
-                </div>
-                <h4 class="title"><a href="blog-details.html">Lorem ipsum dolor sit amet conse adipis.</a></h4>
-                <a class="btn-theme btn-sm" href="blog-details.html">Read More</a>
-              </div>
-            </div> -->
-            <!--== End Blog Item ==-->
-          <!-- </div>
-          <div class="col-md-6 col-lg-4"> -->
-            <!--== Start Blog Item ==-->
-            <!-- <div class="post-item">
-              <div class="thumb">
-                <a href="blog-details.html">
-                  <img src="assets/img/blog/2.jpg" width="350" height="250" alt="Image-HasTech">
-                </a>
-              </div>
-              <div class="content">
-                <div class="meta">
-                  <ul>
-                    <li class="author-info"><span>By:</span> <a href="blog.html">Admin</a></li>
-                    <li class="post-date"><a href="blog.html">Sep 24,2022</a></li>
-                  </ul>
-                </div>
-                <h4 class="title"><a href="blog-details.html">It is a long established fact that a reader will.</a></h4>
-                <a class="btn-theme btn-sm" href="blog-details.html">Read More</a>
-              </div>
-            </div> -->
-            <!--== End Blog Item ==-->
-          <!-- </div>
-          <div class="col-md-6 col-lg-4"> -->
-            <!--== Start Blog Item ==-->
-            <!-- <div class="post-item">
-              <div class="thumb">
-                <a href="blog-details.html">
-                  <img src="assets/img/blog/3.jpg" width="350" height="250" alt="Image-HasTech">
-                </a>
-              </div>
-              <div class="content">
-                <div class="meta">
-                  <ul>
-                    <li class="author-info"><span>By:</span> <a href="blog.html">Admin</a></li>
-                    <li class="post-date"><a href="blog.html">Sep 24,2022</a></li>
-                  </ul>
-                </div>
-                <h4 class="title"><a href="blog-details.html">fashions fade, style is eternal About Upto.</a></h4>
-                <a class="btn-theme btn-sm" href="blog-details.html">Read More</a>
-              </div>
-            </div> -->
-            <!--== End Blog Item ==-->
-          <!-- </div>
-        </div>
-      </div>
-    </section> -->
-    <!--== End Blog Area Wrapper ==-->
   </main>
 
   <!--== Start Footer Area Wrapper ==-->
@@ -619,7 +405,7 @@
           <div class="col-md-6 col-lg-3">
             <div class="widget-item widget-about">
               <h4 class="widget-title">About Us</h4>
-              <p class="desc">Lorem ipsum dolor sit amet, consectel adipisicing elit, sed do eiusmod temp incidid ut labore et dolo</p>
+              <p class="desc">Lorem ipsum this is a trial website done by the team pawty for more information contact us on provided informations</p>
               <div class="social-icons">
                 <a href="https://www.facebook.com/" target="_blank" rel="noopener"><i class="fa fa-facebook"></i></a>
                 <a href="https://dribbble.com/" target="_blank" rel="noopener"><i class="fa fa-dribbble"></i></a>
@@ -636,12 +422,12 @@
                 <div class="collapse-body">
                   <div class="widget-menu-wrap">
                     <ul class="nav-menu">
-                      <li><a href="about-us.html">About Us</a></li>
-                      <li><a href="account-login.html">Delivery Information</a></li>
-                      <li><a href="account-login.html">Privacy Policy</a></li>
-                      <li><a href="account-login.html">Terms & Conditions</a></li>
-                      <li><a href="contact.html">Contact Us</a></li>
-                      <li><a href="account-login.html">Log-In Info</a></li>
+                      <li><a href="/about-us">About Us</a></li>
+                      <li><a href="/account">Delivery Information</a></li>
+                      <li><a href="/account">Privacy Policy</a></li>
+                      <li><a href="/account">Terms & Conditions</a></li>
+                      <li><a href="/contact">Contact Us</a></li>
+                      <li><a href="/account">Log-In Info</a></li>
                     </ul>
                   </div>
                 </div>
@@ -656,12 +442,12 @@
                 <div class="collapse-body">
                   <div class="widget-menu-wrap">
                     <ul class="nav-menu">
-                      <li><a href="account-login.html">Gallery</a></li>
+                      <li><a href="/wishlist">Gallery</a></li>
                       <li><a href="/shop">Brands</a></li>
-                      <li><a href="account-login.html">Gift Certificates</a></li>
+                      <li><a href="/orders">Gift Certificates</a></li>
                       <li><a href="/shop">Specials</a></li>
-                      <li><a href="account.html">My Account Us</a></li>
-                      <li><a href="about-us.html">About Us</a></li>
+                      <li><a href="/account">My Account</a></li>
+                      <li><a href="/about-us">About Us</a></li>
                     </ul>
                   </div>
                 </div>
@@ -675,13 +461,13 @@
               <div id="widgetId-3" class="collapse widget-collapse-body">
                 <div class="collapse-body">
                   <div class="widget-contact-info">
-                    <p class="contact-info-desc">If you have any question.please contact us at <a href="mailto://demo@example.com">demo@example.com</a></p>
+                    <p class="contact-info-desc">If you have any question.please contact us at <a href="mailto://pawtyorg@gmail.com">pawtyorg@gmail.com</a></p>
                     <div class="contact-item">
                       <div class="icon">
                         <i class="pe-7s-map-marker"></i>
                       </div>
                       <div class="info">
-                        <p>Your address goes here. <br>123, Address.</p>
+                        <p>Pawty<br>Atholi - Calicut , Kerala</p>
                       </div>
                     </div>
                     <div class="contact-item phone-info">
@@ -689,7 +475,7 @@
                         <i class="pe-7s-phone"></i>
                       </div>
                       <div class="info">
-                        <p><span>Have any Question</span> <br><a href="tel://0123456789">+0 123 456 789</a></p>
+                        <p><span>Have any Question</span> <br><a href="tel://0123456789">+91 7012264425</a></p>
                       </div>
                     </div>
                   </div>
@@ -708,9 +494,9 @@
         <div class="row">
           <div class="col-12">
             <div class="footer-bottom-content">
-              <p class="copyright">© 2021 Tuime. Made with <i class="fa fa-heart"></i> by <a target="_blank" href="https://themeforest.net/user/codecarnival">Codecarnival.</a></p>
+              <p class="copyright">© 2024 Pawty by <a target="_blank" href="#">HAMIM THOYYIB</a></p>
               <div class="payment">
-                <a href="account.html"><img src="assets/img/photos/payment.png" width="192" height="21" alt="Payment Logo"></a>
+                <a href="/account"><img src="assets/img/photos/payment.png" width="192" height="21" alt="Payment Logo"></a>
               </div>
             </div>
           </div>
@@ -897,7 +683,7 @@
           <div class="search-note">
             <p>Start typing and press Enter to search</p>
           </div>
-          <form action="#" method="post">
+          <form action="/searchProduct" method="post">
             <div class="search-form position-relative">
               <label for="search-input" class="visually-hidden">Search</label>
               <input id="search-input" type="search" class="form-control" placeholder="Search entire store…">
@@ -920,81 +706,17 @@
       <nav id="offcanvasNav" class="offcanvas-menu-nav">
         <ul>
           <li class="offcanvas-nav-parent">
-            <a class="offcanvas-nav-item" href="javascript:void(0)">Home</a>
-            <ul>
-              <li><a href="index.html"><span>Home One</span></a></li>
-              <li><a href="index-two.html"><span>Home Two</span></a></li>
-            </ul>
+            <a class="offcanvas-nav-item" href="/">Home</a>
           </li>
-
-          <li class="offcanvas-nav-parent"><a class="offcanvas-nav-item" href="about-us.html">About</a></li>
-
           <li class="offcanvas-nav-parent">
-            <a class="offcanvas-nav-item" href="javascript:void(0)">Shop</a>
-            <ul>
-              <li>
-                <a class="offcanvas-nav-item" href="javascript:void(0)">Shop Layouts</a>
-                <ul>
-                  <li><a href="shop-three-columns.html"><span>Shop 3 Column</span></a></li>
-                  <li><a href="shop-four-columns.html"><span>Shop 4 Column</span></a></li>
-                  <li><a href="shop-left-sidebar.html"><span>Shop Left Sidebar</span></a></li>
-                  <li><a href="/shop"><span>Shop Right Sidebar</span></a></li>
-                </ul>
-              </li>
-              <li>
-                <a class="offcanvas-nav-item" href="javascript:void(0)">Single Product</a>
-                <ul>
-                  <li><a href="single-normal-product.html"><span>Single Product Normal</span></a></li>
-                  <li><a href="single-product.html"><span>Single Product Variable</span></a></li>
-                  <li><a href="single-group-product.html"><span>Single Product Group</span></a></li>
-                  <li><a href="single-affiliate-product.html"><span>Single Product Affiliate</span></a></li>
-                </ul>
-              </li>
-              <li>
-                <a class="offcanvas-nav-item" href="javascript:void(0)">Others Pages</a>
-                <ul>
-                  <li><a href="/cart"><span>Shopping Cart</span></a></li>
-                  <li><a href="shop-checkout.html"><span>Checkout</span></a></li>
-                  <li><a href="/wishlist"><span>Wishlist</span></a></li>
-                  <li><a href="shop-compare.html"><span>Compare</span></a></li>
-                </ul>
-              </li>
-            </ul>
+            <a class="offcanvas-nav-item" href="/shop">Shop</a>
           </li>
-
           <li class="offcanvas-nav-parent">
-            <a class="offcanvas-nav-item" href="javascript:void(0)">Blog</a>
-            <ul>
-              <li>
-                <a class="offcanvas-nav-item" href="javascript:void(0)">Blog Layout</a>
-                <ul>
-                  <li><a href="blog-grid.html">Blog Grid</a></li>
-                  <li><a href="blog.html">Blog Left Sidebar</a></li>
-                  <li><a href="blog-right-sidebar.html">Blog Right Sidebar</a></li>
-                </ul>
-              </li>
-              <li>
-                <a class="offcanvas-nav-item" href="javascript:void(0)">Single Blog</a>
-                <ul>
-                  <li><a href="blog-details-no-sidebar.html">Blog Details</a></li>
-                  <li><a href="blog-details.html">Blog Details Left Sidebar</a></li>
-                  <li><a href="blog-details-right-sidebar.html">Blog Details Right Sidebar</a></li>
-                </ul>
-              </li>
-            </ul>
+            <a class="offcanvas-nav-item" href="/about">about</a>
           </li>
-
           <li class="offcanvas-nav-parent">
-            <a class="offcanvas-nav-item" href="javascript:void(0)">Pages</a>
-            <ul>
-              <li><a href="account.html"><span>Account</span></a></li>
-              <li><a href="account-login.html"><span>Login</span></a></li>
-              <li><a href="account-register.html"><span>Register</span></a></li>
-              <li><a href="page-not-found.html"><span>Page Not Found</span></a></li>
-            </ul>
+            <a class="offcanvas-nav-item" href="/contact">Contact</a>
           </li>
-
-          <li class="offcanvas-nav-parent"><a class="offcanvas-nav-item" href="contact.html">Contact</a></li>
         </ul>
       </nav>
     </div>

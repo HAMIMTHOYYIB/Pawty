@@ -115,25 +115,42 @@ let userOrder = async (req,res) => {
 }
 
 
-let addAddress = async (req,res) => {
-  let {name,locality,street,city,state,phone,pincode} =req.body;
-  let userId = req.user.id;
-  if(!userId){
-    res.status(404).send('user Not Found')
+let addAddress = async (req, res) => {
+  try {
+    const { val } = req.params;
+    console.log("val :", val.toString())
+    let { name, locality, street, city, state, phone, pincode } = req.body;
+    let userId = req.user.id;
+    if (!userId) {
+      res.status(404).send('user Not Found')
+    }
+    let user = await User.findOne({ _id: userId });
+    if (user.address.length >= 4) {
+      let addError = 'Maximum 4 Address can be saved.'
+      console.log(addError);
+      if (val === '0') {
+        return res.redirect('/accountAddress');
+      }
+      if (val === '1') {
+        return res.redirect('/checkout');
+      }
+    }
+    console.log("addresss lenghttt :", user.address.length);
+    let newAddress = { name, locality, street, city, state, phone, pincode };
+    user.address.push(newAddress);
+    await user.save();
+    if (val === '0') {
+      return res.redirect('/accountAddress');
+    }
+    if (val === '1') {
+      return res.redirect('/checkout');
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Internal Server Error');
   }
-  let user = await User.findOne({_id:userId});
-  if(user.address.length >= 4){
-    let addError = 'Maximum 4 Address can be saved.'
-    console.log(addError);
-    return res.redirect('/account');
-    // return res.render('users/account',{addError,user});
-  }
-  console.log("addresss lenghttt :",user.address.length);
-  let newAddress = {name,locality,street,city,state,phone,pincode};
-  user.address.push(newAddress);
-  user.save();
-  res.redirect('/accountAddress');
 }
+
 let editAddress = async (req, res) => {
   try {
     // console.log(req.user);

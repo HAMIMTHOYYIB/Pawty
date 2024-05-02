@@ -27,7 +27,7 @@ router.get('/orders',userAuth,userController.userOrder);
 // Address management
 router.get('/accountAddress',userAuth,userController.accountAddress);
 router.get('/accountChangePass',userAuth,userController.accountChangePass);
-router.post('/addAddress',userAuth,userController.addAddress);
+router.post('/addAddress/:val',userAuth,userController.addAddress);
 router.post('/editAddress/:id', userAuth, userController.editAddress);
 router.get('/addressDelete/:addressId', userAuth, userController.deleteAddress);
 

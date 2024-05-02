@@ -827,6 +827,12 @@ table p {
   Section Title CSS
 -----------------------------------------------------------------------
 */
+.bannerButton{
+  background-color:#314d70;
+  border-radius:10px;
+  color:white;
+  font-weight:bold;
+}
 .section-title {
   margin-bottom: 72px;
   position: relative;
@@ -1538,7 +1544,7 @@ table p {
           transform: scale(1);
 }
 .home-slider-area .home-slider-container .home-slider-wrapper.slider-default .swiper-slide-active .slider-content-area .slider-thumb .thumb img {
-  opacity: 1;
+  opacity: 100;
   transform: translate(0px, 0px);
   -webkit-transform: translate(0px, 0px);
   -moz-transform: translate(0px, 0px);
@@ -1549,7 +1555,7 @@ table p {
 .home-slider-area .home-slider-container .home-slider-wrapper.slider-default .swiper-slide-active .slider-content-two-area .slider-content .title-box,
 .home-slider-area .home-slider-container .home-slider-wrapper.slider-default .swiper-slide-active .slider-content-two-area .slider-content .desc-box,
 .home-slider-area .home-slider-container .home-slider-wrapper.slider-default .swiper-slide-active .slider-content-two-area .slider-content .btn-box {
-  opacity: 1;
+  opacity:1;
   transform: translate(0px, 0px);
   -webkit-transform: translate(0px, 0px);
   -moz-transform: translate(0px, 0px);
@@ -1844,7 +1850,7 @@ table p {
 }
 @media only screen and (max-width: 575px) {
   .home-slider-area .home-slider-container .home-slider-wrapper.slider-default .slider-content-two-area {
-    height: auto;
+    height:300px;
   }
 }
 .home-slider-area .home-slider-container .home-slider-wrapper.slider-default .slider-content-two-area .container {
