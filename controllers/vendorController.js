@@ -275,9 +275,7 @@ let getOrderDetails = async(req,res) => {
 }
 let updateStatus = async (req, res) => {
   try {
-    console.log("backend working...")
     let {  productId, orderId } = req.params;
-    console.log("body :",req.body)
     let { status } = req.body;
     let order = await Order.findById(orderId);
     let product = order.products.find(prod => prod._id.toString() === productId.toString());
@@ -311,6 +309,63 @@ let updateStatus = async (req, res) => {
         month: 'long',
         year: 'numeric',
       });
+      
+      if(status === 'Cancelled'){
+        const vendor = await Vendor.findOne({ 'products._id': productId });
+        if (!vendor) {
+          throw new Error('Vendor not found');
+        }
+        const vendorProd = vendor.products.find((prod) => prod._id.toString() === productId.toString());
+        if (!vendorProd) {
+          throw new Error('Product not found');
+        }
+        console.log("product order : ",product)
+        vendorProd.sold -= product.quantity;
+        vendorProd.stockQuantity += product.quantity;
+        await vendor.save();
+        if (status === 'Cancelled') {
+          let email = user.email;
+          let subject = "Order Cancelled";
+          let message = `
+              <div style="background-color: #f9f9f9; padding: 20px;">
+                <img src="https://res.cloudinary.com/dw3wmxotb/image/upload/v1712451407/pawty_sxt7if.png" alt="PAWTY" style="max-width: 80px; display: block;">
+                <h2 style="color: #2e702e; text-align: center;">Order Cancelled</h2>
+      
+                <div style="">
+                  <div style="border: 1px solid #555; margin: 0 auto; padding: 20px; text-align: center;">
+                    <h3 style="color: #555;">${user.username}, Your order has been cancelled.</h3>
+                  </div>
+                </div>
+      
+                <div style="display: flex; justify-content:space-between;">
+                  <div style="width:50%; border-right: 1px solid #ddd;">
+                    <p style="color: #555;"><strong>Order ID:</strong> ${orderId}</p>
+                    <p style="color: #555;"><strong>Product Name:</strong> ${productDetails.productName}</p>
+                    <p style="color: #555;"><strong>Price:</strong> ${productDetails.price} /-</p>
+                    <p style="color: #555;"><strong>Quantity:</strong> ${product.quantity}</p>
+                  </div>
+                  <div style="width: 48%;margin-left:2%;">
+                    <h3 style="color: #555; text-align: left">Invoice Details</h3>
+                    <p style="color: #555;"><strong>Invoice ID:</strong> ${orderId}</p>
+                    <p style="color: #555;"><strong>Invoice Date:</strong> ${new Date().toLocaleDateString()}</p>
+                  </div>
+                </div>
+                <div>
+                  <div style="width:50%"></div>
+                  <div style="text-align:left;width:25%">
+                    <h3 style="color: #555; text-align:left">Delivery Address</h3>
+                    <p style="color: #555;"> ${order.shippingAddress.locality}, ${order.shippingAddress.street}</p>
+                    <p style="color: #555;"> ${order.shippingAddress.city}, ${order.shippingAddress.state}</p>
+                    <p style="color: #555;"><strong>PINCODE :</strong> ${order.shippingAddress.pincode}</p>
+                  </div>
+                </div>
+                <hr style="border: 0.5px solid #ddd; margin: 10px auto;">
+                <p style="color: #777; text-align: center;">We apologize for any inconvenience caused.</p>
+              `;
+          await sendOtpEmail(email, subject, message);
+        }
+      
+      }
 
       // Delivery Mail Notification
       if(status === 'Delivered'){

@@ -41,11 +41,13 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.set('view engine','ejs');
 app.use(express.static('public'));
 
-
 app.use('/',adminRoutes);
 app.use('/',vendorRoutes);
 app.use('/',userRoutes);
 
+app.use((req, res, next) => {
+    res.status(404).render("users/notFound");
+});
 
 app.listen(port,()=>{
     console.log(`App is running on : http://localhost:${port}`);

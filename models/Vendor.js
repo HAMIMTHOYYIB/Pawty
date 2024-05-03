@@ -8,6 +8,7 @@ const productSchema = new mongoose.Schema({
     category:{type:String},
     subCategory:{type:String},
     stockQuantity:{type:String},
+    sold:{type:Number,default:0},
     addedOn:{type:Date,default:Date.now},
     images:{type:Array},
 });

@@ -629,6 +629,7 @@ let submitCheckout = async (req, res) => {
         for (const product of vendor.products) {
           if (product._id.toString() === prod._id.toString()) {
             let stock = parseInt(product.stockQuantity) - prod.quantity;
+            product.sold = parseFloat(prod.quantity);
             product.stockQuantity = stock.toString();
             vendorId = vendor._id.toString();
             break;
@@ -769,8 +770,18 @@ let requestCancellation = async (req, res) => {
       return res.status(404).send('Cannot find the product in the order');
     }
     product.status = 'Requested for Cancellation';
-    product.statusHistory[4].vendorChanged = true;
-    product.statusHistory[4].timestamp = Date.now();
+    if(product.statusHistory.length>4){
+      product.statusHistory[4].vendorChanged = true;
+      product.statusHistory[4].timestamp = Date.now();
+    }else{
+      let cancel = {
+        status:"Requested for Cancellation",
+        isActive:true,
+        timestamp:Date.now(),
+        vendorChanged:true
+      }
+      product.statusHistory.push(cancel);
+    }
     await order.save();
     let userEmail = req.user.email; // Assuming user email is stored in order or user profile
     let productDetails = await productHelper.getProductDetails(product._id)
@@ -789,7 +800,6 @@ let requestCancellation = async (req, res) => {
     </div>
     `;
     sendOtpEmail(userEmail ,subject , message );
-
     return res.json({ message: 'Request for cancellation sent' });
   } catch (error) {
     console.log(error);
