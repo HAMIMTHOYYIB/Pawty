@@ -14,7 +14,7 @@ require("dotenv").config();
     console.error("Error connecting to MongoDB", err);
   });
 
-  
+
 const adminRoutes = require("./routes/adminRoutes");
 const vendorRoutes = require("./routes/vendorRoutes");
 const userRoutes = require("./routes/userRoutes");
@@ -39,7 +39,7 @@ app.use(cookieParser());
 const { parsed: config } = require("dotenv").config();
 global.config = config;
 
-const port = 7003;
+const port = 3000;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
