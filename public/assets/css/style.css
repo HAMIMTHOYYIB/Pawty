@@ -2795,6 +2795,7 @@ table p {
   -o-object-fit: cover;
      object-fit: cover;
   width: 100%;
+  overflow: hidden;
   transition: all 0.3s ease-out;
   -webkit-transition: all 0.3s ease-out;
   -moz-transition: all 0.3s ease-out;
@@ -2846,6 +2847,7 @@ table p {
   -moz-transform: scale(1.02);
   -ms-transform: scale(1.02);
   -o-transform: scale(1.02);
+  border-radius:15px;
 }
 
 .shop-top-bar {

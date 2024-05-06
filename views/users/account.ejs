@@ -42,87 +42,105 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <style>
   .hh-grayBox {
-	background-color: #F8F8F8;
-	/* margin-bottom: 20px; */
-	/* padding: 35px; */
-  /* margin-top: 20px; */
+    background-color: #F8F8F8;
+    padding: 15px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
-.pt45{padding-top:45px;} 
-.order-tracking{
-	text-align: center;
-	width: 25.00%;
-	position: relative;
-	display: block;
+.pt-45 {
+    padding-top: 45px;
 }
-.order-tracking .is-complete{
-	display: block;
-	position: relative;
-	border-radius: 50%;
-	height: 30px;
-	width: 30px;
-	border: 0px solid #AFAFAF;
-	background-color: #29568caf;
-	margin: 0 auto;
-	transition: background 0.25s linear;
-	-webkit-transition: background 0.25s linear;
-	z-index: 2;
+.pb-20 {
+    padding-bottom: 20px;
+}
+.order-tracking {
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    width: 20%;
+    margin-bottom: 15px;
+    vertical-align: top; /* Add this line to align the divs */
+}
+
+.order-tracking .is-complete {
+    display: block;
+    position: relative;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    border: 0px solid #AFAFAF;
+    background-color: #29568caf;
+    margin: 0 auto;
+    transition: background 0.25s linear;
+    -webkit-transition: background 0.25s linear;
+    z-index: 2;
 }
 .order-tracking .is-complete:after {
-	display: block;
-	position: absolute;
-	content: '';
-	height: 14px;
-	width: 7px;
-	top: -2px;
-	bottom: 0;
-	left: 5px;
-	margin: auto 0;
-	border: 0px solid #AFAFAF;
-	border-width: 0px 2px 2px 0;
-	transform: rotate(45deg);
-	opacity: 0;
+    display: block;
+    position: absolute;
+    content: '';
+    height: 14px;
+    width: 7px;
+    top: -2px;
+    bottom: 0;
+    left: 5px;
+    margin: auto 0;
+    border: 0px solid #AFAFAF;
+    border-width: 0px 2px 2px 0;
+    transform: rotate(45deg);
+    opacity: 0;
 }
-.order-tracking.completed .is-complete{
-	border-color: #3777c5;
-	border-width: 0px;
-	background-color: #3676c4;
+.order-tracking.completed .is-complete {
+    border-color: #3777c5;
+    border-width: 0px;
+    background-color: #3676c4;
 }
 .order-tracking.completed .is-complete:after {
-	border-color: #fff;
-	border-width: 0px 3px 3px 0;
-	width: 7px;
-	left: 11px;
-	opacity: 1;
+    border-color: #fff;
+    border-width: 0px 3px 3px 0;
+    width: 7px;
+    left: 11px;
+    opacity: 1;
 }
 .order-tracking p {
-	color: #A4A4A4;
-	font-size: 16px;
-	margin-top: 8px;
-	margin-bottom: 0;
-	line-height: 20px;
+    color: #A4A4A4;
+    font-size: 14px;
+    margin-top: 8px;
+    margin-bottom: 0;
+    line-height: 18px;
 }
-.order-tracking p span{font-size: 14px;}
-.order-tracking.completed p{color: #000;}
+.order-tracking p span {
+    font-size: 12px;
+}
+.order-tracking.completed p {
+    color: #000;
+}
 .order-tracking::before {
-	content: '';
-	display: block;
-	height: 3px;
-	width: calc(100% - 40px);
-	background-color: #52a0ff61;
-	top: 13px;
-	position: absolute;
-	left: calc(-50% + 20px);
-	z-index: 0;
+    content: '';
+    display: block;
+    height: 3px;
+    width: calc(100% - 40px);
+    background-color: #52a0ff61;
+    top: 13px;
+    position: absolute;
+    left: calc(-50% + 20px);
+    z-index: 0;
 }
-.order-tracking:first-child:before{display: none;}
-.order-tracking.completed:before{background-color: #3676c4;}
+.order-tracking:first-child:before {
+    display: none;
+}
+.order-tracking.completed:before {
+    background-color: #3676c4;
+}
 .col-12::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
 .col-12 {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
 }
 </style>
 </head>
@@ -340,156 +358,140 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                          <div class="col-12 row">
-                                            <div class="col-lg-4 col-sm-12 justify-content-between">
-                                              <img src="<%= order.products.images[0] %>" class="img-fluid" alt="order-image">
+                                            <div class="row">
+                                                <div class="col-lg-4 col-sm-12">
+                                                    <img src="<%= order.products.images[0] %>" class="img-fluid" alt="order-image">
+                                                </div>
+                                                <div class="col-lg-8 col-sm-12">
+                                                    <div class="my-4 d-flex flex-wrap">
+                                                        <div class="col-md-6 order-details mb-2">
+                                                            <h3>Order Details:</h3>  
+                                                            <p><b>OrderID: #<%= order.products._id %></b></p>
+                                                            <p><b>Product Name:</b> <%= order.products.productName %></p>
+                                                            <p><b>Price:</b> <%= order.products.price %></p>
+                                                            <p><b>Brand:</b> <%= order.products.brand %></p>
+                                                            <p><b>Quantity:</b> <%= order.products.quantity %></p>
+                                                            <p><b>Order Status:</b> <%= order.products.status %></p>
+                                                        </div>
+                                                        <div class="col-md-6 col-sm-12 address-details">
+                                                            <h3 class="">Delivery Address:</h3>
+                                                            <p><b>Customer Name:</b> <span class="text-uppercase"><%= order.shippingAddress.name %></span></p>
+                                                            <p class="text-uppercase">
+                                                                <%= order.shippingAddress.locality %> , <%= order.shippingAddress.street %> <br>
+                                                                <%= order.shippingAddress.city %> , <%= order.shippingAddress.state %>
+                                                            </p>
+                                                            <p><b>Pin:</b> <span class="text-uppercase"><%= order.shippingAddress.pincode %></span></p>
+                                                            <p><b>Phone No:</b> <span class="text-uppercase"><%= order.shippingAddress.phone %></span></p>
+                                                            <p><b>Payment Method:</b> <span><%= order.paymentMethod %></span></p>
+                                                        </div>
+                                                    </div>
+                                                    <div class="d-flex justify-content-center">
+                                                        <% if(order.products.status === 'Pending' || order.products.status ==='Out Of Delivery' || order.products.status ==='Shipped'){ %>
+                                                        <h5 class="w-100 text-danger" id="textCancelOrder-<%= index %>"><button class="w-75 h5" onclick="requestCancellation('<%= order._id %>','<%= order.products._id %>','<%= index %>')" style="background-color:rgb(183, 53, 53);color: white;border-radius:10px;border: none;text-decoration:none;">Cancel Order</button></h5>
+                                                        <% } %>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        
-                                            <div class="col-8">
-                                              <div class="my-4 d-flex flex-wrap">
-                                                <div class="col-md-6 order-details mb-2">
-                                                  <h3>Order Details:</h3>  
-                                                  <p><b>OrderID: #<%= order.products._id %></b></p>
-                                                  <p><b>Product Name:</b> <%= order.products.productName %></p>
-                                                  <p><b>Price:</b> <%= order.products.price %></p>
-                                                  <p><b>Brand:</b> <%= order.products.brand %></p>
-                                                  <p><b>Quantity:</b> <%= order.products.quantity %></p>
-                                                  <p><b>Order Status:</b> <%= order.products.status %></p>
-                                                </div>
-                                                <div class="col-md-6 col-sm-12 address-details mx-auto ">
-                                                  <h3 class="">Delivery Address:</h3>
-                                                  <p><b>Customer Name:</b> <span class="text-uppercase"><%= order.shippingAddress.name %></span></p>
-                                                  <p class="text-uppercase">
-                                                    <%= order.shippingAddress.locality %> , <%= order.shippingAddress.street %> <br>
-                                                    <%= order.shippingAddress.city %> , <%= order.shippingAddress.state %>
-                                                  </p>
-                                                  <p><b>Pin:</b> <span class="text-uppercase"><%= order.shippingAddress.pincode %></span></p>
-                                                  <p><b>Phone No:</b> <span class="text-uppercase"><%= order.shippingAddress.phone %></span></p>
-                                                  <p><b>Payment Method:</b> <span><%= order.paymentMethod %></span></p>
-                                                </div>
-                                              </div>
-                                              <div class="col-12 d-flex justify-content-center">
-                                              <% if(order.products.status === 'Pending' || order.products.status ==='Out Of Delivery' || order.products.status ==='Shipped'){ %>
-                                                <h5 class="w-100 text-danger" id="textCancelOrder-<%= index %>"><button class="w-75 h5" onclick="requestCancellation('<%= order._id %>','<%= order.products._id %>','<%= index %>')" style="background-color:rgb(183, 53, 53);color: white;border-radius:10px;border: none;text-decoration:none;">Cancel Order</button></h5>
-                                                <% } %>
-                                              
-                                              </div>
-                                              <div class="container ms-3  p-0">
+                                            <div class="container p-0">
                                                 <div class="row">
-                                                  <div class="col-12 col-md-10 hh-grayBox pt45 pb20">
-                                                    <div class="row justify-content-between">
-                                                    <% function formatDate(date) {
-                                                      const options = { weekday: 'short', month: 'long', day: 'numeric' };
-                                                      return date.toLocaleDateString('en-US', options);
-                                                      } %>
-                                                    <% if(order.products.statusHistory !== undefined && order.products.statusHistory.length === 6 && 
-                                                      order.products.statusHistory[4].vendorChanged === false && order.products.statusHistory[5].vendorChanged === false  ){ %>
-                                                      <% if(order.products.statusHistory[0].vendorChanged === true){ %>
-                                                      <div class="order-tracking completed">
-                                                        <span class="is-complete"></span>
-                                                        <p>Ordered<br><span><%= (formatDate(order.products.statusHistory[0].timestamp)) %></span></p>
-                                                      </div>
-                                                      <% } %>
-                                                       <% if(order.products.statusHistory[1].vendorChanged === true){ %>  <!--here in [1] it is order confirmation in the frontend  in backend the shipped so it is no neede to show the order confirmed in the order tracking -->
+                                                    <div class="col-12 hh-grayBox pt-3 pb-2">
+                                                        <% function formatDate(date) {
+                                                            const options = { weekday: 'short', month: 'long', day: 'numeric' };
+                                                            return date.toLocaleDateString('en-US', options);
+                                                        } %>
+                                                        <% if(order.products.statusHistory !== undefined && order.products.statusHistory.length === 6 && 
+                                                        order.products.statusHistory[4].vendorChanged === false && order.products.statusHistory[5].vendorChanged === false  ){ %>
+                                                        <% if(order.products.statusHistory[0].vendorChanged === true){ %>
                                                         <div class="order-tracking completed">
-                                                          <span class="is-complete"></span>
-                                                          <p>Shipped<br><span><%= (formatDate(order.products.statusHistory[1].timestamp)) %></span></p>
-                                                        </div>
-                                                      <% }else{ %>
-                                                        <div class="order-tracking">
-                                                          <span class="is-complete"></span>
-                                                          <p>Shipped<br></p>
-                                                        </div>
-                                                      <%} %>
-                                                      <% if(order.products.statusHistory[2].vendorChanged === true){ %>
-                                                        <div class="order-tracking completed">
-                                                          <span class="is-complete"></span>
-                                                          <p>Out Of Delivery<br><span><%= (formatDate(order.products.statusHistory[2].timestamp)) %></span></p>
-                                                        </div>
-                                                      <% }else{ %>
-                                                        <div class="order-tracking">
-                                                          <span class="is-complete"></span>
-                                                          <p>Out Of Delivery<br></p>
-                                                        </div>
-                                                      <%} %>
-                                                      <% if(order.products.statusHistory[3].vendorChanged === true){ %>
-                                                        <div class="order-tracking completed">
-                                                          <span class="is-complete"></span>
-                                                          <p>Delivered <br><span><%= (formatDate(order.products.statusHistory[3].timestamp)) %></span></p>
-                                                        </div>
-                                                      <% }else{ %>
-                                                        <div class="order-tracking">
-                                                          <span class="is-complete"></span>
-                                                          <p>Delivered<br></p>
-                                                        </div>
-                                                      <%} %>
-                                                      <!-- <div class="order-tracking completed">
-                                                        <span class="is-complete"></span>
-                                                        <p>Shipped<br><span>Tue, June 25</span></p>
-                                                      </div>
-                                                      <div class="order-tracking">
-                                                        <span class="is-complete"></span>
-                                                        <p>Delivered<br><span>Fri, June 28</span></p>
-                                                      </div> -->
-                                                    <% } %>
-                                                    <% if(order.products.statusHistory !== undefined && order.products.statusHistory.length === 6 && 
-                                                    (order.products.statusHistory[4].vendorChanged === true || order.products.statusHistory[5].vendorChanged === true)  ){ %>
-                                                      <% if(order.products.statusHistory[0].vendorChanged === true){ %>
-                                                        <div class="order-tracking completed">
-                                                          <span class="is-complete"></span>
-                                                          <p>Ordered<br><span><%= (formatDate(order.products.statusHistory[0].timestamp)) %></span></p>
+                                                            <span class="is-complete"></span>
+                                                            <p>Ordered<br><span><%= (formatDate(order.products.statusHistory[0].timestamp)) %></span></p>
                                                         </div>
                                                         <% } %>
-                                                        <% if(order.products.statusHistory[1].vendorChanged === true){ %>  <!--here in [1] it is order confirmation in the frontend  in backend the shipped so it is no neede to show the order confirmed in the order tracking -->
-                                                          <div class="order-tracking completed">
+                                                        <% if(order.products.statusHistory[1].vendorChanged === true){ %>
+                                                        <div class="order-tracking completed">
                                                             <span class="is-complete"></span>
                                                             <p>Shipped<br><span><%= (formatDate(order.products.statusHistory[1].timestamp)) %></span></p>
-                                                          </div>
-                                                        <% } %>
+                                                        </div>
+                                                        <% }else{ %>
+                                                        <div class="order-tracking">
+                                                            <span class="is-complete"></span>
+                                                            <p>Shipped<br></p>
+                                                        </div>
+                                                        <%} %>
                                                         <% if(order.products.statusHistory[2].vendorChanged === true){ %>
-                                                          <div class="order-tracking completed">
+                                                        <div class="order-tracking completed">
                                                             <span class="is-complete"></span>
                                                             <p>Out Of Delivery<br><span><%= (formatDate(order.products.statusHistory[2].timestamp)) %></span></p>
-                                                          </div>
+                                                        </div>
+                                                        <% }else{ %>
+                                                        <div class="order-tracking">
+                                                            <span class="is-complete"></span>
+                                                            <p>Out Of Delivery<br></p>
+                                                        </div>
+                                                        <%} %>
+                                                        <% if(order.products.statusHistory[3].vendorChanged === true){ %>
+                                                        <div class="order-tracking completed">
+                                                            <span class="is-complete"></span>
+                                                            <p>Delivered <br><span><%= (formatDate(order.products.statusHistory[3].timestamp)) %></span></p>
+                                                        </div>
+                                                        <% }else{ %>
+                                                        <div class="order-tracking">
+                                                            <span class="is-complete"></span>
+                                                            <p>Delivered<br></p>
+                                                        </div>
+                                                        <%} %>
+                                                        <% } %>
+                                                        <% if(order.products.statusHistory !== undefined && order.products.statusHistory.length === 6 && 
+                                                        (order.products.statusHistory[4].vendorChanged === true || order.products.statusHistory[5].vendorChanged === true)  ){ %>
+                                                        <% if(order.products.statusHistory[0].vendorChanged === true){ %>
+                                                        <div class="order-tracking completed">
+                                                            <span class="is-complete"></span>
+                                                            <p>Ordered<br><span><%= (formatDate(order.products.statusHistory[0].timestamp)) %></span></p>
+                                                        </div>
+                                                        <% } %>
+                                                        <% if(order.products.statusHistory[1].vendorChanged === true){ %>
+                                                        <div class="order-tracking completed">
+                                                            <span class="is-complete"></span>
+                                                            <p>Shipped<br><span><%= (formatDate(order.products.statusHistory[1].timestamp)) %></span></p>
+                                                        </div>
+                                                        <% } %>
+                                                        <% if(order.products.statusHistory[2].vendorChanged === true){ %>
+                                                        <div class="order-tracking completed">
+                                                            <span class="is-complete"></span>
+                                                            <p>Out Of Delivery<br><span><%= (formatDate(order.products.statusHistory[2].timestamp)) %></span></p>
+                                                        </div>
                                                         <% } %>
                                                         <% if(order.products.statusHistory[4].vendorChanged === true){ %>
-                                                          <div class="order-tracking completed">
+                                                        <div class="order-tracking completed">
                                                             <span class="is-complete"></span>
                                                             <p>Requested for Cancellation<br><span><%= (formatDate(order.products.statusHistory[4].timestamp)) %></span></p>
-                                                          </div>
-                                                          <% }else{ %>
-                                                            <div class="order-tracking">
-                                                              <span class="is-complete"></span>
-                                                              <p>Cancellation Request<br></p>
-                                                            </div>
-                                                          <%} %>
+                                                        </div>
+                                                        <% }else{ %>
+                                                        <div class="order-tracking">
+                                                            <span class="is-complete"></span>
+                                                            <p>Cancellation Request<br></p>
+                                                        </div>
+                                                        <%} %>
                                                         <% if(order.products.statusHistory[5].vendorChanged === true){ %>
-                                                          <div class="order-tracking completed">
+                                                        <div class="order-tracking completed">
                                                             <span class="is-complete"></span>
                                                             <p>Cancelled <br><span><%= (formatDate(order.products.statusHistory[5].timestamp)) %></span></p>
-                                                          </div>
+                                                        </div>
                                                         <% }else{ %>
-                                                          <div class="order-tracking">
+                                                        <div class="order-tracking">
                                                             <span class="is-complete"></span>
                                                             <p>Cancelled<br></p>
-                                                          </div>
+                                                        </div>
                                                         <%} %>
-                                                    <% } %>
+                                                        <% } %>
                                                     </div>
-                                                   </div>
                                                 </div>
-                                              </div>
                                             </div>
-                                          </div>
-
-                                          <div class="">
-
-                                          </div>
-                                          
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            
                             <% }) %>
                             <!-- <tr>
                               <td><%= ++count %></td>
@@ -531,40 +533,37 @@
                       </div>
                       <div class="col-12"  style="height: 200px; overflow-y: scroll;">
                         <% user.address.forEach((add, index) => { %>
-                          <!-- Address details -->
-                          <address class="col-lg-12 p-3" style="background-color: #eeecec;border-radius:15px;">
-                            <!-- Address content -->
-                            <div class="address-details col-lg-12">
-                                <!-- Name and edit button -->
-                                <div class="name d-flex justify-content-between">
-                                    <strong class="mt-1 text-uppercase col-7"><%= add.name %></strong>
-                                    <div class="col-3" style="display: flex;justify-content:flex-end;align-items:flex-start;">
-                                      <button type="button" class="btn text-success" data-bs-toggle="modal"  data-bs-target="#editAddress<%= index %>">
-                                          <i class="fa fa-edit"></i>
+                          <div class="row mb-3">
+                            <div class="col-lg-12">
+                              <address class="p-3" style="background-color: #eeecec; border-radius: 15px;">
+                                <div class="address-details">
+                                  <div class="name d-flex justify-content-between">
+                                    <strong class="mt-1 text-uppercase col-7 col-lg-8"><%= add.name %></strong>
+                                    <div class="col-5 col-lg-4 text-end">
+                                      <button type="button" class="btn text-success" data-bs-toggle="modal" data-bs-target="#editAddress<%= index %>">
+                                        <i class="fa fa-edit"></i>
                                       </button>
                                       <button type="button" onclick="window.location.href = `/addressDelete/<%= add._id %>`" class="btn text-danger">
-                                          <i class="fa fa-trash text-danger"></i>
+                                        <i class="fa fa-trash text-danger"></i>
                                       </button>
                                     </div>
+                                  </div>
+                                  <div class="location d-flex flex-wrap">
+                                    <div class="col-12 col-lg-6">
+                                      <p>Street: <%= add.street %></p>
+                                      <p>Locality: <%= add.locality %></p>
+                                      <p>City: <%= add.city %></p>
+                                      <p>State: <%= add.state %></p>
+                                    </div>
+                                    <div class="col-12 col-lg-6">
+                                      <p>Mobile: <%= add.phone %></p>
+                                      <p>Pincode: <%= add.pincode %></p>
+                                    </div>
+                                  </div>
                                 </div>
-                                <!-- Location -->
-                                <div class="location d-flex col-lg-12">
-                                    <p><%= add.street %></p>&nbsp;,<p><%= add.locality %></p> , <p><%= add.city %></p>&nbsp;,<p><%= add.state %></p>
-
-                                </div>
-                                <!-- City and state -->
-                                <!-- <div class="city-state d-flex">
-                                </div> -->
-                                <!-- Contact -->
-                                <div class="contact">
-                                    <p>Mobile: <span><%= add.phone %></span></p>
-                                </div>
-                                <!-- Pincode -->
-                                <div class="pincode">
-                                    <p>Pincode : <span><%= add.pincode %></span></p>
-                                </div>
+                              </address>
                             </div>
-                        </address>
+                          </div> 
                           <!-- Modal edit address -->
                           <div class="modal fade" id="editAddress<%= index %>" tabindex="-1" aria-labelledby="editAddressLabel<%= index %>" aria-hidden="true">
                             <div class="modal-dialog">
