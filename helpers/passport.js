@@ -9,11 +9,11 @@ passport.deserializeUser(function(user, done) {
 }); 
 
 passport.use(new GoogleStrategy({ 
-	clientID:process.env.GOOGLE_CLIENT_ID, // Your Credentials here. 
-	clientSecret:process.env.GOOGLE_CLIENT_SECRET, // Your Credentials here. 
-	callbackURL:"http://localhost:7003/auth/google/callback", 
+	clientID:process.env.GOOGLE_CLIENT_ID,
+	clientSecret:process.env.GOOGLE_CLIENT_SECRET,
+	callbackURL:"https://pawtypet.shop/auth/google/callback", 
 	passReqToCallback:true
-}, 
+},
 function(request, accessToken, refreshToken, profile, done) { 
 	return done(null, profile); 
 } 

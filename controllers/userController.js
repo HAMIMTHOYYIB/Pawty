@@ -16,86 +16,106 @@ require('dotenv').config()
 
 // Get Homepage
 let homePage = async (req,res) => {
-
-  let admin = await Admin.findOne();
-  let category = admin.category;
-  let subCategory = admin.subCategory;
-  let banner = admin.banner;
-  let vendors = await Vendor.find().select("products");
-  let products = vendors.map((vendor) => vendor.products).flat();
-  let productsBySubCategory = {};
-  for (let i = 0; i < subCategory.length; i++) {
-    let subCategoryProducts = vendors
-      .map((vendor) => vendor.products.filter((product) => product.subCategory === subCategory[i]))
-      .flat();
-    productsBySubCategory[subCategory[i]] = subCategoryProducts;
+  try {
+    let admin = await Admin.findOne();
+    let category = admin.category;
+    let subCategory = admin.subCategory;
+    let banner = admin.banner;
+    let vendors = await Vendor.find().select("products");
+    let products = vendors.map((vendor) => vendor.products).flat();
+    let productsBySubCategory = {};
+    for (let i = 0; i < subCategory.length; i++) {
+      let subCategoryProducts = vendors
+        .map((vendor) => vendor.products.filter((product) => product.subCategory === subCategory[i]))
+        .flat();
+      productsBySubCategory[subCategory[i]] = subCategoryProducts;
+    }
+    res.render('users/index-two', { category, subCategory, productsBySubCategory, products, banner });
+  } catch (error) {
+    res.status(500).send("Error on rendering home page")
   }
-  res.render('users/index-two', { category, subCategory, productsBySubCategory, products, banner });
 }
 // Get UserAccount
 let account = async (req,res) => {
-  let userId = req.user.id;
-  let user = await User.findOne({_id:userId});
-  if(!user){
-    return res.status(400).send('User Not found');
+  try {
+    let userId = req.user.id;
+    let user = await User.findOne({_id:userId});
+    if(!user){
+      return res.status(400).send('User Not found');
+    }
+    let orders= await helper.accountOrders(userId)
+    const { tab } = req.query;
+    res.render('users/account', { initialTab:'dashboard',user,orders});
+  } catch (error) {
+    res.status(500).send("Cannot render account Page");
   }
-  let orders= await helper.accountOrders(userId)
-  const { tab } = req.query;
-  res.render('users/account', { initialTab:'dashboard',user,orders});
-  // res.render('users/account',{user,addError});
 }
 let editProfile = async (req,res) => {
-  let userId = req.user.id;
-  let user = await User.findOne({_id:userId});
-  const {userName,email,phone} = req.body;
-  user.username = userName;
-  user.email = email;
-  user.phone = phone;
-  await user.save();
-  res.json({ message: "Profile Updated."});
-  
+  try {
+    let userId = req.user.id;
+    let user = await User.findOne({_id:userId});
+    const {userName,email,phone} = req.body;
+    user.username = userName;
+    user.email = email;
+    user.phone = phone;
+    await user.save();
+    res.redirect('/account');
+  } catch (error) {
+    res.status(404).send("Error on Updating Profile",error);
+  }
 }
 let changePass = async (req, res) => {
-  const { currentPass, newPass } = req.body;
-  let userId = req.user.id;
-  let user = await User.findOne({ _id: userId });
-  bcrypt.compare(currentPass, user.password, async (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: 'Internal Server Error' });
-    }
-    if (!result) {
-      return res.status(400).json({ error: 'Wrong Password' });
-    }
-    if (!newPass) {
-      return res.status(400).json({ error: 'New password cannot be empty' });
-    }
-    const hashedPassword = await bcrypt.hash(newPass, 10);
-    user.password = hashedPassword;
-    await user.save();
-    return res.json({ message: 'Password changed successfully' });
-  });
+  try {
+    const { currentPass, newPass } = req.body;
+    let userId = req.user.id;
+    let user = await User.findOne({ _id: userId });
+    bcrypt.compare(currentPass, user.password, async (err, result) => {
+      if (err) {
+        return res.status(500).json({ error: 'Internal Server Error' });
+      }
+      if (!result) {
+        return res.status(400).json({ error: 'Wrong Password' });
+      }
+      if (!newPass) {
+        return res.status(400).json({ error: 'New password cannot be empty' });
+      }
+      const hashedPassword = await bcrypt.hash(newPass, 10);
+      user.password = hashedPassword;
+      await user.save();
+      return res.json({ message: 'Password changed successfully' });
+    });
+  } catch (error) {
+    res.status(500).send("Error On changing Password");
+  }
 };
 let accountAddress = async(req,res) => {
-  let userId = req.user.id;
-  let user = await User.findOne({_id:userId});
-  if(!user){
-    return res.status(400).send('User Not found');
+  try {
+    let userId = req.user.id;
+    let user = await User.findOne({_id:userId});
+    if(!user){
+      return res.status(400).send('User Not found');
+    }
+    let orders= await helper.accountOrders(userId)
+    const { tab } = req.query;
+    res.render('users/account', { initialTab:'address-edit',user,orders});
+  } catch (error) {
+    res.status(500).send("Cannot render account Page");
   }
-  let orders= await helper.accountOrders(userId)
-  // console.log("orders : ",orders.length)
-  const { tab } = req.query;
-  res.render('users/account', { initialTab:'address-edit',user,orders});
+  
 }
 let accountChangePass = async(req,res) => {
-  let userId = req.user.id;
-  let user = await User.findOne({_id:userId});
-  if(!user){
-    return res.status(400).send('User Not found');
+  try {
+    let userId = req.user.id;
+    let user = await User.findOne({_id:userId});
+    if(!user){
+      return res.status(400).send('User Not found');
+    }
+    let orders= await helper.accountOrders(userId)
+    const { tab } = req.query;
+    res.render('users/account', { initialTab: tab || 'changePass',user,orders});
+  } catch (error) {
+    res.status(500).send("Error on changing password");
   }
-  let orders= await helper.accountOrders(userId)
-  // console.log("orders : ",orders)
-  const { tab } = req.query;
-  res.render('users/account', { initialTab: tab || 'changePass',user,orders});
 }
 let userOrder = async (req,res) => {
   let userId = req.user.id;
@@ -113,7 +133,6 @@ let userOrder = async (req,res) => {
     res.status(500).json({message:"Error on getting User Orders"})
   }
 }
-
 
 let addAddress = async (req, res) => {
   try {
@@ -150,27 +169,19 @@ let addAddress = async (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 }
-
 let editAddress = async (req, res) => {
   try {
-    // console.log(req.user);
     const { id } = req.user;
     const { name, locality, street, city, state, phone, pincode } = req.body;
-    
-    // Find the user by userId
     const user = await User.findById(id);
     if (!user) {
       return res.status(404).json({ message: "User not found" });
     }
-    console.log(req.params);
-
-    // Update the address
     const addressIndex = req.params.id
     console.log(addressIndex)
     if (addressIndex === -1) {
       return res.status(404).json({ message: "Address not found" });
     }
-
     user.address[addressIndex] = {
       name,
       locality,
@@ -182,7 +193,6 @@ let editAddress = async (req, res) => {
     };
 
     await user.save();
-    // res.status(200)
     res.json({ message: "Address updated successfully", userAddress: user.address });
   } catch (error) {
     console.error(error);
@@ -190,53 +200,32 @@ let editAddress = async (req, res) => {
   }
 };
 let deleteAddress = async (req,res) => {
-  const { addressId } = req.params;
-  let userId = req.user.id;
-  // console.log("addressId :",addressId,"user :",req.user);
-  let user = await User.findOne({_id:userId});
-  let updatedAdd = user.address.filter(add => add._id != addressId);
-  user.address = updatedAdd
-  user.save();
-  console.log("updated Adres : ",updatedAdd);
-  // await updatedUser.save();
-  res.redirect('/accountAddress');
+  try {
+    const { addressId } = req.params;
+    let userId = req.user.id;
+    let user = await User.findOne({_id:userId});
+    let updatedAdd = user.address.filter(add => add._id != addressId);
+    user.address = updatedAdd
+    user.save();
+    console.log("updated Adres : ",updatedAdd);
+    res.redirect('/accountAddress');
+  } catch (error) {
+    console.error(error)
+    res.status(500).send("Internal Server Error");
+  }
 }
 
-// Get ProductPage
-// let shop = async (req,res) => {
-//   let admin = await Admin.findOne();
-//   let products =  await Vendor.find().select("products");
-//   let vendors = await Vendor.find();
-//   let prod =  vendors.reduce((acc, vendor) => {
-//     return acc + vendor.products.length;
-//   }, 0);
-
-//   if (req.cookies.user_jwt) {
-//     jwt.verify(req.cookies.user_jwt, process.env.JWT_SECRET, async (err, decodedToken)=>{
-//       if(err){
-//         return res.render('users/shop-org',{products,admin,user:undefined,prod});
-//       }else{
-//         req.user = decodedToken;
-//         let user = await User.findOne({_id:req.user.id});
-//         return res.render('users/shop-org',{products,admin,user:user,prod});
-//       }
-//     });
-//   }else{
-//     return res.render('users/shop-org',{products,admin,user:undefined,prod});
-//   }
-// }
-
-
 let shop = async (req, res) => {
-  const perPage = 6;
-  let admin = await Admin.findOne();
-  let vendors = await Vendor.find().select("products");
-  let products = vendors.reduce((acc, vendor) => {
-    return acc.concat(vendor.products);
-  }, []);
-  let prod = products.length;
-  let page = parseInt(req.query.page) || 1;
   try {
+    const perPage = 6;
+    let admin = await Admin.findOne();
+    let vendors = await Vendor.find().select("products");
+    let products = vendors.reduce((acc, vendor) => {
+      return acc.concat(vendor.products);
+    }, []);
+    let prod = products.length;
+    let page = parseInt(req.query.page) || 1;
+
     const totalProducts = prod;
     const totalPages = Math.ceil(totalProducts / perPage);
     products = products.slice((page - 1) * perPage, page * perPage);
@@ -260,31 +249,36 @@ let shop = async (req, res) => {
 };
 // single product
 let product = async (req,res) => {
-  let productId = req.params.id;
-  let vendors = await Vendor.find();
-  let product;
-  vendors.forEach(vendor => {
-    vendor.products.forEach(prod => {
-      if(prod._id.toString() === productId){
-        product = prod;
-      }
-    })
-  });
-  if (req.cookies.user_jwt) {
-    jwt.verify(req.cookies.user_jwt, process.env.JWT_SECRET, async (err, decodedToken)=>{
-      if(err){
-        return res.render('users/single-product',{product,user:undefined});
-      }else{
-        req.user = decodedToken
-        let user = await User.findOne({_id:req.user.id});
-        return res.render('users/single-product',{product,user});
-      }
+  try {
+    let productId = req.params.id;
+    let vendors = await Vendor.find();
+    let product;
+    vendors.forEach(vendor => {
+      vendor.products.forEach(prod => {
+        if(prod._id.toString() === productId){
+          product = prod;
+        }
+      })
     });
-  }else{
-    return res.render('users/single-product',{product,user:undefined});
+    if (req.cookies.user_jwt) {
+      jwt.verify(req.cookies.user_jwt, process.env.JWT_SECRET, async (err, decodedToken)=>{
+        if(err){
+          return res.render('users/single-product',{product,user:undefined});
+        }else{
+          req.user = decodedToken;
+          let user = await User.findOne({_id:req.user.id});
+          return res.render('users/single-product',{product,user:undefined});
+        }
+      });
+    }else{
+      return res.render('users/single-product',{product,user:undefined});
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
   }
 }
-let filterProduct = async (req, res) => {
+let filterProduct = async (req, res) => {  
   const { categories, tags, sort, searchTerm } = req.body;
   try {
     const vendors = await Vendor.find().populate('products');
@@ -459,10 +453,7 @@ let checkCoupon = async (req, res) => {
   const { couponCode } = req.body;
   try {
     let admin = await Admin.findOne();
-    const coupons = admin.coupons;
-    // console.log("Admin coupons :",coupons)
-    // let coupons = AdminCoupons.map(val => val.coupons)
-    // let flatcoupon = coupons.flat(1);
+    const coupons = admin.coupons;  
     let coupon = coupons.filter(val => val.couponCode == couponCode)
     if (coupon[0] && coupon[0].status === 'Active') {
       let currentDate = new Date();
@@ -494,14 +485,19 @@ let checkCoupon = async (req, res) => {
   }
 };
 let removeCoupon = async (req,res) => {
-  let user =  await User.findById(req.user.id);
-  if(!user){
-    return res.status(500).json({valid:false,message:'cannot find user'})
+  try {
+    let user =  await User.findById(req.user.id);
+    if(!user){
+      return res.status(500).json({valid:false,message:'cannot find user'});
+    }
+    console.log("removed coupon");
+    user.cart.discount = 0;
+    user.save();
+    res.json({valid:true,message:'discount removed from the checkout'});
+  } catch (error) {
+    console.error(error)
+    res.status(500).send("Internal Server Error");
   }
-  console.log("removed coupon");
-  user.cart.discount = 0;
-  user.save();
-  res.json({valid:true,message:'discount removed from the checkout'})
 }
 
 //wishlist
@@ -571,49 +567,55 @@ let removefromwishlist = async (req,res) => {
 
 // checkout
 let checkCart = async (req,res) => {
-  let vendors = await Vendor.find();
-  let user = await User.findById(req.user.id);
-  for(let Cproduct of user.cart.products){
-    for(let vendor of vendors){
-      for(Vproduct of vendor.products){
-        if(Vproduct._id.toString() === Cproduct._id.toString()){
-          Cproduct.stock = Vproduct.stockQuantity;
-          Cproduct.productName = Vproduct.productName;
-          Cproduct.price = Vproduct.price;
-          if(Cproduct.stock < Cproduct.quantity){
-            return res.status(201).json({message:"Some products exceeds available stock"});
+  try {
+    let vendors = await Vendor.find();
+    let user = await User.findById(req.user.id);
+    for(let Cproduct of user.cart.products){
+      for(let vendor of vendors){
+        for(Vproduct of vendor.products){
+          if(Vproduct._id.toString() === Cproduct._id.toString()){
+            Cproduct.stock = Vproduct.stockQuantity;
+            Cproduct.productName = Vproduct.productName;
+            Cproduct.price = Vproduct.price;
+            if(Cproduct.stock < Cproduct.quantity){
+              return res.status(201).json({message:"Some products exceeds available stock"});
+            }
           }
         }
       }
     }
+    return res.status(200).json({ message: "Cart checked successfully." });  
+  } catch (error) {
+    console.error(error)
+    res.status(500).send("Internal Server Error");
   }
-  return res.status(200).json({ message: "Cart checked successfully." });  
 }
-
 let getCheckout = async (req,res) => {
-  let vendors = await Vendor.find();
-  let user = await User.findById(req.user.id);
-  for(let Cproduct of user.cart.products){
-    for(let vendor of vendors){
-      for(Vproduct of vendor.products){
-        if(Vproduct._id.toString() === Cproduct._id.toString()){
-          Cproduct.productName = Vproduct.productName;
-          Cproduct.price = Vproduct.price;
+  try {
+    let vendors = await Vendor.find();
+    let user = await User.findById(req.user.id);
+    for(let Cproduct of user.cart.products){
+      for(let vendor of vendors){
+        for(Vproduct of vendor.products){
+          if(Vproduct._id.toString() === Cproduct._id.toString()){
+            Cproduct.productName = Vproduct.productName;
+            Cproduct.price = Vproduct.price;
+          }
         }
       }
     }
+    if(user.cart.products.length === 0){
+      return res.redirect('/cart');
+    }
+    res.render('users/checkout',{user,coupon:false});
+  } catch (error) {
+    console.error(error)
+    res.status(500).send("Internal Server Error");
   }
-  if(user.cart.products.length === 0){
-    return res.redirect('/cart');
-  }
-  console.log("Updated user cart :",user.cart.products[0].productName);
-  res.render('users/checkout',{user,coupon:false})
 }
 let submitCheckout = async (req, res) => {
   const { addressId, paymentMethod , razor } = req.body;
-  console.log("req.body : ", req.body);
   try {
-    console.log("razorValue",razor);
     let user = await User.findById(req.user.id);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
@@ -754,7 +756,6 @@ let submitCheckout = async (req, res) => {
 };
 
 let requestCancellation = async (req, res) => {
-  console.log("Requested for Cancellation");
   try {
     let { orderId, productId } = req.body;
     if (!orderId || !productId) {
@@ -808,7 +809,6 @@ let requestCancellation = async (req, res) => {
 };
 
 let razorpayOrder = async (req,res) => {
-  console.log("razorpay interface workingg");
   const { paymentMethod } = req.body;
   try {
     if (paymentMethod !== 'Razorpay') {
@@ -841,11 +841,16 @@ let razorpayOrder = async (req,res) => {
 
 // Get UserLoginPage
 let loginPage = (req,res) => {
-  if(req.cookies.user_jwt){
-   return  res.redirect('/');
+  try {
+    if(req.cookies.user_jwt){
+      return  res.redirect('/');
+     }
+     let addError = '';
+     res.render('users/account-login',{passError :'',addError})
+  } catch (error) {
+    console.error(error)
+    res.status(500).send("Internal Server Error");
   }
-  let addError = '';
-  res.render('users/account-login',{passError :'',addError})
 }
 let submitlogin = async (req, res) => { 
     const {email, password} = req.body;
@@ -894,34 +899,41 @@ let submitlogin = async (req, res) => {
 
 // Get SignUpPage
 let signupPage = (req,res) => {
-    res.render('users/account-signup',{errMsg:''})
+  try {
+    if(req.cookies.user_jwt){
+      return  res.redirect('/');
+     }
+     res.render('users/account-signup',{errMsg:''})
+  } catch (error) {
+    console.error(error)
+    res.status(500).send("Internal Server Error");
+  }
 }
 let submitSignup = async (req,res) => {
-    console.log(req.body);
-    const { username,email,phone,password,confirmPassword} = req.body;
-    try {
-        const userExist= await User.findOne({email:email});
-        const phoneExist = await User.findOne({phone:phone});
-        if(userExist){
-            return res.status(400).render('users/account-signup',{errMsg:'User exist with this email.'})
-        }
-        if(phoneExist){
-          return res.status(400).render('users/account-signup',{errMsg:'User exist with this Phone Number.'})
+  const { username,email,phone,password,confirmPassword} = req.body;
+  try {
+      const userExist= await User.findOne({email:email});
+      const phoneExist = await User.findOne({phone:phone});
+      if(userExist){
+          return res.status(400).render('users/account-signup',{errMsg:'User exist with this email.'})
       }
-        if(!password){
-            res.status(400).send("Password empty");
-        }
-        if(password !== confirmPassword){
-            res.status(400).send('password does not match');
-        }
-        const hashedPassword = await bcrypt.hash(password,10);
-        const newUser = new User({username,email,phone,password:hashedPassword});
-        await newUser.save();
-        console.log(newUser);
-        res.redirect('/login')
-    } catch (error) {
-        res.status(500).send("Internal Server Error")
+      if(phoneExist){
+        return res.status(400).render('users/account-signup',{errMsg:'User exist with this Phone Number.'})
     }
+      if(!password){
+          res.status(400).send("Password empty");
+      }
+      if(password !== confirmPassword){
+          res.status(400).send('password does not match');
+      }
+      const hashedPassword = await bcrypt.hash(password,10);
+      const newUser = new User({username,email,phone,password:hashedPassword});
+      await newUser.save();
+      console.log(newUser);
+      res.redirect('/login')
+  } catch (error) {
+      res.status(500).send("Internal Server Error")
+  }
 }
 
 const succesGoogleLogin = async (req,res) =>{

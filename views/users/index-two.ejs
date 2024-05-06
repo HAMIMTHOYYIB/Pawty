@@ -178,46 +178,46 @@
     <!--== Start Feature Area Wrapper ==-->
     <div class="feature-area feature-style2-area p-0 features">
       <div class="containe m-0 p-0">
-        <div class="row my-5 mx-0 p-0">
-          <div class="col-md-6 col-6 col-lg-3 d-flex justify-content-center">
+        <div class="row my-5 col-12 mx-0 p-0 g-0 ">
+          <div class="col-3 d-flex justify-content-center">
             <div class="feature-icon-box">
               <div class="icon-box">
-                <img class="icon-img" src="assets/img/icons/f1.png" width="46" height="34" alt="Icon-HasTech">
+                <img class="icon-img img-fluid" src="assets/img/icons/f1.png" alt="Icon-HasTech">
               </div>
-              <div class="content">
+              <div class="content d-sm-block d-none">
                 <h5 class="title">Free Shipping</h5>
                 <p>Capped at ₹39 per order</p>
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-6  col-lg-3 d-flex justify-content-center">
+          <div class="col-3 d-flex justify-content-center">
             <div class="feature-icon-box">
               <div class="icon-box">
-                <img class="icon-img" src="assets/img/icons/f2.png" width="43" height="34" alt="Icon-HasTech">
+                <img class="icon-img img-fluid" src="assets/img/icons/f2.png" alt="Icon-HasTech">
               </div>
-              <div class="content">
+              <div class="content d-sm-block d-none">
                 <h5 class="title">Card Payments</h5>
                 <p>12 Months Installments</p>
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-6 col-lg-3 d-flex justify-content-center">
+          <div class="col-3 d-flex justify-content-center">
             <div class="feature-icon-box">
               <div class="icon-box">
-                <img class="icon-img" src="assets/img/icons/f3.png" width="39" height="39" alt="Icon-HasTech">
+                <img class="icon-img img-fluid" src="assets/img/icons/f3.png" alt="Icon-HasTech">
               </div>
-              <div class="content">
+              <div class="content d-sm-block d-none">
                 <h5 class="title">Easy Returns</h5>
                 <p>Shop With Confidence</p>
               </div>
             </div>
           </div>
-          <div class="col-md-6 col-6 col-lg-3 d-flex justify-content-center">
+          <div class="col-3 d-flex justify-content-center">
             <div class="feature-icon-box ">
               <div class="icon-box">
-                <img class="icon-img" src="assets/img/icons/f4.png" width="36" height="39" alt="Icon-HasTech">
+                <img class="icon-img img-fluid" src="assets/img/icons/f4.png" alt="Icon-HasTech">
               </div>
-              <div class="content">
+              <div class="content d-sm-block d-none">
                 <h5 class="title">24/7 Support</h5>
                 <p>Contact 24 hours everyday</p>
               </div>
@@ -295,12 +295,12 @@
             </div>
           </div>
         </div>
-        <div style="">
+        <div>
           <div id="products-container" style="min-height:320px; white-space: nowrap;overflow-y: auto;" class="row isotope-grid">
             <% let count = 0; %>
             <% products.forEach(prod => { %>
               <% if (prod.subCategory === subCategory[0].subCategoryName && count < 8) { %>
-              <div class="col-sm-6 col-lg-3 isotope-item filter_best_sellers <%= prod.subCategory %>">
+              <div class="col-6 col-lg-3 isotope-item filter_best_sellers <%= prod.subCategory %>">
                 <div class="product-item">
                   <div class="product-thumb">
                     <a href="/product/<%= prod._id %>">
@@ -348,7 +348,7 @@
             productsContainer.innerHTML = "";
             filteredProducts.forEach(prod => {
               productsContainer.innerHTML += `
-                <div class="col-sm-6 col-lg-3 isotope-item filter_best_sellers ${prod.subCategory}">
+                <div class="col-6 col-lg-3 isotope-item filter_best_sellers ${prod.subCategory}">
                   <div class="product-item">
                     <div class="product-thumb">
                       <a href="/product/${prod._id}">

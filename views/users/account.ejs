@@ -116,6 +116,14 @@
 }
 .order-tracking:first-child:before{display: none;}
 .order-tracking.completed:before{background-color: #3676c4;}
+.col-12::-webkit-scrollbar {
+  display: none;
+}
+
+.col-12 {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
 </style>
 </head>
 <body>
@@ -514,32 +522,39 @@
                     <div class="myaccount-content">
                       <div class="d-flex justify-content-between mb-2">
                         <h3>Billing Address</h3>
-                        <!-- <button class="btn">Add New Address</button> -->
                         <div class="d-flex flex-column">
                           <button type="button" class="btn  btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#addAddress">
                             Add New Address
                           </button> 
-                          <small class="text-success">Upto 4 Address can be saved</small>
+                          <small class="text-success">Upto&nbsp;4&nbsp;Address&nbsp;can&nbsp;be&nbsp;saved</small>
                         </div>
                       </div>
-                      <div class="col-12">
+                      <div class="col-12"  style="height: 200px; overflow-y: scroll;">
                         <% user.address.forEach((add, index) => { %>
                           <!-- Address details -->
-                          <address class="col-lg-4 ps-2 d-inline-flex" style="border-radius: 5px; border: 1px solid black;">
+                          <address class="col-lg-12 p-3" style="background-color: #eeecec;border-radius:15px;">
                             <!-- Address content -->
-                            <div class="address-details col-9">
+                            <div class="address-details col-lg-12">
                                 <!-- Name and edit button -->
                                 <div class="name d-flex justify-content-between">
-                                    <strong class="mt-1 text-uppercase"><%= add.name %></strong>
+                                    <strong class="mt-1 text-uppercase col-7"><%= add.name %></strong>
+                                    <div class="col-3" style="display: flex;justify-content:flex-end;align-items:flex-start;">
+                                      <button type="button" class="btn text-success" data-bs-toggle="modal"  data-bs-target="#editAddress<%= index %>">
+                                          <i class="fa fa-edit"></i>
+                                      </button>
+                                      <button type="button" onclick="window.location.href = `/addressDelete/<%= add._id %>`" class="btn text-danger">
+                                          <i class="fa fa-trash text-danger"></i>
+                                      </button>
+                                    </div>
                                 </div>
                                 <!-- Location -->
-                                <div class="location d-flex">
-                                    <p><%= add.street %></p>,<p><%= add.locality %></p>
+                                <div class="location d-flex col-lg-12">
+                                    <p><%= add.street %></p>&nbsp;,<p><%= add.locality %></p> , <p><%= add.city %></p>&nbsp;,<p><%= add.state %></p>
+
                                 </div>
                                 <!-- City and state -->
-                                <div class="city-state d-flex">
-                                    <p><%= add.city %></p>,<p><%= add.state %></p>
-                                </div>
+                                <!-- <div class="city-state d-flex">
+                                </div> -->
                                 <!-- Contact -->
                                 <div class="contact">
                                     <p>Mobile: <span><%= add.phone %></span></p>
@@ -548,14 +563,6 @@
                                 <div class="pincode">
                                     <p>Pincode : <span><%= add.pincode %></span></p>
                                 </div>
-                            </div>
-                            <div class="col-3" style="display: flex;justify-content:flex-end;align-items:flex-start;">
-                                <button type="button" class="btn text-success" data-bs-toggle="modal"  data-bs-target="#editAddress<%= index %>">
-                                    <i class="fa fa-edit"></i>
-                                </button>
-                                <button type="button" onclick="window.location.href = `/addressDelete/<%= add._id %>`" class="btn text-danger">
-                                    <i class="fa fa-trash text-danger"></i>
-                                </button>
                             </div>
                         </address>
                           <!-- Modal edit address -->
@@ -765,58 +772,6 @@
 
      <!--== End My Account Wrapper ==-->
 
-    <!--== Start Feature Area Wrapper ==-->
-    <div class="feature-area">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-3">
-            <div class="feature-icon-box">
-              <div class="icon-box">
-                <img class="icon-img" src="assets/img/icons/f1.png" width="46" height="34" alt="Icon-HasTech">
-              </div>
-              <div class="content">
-                <h5 class="title">Free Shipping</h5>
-                <p>Capped at ₹39 per order</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3">
-            <div class="feature-icon-box">
-              <div class="icon-box">
-                <img class="icon-img" src="assets/img/icons/f2.png" width="43" height="34" alt="Icon-HasTech">
-              </div>
-              <div class="content">
-                <h5 class="title">Card Payments</h5>
-                <p>12 Months Installments</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3">
-            <div class="feature-icon-box">
-              <div class="icon-box">
-                <img class="icon-img" src="assets/img/icons/f3.png" width="39" height="39" alt="Icon-HasTech">
-              </div>
-              <div class="content">
-                <h5 class="title">Easy Returns</h5>
-                <p>Shop With Confidence</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-3">
-            <div class="feature-icon-box">
-              <div class="icon-box">
-                <img class="icon-img" src="assets/img/icons/f4.png" width="36" height="39" alt="Icon-HasTech">
-              </div>
-              <div class="content">
-                <h5 class="title">24/7 Support</h5>
-                <p>Contact 24 hours everyday</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--== End Feature Area Wrapper ==-->
   </main>
 
   <!--== Start Footer Area Wrapper ==-->
