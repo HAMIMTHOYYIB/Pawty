@@ -13,45 +13,50 @@ const fs = require('fs');
 
 
 let dashboard = async (req,res) => {
-    let admin = await Admin.findOne();
-    // let category = admin.category;
-    // let subCategory = admin.subCategory;
-    let users = await User.find();
-    let orders = await Order.find();
-    let vendors = await Vendor.find().select("products")
-    let products = vendors.map((vendor) => vendor.products).flat()
-    let productOrders = await Order.aggregate([
-        {$unwind:'$products'}
-      ]);
-      for (let order of productOrders) {
-        const vendor = await Vendor.findOne({ 'products._id': order.products._id });
-        if (vendor) {
-          const product = vendor.products.find(p => p._id.equals(order.products._id));
-          order.products = {
-            _id: product._id,
-            productName: product.productName,
-            description: product.description,
-            price: product.price,
-            brand: product.brand,
-            category: product.category,
-            subCategory: product.subCategory,
-            stockQuantity: product.stockQuantity,
-            addedOn: product.addedOn,
-            images: product.images,
-            status:order.products.status,
-            quantity:order.products.quantity,
-            vendor : vendor.vendorName       
-          };
-        }
-        let user = await User.findById(order.userId);
-        if (user) {
-          order.userName = user.username;
-          order.userEmail = user.email;
-        }
-      }
-      productOrders.reverse();
-      productOrders.length = 5;
-    res.render('admin/index',{admin,vendors,products,orders,users,productOrders});
+    try {
+        let admin = await Admin.findOne();
+        // let category = admin.category;
+        // let subCategory = admin.subCategory;
+        let users = await User.find();
+        let orders = await Order.find();
+        let vendors = await Vendor.find().select("products")
+        let products = vendors.map((vendor) => vendor.products).flat()
+        let productOrders = await Order.aggregate([
+            {$unwind:'$products'}
+          ]);
+          for (let order of productOrders) {
+            const vendor = await Vendor.findOne({ 'products._id': order.products._id });
+            if (vendor) {
+              const product = vendor.products.find(p => p._id.equals(order.products._id));
+              order.products = {
+                _id: product._id,
+                productName: product.productName,
+                description: product.description,
+                price: product.price,
+                brand: product.brand,
+                category: product.category,
+                subCategory: product.subCategory,
+                stockQuantity: product.stockQuantity,
+                addedOn: product.addedOn,
+                images: product.images,
+                status:order.products.status,
+                quantity:order.products.quantity,
+                vendor : vendor.vendorName       
+              };
+            }
+            let user = await User.findById(order.userId);
+            if (user) {
+              order.userName = user.username;
+              order.userEmail = user.email;
+            }
+          }
+          productOrders.reverse();
+          productOrders.length = 5;
+        res.render('admin/index',{admin,vendors,products,orders,users,productOrders});
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
 }
 
 let adminLogin = (req, res) => {
@@ -61,7 +66,6 @@ let adminLogin = (req, res) => {
         res.render('admin/admin-login', { passError: '' });
     }
 }
-
 let submitAdminLogin = async (req,res) => {
     const {email, password} = req.body;
     if(email && password){
@@ -453,14 +457,19 @@ let orderList = async (req,res) => {
 
 // Banner Management
 let updateBanners = async (req,res) => {
-    const admin = await Admin.findOne();
-    res.render('admin/banners',{admin});
+    try {
+        const admin = await Admin.findOne();
+        res.render('admin/banners',{admin});
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
 }
 let changeMainBanner = async(req,res) => {
-    let imageData = req.files;
-    console.log("images : ",req.files)
-    const imageUrls = [];
     try {
+        let imageData = req.files;
+        console.log("images : ",req.files)
+        const imageUrls = [];
         if(imageData){
             for (const file of imageData) {
               const result = await cloudinary.uploader.upload(file.path);
@@ -482,13 +491,13 @@ let changeMainBanner = async(req,res) => {
     }
 }
 let changeOfferBanner = async (req, res) => {
-    let count = req.params.count;
-    console.log("count :",count)
-    let imageData = req.file;
-    let offerValue = req.body.offerVal;
-    let title = req.body.title;
-
     try {
+        let count = req.params.count;
+        console.log("count :",count)
+        let imageData = req.file;
+        let offerValue = req.body.offerVal;
+        let title = req.body.title;
+
         console.log("image passed to cloudinary upload.")
         if (imageData && offerValue && title) {
             const result = await cloudinary.uploader.upload(imageData.path);
@@ -512,10 +521,11 @@ let changeOfferBanner = async (req, res) => {
     }
 }
 let changeSingleBanner = async (req,res) => {
-    let imageData = req.file;
-    console.log("image : ",req.file)
-    const imageUrl = [];
     try {
+        let imageData = req.file;
+        console.log("image : ",req.file)
+        const imageUrl = [];
+
         if(imageData){
             const result = await cloudinary.uploader.upload(imageData.path);
             imageUrl.push(result.secure_url);
@@ -593,314 +603,333 @@ let getDayOrders = async (req, res) => {
     }
 };
 let getOrderReport = async (req, res) => {
-    let startDate = req.body.startDate;
-    let endDate = req.body.endDate;
-
-    let orders = await Order.find({
-        orderDate: {
-            $gte: new Date(startDate),
-            $lte: new Date(endDate)
-        }
-    });
-
-    for (let order of orders) {
-      let user = await User.findById(order.userId);
-      order.userName = user.username;
-      order.userMail = user.email;
-      for (let product of order.products) {
-        let productDetails = await getProductDetails.getProductDetails(product._id);
-        product.productName = productDetails.productName;
-      } 
-    }
-    const content = `
-    <html>
-        <head>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-                th, td {
-                    border: 1px solid #dddddd;
-                    text-align: left;
-                    padding: 8px;
-                }
-                th {
-                    background-color: #f2f2f2;
-                }
-                .brand-icon {
-                    width: 50px; /* Adjust as needed */
-                    height: 50px; /* Adjust as needed */
-                }
-                .header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 20px;
-                    margin-top: 5px;
-                }
-                .header h2 {
-                    margin: 0;
-                }
-                .date {
-                    text-align: right;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="header">
-                <h2>Pawty Order Report</h2>
-                <div class="date">From: ${startDate}<br>To: ${endDate}</div>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Order ID</th>
-                        <th>Customer Name</th>
-                        <th>Order Total</th>
-                        <th>Products</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${orders.map(order => `
-                        <tr>
-                            <td>${new Date(order.orderDate).toLocaleDateString()}</td>
-                            <td>${order._id}</td>
-                            <td>${order.userName}</td>
-                            <td>${order.total}</td>
-                            <td>
-                                <ul>
-                                    ${order.products.map(product => `
-                                        <li>${product.productName}*${product.quantity}-${product.status}</li>
-                                    `).join('')}
-                                </ul>
-                            </td>
-                        </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-        </body>
-    </html>
-  `;
-    const pdf = await htmlToPdf(content);
-    res.contentType('application/pdf');
-    res.attachment('order-report.pdf');
-    res.send(pdf);
-};
-let getOrderCvv = async (req, res) => {
-    let startDate = req.body.startDate;
-    let endDate = req.body.endDate;
-
-    let query = {};
-    if (startDate && endDate) {
-        query.orderDate = {
-            $gte: new Date(startDate),
-            $lte: new Date(endDate)
-        };
-    }
-
-    let orders = await Order.find(query);
-    for (let order of orders) {
-        let user = await User.findById(order.userId);
-        order.userName = user.username;
-        order.userMail = user.email;
-        for (let product of order.products) {
+    try {
+        let startDate = req.body.startDate;
+        let endDate = req.body.endDate;
+    
+        let orders = await Order.find({
+            orderDate: {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+            }
+        });
+        for (let order of orders) {
+          let user = await User.findById(order.userId);
+          order.userName = user.username;
+          order.userMail = user.email;
+          for (let product of order.products) {
             let productDetails = await getProductDetails.getProductDetails(product._id);
             product.productName = productDetails.productName;
+          } 
         }
+        const content = `
+        <html>
+            <head>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+                    th, td {
+                        border: 1px solid #dddddd;
+                        text-align: left;
+                        padding: 8px;
+                    }
+                    th {
+                        background-color: #f2f2f2;
+                    }
+                    .brand-icon {
+                        width: 50px; /* Adjust as needed */
+                        height: 50px; /* Adjust as needed */
+                    }
+                    .header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 20px;
+                        margin-top: 5px;
+                    }
+                    .header h2 {
+                        margin: 0;
+                    }
+                    .date {
+                        text-align: right;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <h2>Pawty Order Report</h2>
+                    <div class="date">From: ${startDate}<br>To: ${endDate}</div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Order ID</th>
+                            <th>Customer Name</th>
+                            <th>Order Total</th>
+                            <th>Products</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${orders.map(order => `
+                            <tr>
+                                <td>${new Date(order.orderDate).toLocaleDateString()}</td>
+                                <td>${order._id}</td>
+                                <td>${order.userName}</td>
+                                <td>${order.total}</td>
+                                <td>
+                                    <ul>
+                                        ${order.products.map(product => `
+                                            <li>${product.productName}*${product.quantity}-${product.status}</li>
+                                        `).join('')}
+                                    </ul>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </body>
+        </html>
+      `;
+        const pdf = await htmlToPdf(content);
+        res.contentType('application/pdf');
+        res.attachment('order-report.pdf');
+        res.send(pdf); 
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
     }
-
-    const csvWriter = createObjectCsvWriter({
-        path: 'orders.csv',
-        header: [
-            { id: 'orderId', title: 'Order ID' },
-            { id: 'orderDate', title: 'Order Date' },
-            { id: 'userName', title: 'Customer Name' },
-            { id: 'userMail', title: 'Customer Email' },
-            { id: 'total', title: 'Order Total' },
-            { id: 'products', title: 'Products' }
-        ]
-    });
+};
+let getOrderCvv = async (req, res) => {
+    try {
+        let startDate = req.body.startDate;
+        let endDate = req.body.endDate;
     
-    const csvRecords = orders.map(order => ({
-        orderId: order._id,
-        orderDate: new Date(order.orderDate).toLocaleDateString(),
-        userName: order.userName,
-        userMail: order.userMail,
-        total: order.total,
-        products: order.products.map(product => `${product.productName} x ${product.quantity}`).join(';')
-    }));    
-
-    await csvWriter.writeRecords(csvRecords);
-
-    // Set headers and stream CSV file as response
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', 'attachment; filename=Orders.csv');
-    const fileStream = fs.createReadStream('orders.csv');
-    fileStream.pipe(res);
+        let query = {};
+        if (startDate && endDate) {
+            query.orderDate = {
+                $gte: new Date(startDate),
+                $lte: new Date(endDate)
+            };
+        }
+    
+        let orders = await Order.find(query);
+        for (let order of orders) {
+            let user = await User.findById(order.userId);
+            order.userName = user.username;
+            order.userMail = user.email;
+            for (let product of order.products) {
+                let productDetails = await getProductDetails.getProductDetails(product._id);
+                product.productName = productDetails.productName;
+            }
+        }
+    
+        const csvWriter = createObjectCsvWriter({
+            path: 'orders.csv',
+            header: [
+                { id: 'orderId', title: 'Order ID' },
+                { id: 'orderDate', title: 'Order Date' },
+                { id: 'userName', title: 'Customer Name' },
+                { id: 'userMail', title: 'Customer Email' },
+                { id: 'total', title: 'Order Total' },
+                { id: 'products', title: 'Products' }
+            ]
+        });
+        
+        const csvRecords = orders.map(order => ({
+            orderId: order._id,
+            orderDate: new Date(order.orderDate).toLocaleDateString(),
+            userName: order.userName,
+            userMail: order.userMail,
+            total: order.total,
+            products: order.products.map(product => `${product.productName} x ${product.quantity}`).join(';')
+        }));    
+    
+        await csvWriter.writeRecords(csvRecords);
+    
+        // Set headers and stream CSV file as response
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename=Orders.csv');
+        const fileStream = fs.createReadStream('orders.csv');
+        fileStream.pipe(res); 
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
 };
 
 let productWiseOrder = async (req, res) => {
-    let productId = req.params.productId;
-    let orders = await Order.find({
-        'products._id':productId
-    });
-    for (let order of orders) {
-        let user = await User.findById(order.userId);
-        order.userName = user.username;
-        order.userMail = user.email;
-        for (let product of order.products) {
-            if (product._id.toString() === productId) {
-                let vendor = await Vendor.findOne({ 'products._id':productId });
-                let productDetails = vendor.products.find(p => p._id.toString() === productId);
-                product.productName = productDetails.productName;
-                break;
+    try {
+        let productId = req.params.productId;
+        let orders = await Order.find({
+            'products._id':productId
+        });
+        for (let order of orders) {
+            let user = await User.findById(order.userId);
+            order.userName = user.username;
+            order.userMail = user.email;
+            for (let product of order.products) {
+                if (product._id.toString() === productId) {
+                    let vendor = await Vendor.findOne({ 'products._id':productId });
+                    let productDetails = vendor.products.find(p => p._id.toString() === productId);
+                    product.productName = productDetails.productName;
+                    break;
+                }
             }
         }
-    }
-    const product = await getProductDetails.getProductDetails(productId)
-    const content = `
-    <html>
-        <head>
-            <style>
-                body {
-                    font-family: Arial, sans-serif;
-                }
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-                th, td {
-                    border: 1px solid #dddddd;
-                    text-align: left;
-                    padding: 8px;
-                }
-                th {
-                    background-color: #f2f2f2;
-                }
-                .brand-icon {
-                    width: 50px; /* Adjust as needed */
-                    height: 50px; /* Adjust as needed */
-                }
-                .header {
-                    display: flex;
-                    justify-content: space-between;
-                    align-items: center;
-                    margin-bottom: 20px;
-                    margin-top: 5px;
-                }
-                .header h2 {
-                    margin: 0;
-                }
-                .date {
-                    text-align: right;
-                }
-                .product-image {
-                    max-width: 100px;
-                    max-height: 100px;
-                }
-            </style>
-        </head>
-        <body>
-            <div class="header">
-                <h2>Pawty Order Report</h2>
-            </div>
-            <div>
-                <img src="${product.images[0]}" alt="ProductImage" class="product-image">
-                <div>
-                    <strong>${product.productName}</strong><br>
-                    Description: ${product.description}<br>
-                    Price: ${product.price}<br>
-                    Brand: ${product.brand}<br>
-                    Category: ${product.category}<br>
-                    Subcategory: ${product.subCategory}<br>
-                    Stock Quantity: ${product.stockQuantity}
+        const product = await getProductDetails.getProductDetails(productId)
+        const content = `
+        <html>
+            <head>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                    }
+                    table {
+                        width: 100%;
+                        border-collapse: collapse;
+                    }
+                    th, td {
+                        border: 1px solid #dddddd;
+                        text-align: left;
+                        padding: 8px;
+                    }
+                    th {
+                        background-color: #f2f2f2;
+                    }
+                    .brand-icon {
+                        width: 50px; /* Adjust as needed */
+                        height: 50px; /* Adjust as needed */
+                    }
+                    .header {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        margin-bottom: 20px;
+                        margin-top: 5px;
+                    }
+                    .header h2 {
+                        margin: 0;
+                    }
+                    .date {
+                        text-align: right;
+                    }
+                    .product-image {
+                        max-width: 100px;
+                        max-height: 100px;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="header">
+                    <h2>Pawty Order Report</h2>
                 </div>
-            </div>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Date</th>
-                        <th>Order ID</th>
-                        <th>Customer Name</th>
-                        <th>Order Status</th>
-                        <th>Quantity</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${orders.map(order => `
+                <div>
+                    <img src="${product.images[0]}" alt="ProductImage" class="product-image">
+                    <div>
+                        <strong>${product.productName}</strong><br>
+                        Description: ${product.description}<br>
+                        Price: ${product.price}<br>
+                        Brand: ${product.brand}<br>
+                        Category: ${product.category}<br>
+                        Subcategory: ${product.subCategory}<br>
+                        Stock Quantity: ${product.stockQuantity}
+                    </div>
+                </div>
+                <table>
+                    <thead>
                         <tr>
-                            <td>${new Date(order.orderDate).toLocaleDateString()}</td>
-                            <td>${order._id}</td>
-                            <td>${order.userName}</td>
-                            <td>${order.products.find(p => p._id.toString() === productId).status}</td>
-                            <td>${order.products.find(p => p._id.toString() === productId).quantity}</td>
+                            <th>Date</th>
+                            <th>Order ID</th>
+                            <th>Customer Name</th>
+                            <th>Order Status</th>
+                            <th>Quantity</th>
                         </tr>
-                    `).join('')}
-                </tbody>
-            </table>
-        </body>
-    </html>
-    `;
-    const pdf = await htmlToPdf(content);
-    res.contentType('application/pdf');
-    res.attachment('Product-report.pdf');
-    res.send(pdf);
+                    </thead>
+                    <tbody>
+                        ${orders.map(order => `
+                            <tr>
+                                <td>${new Date(order.orderDate).toLocaleDateString()}</td>
+                                <td>${order._id}</td>
+                                <td>${order.userName}</td>
+                                <td>${order.products.find(p => p._id.toString() === productId).status}</td>
+                                <td>${order.products.find(p => p._id.toString() === productId).quantity}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            </body>
+        </html>
+        `;
+        const pdf = await htmlToPdf(content);
+        res.contentType('application/pdf');
+        res.attachment('Product-report.pdf');
+        res.send(pdf);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
+    }
 };
 let productWiseReport = async (req,res) => {
-    let productId = req.params.productId;
+    try {
+        let productId = req.params.productId;
 
-    let orders = await Order.find({
-        'products._id':productId
-    });
-
-    for (let order of orders) {
-        let user = await User.findById(order.userId);
-        order.userName = user.username;
-        order.userMail = user.email;
-        for (let product of order.products) {
-            if (product._id.toString() === productId) {
-                let vendor = await Vendor.findOne({ 'products._id':productId });
-                let productDetails = vendor.products.find(p => p._id.toString() === productId);
-                product.productName = productDetails.productName;
-                break;
+        let orders = await Order.find({
+            'products._id':productId
+        });
+    
+        for (let order of orders) {
+            let user = await User.findById(order.userId);
+            order.userName = user.username;
+            order.userMail = user.email;
+            for (let product of order.products) {
+                if (product._id.toString() === productId) {
+                    let vendor = await Vendor.findOne({ 'products._id':productId });
+                    let productDetails = vendor.products.find(p => p._id.toString() === productId);
+                    product.productName = productDetails.productName;
+                    break;
+                }
             }
         }
+        const csvWriter = createObjectCsvWriter({
+            path: 'product-sales.csv',
+            header: [
+                { id: 'orderDate', title: 'Order Date' },
+                { id: 'orderId', title: 'Order ID' },
+                { id: 'userName', title: 'Customer Name' },
+                { id: 'userMail', title: 'Customer Email' },
+                { id: 'status', title: 'Order Status' },
+                { id: 'quantity', title: 'Quantity' }
+            ]
+        });
+    
+        const csvRecords = orders.flatMap(order => {
+            let product = order.products.find(p => p._id.toString() === productId);
+            if (!product) return [];
+            return {
+                orderDate: new Date(order.orderDate).toLocaleDateString(),
+                orderId: order._id,
+                userName: order.userName,
+                userMail: order.userMail,
+                status: product.status,
+                quantity: product.quantity
+            };
+        });
+    
+        await csvWriter.writeRecords(csvRecords);
+        res.setHeader('Content-Type', 'text/csv');
+        res.setHeader('Content-Disposition', 'attachment; filename=product-sales.csv');
+        const fileStream = fs.createReadStream('product-sales.csv');
+        fileStream.pipe(res);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Internal Server Error");
     }
-    const csvWriter = createObjectCsvWriter({
-        path: 'product-sales.csv',
-        header: [
-            { id: 'orderDate', title: 'Order Date' },
-            { id: 'orderId', title: 'Order ID' },
-            { id: 'userName', title: 'Customer Name' },
-            { id: 'userMail', title: 'Customer Email' },
-            { id: 'status', title: 'Order Status' },
-            { id: 'quantity', title: 'Quantity' }
-        ]
-    });
-
-    const csvRecords = orders.flatMap(order => {
-        let product = order.products.find(p => p._id.toString() === productId);
-        if (!product) return [];
-        return {
-            orderDate: new Date(order.orderDate).toLocaleDateString(),
-            orderId: order._id,
-            userName: order.userName,
-            userMail: order.userMail,
-            status: product.status,
-            quantity: product.quantity
-        };
-    });
-
-    await csvWriter.writeRecords(csvRecords);
-    res.setHeader('Content-Type', 'text/csv');
-    res.setHeader('Content-Disposition', 'attachment; filename=product-sales.csv');
-    const fileStream = fs.createReadStream('product-sales.csv');
-    fileStream.pipe(res);
 };
   
 

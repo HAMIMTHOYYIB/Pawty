@@ -107,10 +107,10 @@ let addProduct = async (req,res) => {
   }
 };
 let submitAddProduct = async (req, res) => {
-  console.log("req user :", req.user);
+  // console.log("req user :", req.user);
   let vendorId = req.user.id;
-  console.log("req.body :", req.body);
-  console.log("req.file :", req.files);
+  // console.log("req.body :", req.body);
+  // console.log("req.file :", req.files);
   let imageData = req.files;
   let productData = req.body;
   let { ProductName, Price, Brand, Stock, Description, Category, SubCategory } = productData;
@@ -172,7 +172,6 @@ let editProduct = async (req,res) => {
   if(!product){
     return res.status(404).send('Product Not Found')
   }
-  console.log("prodd :",product);
   res.render('vendor/product-edit',{product,admin,vendor});
 }
 let submitEditProduct = async (req, res) => {
@@ -200,13 +199,11 @@ let submitEditProduct = async (req, res) => {
     }
 
     let productId = req.params.id; // Assuming you have the productId in the URL
-    console.log("req.parms.productId",productId);
     let vendor = await Vendor.findOne({_id:vendorId});
     if (!vendor) {
       res.status(400).send('Vendor Not Found');
     } else {
       let productIndex = await vendor.products.findIndex(product => product._id.toString() === productId);
-      console.log("prodctIndex :",productIndex);
       if (productIndex === -1) {
         res.status(404).send('Product Not Found');
       } else {
@@ -300,7 +297,6 @@ let updateStatus = async (req, res) => {
           history.isActive = false;
         }
       });
-      console.log("product in orderr",product)
       await order.save();
       let user = await User.findById(order.userId)
       let productDetails = await productHelper.getProductDetails(product._id);
@@ -319,7 +315,6 @@ let updateStatus = async (req, res) => {
         if (!vendorProd) {
           throw new Error('Product not found');
         }
-        console.log("product order : ",product)
         vendorProd.sold -= product.quantity;
         vendorProd.stockQuantity += product.quantity;
         await vendor.save();

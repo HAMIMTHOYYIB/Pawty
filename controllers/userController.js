@@ -860,7 +860,6 @@ let submitlogin = async (req, res) => {
             if (!loginUser) {
                 return res.status(404).render('users/account-login', { passError: 'User Not Found' });//send('User Not Found');
             }
-            console.log("loginUser : ", loginUser);
             bcrypt.compare(password, loginUser.password, (err, result) => {
                 if (err) {
                     // console.error("problem : ", err);
