@@ -342,6 +342,10 @@ let getcart = async (req, res) => {
   try {
     let user = await User.findOne({ _id: req.user.id });
     let Products =  await Vendor.find().select("products");
+    if(user.cart.products.length === 0){
+      user.cart.total = 0;
+      await user.save();
+    }
     user.cart.products.forEach(product => {
       Products.forEach(vend => {
         vend.products.forEach(p => {

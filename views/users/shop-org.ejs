@@ -238,7 +238,7 @@
                       <div class="col-xl-9 g-0">
                         <div class="row">
                             <% products.forEach(product => {  %>
-                          <div class="col-xl-4 g-0">
+                          <div class="col-xl-4 col-sm-6 g-0">
                             <!--== Start Product Item ==-->
                             <div class="product-item">
                               <div class="product-thumb" style="height:250px;width:250px;position: relative; overflow: hidden;">
@@ -325,7 +325,6 @@
 
     <script>
       // sorting
-
       document.getElementById('sortSelect').addEventListener('change', function() {
       filterProducts(); 
       });
@@ -335,9 +334,6 @@
       })
 
       // filtering
-      // Retrieve the user object from the hidden input field
-      // const userDataElement = document.getElementById('userData');
-      // const userData = userDataElement ? JSON.parse(userDataElement.value) : null;
       const userDataElement = document.getElementById('userData');
       const userData = userDataElement && userDataElement.value ? JSON.parse(userDataElement.value) : null;
 
@@ -376,7 +372,6 @@
         console.error('Error:', error);
       });
     }
-
     function updateProductListing(products) {
       const productContainer = document.querySelector('.row .col-xl-9 .row');
       productContainer.innerHTML = '';
@@ -387,7 +382,7 @@
       } else {
           products.forEach(product => {
               const productItem = `
-                  <div class="col-xl-4 g-0">
+                  <div class="col-xl-4 col-sm-6 g-0">
                       <div class="product-item">
                           <div class="product-thumb" style="height:250px;width:250px;position: relative; overflow: hidden;">
                               <a href="/product/${product._id}" class="ms-3" style="max-height:250px;max-width:250px;" >
@@ -405,9 +400,9 @@
                                   ${userData !== null && userData.wishlist.products.some(wProduct => wProduct._id.toString() === product._id.toString()) ? '<i class="bi bi-heart-fill text-danger fs-5"></i>' : '<i class="pe-7s-like"></i>'}
                               </button>
                               <div class="product-action-links">
-                                <button type="button" onclick="addToCart('${product._id}')" class="addToCart btn-product-cart bg-transparent" data-product-id="${product._id}">
+                                  <button type="button" class="addToCart btn-product-cart bg-transparent" data-product-id="${product._id}">
                                     <i class="bi bi-bag fs-5"></i>
-                                </button>
+                                  </button>
                               </div>
                           </div>
                       </div>
@@ -470,6 +465,57 @@
       });
     });
   });
+
+  // Add to cart
+  document.addEventListener('DOMContentLoaded', function() {
+  const addToCartButtons = document.getElementsByClassName('addToCart');
+
+  Array.from(addToCartButtons).forEach(function(button) {
+    button.addEventListener('click', function(event) {
+      event.preventDefault();
+      const productId = this.getAttribute('data-product-id');
+      addToCartf(productId);
+    });
+  });
+  function addToCartf(productId) {
+  axios.post('/addToCart', {
+    productId: productId
+  })
+  .then(function(response) {
+    if (response.status === 201) {
+      Toastify({
+        text: response.data.error,
+        duration: 900,
+        gravity: "top",
+        position: 'right',
+        backgroundColor: "#f44336",
+        stopOnFocus: true, // Stop the timer when the toast is focused
+      }).showToast();
+    } else {
+      console.log(response.data);
+      console.log("added to  cart")
+      Toastify({
+        text: "Product Added to cart",
+        duration: 900, 
+        gravity: "top", 
+        position: 'right',
+        backgroundColor: "#203e5a",
+        stopOnFocus: true, // Stop the timer when the toast is focused
+      }).showToast();
+  
+      setTimeout(function() {
+        document.getElementById('cartNotification').classList.remove('show');
+      }, 2000);
+    }
+  })
+  .catch(function(error) {
+    console.error('Error adding product to cart:', error);
+    // Optionally, show an error message to the user
+  });
+}
+
+
+});
 
     </script>
   
@@ -646,59 +692,6 @@
 <!--=======================Javascript============================-->
 
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<!-- Add To Cart -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  const addToCartButtons = document.getElementsByClassName('addToCart');
-
-  Array.from(addToCartButtons).forEach(function(button) {
-    button.addEventListener('click', function(event) {
-      event.preventDefault();
-      const productId = this.getAttribute('data-product-id');
-      addToCartf(productId);
-    });
-  });
-  function addToCartf(productId) {
-  axios.post('/addToCart', {
-    productId: productId
-  })
-  .then(function(response) {
-    if (response.status === 201) {
-      Toastify({
-        text: response.data.error,
-        duration: 900,
-        gravity: "top",
-        position: 'right',
-        backgroundColor: "#f44336",
-        stopOnFocus: true, // Stop the timer when the toast is focused
-      }).showToast();
-    } else {
-      console.log(response.data);
-      console.log("added to  cart")
-      Toastify({
-        text: "Product Added to cart",
-        duration: 900, 
-        gravity: "top", 
-        position: 'right',
-        backgroundColor: "#203e5a",
-        stopOnFocus: true, // Stop the timer when the toast is focused
-      }).showToast();
-  
-      setTimeout(function() {
-        document.getElementById('cartNotification').classList.remove('show');
-      }, 2000);
-    }
-  })
-  .catch(function(error) {
-    console.error('Error adding product to cart:', error);
-    // Optionally, show an error message to the user
-  });
-}
-
-
-});
-
-</script>
 
 <!--=== jQuery Modernizr Min Js ===-->
 <script src="assets/js/modernizr.js"></script>
