@@ -363,11 +363,18 @@ let getcart = async (req, res) => {
 };
 let addtocart = async (req, res) => {
   try {
-    const { productId } = req.body;
-    const userId = req.user ? req.user.id : null; // Check if user is logged in
-    if (userId === null) {
+    if (!req.cookies.user_jwt) {
       return res.status(201).json({ error: "Try after Login." });
     }
+    jwt.verify(req.cookies.user_jwt, process.env.JWT_SECRET, async (err, decodedToken) => {
+      if (err) {
+        return res.status(201).json({ error: "Unauthorised user" });
+      } else {
+        req.user = decodedToken;
+      }
+    })
+    const { productId } = req.body;
+    const userId = req.user ? req.user.id : null; // Check if user is logged in
     const vendor = await Vendor.findOne({ "products._id": productId });
     if (!vendor) {
       return res.status(404).json({ error: "Vendor not found" });

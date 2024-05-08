@@ -663,7 +663,7 @@ document.addEventListener('DOMContentLoaded', function() {
     productId: productId
   })
   .then(function(response) {
-    if (response.data.status === 201) {
+    if (response.status === 201) {
       Toastify({
         text: response.data.error,
         duration: 900,
