@@ -362,9 +362,12 @@ let getcart = async (req, res) => {
   }
 };
 let addtocart = async (req, res) => {
-  const { productId } = req.body;
-  const userId = req.user.id;
   try {
+    const { productId } = req.body;
+    const userId = req.user ? req.user.id : null; // Check if user is logged in
+    if (userId === null) {
+      return res.status(201).json({ error: "Try after Login." });
+    }
     const vendor = await Vendor.findOne({ "products._id": productId });
     if (!vendor) {
       return res.status(404).json({ error: "Vendor not found" });
@@ -377,7 +380,7 @@ let addtocart = async (req, res) => {
     }
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.status(201).json({ error: "Please log in to add items to the cart" });
     }
     const existingProductIndex = user.cart.products.findIndex((cartItem) => cartItem._id.toString() === productId);
     if (existingProductIndex !== -1) {
@@ -396,6 +399,7 @@ let addtocart = async (req, res) => {
     console.error("Error adding product to cart:", error);
     res.status(500).json({ error: "Unable to add product to cart" });
   }
+  
 }
 let removefromcart = async (req, res) => {
   try {
@@ -512,10 +516,11 @@ let getwishlist = async (req,res) => {
   }
 }
 let addtowishlist  = async (req, res) => {
-  const { productId } = req.body;
-  const userId = req.user.id;
-  let existInWishlist = false;
   try {
+    const { productId } = req.body;
+    const userId = req.user.id;
+    let existInWishlist = false;
+    let userExist = false;
     const vendor = await Vendor.findOne({ "products._id": productId });
     if (!vendor) {
       return res.status(404).json({ error: "Vendor not found" });
@@ -528,8 +533,9 @@ let addtowishlist  = async (req, res) => {
     }
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(404).json({ error: "User not found" });
+      return res.json({ message: "NO user", user, productId, existInWishlist , userExist});
     }
+    userExist = true
     const existingProductIndex = user.wishlist.products.findIndex((Item) => Item._id.toString() === productId);
     if (existingProductIndex !== -1) { //if exist remove from wishlist
       existInWishlist = false;
@@ -545,7 +551,7 @@ let addtowishlist  = async (req, res) => {
       });
     };
     await user.save();
-    res.json({ message: "Product added to wishlist successfully", user, productId, existInWishlist});
+    res.json({ message: "Product added to wishlist successfully", user, productId, existInWishlist , userExist});
   }catch (error) {
     console.error("Error adding product to wishlist:", error);
     res.status(500).json({ error: "Unable to add product to wishlist" });

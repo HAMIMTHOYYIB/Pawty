@@ -287,7 +287,7 @@
           </div>
         </div>
         <div>
-          <div id="products-container" style="min-height:320px; white-space: nowrap;" class="row isotope-grid">
+          <div id="products-container" style="min-height:320px; white-space: nowrap;overflow-y: auto;" class="row isotope-grid">
             <% let count = 0; %>
             <% products.forEach(prod => { %>
               <% if (prod.subCategory === subCategory[0].subCategoryName && count < 4) { %>
@@ -333,7 +333,7 @@
     
             // Filter products based on the clicked subcategory
             const selectedSubcategory = button.getAttribute("data-filter").replace(".", "");
-            const filteredProducts = productsData.filter(prod => prod.subCategory === selectedSubcategory).slice(0, 4);
+            const filteredProducts = productsData.filter(prod => prod.subCategory === selectedSubcategory).slice(0, 8);
     
             // Update the products listing
             productsContainer.innerHTML = "";

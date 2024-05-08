@@ -39,7 +39,7 @@ router.post('/filter',userController.filterProduct)
 
 
 router.get('/cart',userAuth,userController.getcart);
-router.post('/addToCart',userAuth,userController.addtocart);
+router.post('/addToCart',userController.addtocart);
 router.post('/updateCart',userAuth,userController.changeQuantity);
 router.post('/removeFromCart',userAuth,userController.removefromcart);
 router.post('/check-coupon',userAuth,userController.checkCoupon);

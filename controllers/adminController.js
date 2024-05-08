@@ -60,16 +60,22 @@ let dashboard = async (req,res) => {
 }
 
 let adminLogin = (req, res) => {
-    if(req.cookies.admin_jwt){
-        res.redirect('/Dashboard')
-    }else{
-        res.render('admin/admin-login', { passError: '' });
+    try {
+        if(req.cookies.admin_jwt){
+            res.redirect('/Dashboard')
+        }else{
+            res.render('admin/admin-login', { passError: '' });
+        }
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({error : "Internal server error"})
     }
+    
 }
 let submitAdminLogin = async (req,res) => {
-    const {email, password} = req.body;
-    if(email && password){
-        try {
+    try {
+        const {email, password} = req.body;
+        if(email && password){
             const admin = await Admin.findOne({email: email});
             if (!admin) {
                 return res.status(404).render('admin/admin-login', { passError: 'Admin Not Found' });             //send('User Not Found');
@@ -91,43 +97,54 @@ let submitAdminLogin = async (req,res) => {
                 console.log('Admin Loggined succesfully : Token created.');
                 res.redirect('/Dashboard');
             }
-        } catch (error) {
-            console.log("Error on Login Submit.",error);
-            res.status(500).send("Internal Server Error");
-        }  
-    }else{
-        res.render('admin/admin-login',{passError:'Please Complete the fields :'})
-    }
+        }else{
+            res.render('admin/admin-login',{passError:'Please Complete the fields :'})
+        }
+    } catch (error) {
+        console.log("Error on Login Submit.",error);
+        res.status(500).send("Internal Server Error");
+    } 
 }
 
 
 //Category Managment
 let categoryList = async (req,res) => {
-    let admin = await Admin.findOne();
-    if(!admin){
-        res.status(400).send('Admin not found');
+    try {
+        let admin = await Admin.findOne();
+        if(!admin){
+            res.status(400).send('Admin not found');
+        }
+        let category = admin.category.map(category => category);
+        res.render('admin/categorie-list',{category,admin}); 
+    } catch (error) {
+        res.status(500).send("internal Server Error")
     }
-    let category = admin.category.map(category => category);
-    res.render('admin/categorie-list',{category,admin});
 }
-
 let addCategory = async (req,res) => {
-    const admin = await Admin.findOne();
-    res.render('admin/categories-add',{admin});
+    try {
+        const admin = await Admin.findOne();
+        res.render('admin/categories-add',{admin});
+    } catch (error) {
+        res.status(500).send("internal server Error")
+    }
 }
 let submitAddCategory = async (req,res) => {
-    let {categoryName} =req.body;
-    let admin = await Admin.findOne();
-    if(!admin){
-        res.status(400).send('Admin not found')
+    try {
+        let {categoryName} =req.body;
+        let admin = await Admin.findOne();
+        if(!admin){
+            res.status(400).send('Admin not found')
+        }
+        admin.category.push({categoryName});
+        admin.save();
+        res.redirect('/categories')
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
     }
-    admin.category.push({categoryName});
-    admin.save();
-    res.redirect('/categories')
 }
 let editCategory = async (req,res) => {
-    let categoryId = req.params.id;
     try {
+        let categoryId = req.params.id;
         let admin = await Admin.findOne();
         if(!admin){
             res.status(400).send('Admin Not Found')
@@ -143,9 +160,9 @@ let editCategory = async (req,res) => {
     }
 }
 let submitEditCategory = async (req,res) => {
-    let categoryId = req.params.id;
-    let {categoryName} = req.body;
     try {
+        let categoryId = req.params.id;
+        let {categoryName} = req.body;
         let admin = await Admin.findOne();
         if(!admin){
             res.status(400).send('Admin Not Found')
@@ -164,8 +181,8 @@ let submitEditCategory = async (req,res) => {
     }
 }
 let deleteCategory = async (req,res) => {
-    let categoryId = req.params.id;
-    try {
+    try {  
+        let categoryId = req.params.id;
         let admin = await Admin.findOne();
         if(!admin){
             res.status(400).send('Admin Not Found')
@@ -182,33 +199,42 @@ let deleteCategory = async (req,res) => {
 
 // SubCategory Managment
 let subCategoryList = async (req,res) => {
-    let admin = await Admin.findOne();
-    if(!admin){
-        res.status(400).send('Admin Not Found')
+    try {
+        let admin = await Admin.findOne();
+        if(!admin){
+            res.status(400).send('Admin Not Found')
+        }
+        let subCategory = admin.subCategory.map(item => item);
+        res.render('admin/subCategoryList',{subCategory,admin})
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
     }
-    let subCategory = admin.subCategory.map(item => item);
-    res.render('admin/subCategoryList',{subCategory,admin})
 }
-
 let addSubCategory = async (req,res) => {
+    try {  
     const admin = await Admin.findOne();
     res.render('admin/subCategory-add',{admin})
-}
-
-let submitAddSubCategory = async (req,res) => {
-    let {subCategoryName} = req.body;
-    let admin = await Admin.findOne();
-    if(!admin){
-        res.status(400).send('Admin Not Found')
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
     }
-    admin.subCategory.push({subCategoryName});
-    admin.save();
-    res.redirect('/subCategories');
 }
-
-let editSubCategory = async (req,res) => {
-    let subCategoryId = req.params.id;
+let submitAddSubCategory = async (req,res) => {
     try {
+        let {subCategoryName} = req.body;
+        let admin = await Admin.findOne();
+        if(!admin){
+            res.status(400).send('Admin Not Found')
+        }
+        admin.subCategory.push({subCategoryName});
+        admin.save();
+        res.redirect('/subCategories');
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
+    }
+}
+let editSubCategory = async (req,res) => {
+    try {
+        let subCategoryId = req.params.id;
         let admin = await Admin.findOne();
         if(!admin){
             res.status(400).send('Admin Not Found')
@@ -223,9 +249,9 @@ let editSubCategory = async (req,res) => {
     }
 }
 let submitEditSubCategory = async (req,res) => {
-    let subCategoryId = req.params.id;
-    let {subCategoryName} = req.body;
     try {
+        let subCategoryId = req.params.id;
+        let {subCategoryName} = req.body;
         let admin = await Admin.findOne();
         if(!admin){
             res.status(400).send('Admin Not Found')
@@ -243,10 +269,9 @@ let submitEditSubCategory = async (req,res) => {
         res.status(500).send('Internal Server Error')
     }
 }
-
 let deleteSubCategory = async (req,res) => {
-    let subCategoryId = req.params.id;
     try {
+        let subCategoryId = req.params.id;
         let admin = await Admin.findOne();
         if(!admin){
             res.status(400).send('Admin Not Found')
@@ -263,14 +288,17 @@ let deleteSubCategory = async (req,res) => {
 
 // User Management
 let userList =async (req,res) => {
-    const admin = await Admin.findOne();
-    let user = await User.find();
-    res.render('admin/customers',{user,admin});
-}
-
-let userBlock = async (req,res) => {
-    const userId = req.body.userId;
     try {
+        const admin = await Admin.findOne();
+        let user = await User.find();
+        res.render('admin/customers',{user,admin});
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
+    }
+}
+let userBlock = async (req,res) => {
+    try {
+        const userId = req.body.userId;
         const user = await User.findOne({_id:userId});
         console.log(user);
         if(user){
@@ -285,14 +313,17 @@ let userBlock = async (req,res) => {
 
 // Vendor Management
 let vendorList = async (req,res) => {
-    const admin = await Admin.findOne();
-    let vendor = await Vendor.find();
-    res.render('admin/vendors',{vendor,admin})
-}
-
-let vendorVerify = async (req,res) => {
-    const vendorId = req.body.vendorId;
     try {
+        const admin = await Admin.findOne();
+        let vendor = await Vendor.find();
+        res.render('admin/vendors',{vendor,admin})
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
+    }
+}
+let vendorVerify = async (req,res) => {
+    try {
+        const vendorId = req.body.vendorId;
         const vendor = await Vendor.findOne({_id:vendorId});
         if(vendor){
             vendor.Status = !(vendor.Status);
@@ -306,75 +337,96 @@ let vendorVerify = async (req,res) => {
 
 // Coupon Management
 let addCoupon = async (req,res) => {
-    const admin = await Admin.findOne();
-    res.render('admin/coupon-add',{admin});
+    try {
+        const admin = await Admin.findOne();
+        res.render('admin/coupon-add',{admin});
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
+    }
 }
 let listCoupon = async (req,res) => {
-    let admin = await Admin.findOne();
-    if(!admin){
-      return res.status(404).send('Admin Not Found');
+    try {
+        let admin = await Admin.findOne();
+        if(!admin){
+          return res.status(404).send('Admin Not Found');
+        }
+        res.render('admin/coupons-list',{admin});
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
     }
-    res.render('admin/coupons-list',{admin});
 }
 let submitAddCoupon = async (req,res) => {
-    let {status,startDate,endDate,couponCode,category,subCategory,limit,type,value} = req.body;
-    let admin = await Admin.findOne();
-    if(!admin){
-      return res.status(404).send('Admin Not found')
+    try {
+        let {status,startDate,endDate,couponCode,category,subCategory,limit,type,value} = req.body;
+        let admin = await Admin.findOne();
+        if(!admin){
+          return res.status(404).send('Admin Not found')
+        }
+        if(!admin.coupons){
+          admin.coupons = [];
+        }
+        if(startDate === ""){
+          startDate = undefined;
+        };
+        let discountProducts = {category,subCategory};
+        let newCoupon = {status,startDate,endDate,couponCode,limit,type,value,discountProducts}
+        admin.coupons.push(newCoupon);
+        await admin.save();
+        console.log("coupon added succesfully");
+        res.redirect('/admin/couponList')
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
     }
-    if(!admin.coupons){
-      admin.coupons = [];
-    }
-    if(startDate === ""){
-      startDate = undefined;
-    };
-    let discountProducts = {category,subCategory};
-    let newCoupon = {status,startDate,endDate,couponCode,limit,type,value,discountProducts}
-    admin.coupons.push(newCoupon);
-    await admin.save();
-    console.log("coupon added succesfully");
-    res.redirect('/admin/couponList')
 }
 let editCoupon = async (req,res) => {
-    let admin = await Admin.findOne();
-    if(!admin){
-      return res.status(404).send("admin Not Found")
+    try {
+        let admin = await Admin.findOne();
+        if(!admin){
+          return res.status(404).send("admin Not Found")
+        }
+        let coupon = admin.coupons.filter(coup => coup._id.toString() === req.params.couponId)
+        if(!coupon){
+          return res.status(404).send("Coupon Not Found");
+        }
+        res.render('admin/coupon-edit',{coupon:coupon[0],admin})
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
     }
-    let coupon = admin.coupons.filter(coup => coup._id.toString() === req.params.couponId)
-    if(!coupon){
-      return res.status(404).send("Coupon Not Found");
-    }
-    res.render('admin/coupon-edit',{coupon:coupon[0],admin})
 }
 let submitEditCoupon = async (req, res) => {
-    let couponId = req.params.couponId;
-    let admin = await Admin.findOne({_id:req.user.id});
-    if(!admin){
-      return res.status(404).send('Admin Not found');
+    try {
+        let couponId = req.params.couponId;
+        let admin = await Admin.findOne({_id:req.user.id});
+        if(!admin){
+          return res.status(404).send('Admin Not found');
+        }
+      
+        let {status, startDate, endDate, couponCode, category, subCategory, limit, type, value} = req.body;
+        let updatedCoup = {status, startDate, endDate, couponCode, category, subCategory, limit, type, value};
+      
+        let coupon = admin.coupons.find(val => val._id.toString() === couponId);
+        if (!coupon) {
+          return res.status(404).send('Coupon Not found');
+        }
+      
+        Object.assign(coupon, updatedCoup);
+        await admin.save();
+    
+        res.redirect('/admin/couponList');
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
     }
-  
-    let {status, startDate, endDate, couponCode, category, subCategory, limit, type, value} = req.body;
-    let updatedCoup = {status, startDate, endDate, couponCode, category, subCategory, limit, type, value};
-  
-    let coupon = admin.coupons.find(val => val._id.toString() === couponId);
-    if (!coupon) {
-      return res.status(404).send('Coupon Not found');
-    }
-  
-    // Update the coupon object with the values from updatedCoup
-    Object.assign(coupon, updatedCoup);
-  
-    // Save the updated admin object
-    await admin.save();
-
-    res.redirect('/admin/couponList');
 };
 let deleteCoupon = async (req,res) => {
-    let {couponId} = req.body;
-    let admin = await Admin.findById(req.user.id);
-    admin.coupons = admin.coupons.filter(coup => coup._id.toString() !== couponId)
-    await admin.save();
-    res.json({message:"coupon removed succesfully"})
+    try {
+        let {couponId} = req.body;
+        let admin = await Admin.findById(req.user.id);
+        admin.coupons = admin.coupons.filter(coup => coup._id.toString() !== couponId)
+        await admin.save();
+        res.json({message:"coupon removed succesfully"})
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
+    }
 }
 
 
@@ -392,14 +444,18 @@ let adminLogout = (req, res) => {
 
 //admin side listing
 let productList = async (req,res) =>{
-    const admin = await Admin.findOne();
-    let products = await Vendor.find().populate('products').select('vendorName products');
-    res.render('admin/product-grid', {products,admin});
+    try {
+        const admin = await Admin.findOne();
+        let products = await Vendor.find().populate('products').select('vendorName products');
+        res.render('admin/product-grid', {products,admin});
+    } catch (error) {
+        res.status(500).send("Internal Server Error")
+    }
 }
 let productDetails = async (req, res) => {
-    let productId = req.params.productId;
-    const admin = await Admin.findOne();
     try {
+        let productId = req.params.productId;
+        const admin = await Admin.findOne();
         if (!mongoose.Types.ObjectId.isValid(productId)) {
         }
         const vendor = await Vendor.findOne({ 'products._id': productId });
@@ -454,6 +510,7 @@ let orderList = async (req,res) => {
         res.status(500).json({ message: 'Failed to get orders' });
       }
 }
+
 
 // Banner Management
 let updateBanners = async (req,res) => {
