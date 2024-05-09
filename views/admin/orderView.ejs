@@ -116,13 +116,13 @@
                                     <small>Admin </small>
                                 </div>
                                 <a class="nav-link dropdown-toggle pulse p-0" href="#" role="button" data-bs-toggle="dropdown" data-bs-display="static">
-                                    <img class="avatar lg rounded-circle img-thumbnail" src="assets/images/profile_av.svg" alt="profile">
+                                    <img class="avatar lg rounded-circle img-thumbnail" src="/assets/images/profile_av.svg" alt="profile">
                                 </a>
                                 <div class="dropdown-menu rounded-lg shadow border-0 dropdown-animation dropdown-menu-end p-0 m-0">
                                     <div class="card border-0 w280">
                                         <div class="card-body pb-0">
                                             <div class="d-flex py-1">
-                                                <img class="avatar rounded-circle" src="assets/images/profile_av.svg" alt="profile">
+                                                <img class="avatar rounded-circle" src="/assets/images/profile_av.svg" alt="profile">
                                                 <div class="flex-fill ms-3">
                                                     <p class="mb-0"><span class="font-weight-bold"><%= admin.adminname %></span></p>
                                                     <small class=""><%= admin.email %></small>
@@ -178,41 +178,25 @@
                                     <table id="myDataTable" class="table table-hover align-middle mb-0" style="width: 100%;">  
                                         <thead>
                                             <tr>
-                                                <th>Id</th>
-                                                <th>Item</th>
+                                                <th>Date</th>
+                                                <th>OrderId</th>
+                                                <th class="d-flex justify-content-center">Count</th>
                                                 <th>Customer Name</th>
                                                 <th>Payment Info</th>
-                                                <th>Price</th>
-                                                <th>Status</th>
+                                                <th>Total</th>
+                                                <!-- <th>Status</th> -->
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <% let count = 0;  %>
                                             <% orders.forEach(order => { %>
                                             <tr>
-                                                <td><a href="order-details.html"><strong><%= ++count %></strong></a></td>
-                                                <td><img src="<%= order.products.images[0] %>" class="avatar lg rounded me-2" alt="profile-image"><span><%= order.products.productName %></span></td>
+                                                <td><%= new Date(order.orderDate).toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }) %></td>
+                                                <td><a href="/admin/order/<%= order._id %>"><strong><%= order._id %></strong></a></td>
+                                                <td class="d-flex justify-content-center"><%= order.products.length %></td>
                                                 <td><%= order.userName %></td>
                                                 <td><%= order.paymentMethod %></td>
-                                                <td>₹ <%= order.products.price %></td>
-                                                <% if(order.products.status === 'Pending'){ %>
-                                                <td><span class="badge bg-warning font-opensans text-uppercase"><%= order.products.status %></span></td>
-                                                <% }  %>
-                                                <% if(order.products.status === 'Delivered'){ %>
-                                                <td><span class="badge bg-success  font-opensans text-uppercase"><%= order.products.status %></span></td>
-                                                <% }  %>
-                                                <% if(order.products.status === 'Out Of Delivery'){ %>
-                                                <td><span class="badge  bg-dark  font-opensans text-uppercase"><%= order.products.status %></span></td>
-                                                <% }  %>
-                                                <% if(order.products.status === 'Cancelled'){ %>
-                                                <td><span class="badge bg-danger  font-opensans text-uppercase"><%= order.products.status %></span></td>
-                                                <% }  %>
-                                                <% if(order.products.status === 'Shipped'){ %>
-                                                    <td><span class="badge bg-primary font-opensans text-uppercase"><%= order.products.status %></span></td>
-                                                <% }  %>
-                                                <% if(order.products.status === 'Requested for Cancellation'){ %>
-                                                    <td><span class="badge bg-warning text-dark  font-opensans text-uppercase"><%= order.products.status %></span></td>
-                                                <% }  %>
+                                                <td>₹ <%= order.total %></td>
                                             </tr>
                                             <% }) %>
                                         </tbody>

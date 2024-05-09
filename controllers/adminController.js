@@ -475,42 +475,94 @@ let productDetails = async (req, res) => {
 let orderList = async (req,res) => {
     try {
         const admin = await Admin.findOne();
-        // Aggregate orders to unwind products array
-        let orders= await Order.aggregate([
-          {$unwind:'$products'}
-        ]);
-        for (let order of orders) {
-          const vendor = await Vendor.findOne({ 'products._id': order.products._id });
-          if (vendor) {
-            const product = vendor.products.find(p => p._id.equals(order.products._id));
-            order.products = {
-              _id: product._id,
-              productName: product.productName,
-              description: product.description,
-              price: product.price,
-              brand: product.brand,
-              category: product.category,
-              subCategory: product.subCategory,
-              stockQuantity: product.stockQuantity,
-              addedOn: product.addedOn,
-              images: product.images,
-              status:order.products.status,
-              quantity:order.products.quantity          
-            };
+        let orders = await Order.find();
+        // aggregate([
+        //     { $unwind: '$products' }
+        //   ]);
+          
+          for (let order of orders) {
+            // const vendor = await Vendor.findOne({ 'products._id': order.products._id });
+            // if (vendor) {
+            //   const product = vendor.products.find(p => p._id.equals(order.products._id));
+            //   order.products = {
+            //     _id: product._id,
+            //     productName: product.productName,
+            //     description: product.description,
+            //     price: product.price,
+            //     brand: product.brand,
+            //     category: product.category,
+            //     subCategory: product.subCategory,
+            //     stockQuantity: product.stockQuantity,
+            //     addedOn: product.addedOn,
+            //     images: product.images,
+            //     status: order.products.status,
+            //     quantity: order.products.quantity
+            //   };
+            // }
+            let user = await User.findById(order.userId);
+            if (user) {
+              order.userName = user.username;
+            //   order.userEmail = user.email;
+            }
           }
-          let user = await User.findById(order.userId);
-          if (user) {
-            order.userName = user.username;
-            order.userEmail = user.email;
-          }
-        }
-        res.render('admin/orderView', { orders: orders.reverse() , admin});
+          
+        // Grouping orders by _id and aggregating products into an array for each order
+            // let groupedOrders = orders.reduce((acc, order) => {
+            //     const existingOrderIndex = acc.findIndex(o => o._id.equals(order._id));
+            //     if (existingOrderIndex !== -1) {
+            //     acc[existingOrderIndex].products.push(order.products);
+            //     } else {
+            //     acc.push({
+            //         _id: order._id,
+            //         total: order.total,
+            //         discount: order.discount,
+            //         userId: order.userId,
+            //         shippingAddress: order.shippingAddress,
+            //         paymentMethod: order.paymentMethod,
+            //         orderDate: order.orderDate,
+            //         userName: order.userName,
+            //         userEmail: order.userEmail,
+            //         products: [order.products]
+            //     });
+            //     }
+            //     return acc;
+            // }, []);
+            
+        res.render('admin/orderView', { orders:orders.reverse() , admin});
       } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Failed to get orders' });
       }
 }
-
+let orderDetails = async (req, res) => {
+    try {
+      let admin = await Admin.findOne();
+      const {orderId} = req.params;
+      let order = await Order.findById(orderId);
+      let updatedProducts = [];
+  
+      for (let ind = 0; ind < order.products.length; ind++) {
+        const prod = order.products[ind];
+        const vendor = await Vendor.findOne({ 'products._id': prod._id });
+        if (vendor) {
+          const product = vendor.products.find(p => p._id.equals(prod._id));
+          updatedProducts.push({
+            _id: product._id,
+            productName: product.productName,
+            price: product.price,
+            images: product.images,
+            status: prod.status,
+            quantity: prod.quantity,
+            vendor:vendor.vendorName
+          });
+        }
+      }
+      res.render('admin/orderDetails', { order, admin, updatedProducts });
+    } catch (error) {
+      res.status(500).send("Internal Server Error");
+    }
+};
+  
 
 // Banner Management
 let updateBanners = async (req,res) => {
@@ -1017,6 +1069,7 @@ module.exports = {
     productList,
     productDetails,
     orderList,
+    orderDetails,
 
     updateBanners,
     changeMainBanner,

@@ -197,7 +197,7 @@
                   <div class="product-single-info">
                     <h3 class="main-title"><%= product.productName %></h3>
                     <div class="prices">
-                      <span class="price"><%= product.price %></span>
+                      <span class="price">₹ <%= product.price %></span>
                     </div>
                     
                     <p><%= product.description %></p>
@@ -205,11 +205,11 @@
                       <ul>
                         <!-- <li><span>SKU:</span> Ch-256xl</li> -->
                         <li><span>Categories:</span> 
-                          <a href="shop.html"><%= product.category %></a>
+                          <a href="/shop"><%= product.category %></a>
                         </li>
                         <li><span>Tags:</span> 
-                          <a href="shop.html"><%= product.subCategory %></a>,
-                          <!-- <a href="shop.html">Animal.</a> -->
+                          <a href="/shop"><%= product.subCategory %></a>,
+                          <!-- <a href="/shop">Animal.</a> -->
                         </li>
                       </ul>
                     </div>
