@@ -243,16 +243,24 @@ let deleteProduct = async (req,res) => {
 
 let getOrderList = async (req, res) => {
   try {
-    // Find the vendor
-    let vendor = await Vendor.findById(req.user.id);
-    if (!vendor) {
-      return res.status(404).json({ message: 'Vendor not found' });
-    }
-    let orders= await helper.orderOfVendor(req.user.id);
-    res.render('vendor/orderList', { orders: orders.reverse(),vendor});
+      // Find the vendor
+      let vendor = await Vendor.findById(req.user.id);
+      if (!vendor) {
+          return res.status(404).json({ message: 'Vendor not found' });
+      }
+
+      const page = parseInt(req.query.page) || 1;
+      const limit = 10;
+      const startIndex = (page - 1) * limit;
+
+      let orders = await helper.orderOfVendor(req.user.id);
+      const totalOrders = orders.length;
+      orders = orders.sort((a, b) => b.orderDate - a.orderDate).slice(startIndex, startIndex + limit);
+
+      res.render('vendor/orderList', { orders: orders.reverse(), vendor, currentPage: page, totalPages: Math.ceil(totalOrders / limit) });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: 'Failed to get orders' });
+      console.error(err);
+      res.status(500).json({ message: 'Failed to get orders' });
   }
 };
 let getOrderDetails = async(req,res) => {

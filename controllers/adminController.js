@@ -443,15 +443,25 @@ let adminLogout = (req, res) => {
 };
 
 //admin side listing
-let productList = async (req,res) =>{
+let productList = async (req, res) =>{
     try {
         const admin = await Admin.findOne();
-        let products = await Vendor.find().populate('products').select('vendorName products');
-        res.render('admin/product-grid', {products,admin});
+        const page = parseInt(req.query.page) || 1;
+        const limit = 8;
+        const startIndex = (page - 1) * limit;
+
+        let vendors = await Vendor.find().populate('products').select('vendorName products');
+        let products = vendors.flatMap(vendor => vendor.products);
+        const totalProducts = products.length;
+        products = products.slice(startIndex, startIndex + limit);
+        console.log("products :",products.length,products)
+
+        res.render('admin/product-grid', { products, admin, currentPage: page, totalPages: Math.ceil(totalProducts / limit) });
     } catch (error) {
         res.status(500).send("Internal Server Error")
     }
 }
+
 let productDetails = async (req, res) => {
     try {
         let productId = req.params.productId;
@@ -472,68 +482,93 @@ let productDetails = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
-let orderList = async (req,res) => {
+// let orderList = async (req,res) => {
+//     try {
+//         const admin = await Admin.findOne();
+//         let orders = await Order.find();
+//         // aggregate([
+//         //     { $unwind: '$products' }
+//         //   ]);
+          
+//           for (let order of orders) {
+//             // const vendor = await Vendor.findOne({ 'products._id': order.products._id });
+//             // if (vendor) {
+//             //   const product = vendor.products.find(p => p._id.equals(order.products._id));
+//             //   order.products = {
+//             //     _id: product._id,
+//             //     productName: product.productName,
+//             //     description: product.description,
+//             //     price: product.price,
+//             //     brand: product.brand,
+//             //     category: product.category,
+//             //     subCategory: product.subCategory,
+//             //     stockQuantity: product.stockQuantity,
+//             //     addedOn: product.addedOn,
+//             //     images: product.images,
+//             //     status: order.products.status,
+//             //     quantity: order.products.quantity
+//             //   };
+//             // }
+//             let user = await User.findById(order.userId);
+//             if (user) {
+//               order.userName = user.username;
+//             //   order.userEmail = user.email;
+//             }
+//           }
+          
+//         // Grouping orders by _id and aggregating products into an array for each order
+//             // let groupedOrders = orders.reduce((acc, order) => {
+//             //     const existingOrderIndex = acc.findIndex(o => o._id.equals(order._id));
+//             //     if (existingOrderIndex !== -1) {
+//             //     acc[existingOrderIndex].products.push(order.products);
+//             //     } else {
+//             //     acc.push({
+//             //         _id: order._id,
+//             //         total: order.total,
+//             //         discount: order.discount,
+//             //         userId: order.userId,
+//             //         shippingAddress: order.shippingAddress,
+//             //         paymentMethod: order.paymentMethod,
+//             //         orderDate: order.orderDate,
+//             //         userName: order.userName,
+//             //         userEmail: order.userEmail,
+//             //         products: [order.products]
+//             //     });
+//             //     }
+//             //     return acc;
+//             // }, []);
+            
+//         res.render('admin/orderView', { orders:orders.reverse() , admin});
+//       } catch (err) {
+//         console.error(err);
+//         res.status(500).json({ message: 'Failed to get orders' });
+//       }
+// }
+let orderList = async (req, res) => {
     try {
         const admin = await Admin.findOne();
-        let orders = await Order.find();
-        // aggregate([
-        //     { $unwind: '$products' }
-        //   ]);
-          
-          for (let order of orders) {
-            // const vendor = await Vendor.findOne({ 'products._id': order.products._id });
-            // if (vendor) {
-            //   const product = vendor.products.find(p => p._id.equals(order.products._id));
-            //   order.products = {
-            //     _id: product._id,
-            //     productName: product.productName,
-            //     description: product.description,
-            //     price: product.price,
-            //     brand: product.brand,
-            //     category: product.category,
-            //     subCategory: product.subCategory,
-            //     stockQuantity: product.stockQuantity,
-            //     addedOn: product.addedOn,
-            //     images: product.images,
-            //     status: order.products.status,
-            //     quantity: order.products.quantity
-            //   };
-            // }
+        const page = parseInt(req.query.page) || 1;
+        const limit = 10;
+        const startIndex = (page - 1) * limit;
+        
+        let orders = await Order.find().sort({ orderDate: -1 }).skip(startIndex).limit(limit);
+        
+        for (let order of orders) {
             let user = await User.findById(order.userId);
             if (user) {
-              order.userName = user.username;
-            //   order.userEmail = user.email;
+                order.userName = user.username;
             }
-          }
-          
-        // Grouping orders by _id and aggregating products into an array for each order
-            // let groupedOrders = orders.reduce((acc, order) => {
-            //     const existingOrderIndex = acc.findIndex(o => o._id.equals(order._id));
-            //     if (existingOrderIndex !== -1) {
-            //     acc[existingOrderIndex].products.push(order.products);
-            //     } else {
-            //     acc.push({
-            //         _id: order._id,
-            //         total: order.total,
-            //         discount: order.discount,
-            //         userId: order.userId,
-            //         shippingAddress: order.shippingAddress,
-            //         paymentMethod: order.paymentMethod,
-            //         orderDate: order.orderDate,
-            //         userName: order.userName,
-            //         userEmail: order.userEmail,
-            //         products: [order.products]
-            //     });
-            //     }
-            //     return acc;
-            // }, []);
-            
-        res.render('admin/orderView', { orders:orders.reverse() , admin});
-      } catch (err) {
+        }
+        
+        const totalPages = Math.ceil(await Order.countDocuments() / limit);
+        
+        res.render('admin/orderView', { orders, admin, totalPages, currentPage: page });
+    } catch (err) {
         console.error(err);
         res.status(500).json({ message: 'Failed to get orders' });
-      }
+    }
 }
+
 let orderDetails = async (req, res) => {
     try {
       let admin = await Admin.findOne();

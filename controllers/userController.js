@@ -137,7 +137,6 @@ let userOrder = async (req,res) => {
 let addAddress = async (req, res) => {
   try {
     const { val } = req.params;
-    console.log("val :", val.toString())
     let { name, locality, street, city, state, phone, pincode } = req.body;
     let userId = req.user.id;
     if (!userId) {
@@ -154,7 +153,6 @@ let addAddress = async (req, res) => {
         return res.redirect('/checkout');
       }
     }
-    console.log("addresss lenghttt :", user.address.length);
     let newAddress = { name, locality, street, city, state, phone, pincode };
     user.address.push(newAddress);
     await user.save();
@@ -178,7 +176,6 @@ let editAddress = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     const addressIndex = req.params.id
-    console.log(addressIndex)
     if (addressIndex === -1) {
       return res.status(404).json({ message: "Address not found" });
     }
@@ -207,7 +204,6 @@ let deleteAddress = async (req,res) => {
     let updatedAdd = user.address.filter(add => add._id != addressId);
     user.address = updatedAdd
     user.save();
-    console.log("updated Adres : ",updatedAdd);
     res.redirect('/accountAddress');
   } catch (error) {
     console.error(error)
@@ -358,7 +354,6 @@ let getcart = async (req, res) => {
         })
       })
     });
-    console.log("products :",user.cart.products);
     res.render('users/cart', {user,userCart:user.cart });
   } catch (error) {
     console.error(error);
@@ -391,7 +386,10 @@ let addtocart = async (req, res) => {
     }
     const user = await User.findById(userId);
     if (!user) {
-      return res.status(201).json({ error: "Please log in to add items to the cart" });
+      return res.status(201).json({ error: "Please login" });
+    }
+    if(product.stockQuantity <= 0){
+      return res.status(201).json({error:"Product Out of Stock"})
     }
     const existingProductIndex = user.cart.products.findIndex((cartItem) => cartItem._id.toString() === productId);
     if (existingProductIndex !== -1) {
@@ -422,13 +420,11 @@ let removefromcart = async (req, res) => {
     }
 
     user.cart.products = user.cart.products.filter(prod => prod._id.toString() !== productId);
-    console.log("user.cart.total before : ",user.cart.total)
     // Calculate the new total
     let subtotal = parseInt(price) * product.quantity;
     let total = parseInt(user.cart.total) - subtotal;
     
     user.cart.total = total;
-    console.log("user.cart.total after : ",user.cart.total)
     await user.save();
     res.json({ message: "product removed", user, product, total });
   } catch (error) {
@@ -451,7 +447,6 @@ let changeQuantity = async (req, res) => {
         user.cart.total -= parseFloat(price);
       }
       await user.save();
-      console.log("user cart total :",user.cart.total)
       res.status(200).json({ message: 'Quantity updated successfully',user,quantity,price});
     } else {
       res.status(404).json({ message: 'Product not found in cart' });
@@ -574,7 +569,6 @@ let removefromwishlist = async (req,res) => {
     let user = await User.findOne({_id:req.user.id});
     let product  = user.wishlist.products.filter(prod => prod._id.toString() === productId);
     user.wishlist.products = user.wishlist.products.filter(prod => prod._id.toString() !== productId);
-    console.log("product removed from wishlist");
     await user.save();
     res.json({message:"product removed"});
   } catch (error) {
@@ -945,7 +939,6 @@ let submitSignup = async (req,res) => {
       const hashedPassword = await bcrypt.hash(password,10);
       const newUser = new User({username,email,phone,password:hashedPassword});
       await newUser.save();
-      console.log(newUser);
       res.redirect('/login')
   } catch (error) {
       res.status(500).send("Internal Server Error")

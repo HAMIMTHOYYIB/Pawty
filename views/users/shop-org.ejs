@@ -107,7 +107,7 @@
                   <a class="shopping-cart-btn" href="/cart">
                     <i class="pe-7s-shopbag icon"></i>
                     <% if(user !== undefined && user.cart.products){%>
-                    <sup class="shop-count"><%= user.cart.products.length %></sup>
+                    <sup id="cartBadge" class="shop-count"><%= user.cart.products.length %></sup>
                     <% } %>
                   </a>
                 </div>
@@ -502,10 +502,7 @@
         backgroundColor: "#203e5a",
         stopOnFocus: true, // Stop the timer when the toast is focused
       }).showToast();
-  
-      setTimeout(function() {
-        document.getElementById('cartNotification').classList.remove('show');
-      }, 2000);
+      document.getElementById('cartBadge').innerHTML = response.data.user.cart.products.length;
     }
   })
   .catch(function(error) {

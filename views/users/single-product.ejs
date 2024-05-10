@@ -40,25 +40,6 @@
 
     <!--== Main Style CSS ==-->
     <link href="/assets/css/style.css" rel="stylesheet" />
-    <style>
-      .toast {
-        position: fixed;
-        bottom: 40px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 1000;
-        max-width: 300px;
-        background-color: #203e5a;
-        color:#fff;
-        border-radius: 10px;
-        padding: 10px;
-        opacity: 0;
-        transition: opacity 0.5s ease-in-out;
-        }
-        .toast.show {
-        opacity: 1;
-        }
-    </style>
 </head>
 
 <body>
@@ -222,12 +203,6 @@
                       <button type="button" id="addToCart" class="btn-product-cart" data-product-id="<%= product._id %>">
                         Add To Cart
                       </button>
-
-                      <div id="cartNotification" class="toast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="500">
-                        <div class="toast-body">
-                          Product added to cart !
-                        </div>
-                      </div>
 
                       <button type="button" class="addToWishlist btn-product-wishlist" data-product-id="<%= product._id %>">
                         <% if(user !== undefined && user.wishlist.products.some( wProduct => wProduct._id.toString() === product._id.toString())) { %>
@@ -492,7 +467,7 @@
                 // toast.classList.add('show');
                 if(response.status===201){
                   Toastify({
-                  text: "Please Login",
+                  text: response.data.error,
                   duration: 800, 
                   gravity: "top", 
                   position: 'right',
@@ -509,11 +484,6 @@
                     stopOnFocus: true, // Stop the timer when the toast is focused
                   }).showToast();
                 }
-
-                // Hide the toast after 0.5 seconds
-                setTimeout(function () {
-                    toast.classList.remove('show');
-                }, 2000);
             })
             .catch(function (error) {
                 console.error('Error adding product to cart:', error);

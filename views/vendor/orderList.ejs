@@ -257,6 +257,24 @@
                                     </table>
                                 </div>
                             </div>
+                            <nav aria-label="Page navigation">
+                                <ul class="pagination justify-content-center mt-4">
+                                    <% if (currentPage > 1) { %>
+                                    <li class="page-item"><a class="page-link" href="?page=<%= currentPage - 1 %>">Previous</a></li>
+                                    <% } %>
+                                    
+                                    <% for (let i = 1; i <= totalPages; i++) { %>
+                                    <li class="page-item <%= i === currentPage ? 'active' : '' %>">
+                                        <a class="page-link" href="?page=<%= i %>"><%= i %></a>
+                                    </li>
+                                    <% } %>
+                                    
+                                    <% if (currentPage < totalPages) { %>
+                                    <li class="page-item"><a class="page-link" href="?page=<%= currentPage + 1 %>">Next</a></li>
+                                    <% } %>
+                                </ul>
+                            </nav>
+                            
                         </div>
                     </div> <!-- Row end  -->
                 </div>
@@ -527,16 +545,6 @@
 
     <!-- Jquery Page Js -->
     <script src="../js/template.js"></script>
-    <script>
-        $('#myDataTable')
-        .addClass( 'nowrap')
-        .dataTable( {
-            responsive: true,
-            columnDefs: [
-                { targets: [-1, -3], className: 'dt-body-right' }
-            ]
-        });
-    </script>
 </body>
 
 <!-- Mirrored from pixelwibes.com/template/ebazar/html/dist/order-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Fri, 16 Feb 2024 11:51:11 GMT -->

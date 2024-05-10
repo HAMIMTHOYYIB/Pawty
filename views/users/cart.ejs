@@ -86,7 +86,7 @@
                 <div class="shopping-cart">
                   <a class="shopping-cart-btn" href="/cart">
                     <i class="pe-7s-shopbag icon"></i>
-                    <sup class="shop-count"><%= user.cart.products.length %></sup>
+                    <sup id="cartBadge" class="shop-count"><%= user.cart.products.length %></sup>
                   </a>
                 </div>
                 <button class="btn-menu" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasMenu" aria-controls="AsideOffcanvasMenu">
@@ -307,6 +307,7 @@
             button.closest('.tbody-item').remove(); //remove the specific row
             document.getElementById('amount').textContent = `${response.data.total.toFixed(2)}`;
             document.getElementById('totVal').textContent = `${response.data.total.toFixed(2)}`;
+            document.getElementById('cartBadge').innerHTML = response.data.user.cart.products.length;
           })
           .catch(error => {
             console.error('Error removing product from cart:', error.response);
