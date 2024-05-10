@@ -482,68 +482,7 @@ let productDetails = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 };
-// let orderList = async (req,res) => {
-//     try {
-//         const admin = await Admin.findOne();
-//         let orders = await Order.find();
-//         // aggregate([
-//         //     { $unwind: '$products' }
-//         //   ]);
-          
-//           for (let order of orders) {
-//             // const vendor = await Vendor.findOne({ 'products._id': order.products._id });
-//             // if (vendor) {
-//             //   const product = vendor.products.find(p => p._id.equals(order.products._id));
-//             //   order.products = {
-//             //     _id: product._id,
-//             //     productName: product.productName,
-//             //     description: product.description,
-//             //     price: product.price,
-//             //     brand: product.brand,
-//             //     category: product.category,
-//             //     subCategory: product.subCategory,
-//             //     stockQuantity: product.stockQuantity,
-//             //     addedOn: product.addedOn,
-//             //     images: product.images,
-//             //     status: order.products.status,
-//             //     quantity: order.products.quantity
-//             //   };
-//             // }
-//             let user = await User.findById(order.userId);
-//             if (user) {
-//               order.userName = user.username;
-//             //   order.userEmail = user.email;
-//             }
-//           }
-          
-//         // Grouping orders by _id and aggregating products into an array for each order
-//             // let groupedOrders = orders.reduce((acc, order) => {
-//             //     const existingOrderIndex = acc.findIndex(o => o._id.equals(order._id));
-//             //     if (existingOrderIndex !== -1) {
-//             //     acc[existingOrderIndex].products.push(order.products);
-//             //     } else {
-//             //     acc.push({
-//             //         _id: order._id,
-//             //         total: order.total,
-//             //         discount: order.discount,
-//             //         userId: order.userId,
-//             //         shippingAddress: order.shippingAddress,
-//             //         paymentMethod: order.paymentMethod,
-//             //         orderDate: order.orderDate,
-//             //         userName: order.userName,
-//             //         userEmail: order.userEmail,
-//             //         products: [order.products]
-//             //     });
-//             //     }
-//             //     return acc;
-//             // }, []);
-            
-//         res.render('admin/orderView', { orders:orders.reverse() , admin});
-//       } catch (err) {
-//         console.error(err);
-//         res.status(500).json({ message: 'Failed to get orders' });
-//       }
-// }
+
 let orderList = async (req, res) => {
     try {
         const admin = await Admin.findOne();
@@ -559,7 +498,6 @@ let orderList = async (req, res) => {
                 order.userName = user.username;
             }
         }
-        
         const totalPages = Math.ceil(await Order.countDocuments() / limit);
         
         res.render('admin/orderView', { orders, admin, totalPages, currentPage: page });
@@ -575,6 +513,7 @@ let orderDetails = async (req, res) => {
       const {orderId} = req.params;
       let order = await Order.findById(orderId);
       let updatedProducts = [];
+      const singleD = order.discount/order.products.length;
   
       for (let ind = 0; ind < order.products.length; ind++) {
         const prod = order.products[ind];
@@ -584,7 +523,7 @@ let orderDetails = async (req, res) => {
           updatedProducts.push({
             _id: product._id,
             productName: product.productName,
-            price: product.price,
+            price:Math.round(product.price - singleD),
             images: product.images,
             status: prod.status,
             quantity: prod.quantity,

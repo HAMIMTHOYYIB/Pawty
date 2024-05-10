@@ -28,6 +28,9 @@ const orderSchema = new mongoose.Schema({
         default:'Pending',
         required : true
       },
+      price:{
+        type:Number
+      },
       vendorId:{
         type:String,
         required:true

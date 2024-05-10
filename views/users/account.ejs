@@ -316,7 +316,7 @@
                               <td class = "text-bold <%= order.products.status === 'Cancelled'?'text-danger':'d-none' %>"><%= order.products.status %></td>
                               <td class = "text-bold <%= order.products.status === 'Delivered'?'text-success':'d-none' %>"><%= order.products.status %></td>
                               <td class = "text-bold <%= order.products.status === 'Requested for Cancellation'?'text-danger':'d-none' %>"><%= order.products.status %></td>
-                              <td>₹<%= order.products.price %></td>
+                              <td>₹<%= (order.products.price * order.products.quantity)- order.discount %></td>
                               <td><a href="#" data-bs-toggle="modal" data-bs-target="#orderModal-<%= index %>">View</a></td>
                               <!-- <td><a href="/userOrder/<%= order._id %>" class="check-btn sqr-btn">View</a></td> -->
                             </tr>
@@ -339,9 +339,11 @@
                                                             <h3>Order Details:</h3>  
                                                             <p><b>OrderID: #<%= order.products._id %></b></p>
                                                             <p><b>Product Name:</b> <%= order.products.productName %></p>
-                                                            <p><b>Price:</b> <%= order.products.price %></p>
                                                             <p><b>Brand:</b> <%= order.products.brand %></p>
-                                                            <p><b>Quantity:</b> <%= order.products.quantity %></p>
+                                                            <p><b>Price:</b> <%= order.products.price %> x <%= order.products.quantity %></p>
+                                                            <!-- <p><b>Quantity:</b> <%= order.products.quantity %></p> -->
+                                                            <p><b>Discount:</b> <%= order.discount%></p>
+                                                            <p><b>Total:</b> <%= (order.products.price * order.products.quantity)- order.discount %></p>
                                                             <p><b>Order Status:</b> <%= order.products.status %></p>
                                                         </div>
                                                         <div class="col-md-6 col-sm-12 address-details">

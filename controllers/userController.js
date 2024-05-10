@@ -338,22 +338,31 @@ let getcart = async (req, res) => {
   try {
     let user = await User.findOne({ _id: req.user.id });
     let Products =  await Vendor.find().select("products");
+    let tot = 0;
     if(user.cart.products.length === 0){
       user.cart.total = 0;
+      user.cart.discount = 0;
       await user.save();
-    }
-    user.cart.products.forEach(product => {
-      Products.forEach(vend => {
-        vend.products.forEach(p => {
-          if(p._id.toString() === product._id.toString()){
-            product.images = p.images;
-            product.price = p.price;
-            product.productName = p.productName;
-            product.stock = p.stockQuantity;
-          }
+    }else{
+      user.cart.products.forEach(product => {
+        Products.forEach(vend => {
+          vend.products.forEach(p => {
+            if(p._id.toString() === product._id.toString()){
+              product.images = p.images;
+              product.price = p.price;
+              product.productName = p.productName;
+              product.stock = p.stockQuantity;
+              tot+=parseFloat(product.price * product.quantity);
+            }
+          })
         })
-      })
-    });
+      });
+    }
+    if(user.cart.total !== tot){
+      user.cart.total = tot
+      await user.save();
+      console.log("change in cart total")
+    }
     res.render('users/cart', {user,userCart:user.cart });
   } catch (error) {
     console.error(error);
@@ -465,7 +474,7 @@ let checkCoupon = async (req, res) => {
     let admin = await Admin.findOne();
     const coupons = admin.coupons;  
     let coupon = coupons.filter(val => val.couponCode == couponCode)
-    if (coupon[0] && coupon[0].status === 'Active') {
+    if (coupon[0] && coupon[0].status === 'Active' && coupon[0].limit>0) {
       let currentDate = new Date();
       let endDate = new Date(coupon[0].endDate);
       let startDate = new Date(coupon[0].startDate);
@@ -500,7 +509,6 @@ let removeCoupon = async (req,res) => {
     if(!user){
       return res.status(500).json({valid:false,message:'cannot find user'});
     }
-    console.log("removed coupon");
     user.cart.discount = 0;
     user.save();
     res.json({valid:true,message:'discount removed from the checkout'});
@@ -642,7 +650,7 @@ let submitCheckout = async (req, res) => {
         for (const product of vendor.products) {
           if (product._id.toString() === prod._id.toString()) {
             let stock = parseInt(product.stockQuantity) - prod.quantity;
-            product.sold = parseFloat(prod.quantity);
+            product.sold += parseFloat(prod.quantity);
             product.stockQuantity = stock.toString();
             vendorId = vendor._id.toString();
             break;
@@ -832,7 +840,7 @@ let razorpayOrder = async (req,res) => {
 
     // Create order on Razorpay
     const order = await razorpayInstance.orders.create({
-      amount: user.cart.total * 100,
+      amount: user.cart.total - user.cart.discount *100,
       currency: 'INR',
       payment_capture: 1,
     });
@@ -841,7 +849,7 @@ let razorpayOrder = async (req,res) => {
       orderId: order.id,
       razorpayOrderId: order.id,
       razorpayApiKey: process.env.key_id,
-      total : user.cart.total * 100,
+      total : user.cart.total - user.cart.discount * 100,
       user:user
     }); 
   } catch (error) {

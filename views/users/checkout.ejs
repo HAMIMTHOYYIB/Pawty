@@ -102,26 +102,6 @@
   <!--== End Header Wrapper ==-->
   
   <main class="main-content">
-    <!--== Start Page Header Area Wrapper ==-->
-    <div class="page-header-area" data-bg-img="/assets/img/photos/header-bg.jpg">
-      <div class="container pt--0 pb--0">
-        <div class="row">
-          <div class="col-12">
-            <div class="page-header-content">
-              <h2 class="title">Checkout</h2>
-              <nav class="breadcrumb-area">
-                <ul class="breadcrumb">
-                  <li><a href="index.html">Home</a></li>
-                  <li class="breadcrumb-sep">//</li>
-                  <li>Checkout</li>
-                </ul>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <!--== End Page Header Area Wrapper ==-->
 
     <!--== Start Shopping Checkout Area Wrapper ==-->
     <section class="shopping-checkout-wrap my-0">
@@ -246,13 +226,12 @@
                 <div class="billing-form-wrap">
                   <div class=" row">
                     <% user.address.forEach(function(add) { %>
-                      <div class="address-card d-md-flex justify-content-between">
+                      <div class="address-card d-md-flex justify-content-between mb-2">
                         <div>
-                            <input type="radio" name="addressId" id="<%= add._id %>" value="<%= add._id %>">
+                            <input type="radio" class="ms-3" name="addressId" id="<%= add._id %>" value="<%= add._id %>">
                             <b class="text-uppercase me-3"><%= add.name %></b><span><%= add.street %>,<%= add.city %>,<%= add.state %>&nbsp;</span><small><b>-<%= add.pincode %></b></small>
                         </div>
                     </div>
-                    
                     <% }) %>
                 </div>
                 </div>
@@ -272,17 +251,19 @@
                       </tr>
                     </thead>
                     <tbody class="table-body">
+                      <% let tot = 0;%>
                       <% user.cart.products.forEach(prod => { %>
                       <tr class="cart-item">
                         <td class="product-name text-dark"><%= prod.productName  %> <span class="product-quantity"> × <%= prod.quantity%></span></td>
                         <td class="product-total text-success">₹ <%= prod.price*prod.quantity %></td>
                       </tr>
+                      <% tot+= prod.price*prod.quantity %>
                       <% }) %>
                     </tbody>
                     <tfoot class="table-foot">
                       <tr class="cart-subtotal">
                         <th>Subtotal</th>
-                        <td class=" text-success">₹ <span id="amount" class=" text-success"><%= user.cart.total %></span></td>
+                        <td class=" text-success">₹ <span id="amount" class=" text-success"><%= tot %></span></td>
                       </tr>
                       <tr class="cart-discount">
                         <th>Discount</th>
@@ -294,7 +275,7 @@
                       </tr>
                       <tr class="order-total">
                         <th>Total </th>
-                        <td class=" text-success">₹ <span id="totVal" class=" text-success"><%= user.cart.total - user.cart.discount %></span></td>
+                        <td class=" text-success">₹ <span id="totVal" class=" text-success"><%= tot - user.cart.discount %></span></td>
                       </tr>
                     </tfoot>
                   </table>

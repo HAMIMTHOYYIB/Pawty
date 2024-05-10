@@ -11,6 +11,7 @@ let accountOrders = (userId) => {
               {$match:{'userId':userId}} 
             ]);
             for (let order of orders) {
+                const singleD = order.discount/order.products.length;
                 const vendor = await Vendor.findOne({ 'products._id': order.products._id });
                 if (vendor) {
                     const product = vendor.products.find(p => p._id.equals(order.products._id));
@@ -28,6 +29,7 @@ let accountOrders = (userId) => {
                         status: order.products.status,
                         quantity: order.products.quantity,
                         statusHistory: order.products.statusHistory,
+                        discount:singleD
                     };
                 }
                 let user = await User.findById(order.userId);

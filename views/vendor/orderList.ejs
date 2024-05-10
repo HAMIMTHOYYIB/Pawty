@@ -231,7 +231,7 @@
                                                                 <div class="col-6 my-auto">
                                                                     <p><b>#<%= order.products._id %></b></p>
                                                                     <p><b>Product Name : </b> <%= order.products.productName %></p>
-                                                                    <p><b>Price : </b> <%= order.products.price %></p>
+                                                                    <p><b>Price : </b> <%= order.products.price - order.products.discount %></p>
                                                                     <p><b>Brand : </b> <%= order.products.brand %></p>
                                                                     <p><b>Quantity : </b> <%= order.products.quantity %></p>
                                                                     <!-- <p><b>Order Status : </b> <%= order.products.status %></p> -->

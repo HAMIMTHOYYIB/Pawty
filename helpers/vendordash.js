@@ -56,6 +56,8 @@ let orderOfVendor = (vendorId) => {
                 {$match:{'products.vendorId':vendorId}}
               ]);
               for (let order of orders) {
+                let singleOrder = await Order.findById(order._id);
+                let singleD = Math.round(singleOrder.discount/singleOrder.products.length)
                 const vendor = await Vendor.findOne({ 'products._id': order.products._id });
                 if (vendor) {
                   const product = vendor.products.find(p => p._id.equals(order.products._id));
@@ -64,6 +66,7 @@ let orderOfVendor = (vendorId) => {
                     productName: product.productName,
                     description: product.description,
                     price: product.price,
+                    discount:singleD,
                     brand: product.brand,
                     category: product.category,
                     subCategory: product.subCategory,

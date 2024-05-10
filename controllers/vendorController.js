@@ -250,14 +250,14 @@ let getOrderList = async (req, res) => {
       }
 
       const page = parseInt(req.query.page) || 1;
-      const limit = 10;
+      const limit = 8;
       const startIndex = (page - 1) * limit;
 
       let orders = await helper.orderOfVendor(req.user.id);
       const totalOrders = orders.length;
       orders = orders.sort((a, b) => b.orderDate - a.orderDate).slice(startIndex, startIndex + limit);
 
-      res.render('vendor/orderList', { orders: orders.reverse(), vendor, currentPage: page, totalPages: Math.ceil(totalOrders / limit) });
+      res.render('vendor/orderList', { orders, vendor, currentPage: page, totalPages: Math.ceil(totalOrders / limit) });
   } catch (err) {
       console.error(err);
       res.status(500).json({ message: 'Failed to get orders' });
@@ -268,10 +268,10 @@ let getOrderDetails = async(req,res) => {
   const vendor = await Vendor.findById(req.user.id)
   try {
     let order = await Order.findById(orderId);
+    const singleD = Math.round(order.discount/order.products.length);
     let orderProduct = order.products.filter(product => product._id.toString() === productId);
-    // console.log("orderProduct : ",orderProduct);
-    // console.log("statusHistory : ",orderProduct[0].statusHistory);
     let product = await productHelper.getProductDetails(productId);
+    product.price -= singleD;
     res.render('vendor/orderDetails',{order,product,orderProduct,vendor}) ;
 
   } catch (error) {
