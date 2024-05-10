@@ -964,8 +964,21 @@ const succesGoogleLogin = async (req,res) =>{
             email:req.user.email
         })
         await user.save();
-        console.log('UserData Saved.');
-        res.redirect('/login')
+        console.log('New google signup.');
+        const token = jwt.sign({
+          id: user._id,
+          name: user.username,
+          email: user.email,
+        },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "24h",
+        }
+      );
+      res.cookie("user_jwt", token, { httpOnly: true, maxAge: 86400000 }); // 24 hour expiry
+      console.log('User Loggined succesfully : Token created.');
+        // res.render('users/account');
+        res.redirect('/');
     }else{
       if (user.Blocked) {
         console.log('User is blocked ');
