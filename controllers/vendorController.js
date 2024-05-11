@@ -16,20 +16,13 @@ const fs = require('fs');
 
 
 
-let vendorDashboard = async (req, res) => {
-  try {
-      let vendor = await Vendor.findById(req.user.id);
-      let [userOrders, topCategories, orders] = await Promise.all([
-          helper.getclients(req.user.id),
-          helper.orderCountByCategory(req.user.id),
-          helper.orderOfVendor(req.user.id)
-      ]);
-      res.render('vendor/vendorDashboard', { orders, vendor, userOrders, topCategories });
-  } catch (error) {
-      console.error(error);
-      res.status(500).send("Internal Server Error");
-  }
-};
+let vendorDashboard = async (req,res) => {
+  let vendor = await Vendor.findById(req.user.id);
+  let userOrders= await helper.getclients(req.user.id);
+  let topCategories = await helper.orderCountByCategory(req.user.id);
+  let orders= await helper.orderOfVendor(req.user.id);
+  res.render('vendor/vendorDashboard',{orders,vendor,userOrders,topCategories})
+}
 
 let vendorLogin = (req,res) => {
   if(req.cookies.vendor_jwt){
