@@ -840,7 +840,7 @@ let razorpayOrder = async (req,res) => {
 
     // Create order on Razorpay
     const order = await razorpayInstance.orders.create({
-      amount: user.cart.total - user.cart.discount *100,
+      amount: (user.cart.total - user.cart.discount) *100,
       currency: 'INR',
       payment_capture: 1,
     });
@@ -849,7 +849,7 @@ let razorpayOrder = async (req,res) => {
       orderId: order.id,
       razorpayOrderId: order.id,
       razorpayApiKey: process.env.key_id,
-      total : user.cart.total - user.cart.discount * 100,
+      total : (user.cart.total - user.cart.discount) * 100,
       user:user
     }); 
   } catch (error) {
