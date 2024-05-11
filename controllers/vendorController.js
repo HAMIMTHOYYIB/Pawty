@@ -16,13 +16,20 @@ const fs = require('fs');
 
 
 
-let vendorDashboard = async (req,res) => {
-  let vendor = await Vendor.findById(req.user.id);
-  let userOrders= await helper.getclients(req.user.id);
-  let topCategories = await helper.orderCountByCategory(req.user.id);
-  let orders= await helper.orderOfVendor(req.user.id);
-  res.render('vendor/vendorDashboard',{orders,vendor,userOrders,topCategories})
-}
+let vendorDashboard = async (req, res) => {
+  try {
+      let vendor = await Vendor.findById(req.user.id);
+      let [userOrders, topCategories, orders] = await Promise.all([
+          helper.getclients(req.user.id),
+          helper.orderCountByCategory(req.user.id),
+          helper.orderOfVendor(req.user.id)
+      ]);
+      res.render('vendor/vendorDashboard', { orders, vendor, userOrders, topCategories });
+  } catch (error) {
+      console.error(error);
+      res.status(500).send("Internal Server Error");
+  }
+};
 
 let vendorLogin = (req,res) => {
   if(req.cookies.vendor_jwt){
@@ -248,15 +255,12 @@ let getOrderList = async (req, res) => {
       if (!vendor) {
           return res.status(404).json({ message: 'Vendor not found' });
       }
-
       const page = parseInt(req.query.page) || 1;
       const limit = 8;
       const startIndex = (page - 1) * limit;
-
       let orders = await helper.orderOfVendor(req.user.id);
       const totalOrders = orders.length;
       orders = orders.sort((a, b) => b.orderDate - a.orderDate).slice(startIndex, startIndex + limit);
-
       res.render('vendor/orderList', { orders, vendor, currentPage: page, totalPages: Math.ceil(totalOrders / limit) });
   } catch (err) {
       console.error(err);

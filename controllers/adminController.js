@@ -12,52 +12,62 @@ const { createObjectCsvWriter } = require('csv-writer');
 const fs = require('fs');
 
 
-let dashboard = async (req,res) => {
+let dashboard = async (req, res) => {
     try {
-        let admin = await Admin.findOne();
-        // let category = admin.category;
-        // let subCategory = admin.subCategory;
-        let users = await User.find();
-        let orders = await Order.find();
-        let vendors = await Vendor.find().select("products")
-        let products = vendors.map((vendor) => vendor.products).flat()
+        let [admin, users, orders, vendors] = await Promise.all([
+            Admin.findOne(),
+            User.find(),
+            Order.find(),
+            Vendor.find().select("products")
+        ]);
+
+        let products = vendors.flatMap(vendor => vendor.products);
+
         let productOrders = await Order.aggregate([
-            {$unwind:'$products'}
-          ]);
-          for (let order of productOrders) {
-            const vendor = await Vendor.findOne({ 'products._id': order.products._id });
+            { $unwind: '$products' }
+        ]);
+
+        let userMap = {};
+        for (let order of productOrders) {
+            const vendor = vendors.find(v => v.products.some(p => p._id.equals(order.products._id)));
             if (vendor) {
-              const product = vendor.products.find(p => p._id.equals(order.products._id));
-              order.products = {
-                _id: product._id,
-                productName: product.productName,
-                description: product.description,
-                price: product.price,
-                brand: product.brand,
-                category: product.category,
-                subCategory: product.subCategory,
-                stockQuantity: product.stockQuantity,
-                addedOn: product.addedOn,
-                images: product.images,
-                status:order.products.status,
-                quantity:order.products.quantity,
-                vendor : vendor.vendorName       
-              };
+                const product = vendor.products.find(p => p._id.equals(order.products._id));
+                order.products = {
+                    _id: product._id,
+                    productName: product.productName,
+                    description: product.description,
+                    price: product.price,
+                    brand: product.brand,
+                    category: product.category,
+                    subCategory: product.subCategory,
+                    stockQuantity: product.stockQuantity,
+                    addedOn: product.addedOn,
+                    images: product.images,
+                    status: order.products.status,
+                    quantity: order.products.quantity,
+                    vendor: vendor.vendorName
+                };
             }
-            let user = await User.findById(order.userId);
-            if (user) {
-              order.userName = user.username;
-              order.userEmail = user.email;
+
+            if (!userMap[order.userId]) {
+                let user = await User.findById(order.userId);
+                if (user) {
+                    userMap[order.userId] = { userName: user.username, userEmail: user.email };
+                }
             }
-          }
-          productOrders.reverse();
-          productOrders.length = 5;
-        res.render('admin/index',{admin,vendors,products,orders,users,productOrders});
+            order.userName = userMap[order.userId].userName;
+            order.userEmail = userMap[order.userId].userEmail;
+        }
+
+        productOrders.reverse();
+        productOrders.length = 5;
+
+        res.render('admin/index', { admin, vendors, products, orders, users, productOrders });
     } catch (error) {
         console.error(error);
         res.status(500).send("Internal Server Error");
     }
-}
+};
 
 let adminLogin = (req, res) => {
     try {
