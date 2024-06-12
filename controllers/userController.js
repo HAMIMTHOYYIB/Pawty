@@ -903,7 +903,6 @@ let submitlogin = async (req, res) => {
               );
               res.cookie("user_jwt", token, { httpOnly: true, maxAge: 86400000 }); // 24 hour expiry
               console.log('User Loggined succesfully : Token created.');
-                // res.render('users/account',{addError:''});
                 res.redirect('/');
             });
         } catch (error) {
