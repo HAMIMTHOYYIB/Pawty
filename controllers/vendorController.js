@@ -6,7 +6,7 @@ let helper = require('../helpers/vendordash')
 let { sendOtpEmail } = require('../helpers/sentEmail')
 let productHelper = require('../helpers/getProductDetails');
 const nodemailer = require('nodemailer');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken')
 const cloudinary = require('../config/cloudinary')
 require('dotenv').config()
